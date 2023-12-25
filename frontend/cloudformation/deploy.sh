@@ -6,7 +6,7 @@ if [ -z "$INSTANCE" ]
 fi
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-INSTANCE_PATH=$DIR/instances/${INSTANCE}.sh
+INSTANCE_PATH=$DIR/environment/${INSTANCE}.sh
 
 if [ -f "$INSTANCE_PATH" ]; then
     echo "$INSTANCE_PATH exists."
@@ -62,7 +62,7 @@ function deploy() {
         npm run build
     popd
 
-    STACK_NAME=adinath-portfolio-ui-${INSTANCE}
+    STACK_NAME=jalad-e-seva-${INSTANCE}
     aws --region ${REGION} cloudformation deploy \
     --template-file $DIR/template.yaml \
     --stack-name ${STACK_NAME} \
@@ -71,8 +71,8 @@ function deploy() {
     --parameter-overrides \
     Hostname=${HOSTNAME} \
     BucketName=${UI_BUCKET_NAME} \
-    HostedZoneId=${HOSTED_ZONE_ID} \
-    SSLCertArn=${ACM_CERTIFICATE_ARN}
+    HostedZoneId=${HOSTED_ZONE_ID} 
+    # SSLCertArn=${ACM_CERTIFICATE_ARN} 
 
     DISTRIBUTION_ID=$(aws --region ${REGION} cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='CloudFrontDistributionID'].OutputValue" --output text)
     aws --region ${REGION} s3 sync ${DIR}/../build s3://$UI_BUCKET_NAME --acl public-read --delete
