@@ -9,7 +9,23 @@ Release:        22.04
 Codename:       jammy
 ```
 
+### npm Version: 10.2.3
+### Nodejs Version v18.19.0
 
-## npm Version 10.2.3
-## Nodejs Version v18.19.0
+**Change Directory**
 
+```
+cd frontend
+```
+
+**Install dependencies**
+
+```
+npm install
+```
+
+**build**
+
+```
+npm run
+```
