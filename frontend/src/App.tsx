@@ -1,26 +1,20 @@
+// App.tsx
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { ChakraProvider, CSSReset } from '@chakra-ui/react';
+import Portfolio from './Portfolio';
+import Header from './components/common/Header';
+import Footer from './components/common/Footer';
+import './App.css'; // Import your global styles
 
-function App() {
+const App: React.FC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ChakraProvider>
+      <CSSReset />
+      <div className="app">
+        <Portfolio />
+      </div>
+    </ChakraProvider>
   );
-}
+};
 
 export default App;
