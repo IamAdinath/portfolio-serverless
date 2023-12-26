@@ -1,0 +1,53 @@
+/* AboutMe.css */
+
+.about-container {
+    padding: 32px;
+    text-align: center; /* Center text in the container */
+  }
+  
+  .profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 24px;
+  }
+  
+  .profile-image {
+    border-radius: 50%;
+    width: 150px; /* Set the desired width for the profile image */
+    height: 150px; /* Set the desired height for the profile image */
+    object-fit: cover;
+    margin-bottom: 16px;
+  }
+  
+  .social-links {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center items horizontally */
+    margin-bottom: 16px;
+  }
+  
+  .social-icon {
+    font-size: 32px; /* Adjust the size of the icons as needed */
+    margin-right: 16px;
+  }
+  
+  .about-text {
+    margin-top: 16px;
+  }
+  
+  /* Media Queries for Responsiveness */
+  
+  @media (min-width: 768px) {
+    .profile-container {
+      flex-direction: row;
+      justify-content: space-between; /* Distribute items evenly along the main axis */
+    }
+  
+    .about-container {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: left; /* Align text to the left on larger screens */
+    }
+  }
+  
