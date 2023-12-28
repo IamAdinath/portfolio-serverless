@@ -1,9 +1,6 @@
 // Portfolio.tsx
 import React from 'react';
 import { Pane } from 'evergreen-ui';
-import Header from './components/common/Header';
-import AboutMe from './components/sections/AboutMe';
-import Footer from './components/common/Footer';
 
 const Portfolio: React.FC = () => {
   const handleMenuClick = () => {
@@ -13,12 +10,11 @@ const Portfolio: React.FC = () => {
 
   return (
     <Pane paddingX={20} paddingY={20}> {/* Adjust the padding values accordingly */}
-      <Header onMenuClick={handleMenuClick} />
       <Pane marginTop={20} marginBottom={40}>
-        <AboutMe />
+        ljdldbclkdbcljdbcljdbv
+        dvlkjlvnlvc sdlvkjbdflndlvc wlevblvbwlvb sdkjbdskvbjdv adkvbsdkjb adkcbdskb dvkjbdskbdk adkvjcbkldvbvk 
       </Pane>
-      {/* <Projects /> */}
-      <Footer />
+      wdkjwdvjcv wdlkvnlvn wldkvnldvncdlnc welckndvcbkdvc wevkjbldjvbdwwlvjb wkvjbwkjvbv
     </Pane>
   );
 };
