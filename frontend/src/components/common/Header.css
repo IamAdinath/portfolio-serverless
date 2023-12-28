@@ -2,9 +2,14 @@
 header {
   animation: fadeInUp 0.8s ease-out;
   text-align: center;
+  justify-content: center;
+  justify-items: center;
   padding: 20px;
 }
 
+.MenuPane {
+  justify-content: center;
+}
 
 
 @keyframes fadeInUp {

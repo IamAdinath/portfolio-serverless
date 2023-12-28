@@ -1,8 +1,7 @@
 // Header.tsx
 import React, { useEffect, useState } from 'react';
-import { Pane, IconButton, Text, Menu, Popover, Image } from 'evergreen-ui';
-
-import logo from '../../assets/apple-touch-icon.png'; // Update the path based on your project structure
+import { Pane, IconButton, Text, Menu, Popover } from 'evergreen-ui';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -10,6 +9,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleResize = () => {
@@ -24,6 +24,11 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
     };
   }, []);
 
+  const handleLinkClick = (path: string) => {
+    navigate(path);
+    onMenuClick(); // Close the menu after navigating
+  };
+
   return (
     <Pane
       display="flex"
@@ -31,7 +36,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
       background="darkTint"
       boxShadow="0 0 4px rgba(0, 0, 0, 0.1)"
       alignItems="center"
-      justifyContent="space-between"
+      justifyContent="center"
     >
       {/* Regular Menu for Larger Screens */}
       {isSmallScreen ? (
@@ -40,10 +45,12 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
           content={
             <Menu>
               <Menu.Group>
-                <Menu.Item>Home</Menu.Item>
-                <Menu.Item>About</Menu.Item>
-                <Menu.Item>Services</Menu.Item>
-                <Menu.Item>Contact</Menu.Item>
+                <Menu.Item onClick={() => handleLinkClick('/') }>Home</Menu.Item>
+                <Menu.Item onClick={() => handleLinkClick('/about') }>About</Menu.Item>
+                <Menu.Item onClick={() => handleLinkClick('/services')}>Services</Menu.Item>
+                <Menu.Item onClick={() => handleLinkClick('/contact')}>Contact</Menu.Item>
+                <Menu.Item onClick={() => handleLinkClick('/resume')}>Resume</Menu.Item>
+                <Menu.Item onClick={() => handleLinkClick('/blogs')}>Blogs</Menu.Item>
               </Menu.Group>
             </Menu>
           }
@@ -52,21 +59,26 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
         </Popover>
       ) : (
         <Pane display="flex" alignItems="center">
-          <Text size={500} marginRight={16}>
-            Home
-          </Text>
-          <Text size={500} marginRight={16}>
-            About
-          </Text>
-          <Text size={500} marginRight={16}>
-            Services
-          </Text>
-          <Text size={500}>Contact</Text>
+          <Link to="/">
+            <Text size={500} marginRight={16}>Home</Text>
+          </Link>
+          <Link to="/about">
+            <Text size={500} marginRight={16}>About</Text>
+          </Link>
+          <Link to="/services">
+            <Text size={500} marginRight={16}>Services</Text>
+          </Link>
+          <Link to="/contact">
+            <Text size={500} marginRight={16}>Contact</Text>
+          </Link>
+          <Link to="/resume">
+            <Text size={500} marginRight={16}>Resume</Text>
+          </Link>
+          <Link to="/blogs">
+            <Text size={500} marginRight={16}>Blogs</Text>
+          </Link>
         </Pane>
       )}
-
-      {/* Use the imported logo */}
-      <Image src={logo} alt="Logo" width={60} height={60} />
     </Pane>
   );
 };
