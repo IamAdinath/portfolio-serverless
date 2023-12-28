@@ -8,8 +8,7 @@ import { faLinkedin, faGithub, faMedium, faTwitter, faStackOverflow } from '@for
 const AboutMe: React.FC = () => {
   return (
     <Pane className="about-container">
-      <Heading size={600}>About Me</Heading>
-
+      <Heading size={600}> About Me </Heading>
       <div className="profile-container">
         {/* Professional Photo */}
         <img
