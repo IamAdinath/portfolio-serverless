@@ -40,10 +40,10 @@ function validate_parameters() {
         is_error=true
     fi
 
-    if [ -z "$ACM_CERTIFICATE_ARN" ]; then
-        echo ACM_CERTIFICATE_ARN not defined
-        is_error=true
-    fi
+    # if [ -z "$ACM_CERTIFICATE_ARN" ]; then
+    #     echo ACM_CERTIFICATE_ARN not defined
+    #     is_error=true
+    # fi
 
     if [ -z "$HOSTED_ZONE_ID" ]; then
         is_error=true
@@ -62,7 +62,7 @@ function deploy() {
         npm run build
     popd
 
-    STACK_NAME=jalad-e-seva-${INSTANCE}
+    STACK_NAME=portfolio-${INSTANCE}-UI
     aws --region ${REGION} cloudformation deploy \
     --template-file $DIR/template.yaml \
     --stack-name ${STACK_NAME} \

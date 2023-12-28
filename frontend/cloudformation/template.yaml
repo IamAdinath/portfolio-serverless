@@ -2,9 +2,9 @@ AWSTemplateFormatVersion: "2010-09-09"
 Description: "AWS CloudFormation template for Jalad E Seva UI"
 Transform: "AWS::Serverless-2016-10-31"
 Parameters:
-  SSLCertArn:
-    Description: "ACM Cert arn for *.example.jp"
-    Type: "String"
+  # SSLCertArn:
+  #   Description: "ACM Cert arn for *.example.com"
+  #   Type: "String"
   Hostname:
     Description: "Hostname in DNS for ui"
     Type: "String"
@@ -22,7 +22,7 @@ Resources:
   UIBucket:
     Type: "AWS::S3::Bucket"
     Properties:
-      BucketName: !Ref "BucketName"
+      BucketName: !Ref BucketName
       PublicAccessBlockConfiguration:
         BlockPublicAcls: false
         BlockPublicPolicy: false
@@ -53,9 +53,9 @@ Resources:
     Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
     Properties:
       CloudFrontOriginAccessIdentityConfig:
-        Comment: !Sub "Eseva-Stack"
+        Comment: !Sub "Portfolio-Stack"
 
-  eSevaCloudFrontDistribution:
+  PortfolioFrontDistribution:
     Type: AWS::CloudFront::Distribution
     Properties:
       DistributionConfig:
@@ -64,9 +64,9 @@ Resources:
             Id: !Ref UIBucket
             S3OriginConfig:
               OriginAccessIdentity: !Sub 'origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}'
-        Aliases:
-        - !Ref Hostname
-        Enabled: 'true'
+        # Aliases:
+        # - !Ref Hostname
+        Enabled: true
         Comment: "Cloudfront Distribution for the Jalad E seva UI"
         DefaultRootObject: index.html
         DefaultCacheBehavior:
@@ -80,7 +80,7 @@ Resources:
             - PUT
           TargetOriginId: !Ref UIBucket
           ForwardedValues:
-            QueryString: 'false'
+            QueryString: false
             Cookies:
               Forward: none
           ViewerProtocolPolicy: allow-all
@@ -152,12 +152,17 @@ Resources:
   #       DNSName: !GetAtt CloudFrontDistribution.DomainName
   #       EvaluateTargetHealth: false
 
+  PortfolioHostedZone:
+    Type: AWS::Route53::HostedZone
+    Properties:
+      Name: !Ref Hostname
+
 Outputs:
-  ScorerWebBucketName:
-    Value: !Ref "UIBucket"
+  UIBucket:
+    Value: !Ref UIBucket
     Export:
       Name: !Sub "${AWS::StackName}-UIBucketName"
   CloudFrontDistributionID:
-    Value: !Ref "eSevaCloudFrontDistribution"
+    Value: !Ref PortfolioFrontDistribution
     Export:
       Name: !Sub "${AWS::StackName}-DistributionID"
