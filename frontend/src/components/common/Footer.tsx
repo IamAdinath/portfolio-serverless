@@ -17,7 +17,7 @@ const Footer: React.FC = () => {
         <Link href="https://github.com/IamAdinath" target="_blank" marginRight={8}>
           <IconButton icon={<FontAwesomeIcon icon={faGithub} />} />
         </Link>
-        <Link href="https://linkedin.com/in/prime_whites" target="_blank" marginRight={8}>
+        <Link href="https://www.linkedin.com/in/primewhites" target="_blank" marginRight={8}>
           <IconButton icon={<FontAwesomeIcon icon={faLinkedin} />} />
         </Link>
         <Link href="https://medium.com/@adinath.17" target="_blank">
