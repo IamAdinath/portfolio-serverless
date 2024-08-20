@@ -1,0 +1,40 @@
+/* SuggestedBlogs.css */
+.suggested-blogs-footer {
+    margin-top: 40px; /* Space between the blog list and the footer */
+    padding: 20px;
+    background-color: #f1f1f1; /* Light gray background */
+    border-top: 2px solid #ccc; /* Gray border at the top to separate from content */
+  }
+  
+  .suggested-blogs-container {
+    display: flex; /* Align items horizontally */
+    overflow-x: auto; /* Enable horizontal scrolling if necessary */
+    gap: 20px; /* Space between items */
+  }
+  
+  .suggested-blogs-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 150px; /* Limit the width of each item */
+  }
+  
+  .suggested-blogs-thumbnail {
+    width: 100%; /* Full width of the item container */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 8px; /* Rounded corners for the thumbnail */
+    object-fit: cover; /* Crop the image if necessary */
+  }
+  
+  .suggested-blogs-title {
+    margin: 10px 0 5px;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  .suggested-blogs-author {
+    margin: 0;
+    font-size: 14px;
+    color: #555; /* Darker gray for author text */
+  }
+  
