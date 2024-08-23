@@ -1,6 +1,7 @@
 import React from 'react';
-import Blog from './Blog'; // Import the Blog component
-import SuggestedBlogs from './SuggestedBlogs'; // Import the SuggestedBlogs component
+import Blog from './Blog'; 
+import SuggestedBlogs from './SuggestedBlogs';
+import '../common/common.css';
 
 const BlogList: React.FC = () => {
   const blogs = [
@@ -46,7 +47,7 @@ const BlogList: React.FC = () => {
   ];
 
   return (
-    <div>
+    <div className="common-container">
       {blogs.map((blog) => (
         <Blog 
           key={blog.id} 

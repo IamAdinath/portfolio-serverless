@@ -1,5 +1,6 @@
 import React from 'react';
-import './SuggestedBlogs.css'; // Import the CSS file for styling
+import './SuggestedBlogs.css';
+import '../common/common.css';
 
 type Blog = {
   id: number;
@@ -14,7 +15,7 @@ type SuggestedBlogsProps = {
 
 const SuggestedBlogs: React.FC<SuggestedBlogsProps> = ({ suggestions }) => {
   return (
-    <div className="suggested-blogs-footer">
+    <div className="common-container">
       <h3>Suggested Blogs</h3>
       <div className="suggested-blogs-container">
         {suggestions.map((suggestion) => (
