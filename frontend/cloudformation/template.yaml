@@ -1,0 +1,168 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "AWS CloudFormation template for Jalad E Seva UI"
+Transform: "AWS::Serverless-2016-10-31"
+Parameters:
+  # SSLCertArn:
+  #   Description: "ACM Cert arn for *.example.com"
+  #   Type: "String"
+  Hostname:
+    Description: "Hostname in DNS for ui"
+    Type: "String"
+  BucketName:
+    Description: "UI Bucket Asset"
+    Type: "String"
+  HostedZoneId:
+    Type: "String"
+  # TargetHostedZoneId:
+  #   Type: "String"
+  #   Default: Z2FDTNDATAQYW2
+
+Resources:
+
+  UIBucket:
+    Type: "AWS::S3::Bucket"
+    Properties:
+      BucketName: !Ref BucketName
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+      WebsiteConfiguration:
+        IndexDocument: "index.html"
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: BucketOwnerPreferred
+
+  UIBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref UIBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: PublicReadGetObject
+            Effect: Allow
+            Principal: '*'
+            Action: 
+            - s3:GetObject
+            - s3:PutObject
+            Resource: !Sub arn:aws:s3:::${UIBucket}/*
+
+  CloudFrontOriginAccessIdentity:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: !Sub "Portfolio-Stack"
+
+  PortfolioFrontDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Origins:
+          - DomainName: !Sub "${BucketName}.s3.amazonaws.com"
+            Id: !Ref UIBucket
+            S3OriginConfig:
+              OriginAccessIdentity: !Sub 'origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}'
+        # Aliases:
+        # - !Ref Hostname
+        Enabled: true
+        Comment: "Cloudfront Distribution for the Jalad E seva UI"
+        DefaultRootObject: index.html
+        DefaultCacheBehavior:
+          AllowedMethods:
+            - DELETE
+            - GET
+            - HEAD
+            - OPTIONS
+            - PATCH
+            - POST
+            - PUT
+          TargetOriginId: !Ref UIBucket
+          ForwardedValues:
+            QueryString: false
+            Cookies:
+              Forward: none
+          ViewerProtocolPolicy: allow-all
+        PriceClass: PriceClass_200
+        ViewerCertificate:
+          # AcmCertificateArn: "your-acm-certificate-arn"
+          # SslSupportMethod: "sni-only"
+          CloudFrontDefaultCertificate: true
+
+
+  # eSevaHeaderPolicy:
+  #   Type: AWS::CloudFront::ResponseHeadersPolicy
+  #   Properties:
+  #     ResponseHeadersPolicyConfig:
+  #       Name: !Sub ${AWS::StackName}-jalad-e-seva-header-policy
+  #       Comment: Header policy for jalad e seva.
+  #       CorsConfig:
+  #         OriginOverride: false
+  #         AccessControlAllowCredentials: false
+  #         AccessControlAllowHeaders:
+  #           Items:
+  #             - ALL
+  #         AccessControlAllowMethods:
+  #           Items:
+  #             - POST
+  #             - GET
+  #             - OPTIONS
+  #             - DELETE
+  #         AccessControlAllowOrigins:
+  #           Items:
+  #           - !Ref Hostname
+  #         AccessControlExposeHeaders:
+  #           Items:
+  #           - ALL
+  #         AccessControlMaxAgeSec: 3600
+  #       RemoveHeadersConfig:
+  #         Items:
+  #           - Header: server
+  #       ServerTimingHeadersConfig:
+  #         Enabled: true
+  #         SamplingRate: 50
+  #       SecurityHeadersConfig:
+  #         StrictTransportSecurity:
+  #           AccessControlMaxAgeSec: 31536000
+  #           Override: true
+  #         ContentTypeOptions:
+  #           Override: true
+  #         FrameOptions:
+  #           FrameOption: SAMEORIGIN
+  #           Override: true
+  #         ReferrerPolicy:
+  #           Override: true
+  #           ReferrerPolicy: strict-origin-when-cross-origin
+  #         XSSProtection:
+  #           Override: true
+  #           Protection: true
+  #         ContentSecurityPolicy:
+  #           ContentSecurityPolicy: !Sub "img-src 'self'; script-src ${Hostname} 'sha256-UR0iHsZVfsKqSr7yAVEyYw7qoSY2X0JnEIXNLstrEwk='; style-src 'self' 'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU='; object-src 'self';"
+  #           Override: true
+
+  # ARecordZoneApex:
+  #   Type: "AWS::Route53::RecordSet"
+  #   Properties:
+  #     HostedZoneId: !Ref HostedZoneId
+  #     Name: !Sub ${Hostname}.
+  #     Type: A
+  #     AliasTarget:
+  #       HostedZoneId: !Ref TargetHostedZoneId
+  #       DNSName: !GetAtt CloudFrontDistribution.DomainName
+  #       EvaluateTargetHealth: false
+
+  PortfolioHostedZone:
+    Type: AWS::Route53::HostedZone
+    Properties:
+      Name: !Ref Hostname
+
+Outputs:
+  UIBucket:
+    Value: !Ref UIBucket
+    Export:
+      Name: !Sub "${AWS::StackName}-UIBucketName"
+  CloudFrontDistributionID:
+    Value: !Ref PortfolioFrontDistribution
+    Export:
+      Name: !Sub "${AWS::StackName}-DistributionID"

@@ -1,0 +1,42 @@
+/* AboutMe.css */
+
+.profile-container {
+  display: flex;
+  flex-direction: column; /* Stack the image and social links vertically */
+  align-items: center;
+  justify-content: center; /* Center content vertically within the container */
+  margin-top: 24px;
+}
+
+.profile-image {
+  border-radius: 50%;
+  width: 150px; /* Set the desired width for the profile image */
+  height: 150px; /* Set the desired height for the profile image */
+  object-fit: cover;
+  margin-bottom: 16px;
+}
+
+.social-links {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center items horizontally */
+  margin-bottom: 16px;
+  flex-wrap: wrap; /* Wrap the icons if needed on smaller screens */
+}
+
+.social-icon {
+  font-size: 32px; /* Adjust the size of the icons as needed */
+  margin-right: 16px;
+  color: black;
+}
+
+.about-text {
+  margin-top: 16px;
+}
+
+/* Media Queries for Responsiveness */
+@media (min-width: 768px) {
+  .profile-container {
+    flex-direction: column;
+  }
+}

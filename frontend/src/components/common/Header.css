@@ -1,0 +1,26 @@
+/* Header.css */
+header {
+  animation: fadeInUp 0.8s ease-out;
+  text-align: center;
+  justify-content: center;
+  justify-items: center;
+  padding: 20px;
+}
+
+.MenuPane {
+  justify-content: center;
+}
+
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Add any additional responsive styling as needed */
