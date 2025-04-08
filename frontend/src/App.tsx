@@ -5,6 +5,7 @@ import Header from './components/common/Header';
 import Footer from './components/common/Footer';
 import AboutMe from './components/sections/AboutMe';
 import Portfolio from './Portfolio';
+import Resume from './components/sections/Resume';  
 import BlogList from './components/sections/BlogList';
 
 const App: React.FC = () => {
@@ -21,6 +22,7 @@ const App: React.FC = () => {
         <Route path="/" element={<Portfolio />} />
         <Route path="/about" element={<AboutMe />} />
         <Route path="/blogs" element={<BlogList />} /> {/* Renders BlogList with suggested blogs footer */}
+        <Route path="/resume" element={<Resume />} />
       </Routes>
       <Footer />
     </Router>
