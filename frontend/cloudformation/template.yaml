@@ -11,12 +11,7 @@ Parameters:
   BucketName:
     Description: "UI Bucket Asset"
     Type: "String"
-  HostedZoneId:
-    Type: "String"
-  # TargetHostedZoneId:
-  #   Type: "String"
-  #   Default: Z2FDTNDATAQYW2
-
+  
 Resources:
 
   UIBucket:
