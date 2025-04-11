@@ -5,6 +5,7 @@ if [ -z "$ENV" ]
     echo "Environment name not specified. Please specify a valid Instance from ./instances"
 fi
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+echo "DIRECTORY >>> " $DIR
 
 INSTANCE_PATH=$DIR/environment/${ENV}.sh
 
