@@ -2,9 +2,9 @@ AWSTemplateFormatVersion: "2010-09-09"
 Description: "AWS CloudFormation template for Jalad E Seva UI"
 Transform: "AWS::Serverless-2016-10-31"
 Parameters:
-  # SSLCertArn:
-  #   Description: "ACM Cert arn for *.example.com"
-  #   Type: "String"
+  SSLCertArn:
+    Description: "ACM Cert arn for *.example.com"
+    Type: "String"
   Hostname:
     Description: "Hostname in DNS for ui"
     Type: "String"
@@ -64,10 +64,10 @@ Resources:
             Id: !Ref UIBucket
             S3OriginConfig:
               OriginAccessIdentity: !Sub 'origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}'
-        # Aliases:
-        # - !Ref Hostname
+        Aliases:
+        - !Ref Hostname
         Enabled: true
-        Comment: "Cloudfront Distribution for the Jalad E seva UI"
+        Comment: "Cloudfront Distribution for Adinath's portfolio UI"
         DefaultRootObject: index.html
         DefaultCacheBehavior:
           AllowedMethods:
@@ -86,8 +86,8 @@ Resources:
           ViewerProtocolPolicy: allow-all
         PriceClass: PriceClass_200
         ViewerCertificate:
-          # AcmCertificateArn: "your-acm-certificate-arn"
-          # SslSupportMethod: "sni-only"
+          AcmCertificateArn: !Sub arn:aws:acm:${AWS::Region}:${AWS::AccountId}:certificate/${SSLCertArn}
+          SslSupportMethod: "sni-only"
           CloudFrontDefaultCertificate: true
 
 
