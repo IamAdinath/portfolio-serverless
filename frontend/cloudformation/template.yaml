@@ -83,7 +83,7 @@ Resources:
         ViewerCertificate:
           AcmCertificateArn: !Sub arn:aws:acm:${AWS::Region}:${AWS::AccountId}:certificate/${SSLCertArn}
           SslSupportMethod: "sni-only"
-          CloudFrontDefaultCertificate: true
+          # CloudFrontDefaultCertificate: true
 
 
   # eSevaHeaderPolicy:
