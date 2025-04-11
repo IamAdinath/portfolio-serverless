@@ -55,7 +55,8 @@ Resources:
     Properties:
       DistributionConfig:
         Origins:
-          - DomainName: !Sub "${BucketName}.s3.amazonaws.com"
+          # - DomainName: !Sub "${BucketName}.s3.amazonaws.com"
+          - DomainName: !Ref Hostname
             Id: !Ref UIBucket
             S3OriginConfig:
               OriginAccessIdentity: !Sub 'origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}'
