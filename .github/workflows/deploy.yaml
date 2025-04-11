@@ -37,8 +37,8 @@ jobs:
       - name: Deploy using script (dev)
         working-directory: frontend/cloudformation/
         run: |
-          chmod +x ./deploy.sh test
-          ./deploy.sh
+          chmod +x ./deploy.sh
+          ./deploy.sh test
         env:
          
           UI_AWS_REGION: ${{ vars.UI_REGION }}
