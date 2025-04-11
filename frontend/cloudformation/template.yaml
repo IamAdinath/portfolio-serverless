@@ -44,46 +44,46 @@ Resources:
             - s3:PutObject
             Resource: !Sub arn:aws:s3:::${UIBucket}/*
 
-  CloudFrontOriginAccessIdentity:
-    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
-    Properties:
-      CloudFrontOriginAccessIdentityConfig:
-        Comment: !Sub "Portfolio-Stack"
+  # CloudFrontOriginAccessIdentity:
+  #   Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+  #   Properties:
+  #     CloudFrontOriginAccessIdentityConfig:
+  #       Comment: !Sub "Portfolio-Stack"
 
-  PortfolioFrontDistribution:
-    Type: AWS::CloudFront::Distribution
-    Properties:
-      DistributionConfig:
-        Origins:
-          - DomainName: !Sub "${BucketName}.s3.amazonaws.com"
-            Id: !Ref UIBucket
-            S3OriginConfig:
-              OriginAccessIdentity: !Sub 'origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}'
-        Aliases:
-        - !Ref Hostname
-        Enabled: true
-        Comment: "Cloudfront Distribution for Adinath's portfolio UI"
-        DefaultRootObject: index.html
-        DefaultCacheBehavior:
-          AllowedMethods:
-            - DELETE
-            - GET
-            - HEAD
-            - OPTIONS
-            - PATCH
-            - POST
-            - PUT
-          TargetOriginId: !Ref UIBucket
-          ForwardedValues:
-            QueryString: false
-            Cookies:
-              Forward: none
-          ViewerProtocolPolicy: allow-all
-        PriceClass: PriceClass_200
-        ViewerCertificate:
-          AcmCertificateArn: !Sub arn:aws:acm:${AWS::Region}:${AWS::AccountId}:certificate/${SSLCertArn}
-          SslSupportMethod: "sni-only"
-          CloudFrontDefaultCertificate: true
+  # PortfolioFrontDistribution:
+  #   Type: AWS::CloudFront::Distribution
+  #   Properties:
+  #     DistributionConfig:
+  #       Origins:
+  #         - DomainName: !Sub "${BucketName}.s3.amazonaws.com"
+  #           Id: !Ref UIBucket
+  #           S3OriginConfig:
+  #             OriginAccessIdentity: !Sub 'origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}'
+  #       Aliases:
+  #       - !Ref Hostname
+  #       Enabled: true
+  #       Comment: "Cloudfront Distribution for Adinath's portfolio UI"
+  #       DefaultRootObject: index.html
+  #       DefaultCacheBehavior:
+  #         AllowedMethods:
+  #           - DELETE
+  #           - GET
+  #           - HEAD
+  #           - OPTIONS
+  #           - PATCH
+  #           - POST
+  #           - PUT
+  #         TargetOriginId: !Ref UIBucket
+  #         ForwardedValues:
+  #           QueryString: false
+  #           Cookies:
+  #             Forward: none
+  #         ViewerProtocolPolicy: allow-all
+  #       PriceClass: PriceClass_200
+  #       ViewerCertificate:
+  #         AcmCertificateArn: !Sub arn:aws:acm:${AWS::Region}:${AWS::AccountId}:certificate/${SSLCertArn}
+  #         SslSupportMethod: "sni-only"
+  #         CloudFrontDefaultCertificate: true
 
 
   # eSevaHeaderPolicy:
@@ -147,17 +147,17 @@ Resources:
   #       DNSName: !GetAtt CloudFrontDistribution.DomainName
   #       EvaluateTargetHealth: false
 
-  PortfolioHostedZone:
-    Type: AWS::Route53::HostedZone
-    Properties:
-      Name: !Ref Hostname
+  # PortfolioHostedZone:
+  #   Type: AWS::Route53::HostedZone
+  #   Properties:
+  #     Name: !Ref Hostname
 
-Outputs:
-  UIBucket:
-    Value: !Ref UIBucket
-    Export:
-      Name: !Sub "${AWS::StackName}-UIBucketName"
-  CloudFrontDistributionID:
-    Value: !Ref PortfolioFrontDistribution
-    Export:
-      Name: !Sub "${AWS::StackName}-DistributionID"
+# Outputs:
+#   UIBucket:
+#     Value: !Ref UIBucket
+#     Export:
+#       Name: !Sub "${AWS::StackName}-UIBucketName"
+#   CloudFrontDistributionID:
+#     Value: !Ref PortfolioFrontDistribution
+#     Export:
+#       Name: !Sub "${AWS::StackName}-DistributionID"
