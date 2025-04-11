@@ -32,7 +32,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ vars.UI_AWS_REGION }}
+          aws-region: ${{ vars.UI_REGION }}
 
       - name: Deploy using script (dev)
         working-directory: frontend/cloudformation/
