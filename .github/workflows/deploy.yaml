@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - dev
+      - feature/github-actions-deployment
       - master
   workflow_dispatch:
 
@@ -15,7 +16,7 @@ jobs:
     name: Deploy to dev
     runs-on: ubuntu-latest
     environment: dev
-    if: github.ref == 'refs/heads/dev' || github.event_name == 'workflow_dispatch'
+    # if: github.ref == 'refs/heads/dev' || github.event_name == 'workflow_dispatch'
 
     steps:
       - name: Checkout code
