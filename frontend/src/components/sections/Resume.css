@@ -1,180 +1,340 @@
 /* Container for the entire resume */
 .resume-container {
-    max-width: 850px;
-    margin: 0 auto;
-    padding: 20px;
-    font-family: 'Arial', sans-serif;
-    color: #333;
-  }
-  
-  /* Header section */
-  .header {
-    text-align: center;
-    margin-bottom: 30px;
-  }
-  
-  .header h1 {
-    font-size: 2.5em;
-    margin-bottom: 10px;
-    color: #2c3e50;
-  }
-  
-  .header h2 {
-    font-size: 1.5em;
-    color: #34495e;
-    margin-bottom: 15px;
-  }
-  
-  .contact-info {
-    font-size: 1em;
-    color: #777;
-  }
-  
-  .contact-info a {
-    color: #3498db;
-    text-decoration: none;
-  }
-  
-  .contact-info a:hover {
-    text-decoration: underline;
-  }
-  
-  /* Summary section */
-  .summary-section {
-    margin-bottom: 40px;
-    font-size: 1.1em;
-    line-height: 1.6;
-    color: #555;
-    border-left: 4px solid #060606;
-    padding-left: 15px;
-  }
-  
-  /* Content container */
-  .content {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-  }
-  
- 
-  /* Work experience section */
-  .experience-section {
-    width: 60%;
-    font-size: 1em;
-  }
-  
-  .experience-item {
-    margin-bottom: 25px;
-  }
-  
-  .experience-item h4 {
-    font-size: 1.2em;
-    margin: 5px 0;
-    color: #2c3e50;
-  }
-  
-  .experience-item p {
-    margin: 2px 0;
-    color: #777;
-  }
-  
-  .experience-item ul {
-    list-style-type: circle;
-    padding-left: 20px;
-    margin-top: 5px;
-  }
-  
-  .experience-item ul li {
-    margin-bottom: 8px;
-  }
-  
-  /* Certification section */
-  .certification-section {
-    margin-top: 40px;
-  }
-  
-  .certification-section ul {
-    list-style-type: none;
-    padding-left: 0;
-  }
-  
-  .certification-section ul li {
-    margin-bottom: 15px;
-    font-size: 1em;
-  }
-  
-  .certification-section strong {
-    font-weight: bold;
-    color: #2c3e50;
-  }
-  
-  /* Awards section */
-  .awards-section {
-    margin-top: 30px;
-    font-size: 1em;
-  }
-  
-  .awards-section ul {
-    list-style-type: none;
-    padding-left: 0;
-  }
-  
-  .awards-section ul li {
-    margin-bottom: 10px;
-  }
-  
-/* Contact info section */
-.contact-info {
-    display: flex;
-    justify-content: space-between; /* Evenly distribute space between items */
-    align-items: center;
-    font-size: 1em;
-    color: #777;
-    margin-top: 15px;
-  }
-  
-  .contact-info p {
-    display: flex;
-    justify-content: space-between; /* Distribute space between icons and text */
-    align-items: center; /* Ensures text and icons are vertically aligned */
-    flex-wrap: wrap;
-    gap: 10px; /* Adds a small gap between items */
-  }
-  
-  .contact-info a {
-    color: #3498db;
-    text-decoration: none;
-  }
-  
-  .contact-info a:hover {
-    text-decoration: underline;
-  }
-  
-  /* IconButton styling */
-  .IconButton {
-    margin-right: 8px; /* Space between icon and text */
-    display: flex;
-    align-items: center; /* Ensures icon is vertically aligned with text */
-    color: inherit;
-  }
-  
+  max-width: 850px;
+  margin: 0 auto; /* Center the container */
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
+  color: #333;
+  background-color: #fff; /* Good practice to set a background */
+}
 
-  /* Combined Skills Section */
+/* Header section */
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+  border-bottom: 1px solid #eee; /* Add a subtle separator */
+  padding-bottom: 20px;
+}
+
+.header h1 {
+  font-size: 2.5em;
+  margin-bottom: 5px; /* Reduced margin */
+  color: #2c3e50;
+}
+
+.header h2 {
+  font-size: 1.5em;
+  color: #34495e;
+  margin-top: 0; /* Remove top margin */
+  margin-bottom: 20px; /* Increased bottom margin */
+  font-weight: normal; /* Less prominent than H1 */
+}
+
+/* Contact info section - UPDATED for better layout */
+.contact-info {
+  display: flex; /* Use flexbox */
+  flex-wrap: wrap; /* Allow items to wrap on smaller screens */
+  justify-content: center; /* Center the contact items */
+  gap: 10px 20px; /* Row gap and Column gap */
+  font-size: 0.95em; /* Slightly smaller font */
+  color: #555; /* Adjusted color */
+  margin-top: 15px;
+}
+
+/* Style individual contact items (now divs in TSX) */
+.contact-info div {
+  display: flex;
+  align-items: center; /* Vertically align icon and text */
+  gap: 6px; /* Space between icon and text */
+}
+
+.contact-info a {
+  color: #3498db;
+  text-decoration: none;
+}
+
+.contact-info a:hover {
+  text-decoration: underline;
+}
+
+/* Evergreen UI IconButton adjustments (target specific class if needed) */
+/* You might not need specific styles if Evergreen handles it well */
+.IconButton {
+ /* margin-right: 8px; */ /* Gap is handled by the parent flex container now */
+ color: inherit; /* Inherit color from parent */
+}
+/* Ensure icon size is reasonable */
+.contact-info .eg-icon {
+  font-size: 1.1em; /* Adjust icon size if needed */
+}
+
+
+/* Summary section */
+.summary-section {
+  margin-bottom: 30px; /* Adjusted spacing */
+  font-size: 1.05em; /* Slightly adjusted font size */
+  line-height: 1.6;
+  color: #555;
+  border-left: 3px solid #3498db; /* Use theme color */
+  padding-left: 15px;
+}
+/* Added Heading style consistency */
+.summary-section h3 {
+  margin-top: 0; /* Remove default heading margin */
+  margin-bottom: 10px;
+  font-size: 1.3em;
+  color: #2c3e50;
+}
+
+
+/* --- NEW LAYOUT STRUCTURE --- */
+
+/* Remove the old flex container style */
+/*
+.content {
+display: flex;
+justify-content: space-between;
+gap: 20px;
+}
+*/
+
+/* NEW: Main content area for columns */
+.main-content {
+  display: flex;
+  gap: 30px; /* Gap between left and right columns */
+  align-items: flex-start; /* Align columns to the top */
+}
+
+/* NEW: Left column */
+.left-column {
+  flex: 1; /* Takes up 1 part of the available space */
+  /* Example: Use a fixed width or percentage if preferred */
+  /* flex: 0 0 35%; */
+  min-width: 0; /* Prevent flexbox overflow issues */
+}
+
+/* NEW: Right column */
+.right-column {
+  flex: 2; /* Takes up 2 parts of the available space (adjust ratio as needed) */
+  min-width: 0; /* Prevent flexbox overflow issues */
+}
+
+/* --- END NEW LAYOUT STRUCTURE --- */
+
+
+/* General Section Styling */
+section {
+  margin-bottom: 30px; /* Consistent spacing below each section */
+}
+section:last-child {
+  margin-bottom: 0; /* No margin for the last section in a column */
+}
+
+section h3 {
+  font-size: 1.4em; /* Consistent heading size */
+  margin-bottom: 15px;
+  color: #2c3e50;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 5px;
+}
+
+section ul {
+  padding-left: 20px; /* Standard padding for lists */
+  margin-top: 10px;
+}
+
+section li {
+  margin-bottom: 8px;
+  line-height: 1.5; /* Improve readability */
+}
+
+/* Skills Section */
 .skills-section {
-    margin-top: 20px;
+  /* margin-top: 20px; */ /* Remove - handled by general section margin */
+}
+
+/* Skills List - Keeping your Grid layout */
+.skills-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* Responsive columns */
+  gap: 10px 15px; /* Row and column gap */
+  list-style-type: none;
+  padding: 0; /* Remove default padding */
+  margin: 0; /* Remove default margin */
+}
+
+.skills-list li {
+  margin-bottom: 0; /* Remove default margin */
+  font-size: 0.95em; /* Slightly smaller */
+  color: #555;
+  background-color: #f4f4f4; /* Subtle background */
+  padding: 6px 10px; /* Padding for tag look */
+  border-radius: 4px; /* Rounded corners */
+  text-align: center; /* Center text in grid cell */
+}
+
+/* Work experience section */
+.experience-section {
+  /* width: 60%; */ /* REMOVE - Width is now controlled by .right-column flex */
+  font-size: 1em;
+}
+
+.experience-item {
+  margin-bottom: 25px;
+}
+
+.experience-item h4 {
+  font-size: 1.15em; /* Adjusted size */
+  margin: 0 0 3px 0; /* Adjusted margin */
+  color: #2c3e50;
+}
+/* Style for the company/date line */
+.experience-item strong {
+  display: block;
+  font-size: 0.95em;
+  color: #777;
+  margin-bottom: 8px;
+}
+
+.experience-item p { /* If you have <p> tags within experience */
+  margin: 2px 0;
+  color: #777;
+}
+
+.experience-item ul {
+  list-style-type: disc; /* Use standard disc */
+  padding-left: 20px;
+  margin-top: 8px; /* Adjusted space */
+}
+
+.experience-item ul li {
+  margin-bottom: 8px;
+}
+
+/* Certification section */
+.certification-section {
+  /* margin-top: 40px; */ /* Remove - handled by general section margin */
+}
+
+/* Style the groups within certifications */
+.certification-group {
+  margin-bottom: 15px;
+}
+.certification-group:last-child {
+  margin-bottom: 0;
+}
+
+.certification-section ul {
+  list-style-type: none;
+  padding-left: 0;
+  margin-top: 5px; /* Space below strong tag */
+}
+
+.certification-section ul li {
+  margin-bottom: 10px; /* Adjusted spacing */
+  font-size: 1em;
+}
+
+.certification-section strong { /* Styling for Linkedin, Udemy etc. */
+  font-weight: bold;
+  color: #34495e; /* Slightly different color */
+  font-size: 1.05em;
+  display: block; /* Ensure it takes its own line */
+}
+.certification-section a {
+  color: #3498db;
+  text-decoration: none;
+}
+.certification-section a:hover {
+  text-decoration: underline;
+}
+
+
+/* Awards section */
+.awards-section {
+  /* margin-top: 30px; */ /* Remove - handled by general section margin */
+  font-size: 1em;
+}
+
+/* Style the groups within awards */
+.award-group {
+  margin-bottom: 15px;
+}
+.award-group:last-child {
+  margin-bottom: 0;
+}
+
+.awards-section ul {
+  list-style-type: none;
+  padding-left: 0;
+   margin-top: 5px; /* Space below strong tag */
+}
+
+.awards-section ul li {
+  margin-bottom: 8px; /* Adjusted spacing */
+}
+
+.awards-section strong { /* Styling for company names */
+   font-weight: bold;
+  color: #34495e;
+  font-size: 1.05em;
+  display: block;
+}
+
+
+/* --- RESPONSIVENESS --- */
+@media (max-width: 768px) {
+  .main-content {
+      flex-direction: column; /* Stack columns vertically */
+      gap: 0; /* Remove gap when stacked */
   }
-  
+
+  .left-column,
+  .right-column {
+      flex: 1 1 100%; /* Make columns full width */
+      width: 100%;
+  }
+
+  /* Ensure sections still have space between them when stacked */
+  .left-column section:last-child {
+      margin-bottom: 30px;
+  }
+
+  .header h1 {
+      font-size: 2em; /* Adjust heading size */
+  }
+  .header h2 {
+      font-size: 1.3em;
+  }
+
+   /* Stack contact info vertically and align left */
+  .contact-info {
+      flex-direction: column;
+      align-items: flex-start; /* Align to left */
+      gap: 8px; /* Adjust gap for vertical layout */
+  }
+
   .skills-list {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Two columns */
-    grid-template-rows: repeat(2, 1fr);
-    column-gap: 30px;
-    list-style-type: none;
-    padding: 0;
+       /* Adjust grid for smaller screens if needed */
+       grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
   }
-  
+}
+
+@media (max-width: 480px) {
+  .resume-container {
+      padding: 15px; /* Less padding */
+  }
+  .header h1 {
+      font-size: 1.8em;
+  }
+  .header h2 {
+      font-size: 1.2em;
+  }
+  section h3 {
+      font-size: 1.2em;
+  }
   .skills-list li {
-    margin-bottom: 10px;
-    font-size: 1em;
-    color: #555;
+      font-size: 0.9em; /* Smaller skill tags */
+      padding: 4px 8px;
   }
+}
