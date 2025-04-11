@@ -58,7 +58,7 @@ function deploy() {
         npm ci
         npm run build
     popd
-
+    echo "ACM_CERTIFICATE_ARN >>>> " $ACM_CERTIFICATE_ARN
     STACK_NAME=portfolio-${ENV}-UI
     aws --region ${REGION} cloudformation deploy \
     --template-file $DIR/template.yaml \
