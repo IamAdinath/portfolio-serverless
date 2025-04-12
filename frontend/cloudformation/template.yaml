@@ -64,6 +64,15 @@ Resources:
         Enabled: true
         Comment: "Cloudfront Distribution for Adinath's portfolio UI"
         DefaultRootObject: index.html
+        CustomErrorResponses:
+            - ErrorCode: 404
+              ResponsePagePath: /index.html
+              ResponseCode: 200
+              ErrorCachingMinTTL: 0
+            - ErrorCode: 403
+              ResponsePagePath: /index.html
+              ResponseCode: 200
+              ErrorCachingMinTTL: 0
         DefaultCacheBehavior:
           AllowedMethods:
             - DELETE
