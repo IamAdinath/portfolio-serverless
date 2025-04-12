@@ -11,12 +11,7 @@ Parameters:
   BucketName:
     Description: "UI Bucket Asset"
     Type: "String"
-  HostedZoneId:
-    Type: "String"
-  # TargetHostedZoneId:
-  #   Type: "String"
-  #   Default: Z2FDTNDATAQYW2
-
+  
 Resources:
 
   UIBucket:
@@ -69,6 +64,15 @@ Resources:
         Enabled: true
         Comment: "Cloudfront Distribution for Adinath's portfolio UI"
         DefaultRootObject: index.html
+        CustomErrorResponses:
+            - ErrorCode: 404
+              ResponsePagePath: /index.html
+              ResponseCode: 200
+              ErrorCachingMinTTL: 0
+            - ErrorCode: 403
+              ResponsePagePath: /index.html
+              ResponseCode: 200
+              ErrorCachingMinTTL: 0
         DefaultCacheBehavior:
           AllowedMethods:
             - DELETE
@@ -88,74 +92,57 @@ Resources:
         ViewerCertificate:
           AcmCertificateArn: !Sub arn:aws:acm:${AWS::Region}:${AWS::AccountId}:certificate/${SSLCertArn}
           SslSupportMethod: "sni-only"
-          CloudFrontDefaultCertificate: true
 
-
-  # eSevaHeaderPolicy:
-  #   Type: AWS::CloudFront::ResponseHeadersPolicy
-  #   Properties:
-  #     ResponseHeadersPolicyConfig:
-  #       Name: !Sub ${AWS::StackName}-jalad-e-seva-header-policy
-  #       Comment: Header policy for jalad e seva.
-  #       CorsConfig:
-  #         OriginOverride: false
-  #         AccessControlAllowCredentials: false
-  #         AccessControlAllowHeaders:
-  #           Items:
-  #             - ALL
-  #         AccessControlAllowMethods:
-  #           Items:
-  #             - POST
-  #             - GET
-  #             - OPTIONS
-  #             - DELETE
-  #         AccessControlAllowOrigins:
-  #           Items:
-  #           - !Ref Hostname
-  #         AccessControlExposeHeaders:
-  #           Items:
-  #           - ALL
-  #         AccessControlMaxAgeSec: 3600
-  #       RemoveHeadersConfig:
-  #         Items:
-  #           - Header: server
-  #       ServerTimingHeadersConfig:
-  #         Enabled: true
-  #         SamplingRate: 50
-  #       SecurityHeadersConfig:
-  #         StrictTransportSecurity:
-  #           AccessControlMaxAgeSec: 31536000
-  #           Override: true
-  #         ContentTypeOptions:
-  #           Override: true
-  #         FrameOptions:
-  #           FrameOption: SAMEORIGIN
-  #           Override: true
-  #         ReferrerPolicy:
-  #           Override: true
-  #           ReferrerPolicy: strict-origin-when-cross-origin
-  #         XSSProtection:
-  #           Override: true
-  #           Protection: true
-  #         ContentSecurityPolicy:
-  #           ContentSecurityPolicy: !Sub "img-src 'self'; script-src ${Hostname} 'sha256-UR0iHsZVfsKqSr7yAVEyYw7qoSY2X0JnEIXNLstrEwk='; style-src 'self' 'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU='; object-src 'self';"
-  #           Override: true
-
-  # ARecordZoneApex:
-  #   Type: "AWS::Route53::RecordSet"
-  #   Properties:
-  #     HostedZoneId: !Ref HostedZoneId
-  #     Name: !Sub ${Hostname}.
-  #     Type: A
-  #     AliasTarget:
-  #       HostedZoneId: !Ref TargetHostedZoneId
-  #       DNSName: !GetAtt CloudFrontDistribution.DomainName
-  #       EvaluateTargetHealth: false
-
-  PortfolioHostedZone:
-    Type: AWS::Route53::HostedZone
+  PortfolioHeaderPolicy:
+    Type: AWS::CloudFront::ResponseHeadersPolicy
     Properties:
-      Name: !Ref Hostname
+      ResponseHeadersPolicyConfig:
+        Name: !Sub ${AWS::StackName}-header-policy
+        Comment: Header policy for Adinath's Portfolio.
+        CorsConfig:
+          OriginOverride: false
+          AccessControlAllowCredentials: false
+          AccessControlAllowHeaders:
+            Items:
+              - ALL
+          AccessControlAllowMethods:
+            Items:
+              - POST
+              - GET
+              - OPTIONS
+              - DELETE
+          AccessControlAllowOrigins:
+            Items:
+            - !Ref Hostname
+          AccessControlExposeHeaders:
+            Items:
+            - ALL
+          AccessControlMaxAgeSec: 3600
+        RemoveHeadersConfig:
+          Items:
+            - Header: server
+        ServerTimingHeadersConfig:
+          Enabled: true
+          SamplingRate: 50
+        SecurityHeadersConfig:
+          StrictTransportSecurity:
+            AccessControlMaxAgeSec: 31536000
+            Override: true
+          ContentTypeOptions:
+            Override: true
+          FrameOptions:
+            FrameOption: SAMEORIGIN
+            Override: true
+          ReferrerPolicy:
+            Override: true
+            ReferrerPolicy: strict-origin-when-cross-origin
+          XSSProtection:
+            Override: true
+            Protection: true
+          ContentSecurityPolicy:
+            ContentSecurityPolicy: !Sub "img-src 'self'; script-src ${Hostname} 'sha256-UR0iHsZVfsKqSr7yAVEyYw7qoSY2X0JnEIXNLstrEwk='; style-src 'self' 'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU='; object-src 'self';"
+            Override: true
+
 
 Outputs:
   UIBucket:

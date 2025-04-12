@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - dev
+      - feature/github-actions-deployment
       - master
   workflow_dispatch:
 
@@ -15,7 +16,7 @@ jobs:
     name: Deploy to dev
     runs-on: ubuntu-latest
     environment: dev
-    if: github.ref == 'refs/heads/dev' || github.event_name == 'workflow_dispatch'
+    # if: github.ref == 'refs/heads/dev' || github.event_name == 'workflow_dispatch'
 
     steps:
       - name: Checkout code
@@ -31,7 +32,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ vars.UI_AWS_REGION }}
+          aws-region: ${{ vars.UI_REGION }}
 
       - name: Deploy using script (dev)
         working-directory: frontend/cloudformation/
@@ -40,9 +41,10 @@ jobs:
           ./deploy.sh
         env:
          
-          UI_AWS_REGION: ${{ vars.UI_AWS_REGION }}
+          UI_AWS_REGION: ${{ vars.UI_REGION }}
           UI_STACK_NAME: ${{ vars.UI_STACK_NAME }}
           UI_BUCKET_NAME: ${{ vars.UI_BUCKET_NAME }}
+          ENV: test
 
   # --------------------
   # Production Deployment

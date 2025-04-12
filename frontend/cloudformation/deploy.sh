@@ -5,6 +5,7 @@ if [ -z "$ENV" ]
     echo "Environment name not specified. Please specify a valid Instance from ./instances"
 fi
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+echo "DIRECTORY >>> " $DIR
 
 INSTANCE_PATH=$DIR/environment/${ENV}.sh
 
@@ -57,7 +58,7 @@ function deploy() {
         npm ci
         npm run build
     popd
-
+    echo "ACM_CERTIFICATE_ARN >>>> " $ACM_CERTIFICATE_ARN
     STACK_NAME=portfolio-${ENV}-UI
     aws --region ${REGION} cloudformation deploy \
     --template-file $DIR/template.yaml \
