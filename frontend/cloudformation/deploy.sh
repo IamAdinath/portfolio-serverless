@@ -1,12 +1,13 @@
 #!/bin/bash
 
-if [ -z "$INSTANCE" ]
+if [ -z "$ENV" ]
   then
     echo "Environment name not specified. Please specify a valid Instance from ./instances"
 fi
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+echo "DIRECTORY >>> " $DIR
 
-INSTANCE_PATH=$DIR/environment/${INSTANCE}.sh
+INSTANCE_PATH=$DIR/environment/${ENV}.sh
 
 if [ -f "$INSTANCE_PATH" ]; then
     echo "$INSTANCE_PATH exists."
@@ -20,8 +21,8 @@ fi
 function validate_parameters() {
     local is_error=false
 
-    if [ -z "$INSTANCE" ]; then
-        echo INSTANCE not defined
+    if [ -z "$ENV" ]; then
+        echo ENV not defined
         is_error=true
     fi
 
@@ -40,12 +41,8 @@ function validate_parameters() {
         is_error=true
     fi
 
-    # if [ -z "$ACM_CERTIFICATE_ARN" ]; then
-    #     echo ACM_CERTIFICATE_ARN not defined
-    #     is_error=true
-    # fi
-
-    if [ -z "$HOSTED_ZONE_ID" ]; then
+    if [ -z "$ACM_CERTIFICATE_ARN" ]; then
+        echo ACM_CERTIFICATE_ARN not defined
         is_error=true
     fi
 
@@ -55,14 +52,14 @@ function validate_parameters() {
 }
 
 function deploy() {
-    export REACT_APP_INSTANCE=$INSTANCE
+    export REACT_APP_INSTANCE=$ENV
     # change to ui root directory
     pushd $DIR/..
         npm ci
         npm run build
     popd
-
-    STACK_NAME=portfolio-${INSTANCE}-UI
+    echo "ACM_CERTIFICATE_ARN >>>> " $ACM_CERTIFICATE_ARN
+    STACK_NAME=portfolio-${ENV}-UI
     aws --region ${REGION} cloudformation deploy \
     --template-file $DIR/template.yaml \
     --stack-name ${STACK_NAME} \
@@ -71,8 +68,7 @@ function deploy() {
     --parameter-overrides \
     Hostname=${HOSTNAME} \
     BucketName=${UI_BUCKET_NAME} \
-    HostedZoneId=${HOSTED_ZONE_ID} 
-    # SSLCertArn=${ACM_CERTIFICATE_ARN} 
+    SSLCertArn=${ACM_CERTIFICATE_ARN} 
 
     DISTRIBUTION_ID=$(aws --region ${REGION} cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='CloudFrontDistributionID'].OutputValue" --output text)
     aws --region ${REGION} s3 sync ${DIR}/../build s3://$UI_BUCKET_NAME --acl public-read --delete
