@@ -96,7 +96,7 @@ jobs:
   deploy-backend:
     name: Deploy Backend (SAM)
     runs-on: ubuntu-latest
-    environment: ${{ github.ref == 'refs/heads/master' && 'prod' || 'dev' }}
+    # environment: ${{ github.ref == 'refs/heads/master' && 'prod' || 'dev' }}
 
     steps:
       - name: Checkout code
