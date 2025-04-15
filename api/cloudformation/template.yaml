@@ -56,7 +56,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: !Sub add-item-${Env}
-      Handler: sample.lambda_handler
+      Handler: getblogs.app.lambda_handler
       Policies:
         - AWSLambdaBasicExecutionRole
         - AmazonDynamoDBFullAccess
