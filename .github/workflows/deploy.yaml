@@ -101,7 +101,7 @@ jobs:
         run: |
           aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws configure set region ${{ secrets.AWS_REGION }}
+          aws configure set region ${{ vars.API_AWS_REGION }}
 
       - name: Deploy using script
         working-directory: api/cloudformation/
@@ -111,6 +111,6 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          REGION: ${{ vars.API_REGION }}
+          REGION: ${{ vars.API_AWS_REGION }}
           UI_STACK_NAME: ${{ vars.API_STACK_NAME }}
           UI_BUCKET_NAME: ${{ vars.API_BUCKET_NAME }}
