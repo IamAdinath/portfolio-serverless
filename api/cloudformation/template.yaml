@@ -1,51 +1,59 @@
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion: 2010-09-09
 Transform: AWS::Serverless-2016-10-31
-Description: Serverless Blogs API
+Description: >
+  Configurations and resources for Portfolio Backend
 
 Globals:
   Function:
     Runtime: python3.12
-    Timeout: 25
     MemorySize: 256
+    Timeout: 45
+    CodeUri:
+      Bucket: !Ref CodeBucket
+      Key: !Ref CodePath
 
 Resources:
-  GetBlogsFunction:
+
+  PortfolioAPI:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: !Sub PortfolioAPI-${Env}
+      StageName: !Ref Env
+      Cors: "'*'"
+
+  GetBlogsLambda:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: get-blogs
-      CodeUri: lambdas/getblogs/
-      Handler: app.lambda_handler
+      FunctionName: !Sub get-blogs-${Env}
+      Handler: getblogs.app.lambda_handler
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AmazonDynamoDBFullAccess
       Events:
-        ApiEvent:
+        AddItem:
           Type: Api
           Properties:
-            Path: /blogs
-            Method: get
+            RestApiId: !Ref PortfolioAPI
+            Path: /get-blogs
+            Method: GET
 
-  LambdaExecutionRole:
-    Type: AWS::IAM::Role
-    Properties:
-      RoleName: LambdaBasicExecutionRole
-      AssumeRolePolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service: lambda.amazonaws.com
-            Action: sts:AssumeRole
-      Policies:
-        - PolicyName: LambdaLogsPolicy
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-              - Effect: Allow
-                Action:
-                  - logs:CreateLogGroup
-                  - logs:CreateLogStream
-                  - logs:PutLogEvents
-                Resource: "*"
+Parameters:
+  Env:
+    Default: dev
+    Description: The name of this environment. Will be used to name resources
+    Type: String
+  CodeBucket:
+    Description: The S3 Bucket of lambda code uploaded to
+    Type: String
+  CodePath:
+    Description: The S3 path to the lambda zip file
+    Type: String
+  PythonRuntime:
+    Description: The Python version to use for lambda functions
+    Type: String
+    Default: python3.12
 
 Outputs:
-  ApiUrl:
-    Description: "API Gateway endpoint URL for GetBlogs"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/blogs"
+  ApiBaseUrl:
+    Description: "Base URL for the API Gateway"
+    Value: !Sub "https://${PortfolioAPI}.execute-api.${AWS::Region}.amazonaws.com/${Env}"
