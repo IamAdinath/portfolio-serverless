@@ -114,3 +114,5 @@ jobs:
           REGION: ${{ vars.API_AWS_REGION }}
           API_STACK_NAME: ${{ vars.API_STACK_NAME }}
           API_BUCKET_NAME: ${{ vars.API_BUCKET_NAME }}
+          ENV: test
+          CODE_BUCKET: ${{ vars.API_BUCKET_NAME }}
