@@ -1,0 +1,59 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Configurations and resources for Portfolio Backend
+
+Globals:
+  Function:
+    Runtime: python3.12
+    MemorySize: 256
+    Timeout: 45
+    CodeUri:
+      Bucket: !Ref CodeBucket
+      Key: !Ref CodePath
+
+Resources:
+
+  PortfolioAPI:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: !Sub PortfolioAPI-${Env}
+      StageName: !Ref Env
+      Cors: "'*'"
+
+  GetBlogsLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub get-blogs-${Env}
+      Handler: getblogs.app.lambda_handler
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AmazonDynamoDBFullAccess
+      Events:
+        AddItem:
+          Type: Api
+          Properties:
+            RestApiId: !Ref PortfolioAPI
+            Path: /get-blogs
+            Method: GET
+
+Parameters:
+  Env:
+    Default: dev
+    Description: The name of this environment. Will be used to name resources
+    Type: String
+  CodeBucket:
+    Description: The S3 Bucket of lambda code uploaded to
+    Type: String
+  CodePath:
+    Description: The S3 path to the lambda zip file
+    Type: String
+  PythonRuntime:
+    Description: The Python version to use for lambda functions
+    Type: String
+    Default: python3.12
+
+Outputs:
+  ApiBaseUrl:
+    Description: "Base URL for the API Gateway"
+    Value: !Sub "https://${PortfolioAPI}.execute-api.${AWS::Region}.amazonaws.com/${Env}"
