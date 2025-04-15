@@ -104,7 +104,7 @@ jobs:
           aws configure set region ${{ vars.API_AWS_REGION }}
 
       - name: Deploy using script
-        working-directory: api/
+        working-directory: api/cloudformation/
         run: |
           chmod +x ./deploy.sh
           ./deploy.sh
