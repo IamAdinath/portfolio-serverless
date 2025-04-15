@@ -5,7 +5,7 @@ Description: >
 
 Globals:
   Function:
-    Runtime: !Ref PythonRuntime
+    Runtime: python3.12
     MemorySize: 256
     Timeout: 45
     CodeUri:
@@ -13,37 +13,6 @@ Globals:
       Key: !Ref CodePath
 
 Resources:
-  FurnitureEstimatesTable:
-    Type: AWS::DynamoDB::Table
-    Properties:
-      TableName: !Sub FurnitureEstimates-${Env}
-      AttributeDefinitions:
-        - AttributeName: PK
-          AttributeType: S
-        - AttributeName: SK
-          AttributeType: S
-      KeySchema:
-        - AttributeName: PK
-          KeyType: HASH
-        - AttributeName: SK
-          KeyType: RANGE
-      BillingMode: PAY_PER_REQUEST
-
-  UserEstimatesTable:
-    Type: AWS::DynamoDB::Table
-    Properties:
-      TableName: !Sub UserEstimates-${Env}
-      AttributeDefinitions:
-        - AttributeName: PK
-          AttributeType: S
-        - AttributeName: SK
-          AttributeType: S
-      KeySchema:
-        - AttributeName: PK
-          KeyType: HASH
-        - AttributeName: SK
-          KeyType: RANGE
-      BillingMode: PAY_PER_REQUEST
 
   PortfolioAPI:
     Type: AWS::Serverless::Api
@@ -52,25 +21,21 @@ Resources:
       StageName: !Ref Env
       Cors: "'*'"
 
-  AddItemLambda:
+  GetBlogsLambda:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Sub add-item-${Env}
+      FunctionName: !Sub get-blogs-${Env}
       Handler: getblogs.app.lambda_handler
       Policies:
         - AWSLambdaBasicExecutionRole
         - AmazonDynamoDBFullAccess
-      Environment:
-        Variables:
-          FURNITURE_TABLE: !Ref FurnitureEstimatesTable
-          USER_TABLE: !Ref UserEstimatesTable
       Events:
         AddItem:
           Type: Api
           Properties:
             RestApiId: !Ref PortfolioAPI
-            Path: /add-item
-            Method: POST
+            Path: /get-blogs
+            Method: GET
 
 Parameters:
   Env:
