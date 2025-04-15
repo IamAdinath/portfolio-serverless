@@ -119,12 +119,12 @@ jobs:
           fi
 
       - name: Deploy SAM Stack
-        working-directory: api/lambdas
+        working-directory: api/
         run: |
           sam build
           sam deploy \
             --stack-name ${{ vars.API_STACK_NAME }} \
-            --template-file ../cloudformation/template.yaml \
+            --template-file cloudformation/template.yaml \
             --s3-bucket ${{ vars.API_BUCKET_NAME }} \
             --region ${{ vars.API_AWS_REGION }} \
             --capabilities CAPABILITY_IAM \
