@@ -1,69 +1,94 @@
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion: 2010-09-09
 Transform: AWS::Serverless-2016-10-31
-Description: Serverless Blogs API
+Description: >
+  Configurations and resources for Portfolio Backend
 
 Globals:
   Function:
     Runtime: !Ref PythonRuntime
-    Timeout: 30
     MemorySize: 256
+    Timeout: 45
     CodeUri:
       Bucket: !Ref CodeBucket
-      Key: !Ref CodeKey
+      Key: !Ref CodePath
 
 Resources:
-  GetBlogsFunction:
+  FurnitureEstimatesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub FurnitureEstimates-${Env}
+      AttributeDefinitions:
+        - AttributeName: PK
+          AttributeType: S
+        - AttributeName: SK
+          AttributeType: S
+      KeySchema:
+        - AttributeName: PK
+          KeyType: HASH
+        - AttributeName: SK
+          KeyType: RANGE
+      BillingMode: PAY_PER_REQUEST
+
+  UserEstimatesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub UserEstimates-${Env}
+      AttributeDefinitions:
+        - AttributeName: PK
+          AttributeType: S
+        - AttributeName: SK
+          AttributeType: S
+      KeySchema:
+        - AttributeName: PK
+          KeyType: HASH
+        - AttributeName: SK
+          KeyType: RANGE
+      BillingMode: PAY_PER_REQUEST
+
+  PortfolioAPI:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: !Sub PortfolioAPI-${Env}
+      StageName: !Ref Env
+      Cors: "'*'"
+
+  AddItemLambda:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Sub get-blogs-${env}
-      Handler: app.lambda_handler
+      FunctionName: !Sub add-item-${Env}
+      Handler: sample.lambda_handler
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AmazonDynamoDBFullAccess
+      Environment:
+        Variables:
+          FURNITURE_TABLE: !Ref FurnitureEstimatesTable
+          USER_TABLE: !Ref UserEstimatesTable
       Events:
-        ApiEvent:
+        AddItem:
           Type: Api
           Properties:
-            Path: /blogs
-            Method: get
+            RestApiId: !Ref PortfolioAPI
+            Path: /add-item
+            Method: POST
 
-  LambdaExecutionRole:
-    Type: AWS::IAM::Role
-    Properties:
-      RoleName: LambdaBasicExecutionRole
-      AssumeRolePolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service: lambda.amazonaws.com
-            Action: sts:AssumeRole
-      Policies:
-        - PolicyName: LambdaLogsPolicy
-          PolicyDocument:
-            Version: '2012-10-17'
-            Statement:
-              - Effect: Allow
-                Action:
-                  - logs:CreateLogGroup
-                  - logs:CreateLogStream
-                  - logs:PutLogEvents
-                Resource: "*"
+Parameters:
+  Env:
+    Default: dev
+    Description: The name of this environment. Will be used to name resources
+    Type: String
+  CodeBucket:
+    Description: The S3 Bucket of lambda code uploaded to
+    Type: String
+  CodePath:
+    Description: The S3 path to the lambda zip file
+    Type: String
+  PythonRuntime:
+    Description: The Python version to use for lambda functions
+    Type: String
+    Default: python3.12
 
 Outputs:
   ApiBaseUrl:
     Description: "Base URL for the API Gateway"
-    Value: !Sub "https://${WorkshopAPI}.execute-api.${AWS::Region}.amazonaws.com/${Env}"
-
-Parameters:
-  PythonRuntime:
-    Type: String
-    Description: Python runtime version
-    Default: "python3.12"
-  Env:
-    Type: String
-    Description: Environment name
-    Default: "dev"
-  CodeBucket:
-    Type: String
-    Description: S3 bucket where code is stored
-  CodeKey:
-    Type: String
-    Description: S3 bucket path to code zip file
+    Value: !Sub "https://${PortfolioAPI}.execute-api.${AWS::Region}.amazonaws.com/${Env}"

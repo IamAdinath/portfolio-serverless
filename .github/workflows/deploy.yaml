@@ -112,5 +112,5 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           REGION: ${{ vars.API_AWS_REGION }}
-          UI_STACK_NAME: ${{ vars.API_STACK_NAME }}
-          UI_BUCKET_NAME: ${{ vars.API_BUCKET_NAME }}
+          API_STACK_NAME: ${{ vars.API_STACK_NAME }}
+          API_BUCKET_NAME: ${{ vars.API_BUCKET_NAME }}
