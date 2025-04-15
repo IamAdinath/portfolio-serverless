@@ -112,7 +112,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           REGION: ${{ vars.API_AWS_REGION }}
-          API_STACK_NAME: ${{ vars.API_STACK_NAME }}
+          STACK_NAME: ${{ vars.STACK_NAME }}
           API_BUCKET_NAME: ${{ vars.API_BUCKET_NAME }}
           ENV: test
           CODE_BUCKET: ${{ vars.API_BUCKET_NAME }}
