@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - dev
-      - feature/github-actions-deployment
+      - bug/api-deployment-fixes
       - master
   workflow_dispatch:
 
@@ -85,8 +85,8 @@ jobs:
   deploy-api:
     name: Deploy API
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/master'
-    environment: ${{ github.ref == 'refs/heads/master' && 'prod' || 'test' }}
+    # if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/master'
+    # environment: ${{ github.ref == 'refs/heads/master' && 'prod' || 'test' }}
 
     steps:
       - name: Checkout code
