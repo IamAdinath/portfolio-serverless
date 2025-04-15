@@ -16,7 +16,6 @@ jobs:
     name: Deploy to dev
     runs-on: ubuntu-latest
     environment: dev
-    # if: github.ref == 'refs/heads/dev' || github.event_name == 'workflow_dispatch'
 
     steps:
       - name: Checkout code
@@ -40,7 +39,6 @@ jobs:
           chmod +x ./deploy.sh
           ./deploy.sh
         env:
-         
           UI_AWS_REGION: ${{ vars.UI_REGION }}
           UI_STACK_NAME: ${{ vars.UI_STACK_NAME }}
           UI_BUCKET_NAME: ${{ vars.UI_BUCKET_NAME }}
@@ -53,7 +51,6 @@ jobs:
     name: Deploy to Production
     runs-on: ubuntu-latest
     environment: prod
-    needs: deploy-dev
     if: github.ref == 'refs/heads/master' || github.event_name == 'workflow_dispatch'
 
     steps:
@@ -82,21 +79,14 @@ jobs:
           UI_STACK_NAME: ${{ vars.UI_STACK_NAME }}
           UI_BUCKET_NAME: ${{ vars.UI_BUCKET_NAME }}
 
-name: Deploy Backend
-
-on:
-  push:
-    branches:
-      - dev
-      - feature/backend-deplyment
-      - master
-  workflow_dispatch:
-
-jobs:
-  deploy-backend:
-    name: Deploy Backend (SAM)
+  # --------------------
+  # API Deployment
+  # --------------------
+  deploy-api:
+    name: Deploy API
     runs-on: ubuntu-latest
-    # environment: ${{ github.ref == 'refs/heads/master' && 'prod' || 'dev' }}
+    if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/master'
+    environment: ${{ github.ref == 'refs/heads/master' && 'prod' || 'test' }}
 
     steps:
       - name: Checkout code
@@ -118,24 +108,23 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ vars.API_AWS_REGION }}
 
-      - name: Create bucket if not exists
+      - name: Create S3 bucket if not exists
         run: |
           BUCKET=${{ vars.API_BUCKET_NAME }}
           REGION=${{ vars.API_AWS_REGION }}
           if ! aws s3api head-bucket --bucket "$BUCKET" 2>/dev/null; then
-            echo "Creating deployment bucket $BUCKET..."
             aws s3api create-bucket --bucket "$BUCKET" --region "$REGION" --create-bucket-configuration LocationConstraint="$REGION"
           else
-            echo "Bucket $BUCKET already exists."
+            echo "Bucket already exists"
           fi
 
       - name: Deploy SAM Stack
         working-directory: api/cloudformation
         run: |
-          sam build --use-container
+          sam build
           sam deploy \
             --stack-name ${{ vars.API_STACK_NAME }} \
             --s3-bucket ${{ vars.API_BUCKET_NAME }} \
             --region ${{ vars.API_AWS_REGION }} \
-            --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM \
+            --capabilities CAPABILITY_IAM \
             --no-fail-on-empty-changeset
