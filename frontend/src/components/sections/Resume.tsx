@@ -137,7 +137,7 @@ const Resume: React.FC = () => {
                         <h3>Work Experience</h3>
                         <div className="experience-item">
                             <h4>Software Developer II</h4>
-                            <strong>Rackspace Technology (Mar 2022 - Mar Present)</strong>
+                            <strong>Rackspace Technology (Mar 2024 - Present)</strong>
                             <ul>
                                 <li>Automated billing module to reduce mis-calculations and impove efficiency</li>
                                 <li>Conducted code reviews with peers to improve code quality.</li>
