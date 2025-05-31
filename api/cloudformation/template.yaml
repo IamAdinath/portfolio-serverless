@@ -28,8 +28,6 @@ Resources:
           AttributeType: S
         - AttributeName: status
           AttributeType: S
-        - AttributeName: tags
-          AttributeType: S
       KeySchema:
         - AttributeName: postId
           KeyType: HASH
