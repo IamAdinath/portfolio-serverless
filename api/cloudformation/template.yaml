@@ -14,6 +14,98 @@ Globals:
 
 Resources:
 
+  PostsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: Posts
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: postId
+          AttributeType: S
+        - AttributeName: authorId
+          AttributeType: S
+        - AttributeName: publishedAt
+          AttributeType: S
+        - AttributeName: status
+          AttributeType: S
+        - AttributeName: tags
+          AttributeType: S
+      KeySchema:
+        - AttributeName: postId
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: AuthorIdIndex
+          KeySchema:
+            - AttributeName: authorId
+              KeyType: HASH
+            - AttributeName: publishedAt
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+        - IndexName: StatusPublishedAtIndex
+          KeySchema:
+            - AttributeName: status
+              KeyType: HASH
+            - AttributeName: publishedAt
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+
+  AuthorsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: Authors
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: authorId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: authorId
+          KeyType: HASH
+
+  CommentsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: Comments
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: postId
+          AttributeType: S
+        - AttributeName: commentId
+          AttributeType: S
+        - AttributeName: parentCommentId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: postId
+          KeyType: HASH
+        - AttributeName: commentId
+          KeyType: RANGE
+      GlobalSecondaryIndexes:
+        - IndexName: ParentCommentIndex
+          KeySchema:
+            - AttributeName: postId
+              KeyType: HASH
+            - AttributeName: parentCommentId
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+
+  ReactionsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: Reactions
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: commentId
+          AttributeType: S
+        - AttributeName: userId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: commentId
+          KeyType: HASH
+        - AttributeName: userId
+          KeyType: RANGE
+
   PortfolioAPI:
     Type: AWS::Serverless::Api
     Properties:
@@ -36,6 +128,7 @@ Resources:
             RestApiId: !Ref PortfolioAPI
             Path: /get-blogs
             Method: GET
+
 
 Parameters:
   Env:
