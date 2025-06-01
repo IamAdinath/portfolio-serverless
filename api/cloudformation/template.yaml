@@ -128,7 +128,7 @@ Resources:
             Method: GET
       Environment:
         Variables:
-          POSTS_TABLE: !Ref BlogsTable
+          POSTS_TABLE: !Ref PostsTable
 
   CreateBlogsLambda:
     Type: AWS::Serverless::Function
@@ -147,7 +147,7 @@ Resources:
             Method: GET
       Environment:
         Variables:
-          POSTS_TABLE: !Ref BlogsTable
+          POSTS_TABLE: !Ref PostsTable
           ENV : !Ref Env
 
 Parameters:
