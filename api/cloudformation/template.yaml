@@ -115,7 +115,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: !Sub get-blogs-${Env}
-      Handler: getblogs.app.lambda_handler
+      Handler: blogs.get.lambda_handler
       Policies:
         - AWSLambdaBasicExecutionRole
         - AmazonDynamoDBFullAccess
@@ -130,6 +130,24 @@ Resources:
         Variables:
           POSTS_TABLE: !Ref BlogsTable
 
+  CreateBlogsLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub create-blogs-${Env}
+      Handler: blogs.create.lambda_handler
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AmazonDynamoDBFullAccess
+      Events:
+        AddItem:
+          Type: Api
+          Properties:
+            RestApiId: !Ref PortfolioAPI
+            Path: /create-blog
+            Method: GET
+      Environment:
+        Variables:
+          POSTS_TABLE: !Ref BlogsTable
 
 Parameters:
   Env:
