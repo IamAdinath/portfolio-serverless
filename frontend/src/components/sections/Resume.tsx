@@ -136,6 +136,15 @@ const Resume: React.FC = () => {
                     <section className="experience-section">
                         <h3>Work Experience</h3>
                         <div className="experience-item">
+                            <h4>Software Developer II</h4>
+                            <strong>Rackspace Technology (Mar 2024 - Present)</strong>
+                            <ul>
+                                <li>Automated billing module to reduce mis-calculations and impove efficiency</li>
+                                <li>Conducted code reviews with peers to improve code quality.</li>
+                                <li>Improved policy details and enhanced the data protection module.</li>
+                            </ul>
+                        </div>
+                        <div className="experience-item">
                             <h4>Software Engineer</h4>
                             <strong>Futops Technologies India Private Limited (May 2022 - Mar 2024)</strong>
                             <ul>
