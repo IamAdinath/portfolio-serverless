@@ -137,6 +137,123 @@ Resources:
         Variables:
           POSTS_TABLE: !Ref PostsTable
           ENV : !Ref Env
+  
+  BlogUserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: !Sub blog-user-pool-${Env}
+      AutoVerifiedAttributes:
+        - email
+      AliasAttributes:
+        - email
+      Schema:
+        - Name: email
+          Required: true
+          Mutable: false
+
+  BlogUserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      ClientName: !Sub blog-user-client-${Env}
+      UserPoolId: !Ref BlogUserPool
+      GenerateSecret: false
+      AllowedOAuthFlowsUserPoolClient: true
+      AllowedOAuthFlows:
+        - code
+      AllowedOAuthScopes:
+        - email
+        - openid
+        - profile
+      CallbackURLs:
+        - http://localhost:3000/callback  # Replace in prod
+      LogoutURLs:
+        - http://localhost:3000/logout    # Replace in prod
+      SupportedIdentityProviders:
+        - COGNITO
+        - Google
+
+  BlogGoogleIdentityProvider:
+    Type: AWS::Cognito::UserPoolIdentityProvider
+    Properties:
+      ProviderName: Google
+      ProviderType: Google
+      UserPoolId: !Ref BlogUserPool
+      AttributeMapping:
+        email: email
+        username: sub
+      ProviderDetails:
+        client_id: !Ref GoogleClientId
+        authorize_scopes: email profile openid
+
+  BlogUserGroup:
+    Type: AWS::Cognito::UserPoolGroup
+    Properties:
+      GroupName: user
+      Description: Regular blog readers and writers
+      UserPoolId: !Ref BlogUserPool
+
+  BlogAdminGroup:
+    Type: AWS::Cognito::UserPoolGroup
+    Properties:
+      GroupName: admin
+      Description: Admins with elevated permissions
+      UserPoolId: !Ref BlogUserPool
+
+  BlogIdentityPool:
+    Type: AWS::Cognito::IdentityPool
+    Properties:
+      IdentityPoolName: !Sub blog-identity-pool-${Env}
+      AllowUnauthenticatedIdentities: false
+      CognitoIdentityProviders:
+        - ClientId: !Ref BlogUserPoolClient
+          ProviderName: !Sub cognito-idp.${AWS::Region}.amazonaws.com/${BlogUserPool}
+
+  BlogIdentityPoolRoleAttachment:
+    Type: AWS::Cognito::IdentityPoolRoleAttachment
+    Properties:
+      IdentityPoolId: !Ref BlogIdentityPool
+      Roles:
+        authenticated: !GetAtt CognitoAuthenticatedRole.Arn
+
+  CognitoAuthenticatedRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub blog-auth-role-${Env}
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: cognito-identity.amazonaws.com
+            Action: sts:AssumeRoleWithWebIdentity
+            Condition:
+              StringEquals:
+                cognito-identity.amazonaws.com:aud: !Ref BlogIdentityPool
+              "ForAnyValue:StringLike":
+                cognito-identity.amazonaws.com:amr: authenticated
+      Policies:
+        - PolicyName: allowDynamoAndCognito
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:GetItem
+                  - dynamodb:PutItem
+                  - dynamodb:UpdateItem
+                Resource: "*"
+
+  UsersTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub users-${Env}
+      AttributeDefinitions:
+        - AttributeName: user_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: user_id
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
 
 Parameters:
   Env:
@@ -153,6 +270,18 @@ Parameters:
     Description: The Python version to use for lambda functions
     Type: String
     Default: python3.12
+  GoogleClientId:
+    Type: String
+    Description: Google OAuth Client ID
+  GoogleClientSecret:
+    Type: String
+    Description: Google OAuth Client Secret
+  LinkedInClientId:
+    Type: String
+    Description: LinkedIn OAuth Client ID
+  LinkedInClientSecret:
+    Type: String
+    Description: LinkedIn OAuth Client Secret
 
 Outputs:
   ApiBaseUrl:
