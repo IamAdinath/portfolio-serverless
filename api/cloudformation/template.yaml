@@ -49,18 +49,6 @@ Resources:
           Projection:
             ProjectionType: ALL
 
-  AuthorsTable:
-    Type: AWS::DynamoDB::Table
-    Properties:
-      TableName: Authors
-      BillingMode: PAY_PER_REQUEST
-      AttributeDefinitions:
-        - AttributeName: authorId
-          AttributeType: S
-      KeySchema:
-        - AttributeName: authorId
-          KeyType: HASH
-
   CommentsTable:
     Type: AWS::DynamoDB::Table
     Properties:
