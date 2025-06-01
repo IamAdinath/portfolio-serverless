@@ -83,7 +83,11 @@ function deploy() {
     Env=${ENV} \
     CodeBucket=${CODE_BUCKET} \
     CodePath="${CODE_PATH}/${CODE_ZIP}" \
-    PythonRuntime=${DEFAULT_PYTHON_RUNTIME}
+    PythonRuntime=${DEFAULT_PYTHON_RUNTIME}\
+    GoogleClientId=""\
+    GoogleClientSecret=""\
+    LinkedInClientId=""\
+    LinkedInClientSecret=""
 }
 
 validate_parameters
