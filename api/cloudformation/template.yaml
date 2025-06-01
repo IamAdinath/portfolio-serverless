@@ -170,20 +170,20 @@ Resources:
         - http://localhost:3000/logout    # Replace in prod
       SupportedIdentityProviders:
         - COGNITO
-        - Google
+        # - Google
 
-  BlogGoogleIdentityProvider:
-    Type: AWS::Cognito::UserPoolIdentityProvider
-    Properties:
-      ProviderName: Google
-      ProviderType: Google
-      UserPoolId: !Ref BlogUserPool
-      AttributeMapping:
-        email: email
-        username: sub
-      ProviderDetails:
-        client_id: !Ref GoogleClientId
-        authorize_scopes: email profile openid
+  # BlogGoogleIdentityProvider:
+  #   Type: AWS::Cognito::UserPoolIdentityProvider
+  #   Properties:
+  #     ProviderName: Google
+  #     ProviderType: Google
+  #     UserPoolId: !Ref BlogUserPool
+  #     AttributeMapping:
+  #       email: email
+  #       username: sub
+  #     ProviderDetails:
+  #       client_id: !Ref GoogleClientId
+  #       authorize_scopes: email profile openid
 
   BlogUserGroup:
     Type: AWS::Cognito::UserPoolGroup
