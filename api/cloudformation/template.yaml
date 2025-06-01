@@ -148,6 +148,7 @@ Resources:
       Environment:
         Variables:
           POSTS_TABLE: !Ref BlogsTable
+          ENV : !Ref Env
 
 Parameters:
   Env:
