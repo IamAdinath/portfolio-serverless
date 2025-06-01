@@ -126,6 +126,9 @@ Resources:
             RestApiId: !Ref PortfolioAPI
             Path: /get-blogs
             Method: GET
+      Environment:
+        Variables:
+          POSTS_TABLE: !Ref BlogsTable
 
 
 Parameters:
