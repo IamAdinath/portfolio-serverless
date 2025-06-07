@@ -255,6 +255,13 @@ Resources:
           KeyType: HASH
       BillingMode: PAY_PER_REQUEST
 
+  BlogUserPoolDomain:
+    Type: AWS::Cognito::UserPoolDomain
+    Properties:
+      Domain: !Sub blog-${Env}-auth
+      UserPoolId: !Ref BlogUserPool
+
+
 Parameters:
   Env:
     Default: dev
