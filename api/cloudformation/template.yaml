@@ -97,7 +97,10 @@ Resources:
     Properties:
       Name: !Sub PortfolioAPI-${Env}
       StageName: !Ref Env
-      Cors: "'*'"
+      Cors:
+        AllowMethods: "'OPTIONS,GET,POST,PUT,DELETE'"
+        AllowHeaders: "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'"
+        AllowOrigin: "'*'"
 
   GetBlogsLambda:
     Type: AWS::Serverless::Function
