@@ -14,12 +14,5 @@ class Headers:
         "Access-Control-Allow-Headers": "*",
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "*",
-        "Content-Type": "application/json",
-        "Access-Control-Max-Age": "86400",
-        "Vary": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
-        "Cache-Control": "max-age=86400, public",
-        "X-Content-Type-Options": "nosniff",
-        "X-Frame-Options": "DENY",
-        "X-XSS-Protection": "1; mode=block",
-        "Referrer-Policy": "no-referrer",
+        "Content-Type": "application/json"
     }

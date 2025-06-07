@@ -49,6 +49,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
                 <Menu.Item onClick={() => handleLinkClick('/about') }>About</Menu.Item>
                 <Menu.Item onClick={() => handleLinkClick('/resume')}>Resume</Menu.Item>
                 <Menu.Item onClick={() => handleLinkClick('/blogs')}>Blogs</Menu.Item>
+                <Menu.Item onClick={() => handleLinkClick('/auth')}>Login</Menu.Item>
               </Menu.Group>
             </Menu>
           }
@@ -68,6 +69,9 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
           </Link>
           <Link to="/blogs">
             <Text size={500} marginRight={16}>Blogs</Text>
+          </Link>
+          <Link to="/auth">
+            <Text size={500} marginRight={16}>Login</Text>
           </Link>
         </Pane>
       )}
