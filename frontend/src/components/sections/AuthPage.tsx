@@ -5,6 +5,7 @@ import {
   fetchAuthSession,
 } from 'aws-amplify/auth';
 import './AuthPage.css';
+import {requestUserConfirmation} from '../common/userAPI'
 
 const AuthPage: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -18,7 +19,7 @@ const AuthPage: React.FC = () => {
     e.preventDefault();
     try {
       if (isLogin) {
-        await signIn({ username: email, password });
+        await signIn({ username: username, password });
         const session = await fetchAuthSession();
         const idToken = session.tokens?.idToken?.toString();
         if (idToken) {
@@ -41,7 +42,7 @@ const AuthPage: React.FC = () => {
             },
           },
         });
-
+        await requestUserConfirmation({ username: username });
         await signIn({ username: email, password });
         const session = await fetchAuthSession();
         const idToken = session.tokens?.idToken?.toString();
@@ -86,19 +87,19 @@ const AuthPage: React.FC = () => {
               required
             />
             <input
-              type="text"
-              placeholder="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
           </>
         )}
         <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
           required
         />
         <input
