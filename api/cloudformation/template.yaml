@@ -299,6 +299,26 @@ Resources:
         BlockPublicPolicy: true
         IgnorePublicAcls: true
         RestrictPublicBuckets: true
+  
+  DownloadResumeLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub download-resume-${Env}
+      Handler: resume.download.lambda_handler
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AmazonS3FullAccess
+      Environment:
+        Variables:
+          RESUME_BUCKET: !Ref MediaBucket
+          RESUME_KEY: resume/resume.pdf
+      Events:
+        AddItem:
+          Type: Api
+          Properties:
+            RestApiId: !Ref PortfolioAPI
+            Path: /download-resume
+            Method: GET
 
 
 Parameters:
