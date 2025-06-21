@@ -317,7 +317,29 @@ Resources:
             RestApiId: !Ref PortfolioAPI
             Path: /download-resume
             Method: GET
+  
+  MediaBucketPolicy:
+  Type: AWS::S3::BucketPolicy
+  Properties:
+    Bucket: !Ref MediaBucket
+    PolicyDocument:
+      Version: "2012-10-17"
+      Statement:
+        - Sid: AllowCloudFrontOAC
+          Effect: Allow
+          Principal:
+            Service: cloudfront.amazonaws.com
+          Action: "*"
+          Resource: !Sub "${MediaBucket.Arn}/*"
+          Condition:
+            StringEquals:
+              AWS:SourceArn: !Sub "arn:aws:cloudfront::${AWS::AccountId}:distribution/${MediaDistribution}"
 
+        - Sid: AllowSignedURLDownload
+          Effect: Allow
+          Principal: "*"
+          Action: "s3:GetObject"
+          Resource: !Sub "${MediaBucket.Arn}/*"
 
 Parameters:
   Env:
