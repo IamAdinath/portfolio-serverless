@@ -287,7 +287,7 @@ Resources:
   MediaBucket:
     Type: "AWS::S3::Bucket"
     Properties:
-      BucketName: !Sub media-bucket-${Env}
+      BucketName: !Sub mediabucket-${Env}
       AccessControl: Private
       OwnershipControls:
         Rules:
