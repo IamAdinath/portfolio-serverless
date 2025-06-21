@@ -285,20 +285,18 @@ Resources:
           USERS_TABLE: !Ref UsersTable
 
   MediaBucket:
-    Type: "AWS::S3::Bucket"
-    Properties:
-      BucketName: !Sub media-bucket-${Env}
-      BucketEncryption:
-        ServerSideEncryptionConfiguration:
-          - ServerSideEncryptionByDefault:
-              SSEAlgorithm: AES256
-      VersioningConfiguration:
-        Status: Enabled
-      PublicAccessBlockConfiguration:
-        BlockPublicAcls: true
-        BlockPublicPolicy: true
-        IgnorePublicAcls: true
-        RestrictPublicBuckets: true
+  Type: "AWS::S3::Bucket"
+  Properties:
+    BucketName: !Sub media-bucket-${Env}
+    AccessControl: Private
+    OwnershipControls:
+      Rules:
+        - ObjectOwnership: BucketOwnerPreferred
+    PublicAccessBlockConfiguration:
+      BlockPublicAcls: true
+      BlockPublicPolicy: true
+      IgnorePublicAcls: true
+      RestrictPublicBuckets: true
   
   DownloadResumeLambda:
     Type: AWS::Serverless::Function
