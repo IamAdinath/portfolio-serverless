@@ -284,6 +284,78 @@ Resources:
         Variables:
           USERS_TABLE: !Ref UsersTable
 
+  MediaBucket:
+    Type: "AWS::S3::Bucket"
+    Properties:
+      BucketName: !Sub mediabucket-${Env}
+      AccessControl: Private
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: BucketOwnerPreferred
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+  
+  DownloadResumeLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub download-resume-${Env}
+      Handler: resume.download.lambda_handler
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AmazonS3FullAccess
+      Environment:
+        Variables:
+          RESUME_BUCKET: !Ref MediaBucket
+          RESUME_KEY: resume/resume.pdf
+      Events:
+        AddItem:
+          Type: Api
+          Properties:
+            RestApiId: !Ref PortfolioAPI
+            Path: /download-resume
+            Method: GET
+  
+  MediaBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref MediaBucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: AllowCloudFrontOAC
+            Effect: Allow
+            Principal:
+              Service: cloudfront.amazonaws.com
+            Action: "*"
+            Resource: !Sub "${MediaBucket.Arn}/*"
+            Condition:
+              StringEquals:
+                AWS:SourceArn: !Sub "arn:aws:cloudfront::${AWS::AccountId}:distribution/${MediaDistribution}"
+
+          - Sid: AllowSignedURLDownload
+            Effect: Allow
+            Principal: "*"
+            Action: "s3:GetObject"
+            Resource: !Sub "${MediaBucket.Arn}/*"
+
+  MediaBucketCORS:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub media-bucket-${Env}
+      CorsConfiguration:
+        CorsRules:
+          - AllowedOrigins:
+              - "*"
+          - AllowedMethods:
+              - GET
+          - AllowedHeaders:
+              - "*"
+            ExposedHeaders:
+              - Content-Disposition
+            MaxAge: 3000
 
 Parameters:
   Env:
