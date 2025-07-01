@@ -18,7 +18,7 @@ const Resume: React.FC = () => {
                 <div className="contact-info">
                     {/* Use divs or spans instead of pre for better layout control */}
                     <div><IconButton icon={<FontAwesomeIcon icon={faEnvelope} />} aria-label="Email" /> adinathgore.17@gmail.com</div>
-                    <div><IconButton icon={<FontAwesomeIcon icon={faMobileAndroid} />} aria-label="Mobile" /> +919579519806</div>
+                    <div><IconButton icon={<FontAwesomeIcon icon={faMobileAndroid} />} aria-label="Mobile" /> +9195xxxxxxx6</div>
                     <div><IconButton icon={<FontAwesomeIcon icon={faLinkedin} />} aria-label="LinkedIn" /> <a href="https://www.linkedin.com/in/primewhites/">LinkedIn</a></div>
                     <div><IconButton icon={<FontAwesomeIcon icon={faMedium} />} aria-label="Medium Blogs" /> <a href="https://medium.com/@adinath.17">Blogs</a></div>
                 </div>
@@ -178,14 +178,6 @@ const Resume: React.FC = () => {
                                 <li>Wrote unit tests that increased code coverage to 80%</li>
                                 <li>Improved application performance by 35% through refactoring and code optimization</li>
                                 <li>Wrote technical documentation that enabled other developers to quickly understand the application architecture</li>
-                            </ul>
-                        </div>
-                        <div className="experience-item">
-                            <h4>Python Developer</h4>
-                            <strong>Strategy Analysis (Dec 2018 - Apr 2020)</strong>
-                            <ul>
-                                <li>Created a web crawler that identified over 20 new sources of data, resulting in a 2% increase in revenue for the company</li>
-                                <li>Created a dashboard that visually represented key business metrics in real time, allowing for quick and informed decision-making by management</li>
                             </ul>
                         </div>
                     </section>
