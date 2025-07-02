@@ -360,18 +360,18 @@ Resources:
   #       PriceClass: PriceClass_100
   #       Comment: !Sub "MediaDistribution for ${MediaBucket}"
 
-  MediaBucketPolicy:
-    Type: AWS::S3::BucketPolicy
-    Properties:
-      Bucket: !Ref MediaBucket
-      PolicyDocument:
-        Version: "2012-10-17"
-        Statement:
-          - Sid: AllowSignedURLDownload
-            Effect: Allow
-            Principal: "*"
-            Action: "s3:GetObject"
-            Resource: !Sub "${MediaBucket.Arn}/*"
+  # MediaBucketPolicy:
+  #   Type: AWS::S3::BucketPolicy
+  #   Properties:
+  #     Bucket: !Ref MediaBucket
+  #     PolicyDocument:
+  #       Version: "2012-10-17"
+  #       Statement:
+  #         - Sid: AllowSignedURLDownload
+  #           Effect: Allow
+  #           Principal: "*"
+  #           Action: "s3:GetObject"
+  #           Resource: !Sub "${MediaBucket.Arn}/*"
 
 Parameters:
   Env:
