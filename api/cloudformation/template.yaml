@@ -317,7 +317,44 @@ Resources:
             RestApiId: !Ref PortfolioAPI
             Path: /download-resume
             Method: GET
-  
+  MediaOAC:
+    Type: AWS::CloudFront::OriginAccessControl
+    Properties:
+      OriginAccessControlConfig:
+        Name: !Sub "${AWS::StackName}-OAC"
+        Description: Origin Access Control for S3 Media Bucket
+        OriginAccessControlOriginType: s3
+        SigningBehavior: always
+        SigningProtocol: sigv4
+
+  MediaDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Enabled: true
+        DefaultRootObject: index.html
+        Origins:
+          - Id: MediaS3Origin
+            DomainName: !GetAtt MediaBucket.DomainName
+            S3OriginConfig:
+              OriginAccessIdentity: "" # Required to be empty when using OAC
+            OriginAccessControlId: !GetAtt MediaOAC.Id
+        DefaultCacheBehavior:
+          TargetOriginId: MediaS3Origin
+          ViewerProtocolPolicy: redirect-to-https
+          AllowedMethods: [GET, HEAD]
+          CachedMethods: [GET, HEAD]
+          Compress: true
+          ForwardedValues:
+            QueryString: false
+            Cookies:
+              Forward: none
+        ViewerCertificate:
+          CloudFrontDefaultCertificate: true
+        HttpVersion: http2
+        PriceClass: PriceClass_100
+        Comment: !Sub "MediaDistribution for ${MediaBucket}"
+
   MediaBucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
