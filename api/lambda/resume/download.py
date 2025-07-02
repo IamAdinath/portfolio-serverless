@@ -17,16 +17,8 @@ def lambda_handler(event, context):
         resume_file = os.environ['RESUME_KEY']
         url = s3.get_s3_file_url(bucket, resume_file)
         if not url:
-<<<<<<< HEAD
-            return utils.build_response(StatusCodes.NOT_FOUND, Headers)
-        return utils.build_response(StatusCodes.OK, Headers, url)
-    except Exception as e:
-        logger.error(f"Error: {e}")
-        return utils.build_response(StatusCodes.INTERNAL_SERVER_ERROR, Headers)
-=======
             return utils.build_response(StatusCodes.NOT_FOUND, Headers.CORS)
         return utils.build_response(StatusCodes.OK, Headers.CORS, {"url": url})
     except Exception as e:
         logger.error(f"Error: {e}")
         return utils.build_response(StatusCodes.INTERNAL_SERVER_ERROR, Headers.CORS)
->>>>>>> dev
