@@ -288,7 +288,25 @@ Resources:
     Type: "AWS::S3::Bucket"
     Properties:
       BucketName: !Sub mediabucket-${Env}
+<<<<<<< HEAD
       AccessControl: Private
+=======
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders:
+              - "*"
+            AllowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+            AllowedOrigins:
+              - "*"
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+>>>>>>> dev
       OwnershipControls:
         Rules:
           - ObjectOwnership: BucketOwnerPreferred
@@ -317,6 +335,7 @@ Resources:
             RestApiId: !Ref PortfolioAPI
             Path: /download-resume
             Method: GET
+<<<<<<< HEAD
   
   MediaBucketPolicy:
     Type: AWS::S3::BucketPolicy
@@ -356,6 +375,8 @@ Resources:
             ExposedHeaders:
               - Content-Disposition
             MaxAge: 3000
+=======
+>>>>>>> dev
 
 Parameters:
   Env:
