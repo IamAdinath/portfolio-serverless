@@ -331,15 +331,6 @@ Resources:
             RestApiId: !Ref PortfolioAPI
             Path: /download-resume
             Method: GET
-  MediaOAC:
-    Type: AWS::CloudFront::OriginAccessControl
-    Properties:
-      OriginAccessControlConfig:
-        Name: !Sub "${AWS::StackName}-OAC"
-        Description: Origin Access Control for S3 Media Bucket
-        OriginAccessControlOriginType: s3
-        SigningBehavior: always
-        SigningProtocol: sigv4
 
   # MediaDistribution:
   #   Type: AWS::CloudFront::Distribution
@@ -376,16 +367,6 @@ Resources:
       PolicyDocument:
         Version: "2012-10-17"
         Statement:
-          - Sid: AllowCloudFrontOAC
-            Effect: Allow
-            Principal:
-              Service: cloudfront.amazonaws.com
-            Action: "*"
-            Resource: !Sub "${MediaBucket.Arn}/*"
-            # Condition:
-            #   StringEquals:
-            #     AWS:SourceArn: !Sub "arn:aws:cloudfront::${AWS::AccountId}:distribution/${MediaDistribution}"
-
           - Sid: AllowSignedURLDownload
             Effect: Allow
             Principal: "*"
