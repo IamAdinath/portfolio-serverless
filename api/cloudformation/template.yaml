@@ -288,7 +288,21 @@ Resources:
     Type: "AWS::S3::Bucket"
     Properties:
       BucketName: !Sub mediabucket-${Env}
-      AccessControl: Private
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders:
+              - "*"
+            AllowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+            AllowedOrigins:
+              - "*"
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
       OwnershipControls:
         Rules:
           - ObjectOwnership: BucketOwnerPreferred
@@ -377,22 +391,6 @@ Resources:
             Principal: "*"
             Action: "s3:GetObject"
             Resource: !Sub "${MediaBucket.Arn}/*"
-
-  MediaBucketCORS:
-    Type: AWS::S3::Bucket
-    Properties:
-      BucketName: !Sub mediabucket-${Env}
-      CorsConfiguration:
-        CorsRules:
-          - AllowedOrigins:
-              - "*"
-          - AllowedMethods:
-              - GET
-          - AllowedHeaders:
-              - "*"
-            ExposedHeaders:
-              - Content-Disposition
-            MaxAge: 3000
 
 Parameters:
   Env:
