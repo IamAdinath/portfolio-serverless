@@ -55,7 +55,7 @@ function deploy() {
     export REACT_APP_INSTANCE=$ENV
     # change to ui root directory
     pushd $DIR/..
-        npm ci
+        npm install
         npm run build
     popd
     echo "ACM_CERTIFICATE_ARN >>>> " $ACM_CERTIFICATE_ARN
