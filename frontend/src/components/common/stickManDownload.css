@@ -5,7 +5,7 @@
   bottom: 20px;
   right: 30px;
   padding: 10px 20px;
-  background-color: #2563eb;
+  background-color: #010101;
   color: white;
   border: none;
   border-radius: 20px;
@@ -17,7 +17,7 @@
 }
 
 .floating-download-btn:hover {
-  background-color: #1e40af;
+  background-color: #2fc99e;
 }
 
 .stickman-wrapper {
