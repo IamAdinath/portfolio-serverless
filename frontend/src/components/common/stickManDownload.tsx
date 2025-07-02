@@ -60,24 +60,6 @@ const StickmanDownload: React.FC = () => {
         {isAnimating ? 'Downloading...' : '📥 Download'}
       </button>
 
-      {showStickman && (
-        <motion.div
-          className="stickman-wrapper"
-          initial={{ x: '-100%' }}
-          animate={{ x: '60%' }}
-          transition={{ duration: 3 }}
-        >
-          <div className="stickman">🤵‍♂️</div>
-          <div className="rope" />
-          <motion.div
-            className="file-icon"
-            animate={{ rotate: [0, 3, -3, 0] }}
-            transition={{ repeat: Infinity, duration: 1 }}
-          >
-            📄
-          </motion.div>
-        </motion.div>
-      )}
     </>
   );
 };
