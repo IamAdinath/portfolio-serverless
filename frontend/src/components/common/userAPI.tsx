@@ -18,7 +18,10 @@ interface ConfirmUserResponse {
   success: boolean;
   message: string;
 }
-
+const headers = {
+        'Content-Type': 'application/pdf',
+        'Access-Control-Allow-Origin': '*'
+      }
 /**
  * Calls the backend API to trigger administrative confirmation of a newly signed-up user.
  * This endpoint on your backend must be appropriately secured.
@@ -62,7 +65,7 @@ export async function requestUserConfirmation(payload: ConfirmUserPayload): Prom
   }
 }
 
-export async function DownloadResume() {
+export async function ResumeLink() {
   const endpoint = `${API_BASE_URL}/download-resume`;
 
   try {
@@ -81,14 +84,14 @@ export async function DownloadResume() {
       const error: ApiError = new Error(jsonResponse.message || `API Error: ${response.status} ${response.statusText}`);
       error.statusCode = response.status;
       error.details = jsonResponse;
-      console.error('DownloadResume API error:', error.details);
+      console.error('ResumeLink API error:', error.details);
       throw error;
     }
 
     return jsonResponse as { url: string };
 
   } catch (error) {
-    console.error('Network or other error in DownloadResume:', error);
+    console.error('Network or other error in ResumeLink:', error);
     if ((error as ApiError).statusCode) {
       throw error;
     }
@@ -97,3 +100,30 @@ export async function DownloadResume() {
   }
   
 }
+
+export async function GetFile(fileURL: string) {
+  try {
+    const response = await fetch(fileURL, {
+      method: 'GET',
+      headers: headers,
+    });
+
+    if (!response.ok) {
+      const error: ApiError = new Error(`API Error: ${response.status} ${response.statusText}`);
+      error.statusCode = response.status;
+      console.error('GetFile API error:', error);
+      throw error;
+    }
+
+    const blob = await response.blob();
+    return blob;
+
+  } catch (error) {
+    console.error('Network or other error in GetFile:', error);
+    if ((error as ApiError).statusCode) {
+      throw error;
+    }
+    const apiError: ApiError = new Error((error as Error).message || 'An unexpected error occurred during file download.');
+    throw apiError;
+  }
+};
