@@ -332,47 +332,6 @@ Resources:
             Path: /download-resume
             Method: GET
 
-  # MediaDistribution:
-  #   Type: AWS::CloudFront::Distribution
-  #   Properties:
-  #     DistributionConfig:
-  #       Enabled: true
-  #       DefaultRootObject: index.html
-  #       Origins:
-  #         - Id: MediaS3Origin
-  #           DomainName: !GetAtt MediaBucket.DomainName
-  #           S3OriginConfig:
-  #             OriginAccessIdentity: "" # Required to be empty when using OAC
-  #           OriginAccessControlId: !GetAtt MediaOAC.Id
-  #       DefaultCacheBehavior:
-  #         TargetOriginId: MediaS3Origin
-  #         ViewerProtocolPolicy: redirect-to-https
-  #         AllowedMethods: [GET, HEAD]
-  #         CachedMethods: [GET, HEAD]
-  #         Compress: true
-  #         ForwardedValues:
-  #           QueryString: false
-  #           Cookies:
-  #             Forward: none
-  #       ViewerCertificate:
-  #         CloudFrontDefaultCertificate: true
-  #       HttpVersion: http2
-  #       PriceClass: PriceClass_100
-  #       Comment: !Sub "MediaDistribution for ${MediaBucket}"
-
-  # MediaBucketPolicy:
-  #   Type: AWS::S3::BucketPolicy
-  #   Properties:
-  #     Bucket: !Ref MediaBucket
-  #     PolicyDocument:
-  #       Version: "2012-10-17"
-  #       Statement:
-  #         - Sid: AllowSignedURLDownload
-  #           Effect: Allow
-  #           Principal: "*"
-  #           Action: "s3:GetObject"
-  #           Resource: !Sub "${MediaBucket.Arn}/*"
-
 Parameters:
   Env:
     Default: dev
