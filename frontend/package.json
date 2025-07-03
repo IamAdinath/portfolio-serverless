@@ -14,6 +14,12 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "@tiptap/extension-code-block-lowlight": "^2.24.0",
+    "@tiptap/extension-dropcursor": "^2.24.0",
+    "@tiptap/extension-image": "^2.24.0",
+    "@tiptap/extension-placeholder": "^2.24.0",
+    "@tiptap/react": "^2.24.0",
+    "@tiptap/starter-kit": "^2.24.0",
     "@types/jest": "^27.5.2",
     "@types/node": "^16.18.68",
     "@types/react": "^18.2.45",
@@ -21,6 +27,8 @@
     "aws-amplify": "^6.15.0",
     "evergreen-ui": "^7.1.9",
     "framer-motion": "^10.16.16",
+    "highlight.js": "^11.11.1",
+    "lowlight": "^3.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.21.1",
@@ -54,6 +62,11 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "@types/react-router-dom": "^5.3.3"
+    "@tiptap/core": "^2.24.0",
+    "@types/highlight.js": "^9.12.4",
+    "@types/react-router-dom": "^5.3.3",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.11"
   }
 }
