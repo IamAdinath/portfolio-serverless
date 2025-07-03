@@ -8,6 +8,7 @@ import Portfolio from './Portfolio';
 import Resume from './components/sections/Resume';  
 import BlogList from './components/sections/BlogList';
 import AuthPage from './components/sections/AuthPage';
+import WriterPage from './components/sections/WriterPage';
 
 const App: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -25,6 +26,7 @@ const App: React.FC = () => {
         <Route path="/blogs" element={<BlogList />} /> {/* Renders BlogList with suggested blogs footer */}
         <Route path="/resume" element={<Resume />} />
         <Route path="/auth" element={<AuthPage />} />
+        <Route path="/writer" element={<WriterPage />} />
       </Routes>
       <Footer />
     </Router>

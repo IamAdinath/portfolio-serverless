@@ -1,0 +1,202 @@
+/* src/components/WriterPage.css */
+
+/* --- General Layout --- */
+.writer-container {
+  max-width: 800px;
+  margin: 40px auto;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  color: #111;
+}
+
+h1 {
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 30px;
+}
+
+/* --- Menu Bar --- */
+.menu-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-bottom: none;
+  background-color: #f9f9f9;
+  border-radius: 8px 8px 0 0;
+}
+
+.menu-bar button {
+  font-family: inherit;
+  font-size: 14px;
+  background: none;
+  border: 1px solid #ddd;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.menu-bar button:hover {
+  background-color: #eee;
+}
+
+.menu-bar button.is-active {
+  background-color: #111;
+  color: #fff;
+}
+
+/* --- Editor Wrapper & Drop Zone --- */
+.editor-wrapper {
+  position: relative; /* Needed for the overlay */
+}
+
+.drop-zone-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: white;
+  font-weight: bold;
+  border: 2px dashed #fff;
+  z-index: 10;
+  pointer-events: none; /* Allows clicks to pass through if needed, though not for drop */
+}
+
+
+/* --- Tiptap Editor Content Styling --- */
+/* This is the main class for the editable area */
+.ProseMirror {
+  min-height: 400px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 0 0 8px 8px;
+  outline: none; /* Removes the default focus outline */
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+.ProseMirror:focus {
+  border-color: #333;
+}
+
+/* --- Styling for elements INSIDE the editor --- */
+.ProseMirror p {
+  margin: 0 0 1em;
+}
+
+.ProseMirror h1,
+.ProseMirror h2,
+.ProseMirror h3 {
+  line-height: 1.2;
+  margin: 1.5em 0 0.5em;
+}
+
+.ProseMirror ul,
+.ProseMirror ol {
+  padding-left: 20px;
+}
+
+/* Image styles */
+.ProseMirror img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 1em 0;
+  border-radius: 4px;
+}
+
+/* Code block styles */
+.ProseMirror pre {
+  background: #0D0D0D;
+  color: #FFF;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  margin: 1em 0;
+}
+
+.ProseMirror pre code {
+  color: inherit;
+  padding: 0;
+  background: none;
+  font-size: 0.9rem;
+}
+
+/* Syntax highlighting styles from highlight.js */
+.ProseMirror .hljs-comment,
+.ProseMirror .hljs-quote {
+  color: #616161;
+}
+
+.ProseMirror .hljs-variable,
+.ProseMirror .hljs-template-variable,
+.ProseMirror .hljs-attribute,
+.ProseMirror .hljs-tag,
+.ProseMirror .hljs-name,
+.ProseMirror .hljs-regexp,
+.ProseMirror .hljs-link,
+.ProseMirror .hljs-selector-id,
+.ProseMirror .hljs-selector-class {
+  color: #F98181;
+}
+
+.ProseMirror .hljs-keyword,
+.ProseMirror .hljs-selector-tag,
+.ProseMirror .hljs-built_in,
+.ProseMirror .hljs-type {
+    color: #90A9F9;
+}
+
+.ProseMirror .hljs-string,
+.ProseMirror .hljs-symbol,
+.ProseMirror .hljs-bullet {
+    color: #A5D6A7;
+}
+
+.ProseMirror .hljs-number {
+    color: #FFAB40;
+}
+
+/* --- Save Button --- */
+.save-button {
+  display: block;
+  width: 100%;
+  margin-top: 20px;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.save-button:hover {
+  background-color: #0056b3;
+}
+
+/* Add this to WriterPage.css */
+.title-input {
+  width: 100%;
+  padding: 15px;
+  font-size: 2rem;
+  font-weight: bold;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 20px;
+  outline: none;
+  box-sizing: border-box; /* Important */
+}
+
+.title-input:focus {
+  border-bottom-color: #333;
+}
