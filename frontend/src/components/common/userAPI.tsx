@@ -140,9 +140,9 @@ export async function CreateBlogPost(payload: any) {
 
   try {
     const response = await fetch(endpoint, {
-      method: 'GET',
+      method: 'POST',
       headers: base_headers,
-      // body: JSON.stringify(payload),
+      body: JSON.stringify(payload),
     });
 
     const jsonResponse = await response.json().catch(() => ({
