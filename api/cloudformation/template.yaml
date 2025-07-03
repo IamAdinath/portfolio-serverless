@@ -135,7 +135,7 @@ Resources:
           Properties:
             RestApiId: !Ref PortfolioAPI
             Path: /create-blog
-            Method: GET
+            Method: POST
       Environment:
         Variables:
           POSTS_TABLE: !Ref PostsTable
