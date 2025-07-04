@@ -43,7 +43,7 @@ const AuthPage: React.FC = () => {
           },
         });
         await requestUserConfirmation({ username: username });
-        await signIn({ username: email, password });
+        await signIn({ username: username, password });
         const session = await fetchAuthSession();
         const idToken = session.tokens?.idToken?.toString();
         if (idToken) {
