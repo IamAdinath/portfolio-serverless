@@ -138,7 +138,7 @@ Resources:
             Method: POST
       Environment:
         Variables:
-          POSTS_TABLE: !Ref PostsTable
+          BLOGS_TABLE: !Ref PostsTable
           ENV : !Ref Env
   
   BlogUserPool:
