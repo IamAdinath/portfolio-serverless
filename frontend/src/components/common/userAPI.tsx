@@ -22,6 +22,10 @@ const headers = {
         'Content-Type': 'application/pdf',
         'Access-Control-Allow-Origin': '*'
       }
+
+const base_headers = {
+  'Content-Type': 'application/json'
+}
 /**
  * Calls the backend API to trigger administrative confirmation of a newly signed-up user.
  * This endpoint on your backend must be appropriately secured.
@@ -124,6 +128,43 @@ export async function GetFile(fileURL: string) {
       throw error;
     }
     const apiError: ApiError = new Error((error as Error).message || 'An unexpected error occurred during file download.');
+    throw apiError;
+  }
+};
+interface blogPostPayload{
+  title: string;
+  content: Text;
+}
+export async function CreateBlogPost(payload: any) {
+  const endpoint = `${API_BASE_URL}/create-blog`;
+
+  try {
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: base_headers,
+      body: JSON.stringify(payload),
+    });
+
+    const jsonResponse = await response.json().catch(() => ({
+      message: `Request failed with status ${response.status} and no JSON error body.`,
+    }));
+
+    if (!response.ok) {
+      const error: ApiError = new Error(jsonResponse.message || `API Error: ${response.status} ${response.statusText}`);
+      error.statusCode = response.status;
+      error.details = jsonResponse;
+      console.error('CreateBlogPost API error:', error.details);
+      throw error;
+    }
+
+    return jsonResponse;
+
+  } catch (error) {
+    console.error('Network or other error in CreateBlogPost:', error);
+    if ((error as ApiError).statusCode) {
+      throw error;
+    }
+    const apiError: ApiError = new Error((error as Error).message || 'An unexpected error occurred during blog post creation.');
     throw apiError;
   }
 };

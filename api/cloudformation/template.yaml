@@ -119,7 +119,7 @@ Resources:
             Method: GET
       Environment:
         Variables:
-          POSTS_TABLE: !Ref PostsTable
+          BLOGS_TABLE: !Ref PostsTable
 
   CreateBlogsLambda:
     Type: AWS::Serverless::Function
@@ -135,10 +135,10 @@ Resources:
           Properties:
             RestApiId: !Ref PortfolioAPI
             Path: /create-blog
-            Method: GET
+            Method: POST
       Environment:
         Variables:
-          POSTS_TABLE: !Ref PostsTable
+          BLOGS_TABLE: !Ref PostsTable
           ENV : !Ref Env
   
   BlogUserPool:

@@ -43,6 +43,14 @@ jobs:
           UI_STACK_NAME: ${{ vars.UI_STACK_NAME }}
           UI_BUCKET_NAME: ${{ vars.UI_BUCKET_NAME }}
           ENV: test
+          REACT_APP_API_BASE_URL: ${{ vars.REACT_APP_API_BASE_URL }}
+          REACT_APP_COGNITO_USER_POOL_ID: ${{ vars.REACT_APP_COGNITO_USER_POOL_ID }}
+          REACT_APP_COGNITO_CLIENT_ID: ${{ vars.REACT_APP_COGNITO_CLIENT_ID }}
+          REACT_APP_COGNITO_REGION: ${{ vars.REACT_APP_COGNITO_REGION }}
+          REACT_APP_COGNITO_DOMAIN: ${{ vars.REACT_APP_COGNITO_DOMAIN }}
+          REACT_APP_COGNITO_REDIRECT_SIGNIN: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNIN }}
+          REACT_APP_COGNITO_REDIRECT_SIGNOUT: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNOUT }}
+          REACT_APP_API_KEY: ${{ vars.REACT_APP_API_KEY }}
 
   # --------------------
   # Production Deployment
@@ -74,10 +82,29 @@ jobs:
         run: |
           chmod +x ./deploy.sh
           ./deploy.sh 
+          echo " ${{ vars.UI_AWS_REGION }} "
+          echo " ${{ vars.UI_STACK_NAME }} "
+          echo " ${{ vars.UI_BUCKET_NAME }} "
+          echo " REACT_APP_API_BASE_URL ${{ vars.REACT_APP_API_BASE_URL }} "
+          echo "REACT_APP_COGNITO_USER_POOL_ID  ${{ vars.REACT_APP_COGNITO_USER_POOL_ID }} "
+          echo "REACT_APP_COGNITO_CLIENT_ID  ${{ vars.REACT_APP_COGNITO_CLIENT_ID }} "
+          echo " ${{ vars.REACT_APP_COGNITO_REGION }} "
+          echo " ${{ vars.REACT_APP_COGNITO_DOMAIN }} "
+          echo " ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNIN }} "
+          echo " ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNOUT }} "
+          echo "REACT_APP_API_KEY ${{ vars.REACT_APP_API_KEY }} "
         env:
           UI_AWS_REGION: ${{ vars.UI_AWS_REGION }}
           UI_STACK_NAME: ${{ vars.UI_STACK_NAME }}
           UI_BUCKET_NAME: ${{ vars.UI_BUCKET_NAME }}
+          REACT_APP_API_BASE_URL: ${{ vars.REACT_APP_API_BASE_URL }}
+          REACT_APP_COGNITO_USER_POOL_ID: ${{ vars.REACT_APP_COGNITO_USER_POOL_ID }}
+          REACT_APP_COGNITO_CLIENT_ID: ${{ vars.REACT_APP_COGNITO_CLIENT_ID }}
+          REACT_APP_COGNITO_REGION: ${{ vars.REACT_APP_COGNITO_REGION }}
+          REACT_APP_COGNITO_DOMAIN: ${{ vars.REACT_APP_COGNITO_DOMAIN }}
+          REACT_APP_COGNITO_REDIRECT_SIGNIN: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNIN }}
+          REACT_APP_COGNITO_REDIRECT_SIGNOUT: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNOUT }}
+          REACT_APP_API_KEY: ${{ vars.REACT_APP_API_KEY }}
 
   # --------------------
   # API Deployment
