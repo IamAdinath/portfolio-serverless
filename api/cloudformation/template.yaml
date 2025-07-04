@@ -283,6 +283,7 @@ Resources:
       Environment:
         Variables:
           USERS_TABLE: !Ref UsersTable
+          USER_POOL_ID: !Ref BlogUserPool
 
   MediaBucket:
     Type: "AWS::S3::Bucket"
