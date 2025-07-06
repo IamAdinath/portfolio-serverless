@@ -1,0 +1,36 @@
+/* common/toasters.css */
+.toaster-base {
+  position: fixed;
+  top: 2.7rem;
+  right: 33.5rem;
+  z-index: 9999;
+  padding: 0.75rem 1.20rem;
+  border-radius: 0.375rem;
+  color: white;
+  font-size: 0.92rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  animation: fadeInOut 5s ease-in-out forwards;
+  max-width: 300px;
+  word-break: break-word;
+}
+
+/* Individual severity classes */
+.toaster-success {
+  background-color: #16a34a; /* Tailwind green-600 */
+}
+.toaster-error {
+  background-color: #dc2626; /* Tailwind red-600 */
+}
+.toaster-info {
+  background-color: #2563eb; /* Tailwind blue-600 */
+}
+.toaster-warning {
+  background-color: #f59e0b; /* Tailwind yellow-500 */
+}
+
+/* Optional fade animation */
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translateY(-10px); }
+  10%, 90% { opacity: 0.80; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-10px); }
+}
