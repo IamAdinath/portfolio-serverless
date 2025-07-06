@@ -1,11 +1,13 @@
 /* Auth.css */
 .auth-container {
-  max-width: 400px;
+  max-width: 33%;
   margin: auto;
-  padding: 20px;
+  padding: 2%;
   border: 1px solid #ddd;
   background-color: #f9f9f9;
   border-radius: 8px;
+  margin-top: 3rem;
+  margin-bottom: 2rem;
 }
 
 .auth-tabs {
