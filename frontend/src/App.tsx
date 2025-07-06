@@ -9,6 +9,7 @@ import Resume from './components/sections/Resume';
 import BlogList from './components/sections/BlogList';
 import AuthPage from './components/sections/AuthPage';
 import WriterPage from './components/sections/WriterPage';
+import { ToastProvider } from './components/common/ToastProvider'; // ✅ import this
 
 const App: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -18,18 +19,20 @@ const App: React.FC = () => {
   };
 
   return (
-    <Router>
-      <Header onMenuClick={handleMenuClick} />
-      <Routes>
-        <Route path="/" element={<Portfolio />} />
-        <Route path="/about" element={<AboutMe />} />
-        <Route path="/blogs" element={<BlogList />} /> {/* Renders BlogList with suggested blogs footer */}
-        <Route path="/resume" element={<Resume />} />
-        <Route path="/auth" element={<AuthPage />} />
-        <Route path="/writer" element={<WriterPage />} />
-      </Routes>
-      <Footer />
-    </Router>
+    <ToastProvider> 
+      <Router>
+        <Header onMenuClick={handleMenuClick} />
+        <Routes>
+          <Route path="/" element={<Portfolio />} />
+          <Route path="/about" element={<AboutMe />} />
+          <Route path="/blogs" element={<BlogList />} />
+          <Route path="/resume" element={<Resume />} />
+          <Route path="/auth" element={<AuthPage />} />
+          <Route path="/writer" element={<WriterPage />} />
+        </Routes>
+        <Footer />
+      </Router>
+    </ToastProvider>
   );
 };
 
