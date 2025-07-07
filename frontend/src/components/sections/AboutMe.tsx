@@ -4,9 +4,11 @@ import './AboutMe.css'; // Import the specific CSS for AboutMe
 import '../common/common.css'; // Correctly import the common CSS
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLinkedin, faGithub, faMedium, faTwitter, faStackOverflow } from '@fortawesome/free-brands-svg-icons';
+import { usePageTitle } from '../common/usePageTitle';
 
 const AboutMe: React.FC = () => {
   return (
+    usePageTitle('About Me'),
     <Pane className="about-container common-container"> {/* Apply the common container class */}
       <Heading size={600}>About Me</Heading>
       <div className="profile-container">

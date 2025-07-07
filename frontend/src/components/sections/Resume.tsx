@@ -4,8 +4,6 @@ import { IconButton } from 'evergreen-ui';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLinkedin, faMedium } from '@fortawesome/free-brands-svg-icons';
 import { faMobileAndroid, faEnvelope } from '@fortawesome/free-solid-svg-icons';
-import { motion } from 'framer-motion';
-import { useState } from 'react';
 import StickmanDownload from '../common/stickManDownload';
 import { usePageTitle } from '../common/usePageTitle';
 

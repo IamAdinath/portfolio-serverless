@@ -7,6 +7,7 @@ import {
 import './AuthPage.css';
 import { requestUserConfirmation } from '../common/userAPI';
 import { useToast } from '../common/ToastProvider'; // ✅ Import useToast
+import { usePageTitle } from '../common/usePageTitle';
 
 const AuthPage: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -17,10 +18,9 @@ const AuthPage: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const { showSuccess, showError } = useToast(); // ✅ Use toast context
-
+  usePageTitle(isLogin? 'Login' : 'Sign Up');
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     try {
       if (isLogin) {
         await signIn({ username, password });

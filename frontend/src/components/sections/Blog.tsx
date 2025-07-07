@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { usePageTitle } from '../common/usePageTitle';
 type BlogProps = {
   id: number;
   title: string;
@@ -8,6 +8,7 @@ type BlogProps = {
 };
 
 const Blog: React.FC<BlogProps> = ({ title, content, author }) => {
+  usePageTitle(`${title}`);
   return (
     <div className="blog-post">
       <h2>{title}</h2>

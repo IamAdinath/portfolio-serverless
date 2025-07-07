@@ -1,8 +1,10 @@
 // Portfolio.tsx
 import React from 'react';
-import { Pane, Heading, Paragraph, Text, Strong, Avatar } from 'evergreen-ui'; // Added necessary components
+import { Pane, Heading, Paragraph, Text, Avatar } from 'evergreen-ui'; // Added necessary components
+import { usePageTitle } from './components/common/usePageTitle';
 
 const Portfolio: React.FC = () => {
+  usePageTitle('Portfolio');
   const latestBlogs = [
     { id: 1, title: 'My Journey into Web Development', snippet: 'A quick look at how I started...' },
     { id: 2, title: 'Exploring Evergreen UI', snippet: 'Why I chose this library for my portfolio...' },
