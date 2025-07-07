@@ -2,8 +2,10 @@ import React from 'react';
 import Blog from './Blog'; 
 import SuggestedBlogs from './SuggestedBlogs';
 import '../common/common.css';
+import { usePageTitle } from '../common/usePageTitle';
 
 const BlogList: React.FC = () => {
+  usePageTitle('Blogs');
   const blogs = [
     {
       id: 1,

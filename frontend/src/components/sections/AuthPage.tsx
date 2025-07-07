@@ -5,7 +5,9 @@ import {
   fetchAuthSession,
 } from 'aws-amplify/auth';
 import './AuthPage.css';
-import {requestUserConfirmation} from '../common/userAPI'
+import { requestUserConfirmation } from '../common/userAPI';
+import { useToast } from '../common/ToastProvider'; // ✅ Import useToast
+import { usePageTitle } from '../common/usePageTitle';
 
 const AuthPage: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -15,24 +17,25 @@ const AuthPage: React.FC = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
+  const { showSuccess, showError } = useToast(); // ✅ Use toast context
+  usePageTitle(isLogin? 'Login' : 'Sign Up');
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       if (isLogin) {
-        await signIn({ username: username, password });
+        await signIn({ username, password });
         const session = await fetchAuthSession();
         const idToken = session.tokens?.idToken?.toString();
-        if (idToken) {
-          localStorage.setItem('token', idToken);
-        }
-        alert('Logged in successfully!');
+        if (idToken) localStorage.setItem('token', idToken);
+        showSuccess('Logged in successfully!');
       } else {
         if (password !== confirmPassword) {
-          alert('Passwords do not match');
+          showError('Passwords do not match');
           return;
         }
+
         await signUp({
-          username: username,
+          username,
           password,
           options: {
             userAttributes: {
@@ -42,18 +45,20 @@ const AuthPage: React.FC = () => {
             },
           },
         });
-        await requestUserConfirmation({ username: username });
-        await signIn({ username: email, password });
+
+        await requestUserConfirmation({ username });
+        await signIn({ username, password });
         const session = await fetchAuthSession();
         const idToken = session.tokens?.idToken?.toString();
-        if (idToken) {
-          localStorage.setItem('token', idToken);
-        }
-        alert('Signed up and logged in!');
+        if (idToken) localStorage.setItem('token', idToken);
+
+        showSuccess('Signed up and logged in successfully!');
       }
     } catch (error: any) {
       console.error(error);
-      alert(error.message || 'Something went wrong');
+      const msg =
+        (typeof error === 'object' && error?.message?.trim()) || 'Something went wrong';
+      showError(msg);
     }
   };
 
