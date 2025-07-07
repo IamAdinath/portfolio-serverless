@@ -7,8 +7,10 @@ import { faMobileAndroid, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import StickmanDownload from '../common/stickManDownload';
+import { usePageTitle } from '../common/usePageTitle';
 
 const Resume: React.FC = () => {
+    usePageTitle('Resume');
     return (
         <div className="resume-container">
             {/* Header Section */}
