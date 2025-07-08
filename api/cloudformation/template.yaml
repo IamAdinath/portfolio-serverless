@@ -126,8 +126,6 @@ Resources:
     Properties:
       FunctionName: !Sub create-blogs-${Env}
       Handler: blogs.create.lambda_handler
-      Auth:
-        Authorizer: CognitoAuth
       Policies:
         - AWSLambdaBasicExecutionRole
         - AmazonDynamoDBFullAccess
@@ -138,6 +136,8 @@ Resources:
             RestApiId: !Ref PortfolioAPI
             Path: /create-blog
             Method: POST
+            Auth:
+              Authorizer: CognitoAuth
       Environment:
         Variables:
           BLOGS_TABLE: !Ref PostsTable
