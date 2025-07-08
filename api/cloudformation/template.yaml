@@ -126,6 +126,8 @@ Resources:
     Properties:
       FunctionName: !Sub create-blogs-${Env}
       Handler: blogs.create.lambda_handler
+      Auth:
+        Authorizer: CognitoAuth
       Policies:
         - AWSLambdaBasicExecutionRole
         - AmazonDynamoDBFullAccess
@@ -332,6 +334,16 @@ Resources:
             RestApiId: !Ref PortfolioAPI
             Path: /download-resume
             Method: GET
+
+  CognitoAuth:
+    Type: AWS::ApiGateway::Authorizer
+    Properties:
+      Name: CognitoAuthorizer
+      RestApiId: !Ref PortfolioAPI
+      Type: COGNITO_USER_POOLS
+      IdentitySource: method.request.header.Authorization
+      ProviderARNs:
+        - !GetAtt BlogUserPool.Arn
 
 Parameters:
   Env:
