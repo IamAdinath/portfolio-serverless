@@ -39,9 +39,7 @@ export async function requestUserConfirmation(payload: ConfirmUserPayload): Prom
   try {
     const response = await fetch(endpoint, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: base_headers,
       body: JSON.stringify(payload),
     });
 
@@ -75,9 +73,7 @@ export async function ResumeLink() {
   try {
     const response = await fetch(endpoint, {
       method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: base_headers,
     });
 
     const jsonResponse = await response.json().catch(() => ({
@@ -137,11 +133,18 @@ interface blogPostPayload{
 }
 export async function CreateBlogPost(payload: any) {
   const endpoint = `${API_BASE_URL}/create-blog`;
-
+  const token = localStorage.getItem('token');
+  if (!token) {
+    throw new Error('No token found');
+  }
+  const auth_header = {
+        'Content-Type': 'application/json',
+        'Authorization': token
+      }
   try {
     const response = await fetch(endpoint, {
       method: 'POST',
-      headers: base_headers,
+      headers: auth_header,
       body: JSON.stringify(payload),
     });
 
