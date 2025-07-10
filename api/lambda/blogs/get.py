@@ -4,11 +4,13 @@ import boto3
 from boto3.dynamodb.conditions import Key
 from common.contsants import StatusCodes, Headers
 from common.utils import build_response
+import logging
 
 dynamodb = boto3.resource("dynamodb")
-
+logger = logging.getLogger(__name__)
 
 def lambda_handler(event, context):
+    logger.info(f"Received event: {event}")
     table_name = os.getenv("POSTS_TABLE")
     if not table_name:
         return build_response(
