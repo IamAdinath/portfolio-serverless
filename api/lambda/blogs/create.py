@@ -5,15 +5,21 @@ from datetime import datetime
 import boto3
 from common.utils import build_response
 from common.contsants import StatusCodes, Headers
-
+import logging
 dynamodb = boto3.resource('dynamodb')
 BLOGS_TABLE = os.environ['BLOGS_TABLE']
 
+logger = logging.getLogger(__name__)
 def lambda_handler(event, context):
     try:
+        logger.info(f"Received event: {event}")
         user_id = event['requestContext']['authorizer']['claims']['sub']
+        if not user_id:
+            return build_response(StatusCodes.UNAUTHORIZED, Headers.CORS, {
+                "message": "User not authenticated."
+            })
+        logger.info(f"User ID: {user_id}")
         body = json.loads(event['body'])
-
         title = body.get('title')
         content = body.get('content')
         tags = body.get('tags', [])
@@ -28,7 +34,7 @@ def lambda_handler(event, context):
         now = datetime.utcnow().isoformat()
 
         item = {
-            'blog_id': blog_id,
+            'postId': blog_id,
             'author_id': user_id,
             'title': title,
             'content': content,
