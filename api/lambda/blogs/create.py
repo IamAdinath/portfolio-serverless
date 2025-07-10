@@ -11,6 +11,7 @@ BLOGS_TABLE = os.environ['BLOGS_TABLE']
 
 def lambda_handler(event, context):
     try:
+
         user_id = event['requestContext']['authorizer']['claims']['sub']
         body = json.loads(event['body'])
 
@@ -28,7 +29,7 @@ def lambda_handler(event, context):
         now = datetime.utcnow().isoformat()
 
         item = {
-            'blog_id': blog_id,
+            'postId': blog_id,
             'author_id': user_id,
             'title': title,
             'content': content,
