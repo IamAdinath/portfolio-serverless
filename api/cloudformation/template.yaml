@@ -125,8 +125,7 @@ Resources:
             Method: GET
       Environment:
         Variables:
-          # BLOGS_TABLE: !Ref BlogsTable
-          BLOGS_TABLE: !Sub Blogs-${Env}
+          BLOGS_TABLE: !Ref BlogsTable
 
   CreateBlogsLambda:
     Type: AWS::Serverless::Function
@@ -147,7 +146,7 @@ Resources:
               Authorizer: CognitoAuth
       Environment:
         Variables:
-          # BLOGS_TABLE: !Ref BlogsTable
+          BLOGS_TABLE: !Ref BlogsTable
           ENV : !Ref Env
   
   BlogUserPool:
