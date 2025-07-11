@@ -14,17 +14,17 @@ Globals:
 
 Resources:
 
-  PostsTable:
+  BlogsTable:
     Type: AWS::DynamoDB::Table
     Properties:
       TableName: Posts
       BillingMode: PAY_PER_REQUEST
       AttributeDefinitions:
-        - AttributeName: postId
+        - AttributeName: id
           AttributeType: S
-        - AttributeName: authorId
+        - AttributeName: author
           AttributeType: S
-        - AttributeName: publishedAt
+        - AttributeName: published_at
           AttributeType: S
         - AttributeName: status
           AttributeType: S
@@ -36,61 +36,61 @@ Resources:
           KeySchema:
             - AttributeName: authorId
               KeyType: HASH
-            - AttributeName: publishedAt
+            - AttributeName: published_at
               KeyType: RANGE
           Projection:
             ProjectionType: ALL
-        - IndexName: StatusPublishedAtIndex
+        - IndexName: status_published_at
           KeySchema:
             - AttributeName: status
               KeyType: HASH
-            - AttributeName: publishedAt
+            - AttributeName: published_at
               KeyType: RANGE
           Projection:
             ProjectionType: ALL
 
-  CommentsTable:
-    Type: AWS::DynamoDB::Table
-    Properties:
-      TableName: Comments
-      BillingMode: PAY_PER_REQUEST
-      AttributeDefinitions:
-        - AttributeName: postId
-          AttributeType: S
-        - AttributeName: commentId
-          AttributeType: S
-        - AttributeName: parentCommentId
-          AttributeType: S
-      KeySchema:
-        - AttributeName: postId
-          KeyType: HASH
-        - AttributeName: commentId
-          KeyType: RANGE
-      GlobalSecondaryIndexes:
-        - IndexName: ParentCommentIndex
-          KeySchema:
-            - AttributeName: postId
-              KeyType: HASH
-            - AttributeName: parentCommentId
-              KeyType: RANGE
-          Projection:
-            ProjectionType: ALL
+  # CommentsTable:
+  #   Type: AWS::DynamoDB::Table
+  #   Properties:
+  #     TableName: Comments
+  #     BillingMode: PAY_PER_REQUEST
+  #     AttributeDefinitions:
+  #       - AttributeName: post_id
+  #         AttributeType: S
+  #       - AttributeName: comment_id
+  #         AttributeType: S
+  #       - AttributeName: parent_comment
+  #         AttributeType: S
+  #     KeySchema:
+  #       - AttributeName: post_id
+  #         KeyType: HASH
+  #       - AttributeName: comment_id
+  #         KeyType: RANGE
+  #     GlobalSecondaryIndexes:
+  #       - IndexName: ParentCommentIndex
+  #         KeySchema:
+  #           - AttributeName: post_id
+  #             KeyType: HASH
+  #           - AttributeName: parent_comment
+  #             KeyType: RANGE
+  #         Projection:
+  #           ProjectionType: ALL
 
-  ReactionsTable:
-    Type: AWS::DynamoDB::Table
-    Properties:
-      TableName: Reactions
-      BillingMode: PAY_PER_REQUEST
-      AttributeDefinitions:
-        - AttributeName: commentId
-          AttributeType: S
-        - AttributeName: userId
-          AttributeType: S
-      KeySchema:
-        - AttributeName: commentId
-          KeyType: HASH
-        - AttributeName: userId
-          KeyType: RANGE
+  # ReactionsTable:
+  #   Type: AWS::DynamoDB::Table
+  #   Properties:
+  #     TableName: Reactions
+  #     BillingMode: PAY_PER_REQUEST
+  #     AttributeDefinitions:
+  #       - AttributeName: comment_id
+  #         AttributeType: S
+  #       - AttributeName: user_id
+  #         AttributeType: S
+  #     KeySchema:
+  #       - AttributeName: comment_id
+  #         KeyType: HASH
+  #       - AttributeName: user_id
+  #         KeyType: RANGE
 
   PortfolioAPI:
     Type: AWS::Serverless::Api
@@ -125,7 +125,7 @@ Resources:
             Method: GET
       Environment:
         Variables:
-          BLOGS_TABLE: !Ref PostsTable
+          BLOGS_TABLE: !Ref BlogsTable
 
   CreateBlogsLambda:
     Type: AWS::Serverless::Function
@@ -146,7 +146,7 @@ Resources:
               Authorizer: CognitoAuth
       Environment:
         Variables:
-          BLOGS_TABLE: !Ref PostsTable
+          BLOGS_TABLE: !Ref BlogsTable
           ENV : !Ref Env
   
   BlogUserPool:
