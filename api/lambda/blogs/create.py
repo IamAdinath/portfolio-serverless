@@ -7,11 +7,16 @@ from common.utils import build_response
 from common.contsants import StatusCodes, Headers
 import logging
 dynamodb = boto3.resource('dynamodb')
-BLOGS_TABLE = os.environ['BLOGS_TABLE']
+
 
 logger = logging.getLogger(__name__)
 def lambda_handler(event, context):
     try:
+        BLOGS_TABLE = os.getenv("BLOGS_TABLE")
+        if not BLOGS_TABLE:
+            return build_response(StatusCodes.INTERNAL_SERVER_ERROR, Headers.CORS, {
+                "message": "BLOGS_TABLE env variable not set."
+            })
         logger.info(f"Received event: {event}")
         user_id = event['requestContext']['authorizer']['claims']['sub']
         if not user_id:
@@ -45,7 +50,8 @@ def lambda_handler(event, context):
             'updated_at': now,
             'status': blog_status,
             'status_published_at': f'{blog_status}_{now}',
-            'author_index': f'{user_id}_{now}'
+            'author_index': f'{user_id}_{now}',
+            'published_at': now
         }
 
         table = dynamodb.Table(BLOGS_TABLE)
