@@ -14,40 +14,40 @@ Globals:
 
 Resources:
 
-  # BlogsTable:
-  #   Type: AWS::DynamoDB::Table
-  #   Properties:
-  #     TableName: !Sub Blogs-${Env}
-  #     BillingMode: PAY_PER_REQUEST
-  #     AttributeDefinitions:
-  #       - AttributeName: id
-  #         AttributeType: S
-  #       - AttributeName: author
-  #         AttributeType: S
-  #       - AttributeName: published_at
-  #         AttributeType: S
-  #       - AttributeName: status
-  #         AttributeType: S
-  #     KeySchema:
-  #       - AttributeName: id
-  #         KeyType: HASH
-  #     GlobalSecondaryIndexes:
-  #       - IndexName: author_index
-  #         KeySchema:
-  #           - AttributeName: author
-  #             KeyType: HASH
-  #           - AttributeName: published_at
-  #             KeyType: RANGE
-  #         Projection:
-  #           ProjectionType: ALL
-  #       - IndexName: status_published_at
-  #         KeySchema:
-  #           - AttributeName: status
-  #             KeyType: HASH
-  #           - AttributeName: published_at
-  #             KeyType: RANGE
-  #         Projection:
-  #           ProjectionType: ALL
+  BlogsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub Blogs-${Env}
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+        - AttributeName: author
+          AttributeType: S
+        - AttributeName: published_at
+          AttributeType: S
+        - AttributeName: status
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: author_index
+          KeySchema:
+            - AttributeName: author
+              KeyType: HASH
+            - AttributeName: published_at
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+        - IndexName: status_published_at
+          KeySchema:
+            - AttributeName: status
+              KeyType: HASH
+            - AttributeName: published_at
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
 
   CommentsTable:
     Type: AWS::DynamoDB::Table
