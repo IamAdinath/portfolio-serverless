@@ -32,17 +32,20 @@ def lambda_handler(event, context):
 
         blog_id = str(uuid.uuid4())
         now = datetime.utcnow().isoformat()
-
+        blog_status = 'published'
         item = {
-            'postId': blog_id,
-            'author_id': user_id,
+            'id': blog_id,
+            'author': user_id,
             'title': title,
             'content': content,
             'tags': tags,
             'reading_time': reading_time,
             'images': body.get('images', []),  # expect list of image URLs (S3)
             'created_at': now,
-            'updated_at': now
+            'updated_at': now,
+            'status': blog_status,
+            'status_published_at': f'{blog_status}_{now}',
+            'author_index': f'{user_id}_{now}'
         }
 
         table = dynamodb.Table(BLOGS_TABLE)
