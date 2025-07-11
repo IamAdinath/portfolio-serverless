@@ -14,37 +14,37 @@ Globals:
 
 Resources:
 
-  PostsTable:
+  BlogsTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: Posts
+      TableName: !Sub Blogs-${Env}
       BillingMode: PAY_PER_REQUEST
       AttributeDefinitions:
-        - AttributeName: postId
+        - AttributeName: id
           AttributeType: S
-        - AttributeName: authorId
+        - AttributeName: author
           AttributeType: S
-        - AttributeName: publishedAt
+        - AttributeName: published_at
           AttributeType: S
         - AttributeName: status
           AttributeType: S
       KeySchema:
-        - AttributeName: postId
+        - AttributeName: id
           KeyType: HASH
       GlobalSecondaryIndexes:
         - IndexName: AuthorIdIndex
           KeySchema:
-            - AttributeName: authorId
+            - AttributeName: author
               KeyType: HASH
-            - AttributeName: publishedAt
+            - AttributeName: published_at
               KeyType: RANGE
           Projection:
             ProjectionType: ALL
-        - IndexName: StatusPublishedAtIndex
+        - IndexName: status_published_at
           KeySchema:
             - AttributeName: status
               KeyType: HASH
-            - AttributeName: publishedAt
+            - AttributeName: published_at
               KeyType: RANGE
           Projection:
             ProjectionType: ALL
@@ -52,26 +52,26 @@ Resources:
   CommentsTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: Comments
+      TableName: !Sub Blogs-Comments-${Env}
       BillingMode: PAY_PER_REQUEST
       AttributeDefinitions:
-        - AttributeName: postId
+        - AttributeName: post_id
           AttributeType: S
-        - AttributeName: commentId
+        - AttributeName: comment_id
           AttributeType: S
-        - AttributeName: parentCommentId
+        - AttributeName: parent_comment
           AttributeType: S
       KeySchema:
-        - AttributeName: postId
+        - AttributeName: post_id
           KeyType: HASH
-        - AttributeName: commentId
+        - AttributeName: comment_id
           KeyType: RANGE
       GlobalSecondaryIndexes:
         - IndexName: ParentCommentIndex
           KeySchema:
-            - AttributeName: postId
+            - AttributeName: post_id
               KeyType: HASH
-            - AttributeName: parentCommentId
+            - AttributeName: parent_comment
               KeyType: RANGE
           Projection:
             ProjectionType: ALL
@@ -79,17 +79,17 @@ Resources:
   ReactionsTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: Reactions
+      TableName: !Sub Blogs-Reactions-${Env}
       BillingMode: PAY_PER_REQUEST
       AttributeDefinitions:
-        - AttributeName: commentId
+        - AttributeName: comment_id
           AttributeType: S
-        - AttributeName: userId
+        - AttributeName: user_id
           AttributeType: S
       KeySchema:
-        - AttributeName: commentId
+        - AttributeName: comment_id
           KeyType: HASH
-        - AttributeName: userId
+        - AttributeName: user_id
           KeyType: RANGE
 
   PortfolioAPI:
@@ -125,7 +125,7 @@ Resources:
             Method: GET
       Environment:
         Variables:
-          BLOGS_TABLE: !Ref PostsTable
+          BLOGS_TABLE: !Ref BlogsTable
 
   CreateBlogsLambda:
     Type: AWS::Serverless::Function
@@ -146,7 +146,7 @@ Resources:
               Authorizer: CognitoAuth
       Environment:
         Variables:
-          BLOGS_TABLE: !Ref PostsTable
+          BLOGS_TABLE: !Ref BlogsTable
           ENV : !Ref Env
   
   BlogUserPool:
