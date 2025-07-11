@@ -17,7 +17,7 @@ Resources:
   BlogsTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: Posts
+      TableName: !Sub Blogs-${Env}
       BillingMode: PAY_PER_REQUEST
       AttributeDefinitions:
         - AttributeName: id
@@ -29,12 +29,12 @@ Resources:
         - AttributeName: status
           AttributeType: S
       KeySchema:
-        - AttributeName: postId
+        - AttributeName: id
           KeyType: HASH
       GlobalSecondaryIndexes:
         - IndexName: AuthorIdIndex
           KeySchema:
-            - AttributeName: authorId
+            - AttributeName: author
               KeyType: HASH
             - AttributeName: published_at
               KeyType: RANGE
@@ -52,7 +52,7 @@ Resources:
   # CommentsTable:
   #   Type: AWS::DynamoDB::Table
   #   Properties:
-  #     TableName: Comments
+  #     TableName: !Sub Blogs-Comments-${Env}
   #     BillingMode: PAY_PER_REQUEST
   #     AttributeDefinitions:
   #       - AttributeName: post_id
@@ -79,7 +79,7 @@ Resources:
   # ReactionsTable:
   #   Type: AWS::DynamoDB::Table
   #   Properties:
-  #     TableName: Reactions
+  #     TableName: !Sub Blogs-Reactions-${Env}
   #     BillingMode: PAY_PER_REQUEST
   #     AttributeDefinitions:
   #       - AttributeName: comment_id
