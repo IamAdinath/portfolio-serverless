@@ -174,18 +174,10 @@ export async function CreateBlogPost(payload: any) {
 
 export async function GetBlogPosts() {
   const endpoint = `${API_BASE_URL}/get-blogs`;
-  const token = localStorage.getItem('token');
-  if (!token) {
-    throw new Error('No token found');
-  }
-  const auth_header = {
-        'Content-Type': 'application/json',
-        'Authorization': token
-      }
   try {
     const response = await fetch(endpoint, {
       method: 'GET',
-      headers: auth_header,
+      headers: base_headers,
     });
 
     const jsonResponse = await response.json().catch(() => ({
