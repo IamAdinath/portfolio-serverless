@@ -171,3 +171,43 @@ export async function CreateBlogPost(payload: any) {
     throw apiError;
   }
 };
+
+export async function GetBlogPosts() {
+  const endpoint = `${API_BASE_URL}/get-blogs`;
+  const token = localStorage.getItem('token');
+  if (!token) {
+    throw new Error('No token found');
+  }
+  const auth_header = {
+        'Content-Type': 'application/json',
+        'Authorization': token
+      }
+  try {
+    const response = await fetch(endpoint, {
+      method: 'GET',
+      headers: auth_header,
+    });
+
+    const jsonResponse = await response.json().catch(() => ({
+      message: `Request failed with status ${response.status} and no JSON error body.`,
+    }));
+
+    if (!response.ok) {
+      const error: ApiError = new Error(jsonResponse.message || `API Error: ${response.status} ${response.statusText}`);
+      error.statusCode = response.status;
+      error.details = jsonResponse;
+      console.error('GetBlogPosts API error:', error.details);
+      throw error;
+    }
+    const BlogList = jsonResponse.blogs;
+    return BlogList;
+
+  } catch (error) {
+    console.error('Network or other error in GetBlogPosts:', error);
+    if ((error as ApiError).statusCode) {
+      throw error;
+    }
+    const apiError: ApiError = new Error((error as Error).message || 'An unexpected error occurred during blog post retrieval.');
+    throw apiError;
+  }
+};
