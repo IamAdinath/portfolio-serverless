@@ -5,6 +5,7 @@ from boto3.dynamodb.conditions import Key
 from common.contsants import StatusCodes, Headers
 from common.utils import build_response
 import logging
+from common.s3 import get_s3_file_url
 
 dynamodb = boto3.resource("dynamodb")
 logger = logging.getLogger(__name__)
@@ -13,11 +14,19 @@ logger = logging.getLogger(__name__)
 def lambda_handler(event, context):
     logger.info(f"Received event: {event}")
     table_name = os.getenv("BLOGS_TABLE")
+    media_bucket = os.getenv("MEDIA_BCUKET")
     if not table_name:
         return build_response(
             StatusCodes.INTERNAL_SERVER_ERROR,
             Headers.CORS,
             {"error": "BLOGS_TABLE env variable not set"},
+        )
+
+    if not media_bucket:
+        return build_response(
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            Headers.CORS,
+            {"error": "MEDIA_BCUKET env variable not set"},
         )
 
     table = dynamodb.Table(table_name)
@@ -51,8 +60,13 @@ def lambda_handler(event, context):
         )
 
     items = response.get("Items")
+
     for item in items:
         item["reading_time"] = int(item["reading_time"])
+        images_list = item.get("images", [])
+        for image in images_list:
+            item["images"] = get_s3_file_url(media_bucket, image)
+            break
     last_evaluated_key = response.get("LastEvaluatedKey")
     item = json.dumps(items)
     return build_response(
