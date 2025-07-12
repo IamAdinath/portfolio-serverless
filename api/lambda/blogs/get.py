@@ -5,9 +5,11 @@ from boto3.dynamodb.conditions import Key
 from common.contsants import StatusCodes, Headers
 from common.utils import build_response
 import logging
+from common.s3 import get_s3_file_url
 
 dynamodb = boto3.resource("dynamodb")
 logger = logging.getLogger(__name__)
+
 
 def lambda_handler(event, context):
     logger.info(f"Received event: {event}")
@@ -26,9 +28,9 @@ def lambda_handler(event, context):
     last_key = params.get("lastKey")
 
     query_kwargs = {
-        "IndexName": "StatusPublishedAtIndex",
+        "IndexName": "status_published_at",
         "KeyConditionExpression": Key("status").eq("published"),
-        "ScanIndexForward": False,  # descending order
+        "ScanIndexForward": False,
         "Limit": limit,
     }
 
@@ -49,14 +51,21 @@ def lambda_handler(event, context):
             StatusCodes.INTERNAL_SERVER_ERROR, Headers.CORS, {"error": str(e)}
         )
 
-    items = response.get("Items", [])
+    items = response.get("Items")
+    
+    for item in items:
+        item["reading_time"] = int(item["reading_time"])
+        images_list = item.get("images", [])
+        for image in images_list:
+            item["images"] = get_s3_file_url('mediabucket-test', image)
+            break
     last_evaluated_key = response.get("LastEvaluatedKey")
-
+    item = json.dumps(items)
     return build_response(
         StatusCodes.OK,
         Headers.CORS,
         {
-            "posts": items,
+            "blogs": items,
             "lastKey": json.dumps(last_evaluated_key) if last_evaluated_key else None,
         },
     )
