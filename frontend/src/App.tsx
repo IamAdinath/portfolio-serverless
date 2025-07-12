@@ -15,10 +15,7 @@ const App: React.FC = () => {
   return (
     <ToastProvider> 
       <Router>
-        {/* --- FIX --- */}
-        {/* The onMenuClick prop has been removed from the Header component call */}
         <Header />
-        
         <Routes>
           <Route path="/" element={<Portfolio />} />
           <Route path="/about" element={<AboutMe />} />
