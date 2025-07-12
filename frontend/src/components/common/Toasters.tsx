@@ -1,27 +1,52 @@
-// components/common/toasters.tsx
+// src/components/common/ToastProvider.tsx
+
 import React from 'react';
-import './Toasters.css';
+import {ToastMessage, Toast } from './ToastMessage';
+import './Toast.css';
 
-interface ToasterProps {
-  message: string;
-}
-
-export const SuccessToaster: React.FC<ToasterProps> = ({ message }) => {
-  if (!message) return null;
-  return <div className="toaster-base toaster-success">{message}</div>;
+// Define the shape of our Toast context
+type ToastContextType = {
+  addToast: (type: Toast['type'], message: string, duration?: number) => void;
 };
 
-export const ErrorToaster: React.FC<ToasterProps> = ({ message }) => {
-  if (!message) return null;
-  return <div className="toaster-base toaster-error">{message}</div>;
+const ToastContext = React.createContext<ToastContextType | undefined>(undefined);
+
+export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [toasts, setToasts] = React.useState<Toast[]>([]);
+
+  const addToast = (type: Toast['type'], message: string, duration: number = 5000) => {
+    const id = Date.now();
+    setToasts((prevToasts) => [...prevToasts, { id, message, type }]);
+
+    setTimeout(() => {
+      removeToast(id);
+    }, duration);
+  };
+
+  const removeToast = (id: number) => {
+    setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== id));
+  };
+
+  return (
+    <ToastContext.Provider value={{ addToast }}>
+      {children}
+      <div className="toast-container">
+        {toasts.map((toast) => (
+          <ToastMessage
+            key={toast.id}
+            toast={toast}
+            onDismiss={() => removeToast(toast.id)}
+          />
+        ))}
+      </div>
+    </ToastContext.Provider>
+  );
 };
 
-export const InfoToaster: React.FC<ToasterProps> = ({ message }) => {
-  if (!message) return null;
-  return <div className="toaster-base toaster-info">{message}</div>;
-};
-
-export const WarningToaster: React.FC<ToasterProps> = ({ message }) => {
-  if (!message) return null;
-  return <div className="toaster-base toaster-warning">{message}</div>;
+export const useToast = () => {
+  const context = React.useContext(ToastContext);
+  if (!context) {
+    throw new Error('useToast must be used within a ToastProvider');
+  }
+  return context;
 };
