@@ -17,7 +17,7 @@ const AuthPage: React.FC = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const { showSuccess, showError } = useToast(); // ✅ Use toast context
+  const { addToast } = useToast(); 
   usePageTitle(isLogin? 'Login' : 'Sign Up');
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,10 +27,10 @@ const AuthPage: React.FC = () => {
         const session = await fetchAuthSession();
         const idToken = session.tokens?.idToken?.toString();
         if (idToken) localStorage.setItem('token', idToken);
-        showSuccess('Logged in successfully!');
+        addToast('success', 'Logged in successfully!');
       } else {
         if (password !== confirmPassword) {
-          showError('Passwords do not match');
+          addToast('error', 'Passwords do not match!');
           return;
         }
 
@@ -52,13 +52,13 @@ const AuthPage: React.FC = () => {
         const idToken = session.tokens?.idToken?.toString();
         if (idToken) localStorage.setItem('token', idToken);
 
-        showSuccess('Signed up and logged in successfully!');
+        addToast('success', 'Signed up and logged in successfully!');
       }
     } catch (error: any) {
       console.error(error);
       const msg =
         (typeof error === 'object' && error?.message?.trim()) || 'Something went wrong';
-      showError(msg);
+      addToast('error', msg);
     }
   };
 
