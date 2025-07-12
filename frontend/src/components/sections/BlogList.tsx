@@ -1,65 +1,73 @@
-import React from 'react';
-import Blog from './Blog'; 
-import SuggestedBlogs from './SuggestedBlogs';
+import React, { useEffect, useState } from 'react';
+import BlogCard from '../common/BlogCard';
 import '../common/common.css';
 import { usePageTitle } from '../common/usePageTitle';
+import { GetBlogPosts } from '../common/userAPI';
+
+interface Blog {
+  id: string;
+  title: string;
+  content: string;
+  author: string;
+  [key: string]: any;
+}
 
 const BlogList: React.FC = () => {
   usePageTitle('Blogs');
-  const blogs = [
-    {
-      id: 1,
-      title: 'Understanding React Hooks',
-      content: 'Hooks are a new addition in React 16.8 that allow you to use state and other React features without writing a class.',
-      author: 'Jane Smith',
-    },
-    {
-      id: 2,
-      title: 'Advanced JavaScript Concepts',
-      content: 'JavaScript is a versatile language that allows you to build complex applications with simple constructs.',
-      author: 'Michael Johnson',
-    },
-    {
-      id: 3,
-      title: 'State Management with Redux',
-      content: 'Redux is a predictable state container for JavaScript apps. It helps you write applications that behave consistently.',
-      author: 'Emily Brown',
-    },
-  ];
 
-  const suggestedBlogs = [
-    {
-      id: 4,
-      title: 'Getting Started with TypeScript',
-      author: 'Alice Green',
-      thumbnail: 'https://via.placeholder.com/150', // Replace with actual thumbnail URL
-    },
-    {
-      id: 5,
-      title: 'CSS Grid vs Flexbox',
-      author: 'Bob White',
-      thumbnail: 'https://via.placeholder.com/150', // Replace with actual thumbnail URL
-    },
-    {
-      id: 6,
-      title: 'Understanding RESTful APIs',
-      author: 'Carol Black',
-      thumbnail: 'https://via.placeholder.com/150', // Replace with actual thumbnail URL
-    },
-  ];
+  const [blogs, setBlogs] = useState<Blog[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const data = await GetBlogPosts();
+        console.log('Fetched blogs:', data);
+        setBlogs(data);
+      } catch (err: any) {
+        console.error('Error fetching blogs:', err);
+        setError(err.message || 'Failed to load blogs');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBlogs();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="common-container">
+        <p>Loading blogs...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="common-container">
+        <p className="text-red-500">{error}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="common-container">
-      {blogs.map((blog) => (
-        <Blog 
-          key={blog.id} 
-          id={blog.id} 
-          title={blog.title} 
-          content={blog.content} 
-          author={blog.author} 
-        />
-      ))}
-      <SuggestedBlogs suggestions={suggestedBlogs} /> {/* Footer-like suggestion section */}
+      {blogs.length > 0 ? (
+        blogs.map((blog) => (
+          <BlogCard
+            key={blog.id}
+            id={blog.id}
+            title={blog.title}
+            content={blog.content}
+            author={blog.author}
+            thumbnail={blog.images}
+          />
+        ))
+      ) : (
+        <p className="text-gray-500">No blogs found.</p>
+      )}
     </div>
   );
 };
