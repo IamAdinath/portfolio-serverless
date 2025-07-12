@@ -9,6 +9,7 @@ import logging
 dynamodb = boto3.resource("dynamodb")
 logger = logging.getLogger(__name__)
 
+
 def lambda_handler(event, context):
     logger.info(f"Received event: {event}")
     table_name = os.getenv("BLOGS_TABLE")
