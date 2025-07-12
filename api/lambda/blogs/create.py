@@ -35,9 +35,11 @@ def lambda_handler(event, context):
         title = body.get("title")
         content = body.get("content")
         tags = body.get("tags", [])
-        reading_time = body.get("reading_time", 1)  # default 1 min
+        reading_time = body.get("reading_time", 1)
+        blog_status = body.get("status", "published")
 
         if not title or not content:
+            logger.error(f"Invalid Title: {title} and or Content: {content}")
             return build_response(
                 StatusCodes.BAD_REQUEST,
                 Headers.CORS,
@@ -46,7 +48,6 @@ def lambda_handler(event, context):
 
         blog_id = str(uuid.uuid4())
         now = datetime.utcnow().isoformat()
-        blog_status = "published"
         item = {
             "id": blog_id,
             "author": user_id,
@@ -73,7 +74,7 @@ def lambda_handler(event, context):
         )
 
     except Exception as e:
-        print("Error:", e)
+        logger.eror(f"Error: {e}")
         return build_response(
             StatusCodes.INTERNAL_SERVER_ERROR,
             Headers.CORS,
