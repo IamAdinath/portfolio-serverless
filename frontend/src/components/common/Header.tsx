@@ -73,7 +73,7 @@ const Header: React.FC = () => {
     >
       <Link to="/" style={{ textDecoration: 'none' }}>
         <Text fontWeight={600} fontSize="18px" color="neutral">
-          YourLogo
+          AG
         </Text>
       </Link>
 
