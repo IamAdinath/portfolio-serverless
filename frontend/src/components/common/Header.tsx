@@ -1,78 +1,97 @@
-// Header.tsx
-import React, { useEffect, useState } from 'react';
-import { Pane, IconButton, Text, Menu, Popover } from 'evergreen-ui';
-import { Link, useNavigate } from 'react-router-dom';
+// src/components/common/Header.tsx
+import React from 'react';
+import { Pane, IconButton, Text, Menu, Popover, TickIcon } from 'evergreen-ui';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import './Header.css';
 
-interface HeaderProps {
-  onMenuClick: () => void;
-}
+const navLinks = [
+  { label: 'Home', path: '/' },
+  { label: 'About', path: '/about' },
+  { label: 'Resume', path: '/resume' },
+  { label: 'Blogs', path: '/blogs' },
+  { label: 'Login', path: '/auth' },
+];
 
-const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
-  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
+const useMediaQuery = (query: string) => {
+  const [matches, setMatches] = React.useState(window.matchMedia(query).matches);
+
+  React.useEffect(() => {
+    const mediaQuery = window.matchMedia(query);
+    const handler = (event: MediaQueryListEvent) => setMatches(event.matches);
+    mediaQuery.addEventListener('change', handler);
+    return () => mediaQuery.removeEventListener('change', handler);
+  }, [query]);
+
+  return matches;
+};
+
+const Header: React.FC = () => {
+  const isSmallScreen = useMediaQuery('(max-width: 768px)');
   const navigate = useNavigate();
+  const location = useLocation();
 
-  useEffect(() => {
-    const handleResize = () => {
-      setIsSmallScreen(window.innerWidth < 768);
-    };
+  const renderNavLinks = (isMenu: boolean = false) => {
+    return navLinks.map((link) => {
+      const isActive = location.pathname === link.path;
 
-    window.addEventListener('resize', handleResize);
+      if (isMenu) {
+        return (
+          <Menu.Item
+            key={link.path}
+            onSelect={() => navigate(link.path)}
+            icon={isActive ? <TickIcon color="success" /> : undefined}
+            style={{ fontWeight: isActive ? 600 : 400 }}
+          >
+            {link.label}
+          </Menu.Item>
+        );
+      }
 
-    // Cleanup event listener on component unmount
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
-  const handleLinkClick = (path: string) => {
-    navigate(path);
-    onMenuClick(); // Close the menu after navigating
+      return (
+        <Link
+          key={link.path}
+          to={link.path}
+          className={`nav-link ${isActive ? 'active' : ''}`}
+        >
+          {link.label}
+        </Link>
+      );
+    });
   };
 
   return (
     <Pane
+      is="header"
+      className="app-header"
       display="flex"
-      padding={16}
-      background="darkTint"
-      boxShadow="0 0 4px rgba(0, 0, 0, 0.1)"
+      paddingX={24}
+      paddingY={16}
+      background="white"
+      borderBottom="1px solid #EAEAEA"
       alignItems="center"
-      justifyContent="center"
+      justifyContent="space-between"
     >
-      {/* Regular Menu for Larger Screens */}
+      <Link to="/" style={{ textDecoration: 'none' }}>
+        <Text fontWeight={600} fontSize="18px" color="neutral">
+          YourLogo
+        </Text>
+      </Link>
+
       {isSmallScreen ? (
         <Popover
-          position="bottom-left"
+          position="bottom-right"
           content={
             <Menu>
-              <Menu.Group>
-                <Menu.Item onClick={() => handleLinkClick('/') }>Home</Menu.Item>
-                <Menu.Item onClick={() => handleLinkClick('/about') }>About</Menu.Item>
-                <Menu.Item onClick={() => handleLinkClick('/resume')}>Resume</Menu.Item>
-                <Menu.Item onClick={() => handleLinkClick('/blogs')}>Blogs</Menu.Item>
-                <Menu.Item onClick={() => handleLinkClick('/auth')}>Login</Menu.Item>
-              </Menu.Group>
+              <Menu.Group>{renderNavLinks(true)}</Menu.Group>
             </Menu>
           }
         >
-          <IconButton icon="menu" onClick={onMenuClick} />
+
+          <IconButton icon="menu" height={32} />
         </Popover>
       ) : (
-        <Pane display="flex" alignItems="center">
-          <Link to="/">
-            <Text size={500} marginRight={16}>Home</Text>
-          </Link>
-          <Link to="/about">
-            <Text size={500} marginRight={16}>About</Text>
-          </Link>
-          <Link to="/resume">
-            <Text size={500} marginRight={16}>Resume</Text>
-          </Link>
-          <Link to="/blogs">
-            <Text size={500} marginRight={16}>Blogs</Text>
-          </Link>
-          <Link to="/auth">
-            <Text size={500} marginRight={16}>Login</Text>
-          </Link>
+        <Pane is="nav" display="flex" alignItems="center" gap="2rem">
+          {renderNavLinks(false)}
         </Pane>
       )}
     </Pane>
