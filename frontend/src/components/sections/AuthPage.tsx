@@ -15,14 +15,8 @@ const AuthPage: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const { addToast } = useToast();
-  usePageTitle(isLogin ? 'Login' : 'Sign Up');
-
-<<<<<<< HEAD
   const { addToast } = useToast(); 
   usePageTitle(isLogin? 'Login' : 'Sign Up');
-=======
->>>>>>> enhancement/auth-UI
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -51,24 +45,14 @@ const AuthPage: React.FC = () => {
         const session = await fetchAuthSession();
         const idToken = session.tokens?.idToken?.toString();
         if (idToken) localStorage.setItem('token', idToken);
-<<<<<<< HEAD
-
-=======
->>>>>>> enhancement/auth-UI
         addToast('success', 'Signed up and logged in successfully!');
       }
     } catch (error: any) {
       console.error(error);
-<<<<<<< HEAD
-      const msg =
-        (typeof error === 'object' && error?.message?.trim()) || 'Something went wrong';
-      addToast('error', msg);
-=======
       const msg = (typeof error === 'object' && error?.message?.trim()) || 'Something went wrong';
       addToast('error', msg);
     } finally {
       setLoading(false);
->>>>>>> enhancement/auth-UI
     }
   };
 
