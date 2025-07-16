@@ -178,9 +178,9 @@ Resources:
         - openid
         - profile
       CallbackURLs:
-        - http://localhost:3000/callback  # Replace in prod
+        - http://localhost:3000/callback
       LogoutURLs:
-        - http://localhost:3000/logout    # Replace in prod
+        - http://localhost:3000/logout
       SupportedIdentityProviders:
         - COGNITO
         # - Google
