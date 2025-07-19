@@ -10,13 +10,14 @@ from common.s3 import get_s3_file_url
 dynamodb = boto3.resource("dynamodb")
 
 logger = logging.getLogger(__name__)
-
+logger.setLevel(logging.INFO)
 
 def lambda_handler(event, context):
     logger.info(f"Received event: {event}")
     table_name = os.getenv("BLOGS_TABLE")
     media_bucket = os.getenv("MEDIA_BCUKET")
     if not table_name:
+        logger.error("BLOGS_TABLE env variable is not set")
         return build_response(
             StatusCodes.INTERNAL_SERVER_ERROR,
             Headers.CORS,
@@ -24,28 +25,34 @@ def lambda_handler(event, context):
         )
 
     if not media_bucket:
+        logger.error("MEDIA_BCUKET env variable is not set")
         return build_response(
             StatusCodes.INTERNAL_SERVER_ERROR,
             Headers.CORS,
             {"error": "MEDIA_BCUKET env variable not set"},
         )
 
-    table = dynamodb.Table(table_name)
-    blog_id = event.get("pathParameters", {}).get("id")
+    blog_id = event.get("queryStringParameters", {}).get("id")
     if not blog_id:
+        logger.error("Blog ID is required")
         return build_response(
             StatusCodes.BAD_REQUEST,
             Headers.CORS,
             {"error": "Blog ID is required"},
         )
     try:
-        response = table.get_item(Key={"id": blog_id, "status": "published"})
+        table = dynamodb.Table(table_name)
+        logger.info(f"Fetching blog with ID: {blog_id}")
+        KeyConditionExpression = Key("id").eq(blog_id)
+        response = table.query(KeyConditionExpression=KeyConditionExpression)
+        item = response.get("Items", [{}])[0]
     except Exception as e:
+        logger.error(f"Error fetching blog: {str(e)}")
         return build_response(
             StatusCodes.INTERNAL_SERVER_ERROR, Headers.CORS, {"error": str(e)}
         )
-    item = response.get("Item")
     if not item:
+        logger.warning(f"Blog with ID {blog_id} not found")
         return build_response(
             StatusCodes.NOT_FOUND,
             Headers.CORS,
@@ -61,5 +68,5 @@ def lambda_handler(event, context):
     return build_response(
         StatusCodes.OK,
         Headers.CORS,
-        json.dumps(items),
+        json.dumps(item),
     )
