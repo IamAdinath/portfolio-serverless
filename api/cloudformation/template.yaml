@@ -353,6 +353,27 @@ Resources:
       ProviderARNs:
         - !GetAtt BlogUserPool.Arn
 
+  GetBlogByIdLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub get-blog-by-id-${Env}
+      Handler: blogs.getbyid.lambda_handler
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AmazonDynamoDBFullAccess
+        - AmazonS3FullAccess
+      Events:
+        AddItem:
+          Type: Api
+          Properties:
+            RestApiId: !Ref PortfolioAPI
+            Path: /get-blog
+            Method: GET
+      Environment:
+        Variables:
+          BLOGS_TABLE: !Ref BlogsTable
+          MEDIA_BCUKET: !Ref MediaBucket
+
 Parameters:
   Env:
     Default: dev
