@@ -1,5 +1,6 @@
 import React from 'react';
 import './BlogCard.css';
+import { Link } from 'react-router-dom';
 
 export interface BlogCardProps {
   id: string;
@@ -40,12 +41,19 @@ const BlogCard: React.FC<BlogCardProps> = ({
   tags
 }) => {
   const contentSnippet = createSnippet(content);
+  console.log('blog id: ', id)
   return (
-    <a href={`/blog/${id}`} className="blog-card-link">
+    <Link to={`/blog/${id}`} className="blog-card-link">
       <article className="blog-card">
         <div className="blog-content-wrapper">
           <div className="author-details">
-            {/* <span className="author-name">{author}</span> */}
+            
+            {/* To do 
+            : Add author avatar or image here if available
+            : Add Author name next to the avatar
+            : Add a link to the author's profile page if available
+             */}
+
           </div>
           <h2 className="blog-title">{title}</h2>
           <p className="blog-snippet">{contentSnippet}</p>
@@ -62,7 +70,7 @@ const BlogCard: React.FC<BlogCardProps> = ({
           </div>
         )}
       </article>
-    </a>
+    </Link>
   );
 };
 
