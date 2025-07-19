@@ -91,7 +91,7 @@ const WriterPage = () => {
       // Optionally, clear the form or redirect
       setTitle('');
       editor.commands.clearContent();
-      // window.location.href = `/blog/${result.blogId}`;
+      // window.location.href = `/blog/${result.id}`;
 
     } catch (error: any) {
       console.error('API Error:', error);

@@ -203,3 +203,56 @@ export async function GetBlogPosts() {
     throw apiError;
   }
 };
+
+interface BlogPostData {
+  id: string;
+  title: string;
+  content: string;
+  reading_time: number;
+  status: string;
+  images: string[];
+  tags: string[];
+  updated_at: string;
+  created_at: string;
+  author: string;
+}
+export async function GetBlogPostById(id: string) {
+  const endpoint = `${API_BASE_URL}/get-blog?id=${id}`;
+  try {
+    const response = await fetch(endpoint, {
+      method: 'GET',
+      headers: base_headers,
+    });
+
+    const rawStringResponse = await response.json().catch(() => ({
+      message: `Request failed with status ${response.status} and no JSON error body.`,
+    }));
+
+    if (!response.ok) {
+      const error: ApiError = new Error(rawStringResponse.message || `API Error: ${response.status} ${response.statusText}`);
+      error.statusCode = response.status;
+      error.details = rawStringResponse;
+      console.error('GetBlogPostById API error:', error.details);
+      throw error;
+    }
+    const parsedData = JSON.parse(rawStringResponse);
+    console.log('Parsed data (object):', parsedData);
+
+    if (parsedData && typeof parsedData === 'object' && parsedData.id) {
+      const jsonResponse = parsedData as BlogPostData;
+      console.log('Parsed data is a valid blog post:', jsonResponse);
+      
+      return jsonResponse;
+    } else {
+      throw new Error('Parsed data is not a valid blog post.');
+    }
+
+  } catch (error) {
+    console.error('Network or other error in GetBlogPostById:', error);
+    if ((error as ApiError).statusCode) {
+      throw error;
+    }
+    const apiError: ApiError = new Error((error as Error).message || 'An unexpected error occurred during blog post retrieval by ID.');
+    throw apiError;
+  }
+}
