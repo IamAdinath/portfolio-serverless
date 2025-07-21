@@ -1,16 +1,18 @@
 import os
 import json
 import boto3
+import logging
+
 from common.contsants import StatusCodes, Headers
 from common.utils import build_response
-import logging
-from common.s3 import upload_to_s3, get_s3_file_url
+from common.s3 import put_s3_file, get_s3_file_url
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 def lambda_handler(event, context):
     logger.info(f"Received event: {event}")
+    
     media_bucket = os.getenv("MEDIA_BUCKET")
     if not media_bucket:
         logger.error("MEDIA_BUCKET env variable is not set")
@@ -20,7 +22,24 @@ def lambda_handler(event, context):
             {"error": "MEDIA_BUCKET env variable not set"},
         )
 
-    file_content = event.get("body")
+    payload = event.get("body")
+
+    file_content = None
+    file_name = None
+
+    if payload:
+        try:
+            data = json.loads(payload)
+            file_content = data.get("file_content")
+            file_name = data.get("file_name")
+        except json.JSONDecodeError:
+            logger.error("Invalid JSON payload")
+            return build_response(
+                StatusCodes.BAD_REQUEST,
+                Headers.CORS,
+                {"error": "Invalid JSON payload"},
+            )
+
     if not file_content:
         logger.error("File content is required")
         return build_response(
@@ -29,7 +48,6 @@ def lambda_handler(event, context):
             {"error": "File content is required"},
         )
 
-    file_name = event.get("queryStringParameters", {}).get("file_name")
     if not file_name:
         logger.error("File name is required")
         return build_response(
@@ -39,7 +57,7 @@ def lambda_handler(event, context):
         )
 
     try:
-        upload_to_s3(media_bucket, file_name, file_content)
+        put_s3_file(media_bucket, file_name, file_content)
         file_url = get_s3_file_url(media_bucket, file_name)
         return build_response(
             StatusCodes.CREATED,
@@ -49,5 +67,7 @@ def lambda_handler(event, context):
     except Exception as e:
         logger.error(f"Error uploading file: {str(e)}")
         return build_response(
-            StatusCodes.INTERNAL_SERVER_ERROR, Headers.CORS, {"error": str(e)}
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            Headers.CORS,
+            {"error": str(e)},
         )
