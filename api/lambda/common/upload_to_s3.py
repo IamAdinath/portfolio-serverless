@@ -10,9 +10,10 @@ from common.s3 import put_s3_file, get_s3_file_url
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
+
 def lambda_handler(event, context):
     logger.info(f"Received event: {event}")
-    
+
     media_bucket = os.getenv("MEDIA_BUCKET")
     if not media_bucket:
         logger.error("MEDIA_BUCKET env variable is not set")
