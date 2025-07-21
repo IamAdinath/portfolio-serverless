@@ -391,7 +391,7 @@ Resources:
             Method: POST
       Environment:
         Variables:
-          BUCKET_NAME: !Ref MediaBucket
+          MEDIA_BUCKET: !Ref MediaBucket
           ENV : !Ref Env
 
 Parameters:
