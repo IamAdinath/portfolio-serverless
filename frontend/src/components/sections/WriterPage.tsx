@@ -1,26 +1,26 @@
-// src/components/sections/WriterPage.tsx
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useRef, useEffect } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import type { Editor } from '@tiptap/core';
 import StarterKit from '@tiptap/starter-kit';
-import Image from '@tiptap/extension-image';
+import TiptapImage from '@tiptap/extension-image';
 import Dropcursor from '@tiptap/extension-dropcursor';
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import { createLowlight } from 'lowlight';
-
-// Language imports for syntax highlighting
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faImage } from '@fortawesome/free-solid-svg-icons';
+import { v4 as uuidv4 } from 'uuid';
+import 'highlight.js/styles/github.css';
 import ts from 'highlight.js/lib/languages/typescript';
 import js from 'highlight.js/lib/languages/javascript';
 import css from 'highlight.js/lib/languages/css';
 import json from 'highlight.js/lib/languages/json';
-import html from 'highlight.js/lib/languages/xml'; // for html
+import html from 'highlight.js/lib/languages/xml';
 
 import './WriterPage.css';
+import { CreateDraftBlogPost, getPresignedUrl, uploadFileToS3 } from '../common/userAPI'; // Your API helpers
+import { useToast } from '../common/ToastProvider';
 
-import { CreateBlogPost } from '../common/userAPI';
-
-// Initialize and configure the syntax highlighter
 const lowlight = createLowlight();
 lowlight.register('js', js);
 lowlight.register('ts', ts);
@@ -28,12 +28,25 @@ lowlight.register('css', css);
 lowlight.register('json', json);
 lowlight.register('html', html);
 
+// --- Custom Image Extension to allow 'data-id' attribute for placeholders ---
+const CustomImage = TiptapImage.extend({
+  addAttributes() {
+    return {
+      ...this.parent?.(),
+      'data-id': { default: null },
+    };
+  },
+});
 
-// --- MENU BAR COMPONENT (Unchanged) ---
-const MenuBar = ({ editor }: { editor: Editor | null }) => {
-  if (!editor) {
-    return null;
-  }
+// --- ORIGINAL MENU BAR with the new Image Button ---
+const MenuBar = ({ editor, onImageUpload }: { editor: Editor | null, onImageUpload: (file: File) => void }) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  if (!editor) return null;
+
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) onImageUpload(file);
+  };
 
   return (
     <div className="menu-bar">
@@ -44,6 +57,18 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
       <button onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} className={editor.isActive('heading', { level: 2 }) ? 'is-active' : ''}>H2</button>
       <button onClick={() => editor.chain().focus().toggleBulletList().run()} className={editor.isActive('bulletList') ? 'is-active' : ''}>List</button>
       <button onClick={() => editor.chain().focus().toggleCodeBlock().run()} className={editor.isActive('codeBlock') ? 'is-active' : ''}>Code Block</button>
+      
+      {/* --- ADDED IMAGE BUTTON --- */}
+      <input
+        type="file"
+        accept="image/*"
+        ref={fileInputRef}
+        onChange={handleFileSelect}
+        style={{ display: 'none' }}
+      />
+      <button onClick={() => fileInputRef.current?.click()} title="Add Image">
+        <FontAwesomeIcon icon={faImage} />
+      </button>
     </div>
   );
 };
@@ -51,90 +76,121 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 
 // --- MAIN WRITER PAGE COMPONENT ---
 const WriterPage = () => {
-  // NEW: State for title and saving status
   const [title, setTitle] = useState('');
   const [isSaving, setIsSaving] = useState(false);
-  
-  // State for drag-and-drop UI
   const [isDragging, setIsDragging] = useState(false);
+  const { addToast } = useToast();
+  
+  // ✅ Pre-generate a unique ID for this editing session.
+  const [draftId] = useState(() => uuidv4());
+  const imageCounter = useRef(0); // To keep track of image index (image_0, image_1, etc.)
+
 
   const editor = useEditor({
     extensions: [
       StarterKit.configure({ codeBlock: false }),
       CodeBlockLowlight.configure({ lowlight }),
-      Image.configure({ inline: false, allowBase64: true }),
+      CustomImage.configure({ inline: false }),
       Dropcursor,
     ],
-    content: `
-    `,
+    content: ``,
   });
 
-  // NEW: API call handler to save the blog post
+  const handleImageUpload = useCallback(async (file: File) => {
+    if (!editor) return;
+
+    const placeholderId = `placeholder-${Date.now()}`;
+    const loadingGif = '/stickman-pulling-file.gif'; // Your loading GIF
+
+    // Insert the placeholder image into the editor immediately
+    // editor.chain().focus().setImage({ src: loadingGif, 'data-id': placeholderId }).run();
+
+    try {
+      // ✅ Use the pre-generated draftId for the S3 key
+      const imageKey = `posts/${draftId}/image_${imageCounter.current++}.jpg`;
+      const fileType = imageKey.split('.').pop() || 'jpg';
+
+      // 1. Get a presigned URL for our specific S3 key
+      const presignedData = await getPresignedUrl( imageKey, fileType );
+      if (!presignedData || !presignedData.url) throw new Error('Failed to get presigned URL.');
+
+      // 2. Upload the file directly to S3
+      const finalImageUrl = await uploadFileToS3(presignedData.url, file);
+
+      // 3. Find the placeholder and replace its src with the final URL
+      const { state, dispatch } = editor.view;
+      const { tr } = state;
+      let placeholderPos: number | null = null;
+      state.doc.descendants((node, pos) => {
+        if (node.type.name === 'image' && node.attrs['data-id'] === placeholderId) {
+          placeholderPos = pos;
+        }
+      });
+
+      if (placeholderPos !== null) {
+        tr.setNodeMarkup(placeholderPos, undefined, { src: finalImageUrl, 'data-id': null });
+        dispatch(tr);
+      }
+    } catch (error) {
+      console.error('Image upload failed:', error);
+      addToast('error', 'Image upload failed.');
+      // You could add logic here to remove the failed placeholder from the editor
+    }
+  }, [editor, draftId, addToast]);
+
+
   const handleSave = async () => {
     if (!editor || !title.trim()) {
-      alert('Please enter a title before saving.');
+      addToast('error', 'Please enter a title before saving.');
       return;
     }
-
     setIsSaving(true);
+
     const contentHTML = editor.getHTML();
+    const doc = new DOMParser().parseFromString(contentHTML, 'text/html');
+    const finalImageUrls = Array.from(doc.querySelectorAll('img')).map(img => img.src).filter(src => !src.includes('stickman-pulling-file.gif'));
 
     const blogPostPayload = {
+      id: draftId, // ✅ Send the pre-generated ID to the backend
       title: title,
       content: contentHTML,
+      images: finalImageUrls,
     };
 
     try {
-      // Replace with your actual API endpoint
-      const response = await CreateBlogPost(blogPostPayload);
+      await CreateDraftBlogPost(blogPostPayload);
+      addToast('success', 'Blog post saved successfully!');
       
-      // Optionally, clear the form or redirect
       setTitle('');
       editor.commands.clearContent();
-      // window.location.href = `/blog/${result.id}`;
-
+      // Reset for a new post by generating a new draftId (not strictly needed, but good practice if staying on page)
+      // setDraftId(uuidv4()); 
     } catch (error: any) {
       console.error('API Error:', error);
-      alert(`An error occurred: ${error.message}`);
+      addToast('error', `An error occurred: ${error.message}`);
     } finally {
-      // Re-enable the form fields
       setIsSaving(false);
     }
   };
 
-  // --- Drag and Drop Handlers (Unchanged) ---
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsDragging(true);
-  };
-  
-  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsDragging(false);
-  };
+  // --- Drag and Drop Handlers ---
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => { e.preventDefault(); setIsDragging(true); };
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => { e.preventDefault(); setIsDragging(false); };
   
   const handleDrop = useCallback((e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setIsDragging(false);
     
-    if (!editor) return;
-
     const file = e.dataTransfer.files[0];
     if (file && file.type.startsWith('image/')) {
-      const reader = new FileReader();
-      reader.onload = (readerEvent) => {
-        const imageUrl = readerEvent.target?.result as string;
-        editor.chain().focus().setImage({ src: imageUrl }).run();
-      };
-      reader.readAsDataURL(file);
+      handleImageUpload(file);
     }
-  }, [editor]);
+  }, [handleImageUpload]);
 
   return (
     <div className="writer-container">
       <h1>Create a New Post</h1>
 
-      {/* NEW: Input for the blog post title */}
       <input
         type="text"
         className="title-input"
@@ -150,12 +206,11 @@ const WriterPage = () => {
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        <MenuBar editor={editor} />
+        <MenuBar editor={editor} onImageUpload={handleImageUpload} />
         <EditorContent editor={editor} />
         {isDragging && <div className="drop-zone-overlay">Drop image here</div>}
       </div>
       
-      {/* NEW: Updated save button with loading state */}
       <button className="save-button" onClick={handleSave} disabled={isSaving}>
         {isSaving ? 'Saving...' : 'Save and Publish'}
       </button>
