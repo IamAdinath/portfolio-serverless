@@ -320,8 +320,17 @@ export async function uploadFileToS3(signedUrl: string, file: File): Promise<str
   }
 }
 
-export async function getPresignedUrl(fileName: string, fileType: string): Promise<string> {
+interface PresignedUrlResponse {
+  url: string;
+  fields?: Record<string, string>;
+}
+
+export async function getPresignedUrl(fileName: string, fileType: string): Promise<PresignedUrlResponse | null | undefined> {
   const endpoint = `${API_BASE_URL}/get-presigned-url?fileName=${encodeURIComponent(fileName)}`;
+  if (!fileName || !fileType) {
+    console.error('File name or type is missing for presigned URL request.');
+    return null;
+  }
 
   try {
     const response = await fetch(endpoint, {
