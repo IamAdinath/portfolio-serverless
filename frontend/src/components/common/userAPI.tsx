@@ -131,7 +131,7 @@ interface blogPostPayload{
   title: string;
   content: Text;
 }
-export async function CreateBlogPost(payload: any) {
+export async function CreateDraftBlogPost(payload: any) {
   const endpoint = `${API_BASE_URL}/create-blog`;
   const token = localStorage.getItem('token');
   if (!token) {
@@ -168,6 +168,47 @@ export async function CreateBlogPost(payload: any) {
       throw error;
     }
     const apiError: ApiError = new Error((error as Error).message || 'An unexpected error occurred during blog post creation.');
+    throw apiError;
+  }
+};
+
+export async function UpdateBlogPost(id: string, payload: any) {
+  const endpoint = `${API_BASE_URL}/update-blog?id=${id}`;
+  const token = localStorage.getItem('token');
+  if (!token) {
+    throw new Error('No token found');
+  }
+  const auth_header = {
+        'Content-Type': 'application/json',
+        'Authorization': token
+      }
+  try {
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: auth_header,
+      body: JSON.stringify(payload),
+    });
+
+    const jsonResponse = await response.json().catch(() => ({
+      message: `Request failed with status ${response.status} and no JSON error body.`,
+    }));
+
+    if (!response.ok) {
+      const error: ApiError = new Error(jsonResponse.message || `API Error: ${response.status} ${response.statusText}`);
+      error.statusCode = response.status;
+      error.details = jsonResponse;
+      console.error('UpdateBlogPost API error:', error.details);
+      throw error;
+    }
+
+    return jsonResponse;
+
+  } catch (error) {
+    console.error('Network or other error in UpdateBlogPost:', error);
+    if ((error as ApiError).statusCode) {
+      throw error;
+    }
+    const apiError: ApiError = new Error((error as Error).message || 'An unexpected error occurred during blog post update.');
     throw apiError;
   }
 };
@@ -254,5 +295,47 @@ export async function GetBlogPostById(id: string) {
     }
     const apiError: ApiError = new Error((error as Error).message || 'An unexpected error occurred during blog post retrieval by ID.');
     throw apiError;
+  }
+}
+
+export async function uploadFileToS3(signedUrl: string, file: File): Promise<string> {
+  try {
+    const response = await fetch(signedUrl, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': file.type,
+      },
+      body: file,
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to upload file: ${response.status} ${response.statusText}`);
+    }
+
+    // Return the final URL of the uploaded file
+    return signedUrl.split('?')[0]; // Assuming the signed URL is the final URL
+  } catch (error) {
+    console.error('Error uploading file to S3:', error);
+    throw error;
+  }
+}
+
+export async function getPresignedUrl(fileName: string, fileType: string): Promise<string> {
+  const endpoint = `${API_BASE_URL}/get-presigned-url?fileName=${encodeURIComponent(fileName)}`;
+
+  try {
+    const response = await fetch(endpoint, {
+      method: 'GET',
+      headers: base_headers,
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to get presigned URL: ${response.status} ${response.statusText}`);
+    }
+
+    const jsonResponse = await response.json();
+  } catch (error) {
+    console.error('Error getting presigned URL:', error);
+    throw error;
   }
 }
