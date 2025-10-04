@@ -20,7 +20,6 @@ import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import { createLowlight } from 'lowlight';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faImage } from '@fortawesome/free-solid-svg-icons';
-import { v4 as uuidv4 } from 'uuid';
 
 // --- Syntax Highlighting Imports ---
 import 'highlight.js/styles/github-dark.css'; // Or your preferred theme
@@ -85,14 +84,13 @@ const MenuBar = ({ editor, onImageUpload }: { editor: Editor | null, onImageUplo
 const WriterPage = () => {
   const [blogId, setBlogId] = useState<string | null>(null);
   const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
+
   const [status, setStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
   const [isDragging, setIsDragging] = useState(false);
   const { addToast } = useToast();
   const imageCounter = useRef(0);
 
   const debouncedTitle = useDebounce(title, 1500);
-  const debouncedContent = useDebounce(content, 30000); // Auto-save every 30 seconds
 
   const editor = useEditor({
     extensions: [
@@ -104,8 +102,7 @@ const WriterPage = () => {
       Dropcursor,
     ],
     content: ``,
-    onUpdate: ({ editor }) => {
-      setContent(editor.getHTML());
+    onUpdate: () => {
       setStatus('idle');
     },
   });
@@ -132,23 +129,7 @@ const WriterPage = () => {
     }
   }, [debouncedTitle, blogId, addToast]);
 
-  // Effect for periodic auto-saving of content
-  useEffect(() => {
-    if (blogId && debouncedContent && status === 'idle') {
-      const autoSave = async () => {
-        setStatus('saving');
-        try {
-          await UpdateBlogPost(blogId, { content: debouncedContent });
-          setStatus('saved');
-        } catch (error) {
-          console.error("Auto-save failed:", error);
-          addToast('error', 'Auto-save failed. Check your connection.');
-          setStatus('idle'); // Allow retry
-        }
-      };
-      autoSave();
-    }
-  }, [debouncedContent, blogId, status, addToast]);
+
 
 
   const handleImageUpload = useCallback(async (file: File) => {
@@ -170,11 +151,16 @@ const WriterPage = () => {
       const imageKey = `posts/${blogId}/image_${imageCounter.current++}.jpg`;
       
       const presignedData = await getPresignedUrl(imageKey);
-      if (!presignedData ||  !presignedData.publicUrl) {
+      if (!presignedData || !presignedData.presignedUrl || !presignedData.publicUrl) {
           throw new Error('Invalid response from presigned URL endpoint.');
       }
       
-      await fetch(presignedData.publicUrl, { method: 'PUT', headers: { 'Content-Type': file.type }, body: file });
+      // Upload to S3 using the presigned URL
+      await fetch(presignedData.presignedUrl, { 
+        method: 'PUT', 
+        headers: { 'Content-Type': file.type }, 
+        body: file 
+      });
 
       const finalImageUrl = presignedData.publicUrl;
       
@@ -213,7 +199,6 @@ const WriterPage = () => {
       await UpdateBlogPost(blogId, blogPostPayload);
       addToast('success', 'Blog post published successfully!');
       setTitle('');
-      setContent('');
       editor.commands.clearContent(true);
       setBlogId(null);
       setStatus('idle');
