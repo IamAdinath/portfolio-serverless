@@ -298,7 +298,7 @@ export async function GetBlogPostById(id: string) {
   }
 }
 
-export async function uploadFileToS3(signedUrl: string, file: File): Promise<string> {
+export async function putFileToS3(signedUrl: string, file: File): Promise<string> {
   try {
     const response = await fetch(signedUrl, {
       method: 'PUT',
@@ -321,15 +321,46 @@ export async function uploadFileToS3(signedUrl: string, file: File): Promise<str
 }
 
 interface PresignedUrlResponse {
-  url: string;
+  publicUrl: string;
   fields?: Record<string, string>;
 }
 
-export async function getPresignedUrl(fileName: string, fileType: string): Promise<PresignedUrlResponse | null | undefined> {
-  const endpoint = `${API_BASE_URL}/get-presigned-url?fileName=${encodeURIComponent(fileName)}`;
-  if (!fileName || !fileType) {
+export async function uploadFileToS3(fileName: string, file_content: any): Promise<any | null | undefined> {
+  const endpoint = `${API_BASE_URL}/upload-to-s3`;
+  if (!fileName || !file_content) {
     console.error('File name or type is missing for presigned URL request.');
     return null;
+  }
+  const body = {
+    "fileName": fileName,
+    "file_content": file_content,
+  }
+
+  try {
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: base_headers,
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to get presigned URL: ${response.status} ${response.statusText}`);
+    }
+
+    const jsonResponse = await response.json();
+  } catch (error) {
+    console.error('Error getting presigned URL:', error);
+    throw error;
+  }
+}
+
+export async function getPresignedUrl(fileName: string): Promise<PresignedUrlResponse | null | undefined> {
+  const endpoint = `${API_BASE_URL}/get-presigned-url?fileName=${encodeURIComponent(fileName)}`;
+  if (!fileName) {
+    console.error('File name or type is missing for presigned URL request.');
+    return null;
+  }
+  const body = {
+    "fileName": fileName,
   }
 
   try {
@@ -343,6 +374,9 @@ export async function getPresignedUrl(fileName: string, fileType: string): Promi
     }
 
     const jsonResponse = await response.json();
+    const presignedUrl = jsonResponse;
+    return jsonResponse as PresignedUrlResponse;
+
   } catch (error) {
     console.error('Error getting presigned URL:', error);
     throw error;
