@@ -318,10 +318,24 @@ Resources:
         Rules:
           - ObjectOwnership: BucketOwnerPreferred
       PublicAccessBlockConfiguration:
-        BlockPublicAcls: true
-        BlockPublicPolicy: true
-        IgnorePublicAcls: true
-        RestrictPublicBuckets: true
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+
+  MediaBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref MediaBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: PublicReadGetObject
+            Effect: Allow
+            Principal: '*'
+            Action: 
+            - s3:GetObject
+            Resource: !Sub arn:aws:s3:::${MediaBucket}/*
   
   DownloadResumeLambda:
     Type: AWS::Serverless::Function
@@ -389,6 +403,26 @@ Resources:
             RestApiId: !Ref PortfolioAPI
             Path: /upload-to-s3
             Method: POST
+      Environment:
+        Variables:
+          MEDIA_BUCKET: !Ref MediaBucket
+          ENV : !Ref Env
+
+  GetPresignedUrlLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub get-presigned-url-${Env}
+      Handler: common.get_presigned_url.lambda_handler
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AmazonS3FullAccess
+      Events:
+        AddItem:
+          Type: Api
+          Properties:
+            RestApiId: !Ref PortfolioAPI
+            Path: /get-presigned-url
+            Method: GET
       Environment:
         Variables:
           MEDIA_BUCKET: !Ref MediaBucket
