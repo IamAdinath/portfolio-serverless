@@ -70,25 +70,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ vars.UI_AWS_REGION }}
 
-      - name: Create environment file
-        working-directory: frontend/cloudformation/environment/
-        run: |
-          cat > dev.sh << EOF
-          #!/bin/bash
-          export ENV=dev
-          export REGION=${{ vars.UI_AWS_REGION }}
-          export UI_BUCKET_NAME=${{ vars.UI_BUCKET_NAME_DEV }}
-          export REACT_APP_API_BASE_URL=${{ vars.REACT_APP_API_BASE_URL_DEV }}
-          export REACT_APP_COGNITO_USER_POOL_ID=${{ vars.REACT_APP_COGNITO_USER_POOL_ID_DEV }}
-          export REACT_APP_COGNITO_CLIENT_ID=${{ vars.REACT_APP_COGNITO_CLIENT_ID_DEV }}
-          export REACT_APP_COGNITO_REGION=${{ vars.REACT_APP_COGNITO_REGION }}
-          export REACT_APP_COGNITO_DOMAIN=${{ vars.REACT_APP_COGNITO_DOMAIN_DEV }}
-          export REACT_APP_COGNITO_REDIRECT_SIGNIN=${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNIN_DEV }}
-          export REACT_APP_COGNITO_REDIRECT_SIGNOUT=${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNOUT_DEV }}
-          export REACT_APP_API_KEY=${{ vars.REACT_APP_API_KEY_DEV }}
-          EOF
-          chmod +x dev.sh
-
       - name: Deploy UI Stack (Dev)
         working-directory: frontend/cloudformation/
         run: |
@@ -96,6 +77,16 @@ jobs:
           ./deploy-dev.sh
         env:
           ENV: dev
+          REGION: ${{ vars.UI_AWS_REGION }}
+          UI_BUCKET_NAME: ${{ vars.UI_BUCKET_NAME_DEV }}
+          REACT_APP_API_BASE_URL: ${{ vars.REACT_APP_API_BASE_URL_DEV }}
+          REACT_APP_COGNITO_USER_POOL_ID: ${{ vars.REACT_APP_COGNITO_USER_POOL_ID_DEV }}
+          REACT_APP_COGNITO_CLIENT_ID: ${{ vars.REACT_APP_COGNITO_CLIENT_ID_DEV }}
+          REACT_APP_COGNITO_REGION: ${{ vars.REACT_APP_COGNITO_REGION }}
+          REACT_APP_COGNITO_DOMAIN: ${{ vars.REACT_APP_COGNITO_DOMAIN_DEV }}
+          REACT_APP_COGNITO_REDIRECT_SIGNIN: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNIN_DEV }}
+          REACT_APP_COGNITO_REDIRECT_SIGNOUT: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNOUT_DEV }}
+          REACT_APP_API_KEY: ${{ vars.REACT_APP_API_KEY_DEV }}
 
   # --------------------
   # Production Environment
@@ -159,27 +150,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ vars.UI_AWS_REGION }}
 
-      - name: Create environment file
-        working-directory: frontend/cloudformation/environment/
-        run: |
-          cat > prod.sh << EOF
-          #!/bin/bash
-          export ENV=prod
-          export REGION=${{ vars.UI_AWS_REGION }}
-          export HOSTNAME=${{ vars.UI_HOSTNAME_PROD }}
-          export UI_BUCKET_NAME=${{ vars.UI_BUCKET_NAME_PROD }}
-          export ACM_CERTIFICATE_ARN=${{ vars.ACM_CERTIFICATE_ARN }}
-          export REACT_APP_API_BASE_URL=${{ vars.REACT_APP_API_BASE_URL_PROD }}
-          export REACT_APP_COGNITO_USER_POOL_ID=${{ vars.REACT_APP_COGNITO_USER_POOL_ID_PROD }}
-          export REACT_APP_COGNITO_CLIENT_ID=${{ vars.REACT_APP_COGNITO_CLIENT_ID_PROD }}
-          export REACT_APP_COGNITO_REGION=${{ vars.REACT_APP_COGNITO_REGION }}
-          export REACT_APP_COGNITO_DOMAIN=${{ vars.REACT_APP_COGNITO_DOMAIN_PROD }}
-          export REACT_APP_COGNITO_REDIRECT_SIGNIN=${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNIN_PROD }}
-          export REACT_APP_COGNITO_REDIRECT_SIGNOUT=${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNOUT_PROD }}
-          export REACT_APP_API_KEY=${{ vars.REACT_APP_API_KEY_PROD }}
-          EOF
-          chmod +x prod.sh
-
       - name: Deploy UI Stack (Prod)
         working-directory: frontend/cloudformation/
         run: |
@@ -187,3 +157,15 @@ jobs:
           ./deploy-prod.sh
         env:
           ENV: prod
+          REGION: ${{ vars.UI_AWS_REGION }}
+          HOSTNAME: ${{ vars.UI_HOSTNAME_PROD }}
+          UI_BUCKET_NAME: ${{ vars.UI_BUCKET_NAME_PROD }}
+          ACM_CERTIFICATE_ARN: ${{ vars.ACM_CERTIFICATE_ARN }}
+          REACT_APP_API_BASE_URL: ${{ vars.REACT_APP_API_BASE_URL_PROD }}
+          REACT_APP_COGNITO_USER_POOL_ID: ${{ vars.REACT_APP_COGNITO_USER_POOL_ID_PROD }}
+          REACT_APP_COGNITO_CLIENT_ID: ${{ vars.REACT_APP_COGNITO_CLIENT_ID_PROD }}
+          REACT_APP_COGNITO_REGION: ${{ vars.REACT_APP_COGNITO_REGION }}
+          REACT_APP_COGNITO_DOMAIN: ${{ vars.REACT_APP_COGNITO_DOMAIN_PROD }}
+          REACT_APP_COGNITO_REDIRECT_SIGNIN: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNIN_PROD }}
+          REACT_APP_COGNITO_REDIRECT_SIGNOUT: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNOUT_PROD }}
+          REACT_APP_API_KEY: ${{ vars.REACT_APP_API_KEY_PROD }}
