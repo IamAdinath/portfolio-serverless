@@ -77,9 +77,7 @@ jobs:
           #!/bin/bash
           export ENV=dev
           export REGION=${{ vars.UI_AWS_REGION }}
-          export HOSTNAME=${{ vars.UI_HOSTNAME_DEV }}
           export UI_BUCKET_NAME=${{ vars.UI_BUCKET_NAME_DEV }}
-          export ACM_CERTIFICATE_ARN=${{ vars.ACM_CERTIFICATE_ARN }}
           export REACT_APP_API_BASE_URL=${{ vars.REACT_APP_API_BASE_URL_DEV }}
           export REACT_APP_COGNITO_USER_POOL_ID=${{ vars.REACT_APP_COGNITO_USER_POOL_ID_DEV }}
           export REACT_APP_COGNITO_CLIENT_ID=${{ vars.REACT_APP_COGNITO_CLIENT_ID_DEV }}
@@ -91,11 +89,11 @@ jobs:
           EOF
           chmod +x dev.sh
 
-      - name: Deploy UI Stack
+      - name: Deploy UI Stack (Dev)
         working-directory: frontend/cloudformation/
         run: |
-          chmod +x ./deploy.sh
-          ./deploy.sh
+          chmod +x ./deploy-dev.sh
+          ./deploy-dev.sh
         env:
           ENV: dev
 
@@ -182,10 +180,10 @@ jobs:
           EOF
           chmod +x prod.sh
 
-      - name: Deploy UI Stack
+      - name: Deploy UI Stack (Prod)
         working-directory: frontend/cloudformation/
         run: |
-          chmod +x ./deploy.sh
-          ./deploy.sh
+          chmod +x ./deploy-prod.sh
+          ./deploy-prod.sh
         env:
           ENV: prod

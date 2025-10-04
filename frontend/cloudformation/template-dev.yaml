@@ -1,13 +1,8 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: "AWS CloudFormation template for Portfolio UI - Production"
+Description: "AWS CloudFormation template for Portfolio UI - Development"
 Transform: "AWS::Serverless-2016-10-31"
+
 Parameters:
-  SSLCertArn:
-    Description: "ACM Cert arn for custom domain"
-    Type: "String"
-  Hostname:
-    Description: "Hostname in DNS for ui"
-    Type: "String"
   BucketName:
     Description: "UI Bucket Asset"
     Type: "String"
@@ -25,6 +20,7 @@ Resources:
         RestrictPublicBuckets: false
       WebsiteConfiguration:
         IndexDocument: "index.html"
+        ErrorDocument: "index.html"
       OwnershipControls:
         Rules:
           - ObjectOwnership: BucketOwnerPreferred
@@ -41,14 +37,13 @@ Resources:
             Principal: '*'
             Action: 
             - s3:GetObject
-            - s3:PutObject
             Resource: !Sub arn:aws:s3:::${UIBucket}/*
 
   CloudFrontOriginAccessIdentity:
     Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
     Properties:
       CloudFrontOriginAccessIdentityConfig:
-        Comment: !Sub "Portfolio-Stack"
+        Comment: !Sub "Portfolio-Dev-Stack"
 
   PortfolioFrontDistribution:
     Type: AWS::CloudFront::Distribution
@@ -59,10 +54,8 @@ Resources:
             Id: !Ref UIBucket
             S3OriginConfig:
               OriginAccessIdentity: !Sub 'origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}'
-        Aliases:
-        - !Ref Hostname
         Enabled: true
-        Comment: "Cloudfront Distribution for Portfolio UI - Production"
+        Comment: "Cloudfront Distribution for Portfolio UI - Development"
         DefaultRootObject: index.html
         CustomErrorResponses:
             - ErrorCode: 404
@@ -87,24 +80,21 @@ Resources:
             QueryString: false
             Cookies:
               Forward: none
-          ViewerProtocolPolicy: allow-all
-        PriceClass: PriceClass_200
-        ViewerCertificate:
-          AcmCertificateArn: !Sub arn:aws:acm:${AWS::Region}:${AWS::AccountId}:certificate/${SSLCertArn}
-          SslSupportMethod: "sni-only"
+          ViewerProtocolPolicy: redirect-to-https
+        PriceClass: PriceClass_100
 
   PortfolioHeaderPolicy:
     Type: AWS::CloudFront::ResponseHeadersPolicy
     Properties:
       ResponseHeadersPolicyConfig:
         Name: !Sub ${AWS::StackName}-header-policy
-        Comment: Header policy for Portfolio Production.
+        Comment: Header policy for Portfolio Development.
         CorsConfig:
           OriginOverride: false
           AccessControlAllowCredentials: false
           AccessControlAllowHeaders:
             Items:
-              - ALL
+              - "*"
           AccessControlAllowMethods:
             Items:
               - POST
@@ -113,10 +103,10 @@ Resources:
               - DELETE
           AccessControlAllowOrigins:
             Items:
-            - !Ref Hostname
+            - "*"
           AccessControlExposeHeaders:
             Items:
-            - ALL
+            - "*"
           AccessControlMaxAgeSec: 3600
         RemoveHeadersConfig:
           Items:
@@ -139,10 +129,6 @@ Resources:
           XSSProtection:
             Override: true
             Protection: true
-          ContentSecurityPolicy:
-            ContentSecurityPolicy: !Sub "img-src 'self'; script-src ${Hostname} 'sha256-UR0iHsZVfsKqSr7yAVEyYw7qoSY2X0JnEIXNLstrEwk='; style-src 'self' 'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU='; object-src 'self';"
-            Override: true
-
 
 Outputs:
   UIBucket:
@@ -153,3 +139,7 @@ Outputs:
     Value: !Ref PortfolioFrontDistribution
     Export:
       Name: !Sub "${AWS::StackName}-DistributionID"
+  CloudFrontURL:
+    Value: !Sub "https://${PortfolioFrontDistribution.DomainName}"
+    Export:
+      Name: !Sub "${AWS::StackName}-CloudFrontURL"
