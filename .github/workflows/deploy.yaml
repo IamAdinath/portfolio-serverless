@@ -4,62 +4,55 @@ on:
   push:
     branches:
       - dev
-      - bug/api-deployment-fixes
       - master
   workflow_dispatch:
 
 jobs:
   # --------------------
-  # dev Deployment
+  # Development Environment
   # --------------------
-  deploy-dev:
-    name: Deploy to dev
+  deploy-api-dev:
+    name: Deploy API - Dev
     runs-on: ubuntu-latest
     environment: dev
+    if: github.ref == 'refs/heads/dev'
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
-          node-version: "22"
+          python-version: '3.12'
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ vars.UI_REGION }}
+          aws-region: ${{ vars.API_AWS_REGION }}
 
-      - name: Deploy using script (dev)
-        working-directory: frontend/cloudformation/
+      - name: Deploy API Stack
+        working-directory: api/cloudformation/
         run: |
           chmod +x ./deploy.sh
           ./deploy.sh
         env:
-          UI_AWS_REGION: ${{ vars.UI_REGION }}
-          UI_STACK_NAME: ${{ vars.UI_STACK_NAME }}
-          UI_BUCKET_NAME: ${{ vars.UI_BUCKET_NAME }}
-          ENV: test
-          REACT_APP_API_BASE_URL: ${{ vars.REACT_APP_API_BASE_URL }}
-          REACT_APP_COGNITO_USER_POOL_ID: ${{ vars.REACT_APP_COGNITO_USER_POOL_ID }}
-          REACT_APP_COGNITO_CLIENT_ID: ${{ vars.REACT_APP_COGNITO_CLIENT_ID }}
-          REACT_APP_COGNITO_REGION: ${{ vars.REACT_APP_COGNITO_REGION }}
-          REACT_APP_COGNITO_DOMAIN: ${{ vars.REACT_APP_COGNITO_DOMAIN }}
-          REACT_APP_COGNITO_REDIRECT_SIGNIN: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNIN }}
-          REACT_APP_COGNITO_REDIRECT_SIGNOUT: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNOUT }}
-          REACT_APP_API_KEY: ${{ vars.REACT_APP_API_KEY }}
+          ENV: dev
+          REGION: ${{ vars.API_AWS_REGION }}
+          STACK_NAME: ${{ vars.API_STACK_NAME_DEV }}
+          CODE_BUCKET: ${{ vars.API_BUCKET_NAME_DEV }}
+          DEFAULT_PYTHON_RUNTIME: python3.12
+          AWS_PROFILE: ""
+          AWS_PROFILE_OPTION: ""
 
-  # --------------------
-  # Production Deployment
-  # --------------------
-  deploy-prod:
-    name: Deploy to Production
+  deploy-ui-dev:
+    name: Deploy UI - Dev
     runs-on: ubuntu-latest
-    environment: prod
-    if: github.ref == 'refs/heads/master' || github.event_name == 'workflow_dispatch'
+    environment: dev
+    needs: deploy-api-dev
+    if: github.ref == 'refs/heads/dev'
 
     steps:
       - name: Checkout code
@@ -77,43 +70,69 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ vars.UI_AWS_REGION }}
 
-      - name: Deploy using script (Production)
+      - name: Deploy UI Stack (Dev)
         working-directory: frontend/cloudformation/
         run: |
-          chmod +x ./deploy.sh
-          ./deploy.sh 
-          echo " ${{ vars.UI_AWS_REGION }} "
-          echo " ${{ vars.UI_STACK_NAME }} "
-          echo " ${{ vars.UI_BUCKET_NAME }} "
-          echo " REACT_APP_API_BASE_URL ${{ vars.REACT_APP_API_BASE_URL }} "
-          echo "REACT_APP_COGNITO_USER_POOL_ID  ${{ vars.REACT_APP_COGNITO_USER_POOL_ID }} "
-          echo "REACT_APP_COGNITO_CLIENT_ID  ${{ vars.REACT_APP_COGNITO_CLIENT_ID }} "
-          echo " ${{ vars.REACT_APP_COGNITO_REGION }} "
-          echo " ${{ vars.REACT_APP_COGNITO_DOMAIN }} "
-          echo " ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNIN }} "
-          echo " ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNOUT }} "
-          echo "REACT_APP_API_KEY ${{ vars.REACT_APP_API_KEY }} "
+          chmod +x ./deploy-dev.sh
+          ./deploy-dev.sh
         env:
-          UI_AWS_REGION: ${{ vars.UI_AWS_REGION }}
-          UI_STACK_NAME: ${{ vars.UI_STACK_NAME }}
-          UI_BUCKET_NAME: ${{ vars.UI_BUCKET_NAME }}
-          REACT_APP_API_BASE_URL: ${{ vars.REACT_APP_API_BASE_URL }}
-          REACT_APP_COGNITO_USER_POOL_ID: ${{ vars.REACT_APP_COGNITO_USER_POOL_ID }}
-          REACT_APP_COGNITO_CLIENT_ID: ${{ vars.REACT_APP_COGNITO_CLIENT_ID }}
+          ENV: dev
+          REGION: ${{ vars.UI_AWS_REGION }}
+          UI_BUCKET_NAME: ${{ vars.UI_BUCKET_NAME_DEV }}
+          REACT_APP_API_BASE_URL: ${{ vars.REACT_APP_API_BASE_URL_DEV }}
+          REACT_APP_COGNITO_USER_POOL_ID: ${{ vars.REACT_APP_COGNITO_USER_POOL_ID_DEV }}
+          REACT_APP_COGNITO_CLIENT_ID: ${{ vars.REACT_APP_COGNITO_CLIENT_ID_DEV }}
           REACT_APP_COGNITO_REGION: ${{ vars.REACT_APP_COGNITO_REGION }}
-          REACT_APP_COGNITO_DOMAIN: ${{ vars.REACT_APP_COGNITO_DOMAIN }}
-          REACT_APP_COGNITO_REDIRECT_SIGNIN: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNIN }}
-          REACT_APP_COGNITO_REDIRECT_SIGNOUT: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNOUT }}
-          REACT_APP_API_KEY: ${{ vars.REACT_APP_API_KEY }}
+          REACT_APP_COGNITO_DOMAIN: ${{ vars.REACT_APP_COGNITO_DOMAIN_DEV }}
+          REACT_APP_COGNITO_REDIRECT_SIGNIN: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNIN_DEV }}
+          REACT_APP_COGNITO_REDIRECT_SIGNOUT: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNOUT_DEV }}
+          REACT_APP_API_KEY: ${{ vars.REACT_APP_API_KEY_DEV }}
 
   # --------------------
-  # API Deployment
+  # Production Environment
   # --------------------
-  deploy-api:
-    name: Deploy API
+  deploy-api-prod:
+    name: Deploy API - Prod
     runs-on: ubuntu-latest
-    # if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/master'
-    # environment: ${{ github.ref == 'refs/heads/master' && 'prod' || 'test' }}
+    environment: prod
+    if: github.ref == 'refs/heads/master'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.API_AWS_REGION }}
+
+      - name: Deploy API Stack
+        working-directory: api/cloudformation/
+        run: |
+          chmod +x ./deploy.sh
+          ./deploy.sh
+        env:
+          ENV: prod
+          REGION: ${{ vars.API_AWS_REGION }}
+          STACK_NAME: ${{ vars.API_STACK_NAME_PROD }}
+          CODE_BUCKET: ${{ vars.API_BUCKET_NAME_PROD }}
+          DEFAULT_PYTHON_RUNTIME: python3.12
+          AWS_PROFILE: ""
+          AWS_PROFILE_OPTION: ""
+
+  deploy-ui-prod:
+    name: Deploy UI - Prod
+    runs-on: ubuntu-latest
+    environment: prod
+    needs: deploy-api-prod
+    if: github.ref == 'refs/heads/master'
 
     steps:
       - name: Checkout code
@@ -125,21 +144,28 @@ jobs:
           node-version: "22"
 
       - name: Configure AWS Credentials
-        run: |
-          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws configure set region ${{ vars.API_AWS_REGION }}
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.UI_AWS_REGION }}
 
-      - name: Deploy using script
-        working-directory: api/cloudformation/
+      - name: Deploy UI Stack (Prod)
+        working-directory: frontend/cloudformation/
         run: |
-          chmod +x ./deploy.sh
-          ./deploy.sh
+          chmod +x ./deploy-prod.sh
+          ./deploy-prod.sh
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          REGION: ${{ vars.API_AWS_REGION }}
-          STACK_NAME: ${{ vars.API_STACK_NAME }}
-          API_BUCKET_NAME: ${{ vars.API_BUCKET_NAME }}
-          ENV: test
-          CODE_BUCKET: ${{ vars.API_BUCKET_NAME }}
+          ENV: prod
+          REGION: ${{ vars.UI_AWS_REGION }}
+          HOSTNAME: ${{ vars.UI_HOSTNAME_PROD }}
+          UI_BUCKET_NAME: ${{ vars.UI_BUCKET_NAME_PROD }}
+          ACM_CERTIFICATE_ARN: ${{ vars.ACM_CERTIFICATE_ARN }}
+          REACT_APP_API_BASE_URL: ${{ vars.REACT_APP_API_BASE_URL_PROD }}
+          REACT_APP_COGNITO_USER_POOL_ID: ${{ vars.REACT_APP_COGNITO_USER_POOL_ID_PROD }}
+          REACT_APP_COGNITO_CLIENT_ID: ${{ vars.REACT_APP_COGNITO_CLIENT_ID_PROD }}
+          REACT_APP_COGNITO_REGION: ${{ vars.REACT_APP_COGNITO_REGION }}
+          REACT_APP_COGNITO_DOMAIN: ${{ vars.REACT_APP_COGNITO_DOMAIN_PROD }}
+          REACT_APP_COGNITO_REDIRECT_SIGNIN: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNIN_PROD }}
+          REACT_APP_COGNITO_REDIRECT_SIGNOUT: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNOUT_PROD }}
+          REACT_APP_API_KEY: ${{ vars.REACT_APP_API_KEY_PROD }}
