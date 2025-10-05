@@ -66,11 +66,7 @@ Resources:
         Aliases:
         - !Ref Hostname
         Enabled: true
-<<<<<<< HEAD
         Comment: !Sub "Cloudfront Distribution for ${ProjectName} UI - Production"
-=======
-        Comment: "Cloudfront Distribution for Portfolio UI - Production"
->>>>>>> master
         DefaultRootObject: index.html
         CustomErrorResponses:
             - ErrorCode: 404
@@ -106,11 +102,7 @@ Resources:
     Properties:
       ResponseHeadersPolicyConfig:
         Name: !Sub ${AWS::StackName}-header-policy
-<<<<<<< HEAD
         Comment: !Sub "Header policy for ${ProjectName} Production."
-=======
-        Comment: Header policy for Portfolio Production.
->>>>>>> master
         CorsConfig:
           OriginOverride: false
           AccessControlAllowCredentials: false

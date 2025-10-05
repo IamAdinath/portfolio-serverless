@@ -3,13 +3,10 @@ Description: "AWS CloudFormation template for Portfolio UI - Development"
 Transform: "AWS::Serverless-2016-10-31"
 
 Parameters:
-<<<<<<< HEAD
   ProjectName:
     Default: portfolio
     Description: "The name of the project. Will be used as prefix for resource names"
     Type: "String"
-=======
->>>>>>> master
   BucketName:
     Description: "UI Bucket Asset"
     Type: "String"
@@ -50,11 +47,7 @@ Resources:
     Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
     Properties:
       CloudFrontOriginAccessIdentityConfig:
-<<<<<<< HEAD
         Comment: !Sub "${ProjectName}-Dev-Stack"
-=======
-        Comment: !Sub "Portfolio-Dev-Stack"
->>>>>>> master
 
   PortfolioFrontDistribution:
     Type: AWS::CloudFront::Distribution
@@ -66,11 +59,7 @@ Resources:
             S3OriginConfig:
               OriginAccessIdentity: !Sub 'origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}'
         Enabled: true
-<<<<<<< HEAD
         Comment: !Sub "Cloudfront Distribution for ${ProjectName} UI - Development"
-=======
-        Comment: "Cloudfront Distribution for Portfolio UI - Development"
->>>>>>> master
         DefaultRootObject: index.html
         CustomErrorResponses:
             - ErrorCode: 404
@@ -103,11 +92,7 @@ Resources:
     Properties:
       ResponseHeadersPolicyConfig:
         Name: !Sub ${AWS::StackName}-header-policy
-<<<<<<< HEAD
         Comment: !Sub "Header policy for ${ProjectName} Development."
-=======
-        Comment: Header policy for Portfolio Development.
->>>>>>> master
         CorsConfig:
           OriginOverride: false
           AccessControlAllowCredentials: false
