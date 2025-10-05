@@ -46,7 +46,10 @@ function deploy() {
     echo "DIRECTORY >>> " $DIR
     
     echo "=== Environment Variables ==="
+<<<<<<< HEAD
     echo "PROJECT_NAME: $PROJECT_NAME"
+=======
+>>>>>>> master
     echo "ENV: $ENV"
     echo "REGION: $REGION"
     echo "UI_BUCKET_NAME: $UI_BUCKET_NAME"
@@ -74,7 +77,11 @@ function deploy() {
     
     # Choose template based on environment
     TEMPLATE_FILE="template.yaml"
+<<<<<<< HEAD
     STACK_NAME=${PROJECT_NAME}-${ENV}-UI
+=======
+    STACK_NAME=portfolio-${ENV}-UI
+>>>>>>> master
     
     if [ "$ENV" = "dev" ] || [ "$ENV" = "development" ]; then
         TEMPLATE_FILE="template-dev.yaml"
@@ -86,7 +93,10 @@ function deploy() {
         --capabilities CAPABILITY_NAMED_IAM \
         --no-fail-on-empty-changeset \
         --parameter-overrides \
+<<<<<<< HEAD
         ProjectName=${PROJECT_NAME} \
+=======
+>>>>>>> master
         BucketName=${UI_BUCKET_NAME}
         
         # Get CloudFront URL for dev
@@ -101,7 +111,10 @@ function deploy() {
         --capabilities CAPABILITY_NAMED_IAM \
         --no-fail-on-empty-changeset \
         --parameter-overrides \
+<<<<<<< HEAD
         ProjectName=${PROJECT_NAME} \
+=======
+>>>>>>> master
         Hostname=${HOSTNAME} \
         BucketName=${UI_BUCKET_NAME} \
         SSLCertArn=${ACM_CERTIFICATE_ARN}
