@@ -464,3 +464,18 @@ Outputs:
   ApiBaseUrl:
     Description: "Base URL for the API Gateway"
     Value: !Sub "https://${PortfolioAPI}.execute-api.${AWS::Region}.amazonaws.com/${Env}"
+  CognitoUserPoolId:
+    Description: "Cognito User Pool ID"
+    Value: !Ref BlogUserPool
+  CognitoUserPoolClientId:
+    Description: "Cognito User Pool Client ID"
+    Value: !Ref BlogUserPoolClient
+  CognitoIdentityPoolId:
+    Description: "Cognito Identity Pool ID"
+    Value: !Ref BlogIdentityPool
+  MediaBucketName:
+    Description: "S3 Bucket for media files"
+    Value: !Ref MediaBucket
+  UserPoolDomain:
+    Description: "Cognito User Pool Domain"
+    Value: !Ref BlogUserPoolDomain
