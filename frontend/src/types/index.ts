@@ -74,7 +74,7 @@ export interface Blog {
 
 export interface BlogPostPayload {
   title: string;
-  content: string;
+  content?: string;
   images?: string[];
   status?: string;
 }
@@ -137,9 +137,4 @@ export interface RouteParams {
 }
 
 // ===== HTTP HEADERS =====
-export interface HttpHeaders {
-  'Content-Type': string;
-  'Access-Control-Allow-Origin'?: string;
-  'Authorization'?: string;
-  [key: string]: string | undefined;
-}
+export type HttpHeaders = Record<string, string>;

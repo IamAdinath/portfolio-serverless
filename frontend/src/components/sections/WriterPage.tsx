@@ -62,7 +62,7 @@ const MenuBar = ({ editor, onImageUpload }: { editor: Editor | null, onImageUplo
     const file = event.target.files?.[0];
     if (file) onImageUpload(file);
   };
-  
+
   return (
     <div className="menu-bar">
       <button onClick={() => editor.chain().focus().toggleBold().run()} className={editor.isActive('bold') ? 'is-active' : ''}>Bold</button>
@@ -135,8 +135,8 @@ const WriterPage = () => {
   const handleImageUpload = useCallback(async (file: File) => {
     if (!editor) return;
     if (!blogId) {
-        addToast('error', 'Please enter a title to start adding images.');
-        return;
+      addToast('error', 'Please enter a title to start adding images.');
+      return;
     }
     const placeholderId = `placeholder-${Date.now()}`;
     const blobUrl = URL.createObjectURL(file);
@@ -149,21 +149,21 @@ const WriterPage = () => {
 
     try {
       const imageKey = `posts/${blogId}/image_${imageCounter.current++}.jpg`;
-      
+
       const presignedData = await getPresignedUrl(imageKey);
       if (!presignedData || !presignedData.presignedUrl || !presignedData.publicUrl) {
-          throw new Error('Invalid response from presigned URL endpoint.');
+        throw new Error('Invalid response from presigned URL endpoint.');
       }
-      
+
       // Upload to S3 using the presigned URL
-      await fetch(presignedData.presignedUrl, { 
-        method: 'PUT', 
-        headers: { 'Content-Type': file.type }, 
-        body: file 
+      await fetch(presignedData.presignedUrl, {
+        method: 'PUT',
+        headers: { 'Content-Type': file.type },
+        body: file
       });
 
       const finalImageUrl = presignedData.publicUrl;
-      
+
       const { state, dispatch } = editor.view;
       const { tr } = state;
       let placeholderPos: number | null = null;
@@ -210,7 +210,7 @@ const WriterPage = () => {
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => { e.preventDefault(); setIsDragging(true); };
   const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => { e.preventDefault(); setIsDragging(false); };
-  
+
   const handleDrop = useCallback((e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setIsDragging(false);
