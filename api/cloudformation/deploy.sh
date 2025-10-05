@@ -7,6 +7,11 @@ function parameter_error() {
 function validate_parameters() {
     local is_error=false
 
+    if [ -z "$PROJECT_NAME" ]; then
+        parameter_error "PROJECT_NAME"
+        is_error=true
+    fi
+
     if [ -z "$ENV" ]; then
         parameter_error "ENV"
         is_error=true
@@ -80,6 +85,7 @@ function deploy() {
     --capabilities CAPABILITY_NAMED_IAM \
     --no-fail-on-empty-changeset \
     --parameter-overrides \
+    ProjectName=${PROJECT_NAME} \
     Env=${ENV} \
     CodeBucket=${CODE_BUCKET} \
     CodePath="${CODE_PATH}/${CODE_ZIP}" \
