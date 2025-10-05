@@ -44,8 +44,6 @@ jobs:
           STACK_NAME: ${{ vars.API_STACK_NAME_DEV }}
           CODE_BUCKET: ${{ vars.API_BUCKET_NAME_DEV }}
           DEFAULT_PYTHON_RUNTIME: python3.12
-          AWS_PROFILE: ""
-          AWS_PROFILE_OPTION: ""
 
   deploy-ui-dev:
     name: Deploy UI - Dev
@@ -124,8 +122,6 @@ jobs:
           STACK_NAME: ${{ vars.API_STACK_NAME_PROD }}
           CODE_BUCKET: ${{ vars.API_BUCKET_NAME_PROD }}
           DEFAULT_PYTHON_RUNTIME: python3.12
-          AWS_PROFILE: ""
-          AWS_PROFILE_OPTION: ""
 
   deploy-ui-prod:
     name: Deploy UI - Prod
