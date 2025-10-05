@@ -39,13 +39,12 @@ jobs:
           chmod +x ./deploy.sh
           ./deploy.sh
         env:
+          PROJECT_NAME: ${{ vars.PROJECT_NAME }}
           ENV: dev
           REGION: ${{ vars.API_AWS_REGION }}
           STACK_NAME: ${{ vars.API_STACK_NAME_DEV }}
           CODE_BUCKET: ${{ vars.API_BUCKET_NAME_DEV }}
           DEFAULT_PYTHON_RUNTIME: python3.12
-          AWS_PROFILE: ""
-          AWS_PROFILE_OPTION: ""
 
   deploy-ui-dev:
     name: Deploy UI - Dev
@@ -76,6 +75,7 @@ jobs:
           chmod +x ./deploy-dev.sh
           ./deploy-dev.sh
         env:
+          PROJECT_NAME: ${{ vars.PROJECT_NAME }}
           ENV: dev
           REGION: ${{ vars.UI_AWS_REGION }}
           UI_BUCKET_NAME: ${{ vars.UI_BUCKET_NAME_DEV }}
@@ -119,13 +119,12 @@ jobs:
           chmod +x ./deploy.sh
           ./deploy.sh
         env:
+          PROJECT_NAME: ${{ vars.PROJECT_NAME }}
           ENV: prod
           REGION: ${{ vars.API_AWS_REGION }}
           STACK_NAME: ${{ vars.API_STACK_NAME_PROD }}
           CODE_BUCKET: ${{ vars.API_BUCKET_NAME_PROD }}
           DEFAULT_PYTHON_RUNTIME: python3.12
-          AWS_PROFILE: ""
-          AWS_PROFILE_OPTION: ""
 
   deploy-ui-prod:
     name: Deploy UI - Prod
@@ -156,6 +155,7 @@ jobs:
           chmod +x ./deploy-prod.sh
           ./deploy-prod.sh
         env:
+          PROJECT_NAME: ${{ vars.PROJECT_NAME }}
           ENV: prod
           REGION: ${{ vars.UI_AWS_REGION }}
           HOSTNAME: ${{ vars.UI_HOSTNAME_PROD }}
