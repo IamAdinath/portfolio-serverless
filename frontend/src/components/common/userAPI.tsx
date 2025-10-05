@@ -1,11 +1,10 @@
 
-import { 
+import type { 
   ApiError, 
   ConfirmUserPayload, 
   ConfirmUserResponse, 
   BlogPostData, 
   BlogPostPayload,
-  PresignedUrlResponse,
   PresignedUrlApiResponse,
   HttpHeaders
 } from '../../types';

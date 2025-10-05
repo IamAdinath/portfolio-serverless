@@ -2,7 +2,7 @@
 import React, { useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faExclamationCircle, faInfoCircle, faExclamationTriangle, faTimes } from '@fortawesome/free-solid-svg-icons';
-import { Toast, ToastMessageProps } from '../../types';
+import { ToastMessageProps } from '../../types';
 import './Toast.css';
 
 // Re-export Toast type for backward compatibility
