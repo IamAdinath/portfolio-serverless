@@ -1,16 +1,12 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
 import './stickManDownload.css';
 import { ResumeLink, GetFile } from './userAPI';
 
 const StickmanDownload: React.FC = () => {
   const [isAnimating, setIsAnimating] = useState(false);
-  const [showStickman, setShowStickman] = useState(false);
-
   const handleDownload = async () => {
     try {
       setIsAnimating(true);
-      setShowStickman(true);
 
       const response = await ResumeLink();
       const presignedUrl = response.url;
@@ -38,15 +34,12 @@ const StickmanDownload: React.FC = () => {
           }
         }
 
-        setIsAnimating(false);
-        setShowStickman(false);
-      }, 3200); // Sync with animation
+        setIsAnimating(false);      }, 3200); // Sync with animation
 
     } catch (err) {
       console.error('Failed to fetch resume URL:', err);
       alert('Error getting download link.');
       setIsAnimating(false);
-      setShowStickman(false);
     }
   };
 

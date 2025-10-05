@@ -5,6 +5,7 @@ import BlogCard from '../common/BlogCard';
 import '../common/common.css';
 import { usePageTitle } from '../common/usePageTitle';
 import { GetBlogPosts } from '../common/userAPI';
+import { Blog, DateFormatOptions } from '../../types';
 
 // --- NEW HELPER FUNCTIONS ---
 
@@ -28,21 +29,9 @@ const calculateReadTime = (htmlContent: string): number => {
  * @returns A formatted date string like "Dec 25, 2023".
  */
 const formatPublishDate = (dateString: string): string => {
-  const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'short', day: 'numeric' };
+  const options: DateFormatOptions = { year: 'numeric', month: 'short', day: 'numeric' };
   return new Date(dateString).toLocaleDateString('en-US', options);
 };
-
-// --- UPDATED INTERFACE ---
-
-interface Blog {
-  id: string;
-  title: string;
-  content: string;
-  author: string;
-  createdAt: string;
-  images?: string;
-  [key: string]: any;
-}
 
 const BlogList: React.FC = () => {
   usePageTitle('Blogs');

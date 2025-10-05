@@ -1,29 +1,25 @@
 
+import type { 
+  ApiError, 
+  ConfirmUserPayload, 
+  ConfirmUserResponse, 
+  BlogPostData, 
+  BlogPostPayload,
+  PresignedUrlApiResponse,
+  HttpHeaders
+} from '../../types';
+
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 if (!API_BASE_URL) {
   console.error("API_BASE_URL is not defined. Check your .env file for REACT_APP_API_BASE_URL.");
 }
-
-interface ApiError extends Error {
-  statusCode?: number;
-  details?: any;
+const headers: HttpHeaders = {
+  'Content-Type': 'application/pdf',
+  'Access-Control-Allow-Origin': '*'
 }
 
-interface ConfirmUserPayload {
-  username: string; 
-}
-
-interface ConfirmUserResponse {
-  success: boolean;
-  message: string;
-}
-const headers = {
-        'Content-Type': 'application/pdf',
-        'Access-Control-Allow-Origin': '*'
-      }
-
-const base_headers = {
+const base_headers: HttpHeaders = {
   'Content-Type': 'application/json'
 }
 /**
@@ -127,20 +123,17 @@ export async function GetFile(fileURL: string) {
     throw apiError;
   }
 };
-interface blogPostPayload{
-  title: string;
-  content: Text;
-}
-export async function CreateDraftBlogPost(payload: any) {
+
+export async function CreateDraftBlogPost(payload: BlogPostPayload) {
   const endpoint = `${API_BASE_URL}/create-blog`;
   const token = localStorage.getItem('token');
   if (!token) {
     throw new Error('No token found');
   }
-  const auth_header = {
-        'Content-Type': 'application/json',
-        'Authorization': token
-      }
+  const auth_header: HttpHeaders = {
+    'Content-Type': 'application/json',
+    'Authorization': token
+  }
   try {
     const response = await fetch(endpoint, {
       method: 'POST',
@@ -172,16 +165,16 @@ export async function CreateDraftBlogPost(payload: any) {
   }
 };
 
-export async function UpdateBlogPost(id: string, payload: any) {
+export async function UpdateBlogPost(id: string, payload: BlogPostPayload) {
   const endpoint = `${API_BASE_URL}/update-blog?id=${id}`;
   const token = localStorage.getItem('token');
   if (!token) {
     throw new Error('No token found');
   }
-  const auth_header = {
-        'Content-Type': 'application/json',
-        'Authorization': token
-      }
+  const auth_header: HttpHeaders = {
+    'Content-Type': 'application/json',
+    'Authorization': token
+  }
   try {
     const response = await fetch(endpoint, {
       method: 'POST',
@@ -245,18 +238,7 @@ export async function GetBlogPosts() {
   }
 };
 
-interface BlogPostData {
-  id: string;
-  title: string;
-  content: string;
-  reading_time: number;
-  status: string;
-  images: string[];
-  tags: string[];
-  updated_at: string;
-  created_at: string;
-  author: string;
-}
+
 export async function GetBlogPostById(id: string) {
   const endpoint = `${API_BASE_URL}/get-blog?id=${id}`;
   try {
@@ -320,10 +302,7 @@ export async function putFileToS3(signedUrl: string, file: File): Promise<string
   }
 }
 
-interface PresignedUrlResponse {
-  publicUrl: string;
-  fields?: Record<string, string>;
-}
+
 
 export async function uploadFileToS3(fileName: string, file_content: any): Promise<any | null | undefined> {
   const endpoint = `${API_BASE_URL}/upload-to-s3`;
@@ -353,11 +332,7 @@ export async function uploadFileToS3(fileName: string, file_content: any): Promi
   }
 }
 
-interface PresignedUrlApiResponse {
-  presignedUrl: string;
-  publicUrl: string;
-  fileName: string;
-}
+
 
 export async function getPresignedUrl(fileName: string): Promise<PresignedUrlApiResponse | null> {
   const endpoint = `${API_BASE_URL}/get-presigned-url?fileName=${encodeURIComponent(fileName)}`;

@@ -2,18 +2,11 @@
 import React, { useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faExclamationCircle, faInfoCircle, faExclamationTriangle, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { ToastMessageProps } from '../../types';
 import './Toast.css';
 
-export interface Toast {
-  id: number;
-  message: string;
-  type: 'success' | 'error' | 'info' | 'warning';
-}
-
-interface ToastMessageProps {
-  toast: Toast;
-  onDismiss: () => void;
-}
+// Re-export Toast type for backward compatibility
+export type { Toast } from '../../types';
 
 const toastConfig = {
   success: { icon: faCheckCircle, className: 'toast-success' },

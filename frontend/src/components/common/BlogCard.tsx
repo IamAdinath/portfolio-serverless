@@ -1,17 +1,7 @@
 import React from 'react';
 import './BlogCard.css';
 import { Link } from 'react-router-dom';
-
-export interface BlogCardProps {
-  id: string;
-  title: string;
-  content: string;
-  author: string;
-  publishDate: string;
-  readTimeInMinutes: number;
-  thumbnail?: string;
-  tags: string[];
-}
+import { BlogCardProps } from '../../types';
 
 /**
  * NEW: Helper function to create a clean text snippet from HTML content.
@@ -61,7 +51,7 @@ const BlogCard: React.FC<BlogCardProps> = ({
             <span>{publishDate}</span>
             <span className="meta-separator">·</span>
             <span>{readTimeInMinutes} min read</span>
-            <span className="blog-tags">{tags.join(', ')}</span>
+            <span className="blog-tags">{tags?.join(', ') || ''}</span>
           </div>
         </div>
         {thumbnail && (
