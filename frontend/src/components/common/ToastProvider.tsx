@@ -1,12 +1,9 @@
 // src/components/common/ToastProvider.tsx
 
 import React from 'react';
-import { ToastMessage, Toast } from './ToastMessage';
+import { ToastMessage } from './ToastMessage';
+import { Toast, ToastContextType } from '../../types';
 import './Toast.css';
-
-type ToastContextType = {
-  addToast: (type: Toast['type'], message: string, duration?: number) => void;
-};
 
 const ToastContext = React.createContext<ToastContextType | undefined>(undefined);
 

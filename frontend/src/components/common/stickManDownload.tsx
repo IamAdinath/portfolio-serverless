@@ -5,7 +5,7 @@ import { ResumeLink, GetFile } from './userAPI';
 
 const StickmanDownload: React.FC = () => {
   const [isAnimating, setIsAnimating] = useState(false);
-  const [showStickman, setShowStickman] = useState(false);
+  const [setShowStickman] = useState(false);
 
   const handleDownload = async () => {
     try {
