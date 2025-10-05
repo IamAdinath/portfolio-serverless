@@ -39,6 +39,7 @@ jobs:
           chmod +x ./deploy.sh
           ./deploy.sh
         env:
+          PROJECT_NAME: ${{ vars.PROJECT_NAME }}
           ENV: dev
           REGION: ${{ vars.API_AWS_REGION }}
           STACK_NAME: ${{ vars.API_STACK_NAME_DEV }}
@@ -74,6 +75,7 @@ jobs:
           chmod +x ./deploy-dev.sh
           ./deploy-dev.sh
         env:
+          PROJECT_NAME: ${{ vars.PROJECT_NAME }}
           ENV: dev
           REGION: ${{ vars.UI_AWS_REGION }}
           UI_BUCKET_NAME: ${{ vars.UI_BUCKET_NAME_DEV }}
@@ -117,6 +119,7 @@ jobs:
           chmod +x ./deploy.sh
           ./deploy.sh
         env:
+          PROJECT_NAME: ${{ vars.PROJECT_NAME }}
           ENV: prod
           REGION: ${{ vars.API_AWS_REGION }}
           STACK_NAME: ${{ vars.API_STACK_NAME_PROD }}
@@ -152,6 +155,7 @@ jobs:
           chmod +x ./deploy-prod.sh
           ./deploy-prod.sh
         env:
+          PROJECT_NAME: ${{ vars.PROJECT_NAME }}
           ENV: prod
           REGION: ${{ vars.UI_AWS_REGION }}
           HOSTNAME: ${{ vars.UI_HOSTNAME_PROD }}

@@ -3,6 +3,11 @@
 function validate_parameters() {
     local is_error=false
 
+    if [ -z "$PROJECT_NAME" ]; then
+        echo "PROJECT_NAME not defined"
+        is_error=true
+    fi
+
     if [ -z "$ENV" ]; then
         echo "ENV not defined"
         is_error=true
@@ -41,6 +46,7 @@ function deploy() {
     echo "DIRECTORY >>> " $DIR
     
     echo "=== Environment Variables ==="
+    echo "PROJECT_NAME: $PROJECT_NAME"
     echo "ENV: $ENV"
     echo "REGION: $REGION"
     echo "UI_BUCKET_NAME: $UI_BUCKET_NAME"
@@ -68,7 +74,7 @@ function deploy() {
     
     # Choose template based on environment
     TEMPLATE_FILE="template.yaml"
-    STACK_NAME=portfolio-${ENV}-UI
+    STACK_NAME=${PROJECT_NAME}-${ENV}-UI
     
     if [ "$ENV" = "dev" ] || [ "$ENV" = "development" ]; then
         TEMPLATE_FILE="template-dev.yaml"
@@ -80,6 +86,7 @@ function deploy() {
         --capabilities CAPABILITY_NAMED_IAM \
         --no-fail-on-empty-changeset \
         --parameter-overrides \
+        ProjectName=${PROJECT_NAME} \
         BucketName=${UI_BUCKET_NAME}
         
         # Get CloudFront URL for dev
@@ -94,6 +101,7 @@ function deploy() {
         --capabilities CAPABILITY_NAMED_IAM \
         --no-fail-on-empty-changeset \
         --parameter-overrides \
+        ProjectName=${PROJECT_NAME} \
         Hostname=${HOSTNAME} \
         BucketName=${UI_BUCKET_NAME} \
         SSLCertArn=${ACM_CERTIFICATE_ARN}

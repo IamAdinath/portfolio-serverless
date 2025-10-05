@@ -2,6 +2,10 @@ AWSTemplateFormatVersion: "2010-09-09"
 Description: "AWS CloudFormation template for Portfolio UI - Production"
 Transform: "AWS::Serverless-2016-10-31"
 Parameters:
+  ProjectName:
+    Default: portfolio
+    Description: "The name of the project. Will be used as prefix for resource names"
+    Type: "String"
   SSLCertArn:
     Description: "ACM Cert arn for custom domain"
     Type: "String"
@@ -48,7 +52,7 @@ Resources:
     Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
     Properties:
       CloudFrontOriginAccessIdentityConfig:
-        Comment: !Sub "Portfolio-Stack"
+        Comment: !Sub "${ProjectName}-Stack"
 
   PortfolioFrontDistribution:
     Type: AWS::CloudFront::Distribution
@@ -62,7 +66,7 @@ Resources:
         Aliases:
         - !Ref Hostname
         Enabled: true
-        Comment: "Cloudfront Distribution for Portfolio UI - Production"
+        Comment: !Sub "Cloudfront Distribution for ${ProjectName} UI - Production"
         DefaultRootObject: index.html
         CustomErrorResponses:
             - ErrorCode: 404
@@ -98,7 +102,7 @@ Resources:
     Properties:
       ResponseHeadersPolicyConfig:
         Name: !Sub ${AWS::StackName}-header-policy
-        Comment: Header policy for Portfolio Production.
+        Comment: !Sub "Header policy for ${ProjectName} Production."
         CorsConfig:
           OriginOverride: false
           AccessControlAllowCredentials: false

@@ -3,6 +3,11 @@
 function validate_parameters() {
     local is_error=false
 
+    if [ -z "$PROJECT_NAME" ]; then
+        echo "PROJECT_NAME not defined"
+        is_error=true
+    fi
+
     if [ -z "$ENV" ]; then
         echo "ENV not defined"
         is_error=true
@@ -38,6 +43,7 @@ function deploy() {
     echo "DIRECTORY >>> " $DIR
     
     echo "=== Environment Variables ==="
+    echo "PROJECT_NAME: $PROJECT_NAME"
     echo "ENV: $ENV"
     echo "REGION: $REGION"
     echo "HOSTNAME: $HOSTNAME"
@@ -60,13 +66,14 @@ function deploy() {
     popd
     
     # Deploy CloudFormation stack
-    STACK_NAME=portfolio-${ENV}-UI
+    STACK_NAME=${PROJECT_NAME}-${ENV}-UI
     aws --region ${REGION} cloudformation deploy \
     --template-file $DIR/template.yaml \
     --stack-name ${STACK_NAME} \
     --capabilities CAPABILITY_NAMED_IAM \
     --no-fail-on-empty-changeset \
     --parameter-overrides \
+    ProjectName=${PROJECT_NAME} \
     Hostname=${HOSTNAME} \
     BucketName=${UI_BUCKET_NAME} \
     SSLCertArn=${ACM_CERTIFICATE_ARN} 
