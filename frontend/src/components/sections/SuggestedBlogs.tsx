@@ -1,17 +1,7 @@
 import React from 'react';
 import './SuggestedBlogs.css';
 import '../common/common.css';
-
-type Blog = {
-  id: number;
-  title: string;
-  author: string;
-  thumbnail: string; // URL to the thumbnail image
-};
-
-type SuggestedBlogsProps = {
-  suggestions: Blog[];
-};
+import { SuggestedBlogsProps } from '../../types';
 
 const SuggestedBlogs: React.FC<SuggestedBlogsProps> = ({ suggestions }) => {
   return (

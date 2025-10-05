@@ -2,19 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { usePageTitle } from '../common/usePageTitle';
 import { GetBlogPostById } from '../common/userAPI';
-
-interface BlogPostData {
-  id: string;
-  title: string;
-  content: string;
-  author: string;
-  created_at: string;
-  updated_at: string;
-  reading_time: number;
-  status: string;
-  images: string[];
-  tags: string[];
-}
+import { BlogPostData } from '../../types';
 
 const Blog: React.FC = () => {
   const { blogId } = useParams<{ blogId: string }>();
