@@ -50,7 +50,7 @@ const StickmanDownload: React.FC = () => {
         className="floating-download-btn"
         disabled={isAnimating}
       >
-        {isAnimating ? 'Downloading...' : '📥 Download'}
+        {isAnimating ? '⏳ Downloading...' : '📄 Download Resume'}
       </button>
 
     </>
