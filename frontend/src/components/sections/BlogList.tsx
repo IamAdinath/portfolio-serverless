@@ -2,10 +2,12 @@
 
 import React, { useEffect, useState } from 'react';
 import BlogCard from '../common/BlogCard';
-import '../common/common.css';
+import './BlogList.css';
 import { usePageTitle } from '../common/usePageTitle';
 import { GetBlogPosts } from '../common/userAPI';
 import { Blog, DateFormatOptions } from '../../types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBlog, faCalendar, faClock, faUser } from '@fortawesome/free-solid-svg-icons';
 
 // --- NEW HELPER FUNCTIONS ---
 
@@ -56,39 +58,90 @@ const BlogList: React.FC = () => {
   }, []);
 
   if (loading) {
-    return <div className="common-container"><p>Loading blogs...</p></div>;
+    return (
+      <div className="bloglist-main-container">
+        <div className="bloglist-loading">
+          <FontAwesomeIcon icon={faClock} style={{ marginRight: '10px', fontSize: '1.2rem' }} />
+          Loading blogs...
+        </div>
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="common-container"><p className="text-red-500">{error}</p></div>;
+    return (
+      <div className="bloglist-main-container">
+        <div className="bloglist-error">
+          ⚠️ {error}
+        </div>
+      </div>
+    );
   }
 
-  return (
-    <div className="common-container">
-      {blogs.length > 0 ? (
-        blogs.map((blog) => {
-          const readTime = calculateReadTime(blog.content);
-          const publishDate = blog.published_at ? formatPublishDate(blog.published_at) : "Date not available";
-          const thumbnail = blog.images ? blog.images:  undefined;
-          const tags = blog.tags? blog.tags : [];
+  // Calculate stats
+  const totalBlogs = blogs.length;
+  const totalReadTime = blogs.reduce((total, blog) => total + calculateReadTime(blog.content), 0);
+  const uniqueAuthors = new Set(blogs.map(blog => blog.author)).size;
 
-          return (
-            <BlogCard
-              key={blog.id}
-              id={blog.id}
-              title={blog.title}
-              content={blog.content}
-              author={blog.author}
-              publishDate={publishDate}
-              readTimeInMinutes={readTime}
-              thumbnail={thumbnail}
-              tags={tags}
-            />
-          );
-        })
-      ) : (
-        <p className="text-gray-500">No blogs found.</p>
+  return (
+    <div className="bloglist-main-container">
+      {/* Header Section */}
+      <div className="bloglist-header">
+        <h1>
+          <FontAwesomeIcon icon={faBlog} style={{ marginRight: '15px', color: '#2d2d2d' }} />
+          Blog Posts
+        </h1>
+        <p>Discover insights, tutorials, and thoughts on web development, cloud architecture, and technology trends.</p>
+      </div>
+
+      {/* Stats Section */}
+      {blogs.length > 0 && (
+        <div className="bloglist-stats">
+          <div className="bloglist-stat">
+            <span className="bloglist-stat-number">{totalBlogs}</span>
+            <span className="bloglist-stat-label">Total Posts</span>
+          </div>
+          <div className="bloglist-stat">
+            <span className="bloglist-stat-number">{totalReadTime}</span>
+            <span className="bloglist-stat-label">Minutes of Content</span>
+          </div>
+          <div className="bloglist-stat">
+            <span className="bloglist-stat-number">{uniqueAuthors}</span>
+            <span className="bloglist-stat-label">Authors</span>
+          </div>
+        </div>
       )}
+
+      {/* Blog Grid */}
+      <div className="bloglist-grid">
+        {blogs.length > 0 ? (
+          blogs.map((blog) => {
+            const readTime = calculateReadTime(blog.content);
+            const publishDate = blog.published_at ? formatPublishDate(blog.published_at) : "Date not available";
+            const thumbnail = blog.images ? blog.images : undefined;
+            const tags = blog.tags ? blog.tags : [];
+
+            return (
+              <BlogCard
+                key={blog.id}
+                id={blog.id}
+                title={blog.title}
+                content={blog.content}
+                author={blog.author}
+                publishDate={publishDate}
+                readTimeInMinutes={readTime}
+                thumbnail={thumbnail}
+                tags={tags}
+              />
+            );
+          })
+        ) : (
+          <div className="bloglist-no-blogs">
+            <FontAwesomeIcon icon={faBlog} style={{ fontSize: '3rem', marginBottom: '20px', color: '#cbd5e0' }} />
+            <p>No blogs found. Check back soon for new content!</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
