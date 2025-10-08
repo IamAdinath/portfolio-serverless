@@ -15,6 +15,7 @@ const publicNavLinks = [
 
 const authNavLinks = [
   { label: 'Write', path: '/writer' },
+  { label: 'Admin', path: '/admin' },
 ];
 
 

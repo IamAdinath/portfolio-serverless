@@ -30,6 +30,7 @@ import json from 'highlight.js/lib/languages/json';
 import html from 'highlight.js/lib/languages/xml';
 
 // --- Your Project Imports ---
+import { Link } from 'react-router-dom';
 import './WriterPage.css';
 import { CreateDraftBlogPost, UpdateBlogPost, getPresignedUrl } from '../common/userAPI';
 import { useToast } from '../common/ToastProvider';
@@ -345,6 +346,9 @@ const WriterPage = () => {
         <div className="writer-header-right">
           <div className="user-info">
             <span className="welcome-text">Welcome, {user?.username}</span>
+            <Link to="/admin" className="admin-link" title="Admin Dashboard">
+              Admin
+            </Link>
             <button className="logout-btn" onClick={logout} title="Logout">
               Logout
             </button>

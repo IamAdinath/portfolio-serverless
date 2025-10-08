@@ -8,6 +8,7 @@ import Resume from './components/sections/Resume';
 import BlogList from './components/sections/BlogList';
 import AuthPage from './components/sections/AuthPage';
 import WriterPage from './components/sections/WriterPage';
+import AdminDashboard from './components/sections/AdminDashboard';
 import { ToastProvider } from './components/common/ToastProvider';
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/common/ProtectedRoute';
@@ -28,6 +29,11 @@ const App: React.FC = () => {
             <Route path="/writer" element={
               <ProtectedRoute>
                 <WriterPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/admin" element={
+              <ProtectedRoute>
+                <AdminDashboard />
               </ProtectedRoute>
             } />
             <Route path="/blog/:blogId" element={<Blog />} />
