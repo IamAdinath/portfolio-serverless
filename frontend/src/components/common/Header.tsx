@@ -2,14 +2,18 @@
 import React from 'react';
 import { Pane, IconButton, Text, Menu, Popover, TickIcon } from 'evergreen-ui';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 import './Header.css';
 
-const navLinks = [
+const publicNavLinks = [
   { label: 'Home', path: '/' },
   { label: 'About', path: '/about' },
   { label: 'Resume', path: '/resume' },
   { label: 'Blogs', path: '/blogs' },
-  { label: 'Login', path: '/auth' },
+];
+
+const authNavLinks = [
+  { label: 'Write', path: '/writer' },
 ];
 
 const useMediaQuery = (query: string) => {
@@ -29,9 +33,17 @@ const Header: React.FC = () => {
   const isSmallScreen = useMediaQuery('(max-width: 768px)');
   const navigate = useNavigate();
   const location = useLocation();
+  const { isAuthenticated, user, logout } = useAuth();
+
+  // Combine nav links based on auth status
+  const navLinks = [
+    ...publicNavLinks,
+    ...(isAuthenticated ? authNavLinks : []),
+    ...(isAuthenticated ? [] : [{ label: 'Login', path: '/auth' }]),
+  ];
 
   const renderNavLinks = (isMenu: boolean = false) => {
-    return navLinks.map((link) => {
+    const links = navLinks.map((link) => {
       const isActive = location.pathname === link.path;
 
       if (isMenu) {
@@ -57,6 +69,21 @@ const Header: React.FC = () => {
         </Link>
       );
     });
+
+    // Add logout option for authenticated users
+    if (isAuthenticated && isMenu) {
+      links.push(
+        <Menu.Item
+          key="logout"
+          onSelect={() => logout()}
+          intent="danger"
+        >
+          Logout ({user?.username})
+        </Menu.Item>
+      );
+    }
+
+    return links;
   };
 
   return (
@@ -92,6 +119,26 @@ const Header: React.FC = () => {
       ) : (
         <Pane is="nav" display="flex" alignItems="center" gap="2rem">
           {renderNavLinks(false)}
+          {isAuthenticated && (
+            <Pane display="flex" alignItems="center" gap="1rem">
+              <Text fontSize="14px" color="muted">
+                {user?.username}
+              </Text>
+              <button
+                onClick={logout}
+                style={{
+                  background: 'none',
+                  border: '1px solid #ccc',
+                  padding: '4px 8px',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  fontSize: '12px'
+                }}
+              >
+                Logout
+              </button>
+            </Pane>
+          )}
         </Pane>
       )}
     </Pane>
