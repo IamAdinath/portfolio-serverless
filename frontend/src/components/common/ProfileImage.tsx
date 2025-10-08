@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { GetProfileImage } from './userAPI';
+import { FILES } from '../../constants';
 
 interface ProfileImageProps {
   size?: 'small' | 'medium' | 'large';
@@ -65,7 +66,7 @@ const ProfileImage: React.FC<ProfileImageProps> = ({
   return (
     <img
       src={imageUrl}
-      alt="Adinath Gore - Software Engineer"
+      alt={FILES.PROFILE_IMAGE_ALT}
       className={`${className} ${sizeClasses[size]} rounded-full object-cover`}
       onError={handleImageError}
     />

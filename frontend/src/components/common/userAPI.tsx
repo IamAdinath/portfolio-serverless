@@ -111,6 +111,11 @@ export async function ResumeLink() {
   return response.downloadUrl;
 }
 
+export async function DownloadResume() {
+  const response = await getMediaFile('resume');
+  return response;
+}
+
 export async function GetProfileImage() {
   const response = await getMediaFile('profile');
   return response.imageUrl;

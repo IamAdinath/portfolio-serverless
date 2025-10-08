@@ -1,37 +1,40 @@
 import React, { useState } from 'react';
 import './stickManDownload.css';
-import { ResumeLink, GetFile } from './userAPI';
+import { DownloadResume } from './userAPI';
+import { downloadFile } from '../../utils/downloadUtils';
+import { useToast } from './ToastProvider';
+import { APP_CONFIG, FILES } from '../../constants';
 
 const StickmanDownload: React.FC = () => {
   const [isAnimating, setIsAnimating] = useState(false);
+  const { addToast } = useToast();
+
   const handleDownload = async () => {
     try {
       setIsAnimating(true);
+      addToast('info', 'Preparing download...');
 
-      const presignedUrl = await ResumeLink();
+      const response = await DownloadResume();
+      const presignedUrl = response.downloadUrl;
+      const filename = response.filename || FILES.RESUME_FILENAME;
 
       setTimeout(async () => {
         if (presignedUrl) {
           try {
-            // Create a direct download link using the presigned URL
-            const link = document.createElement('a');
-            link.href = presignedUrl;
-            link.download = 'Adinath_Gore_Resume.pdf';
-            link.target = '_blank'; // Open in new tab as fallback
-            document.body.appendChild(link);
-            link.click();
-            link.remove();
+            await downloadFile(presignedUrl, filename);
+            addToast('success', 'Resume downloaded successfully!');
           } catch (error) {
             console.error('Error downloading file:', error);
-            alert('Failed to download file. Please try again.');
+            addToast('error', 'Failed to download file. Please try again.');
           }
         }
 
-        setIsAnimating(false);      }, 3200); // Sync with animation
+        setIsAnimating(false);
+      }, APP_CONFIG.ANIMATION_DURATION);
 
     } catch (err) {
       console.error('Failed to fetch resume URL:', err);
-      alert('Error getting download link.');
+      addToast('error', 'Error getting download link. Please try again.');
       setIsAnimating(false);
     }
   };

@@ -5,6 +5,7 @@ import { faLinkedin, faMedium } from '@fortawesome/free-brands-svg-icons';
 import { faMobileAndroid, faEnvelope, faAward, faCertificate, faCode, faBriefcase } from '@fortawesome/free-solid-svg-icons';
 import StickmanDownload from '../common/stickManDownload';
 import { usePageTitle } from '../common/usePageTitle';
+import { CONTACT } from '../../constants';
 
 const Resume: React.FC = () => {
     usePageTitle('Resume');
@@ -25,7 +26,7 @@ const Resume: React.FC = () => {
                 <div className="contact-info">
                     <div className="contact-item">
                         <FontAwesomeIcon icon={faEnvelope} className="contact-icon" />
-                        <span>adinathgore.17@gmail.com</span>
+                        <span>{CONTACT.EMAIL}</span>
                     </div>
                     <div className="contact-item">
                         <FontAwesomeIcon icon={faMobileAndroid} className="contact-icon" />

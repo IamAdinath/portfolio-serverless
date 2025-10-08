@@ -16,17 +16,18 @@ import {
   faArrowUp
 } from '@fortawesome/free-solid-svg-icons';
 import './Footer.css';
+import { CONTACT, SOCIAL_LINKS } from '../../constants';
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
   const socialLinks = [
-    { icon: faLinkedin, url: 'https://www.linkedin.com/in/primewhites/', label: 'LinkedIn' },
-    { icon: faGithub, url: 'https://github.com/IamAdinath', label: 'GitHub' },
-    { icon: faTwitter, url: 'https://twitter.com/prime_whites', label: 'Twitter' },
-    { icon: faMedium, url: 'https://medium.com/@adinath.17', label: 'Medium' },
-    { icon: faStackOverflow, url: 'https://stackoverflow.com/users/14975561/adinath-gore', label: 'Stack Overflow' },
-    { icon: faEnvelope, url: 'mailto:iamadinath@protonmail.com', label: 'Email' },
+    { icon: faLinkedin, url: SOCIAL_LINKS.LINKEDIN, label: 'LinkedIn' },
+    { icon: faGithub, url: SOCIAL_LINKS.GITHUB, label: 'GitHub' },
+    { icon: faTwitter, url: SOCIAL_LINKS.TWITTER, label: 'Twitter' },
+    { icon: faMedium, url: SOCIAL_LINKS.MEDIUM, label: 'Medium' },
+    { icon: faStackOverflow, url: SOCIAL_LINKS.STACKOVERFLOW, label: 'Stack Overflow' },
+    { icon: faEnvelope, url: `mailto:${CONTACT.EMAIL}`, label: 'Email' },
   ];
 
   const quickLinks = [
@@ -90,8 +91,8 @@ const Footer: React.FC = () => {
             <h4>Get In Touch</h4>
             <div className="footer-contact-item">
               <FontAwesomeIcon icon={faEnvelope} />
-              <a href="mailto:iamadinath@protonmail.com">
-                iamadinath@protonmail.com
+              <a href={`mailto:${CONTACT.EMAIL}`}>
+                {CONTACT.EMAIL}
               </a>
             </div>
             <div className="footer-contact-item">
