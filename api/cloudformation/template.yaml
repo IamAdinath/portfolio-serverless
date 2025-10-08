@@ -172,6 +172,28 @@ Resources:
         Variables:
           BLOGS_TABLE: !Ref BlogsTable
           ENV : !Ref Env
+
+  DeleteBlogsLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${ProjectName}-delete-blogs-${Env}
+      Handler: blogs.delete.lambda_handler
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AmazonDynamoDBFullAccess
+      Events:
+        DeleteItem:
+          Type: Api
+          Properties:
+            RestApiId: !Ref PortfolioAPI
+            Path: /delete-blog
+            Method: DELETE
+            Auth:
+              Authorizer: CognitoAuth
+      Environment:
+        Variables:
+          BLOGS_TABLE: !Ref BlogsTable
+          ENV : !Ref Env
   
   BlogUserPool:
     Type: AWS::Cognito::UserPool
