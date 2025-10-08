@@ -1,16 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-  faEdit, 
-  faTrash, 
-  faEye, 
-  faPlus, 
+import {
+  faEdit,
+  faTrash,
+  faEye,
+  faPlus,
   faSearch,
-  faFilter,
   faCalendar,
-  faUser,
-  faTags
 } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../common/ToastProvider';
@@ -18,10 +15,9 @@ import { usePageTitle } from '../common/usePageTitle';
 import { GetBlogPosts, DeleteBlogPost } from '../common/userAPI';
 import { BlogPostData } from '../../types';
 import './AdminDashboard.css';
-
 const AdminDashboard: React.FC = () => {
   usePageTitle('Admin Dashboard');
-  
+
   const [blogs, setBlogs] = useState<BlogPostData[]>([]);
   const [filteredBlogs, setFilteredBlogs] = useState<BlogPostData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -29,24 +25,12 @@ const AdminDashboard: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState<'all' | 'draft' | 'published'>('all');
   const [sortBy, setSortBy] = useState<'date' | 'title' | 'status'>('date');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
-  
+
   const { user, isAuthenticated } = useAuth();
   const { addToast } = useToast();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate('/auth');
-      return;
-    }
-    fetchBlogs();
-  }, [isAuthenticated, navigate]);
-
-  useEffect(() => {
-    filterAndSortBlogs();
-  }, [blogs, searchTerm, statusFilter, sortBy, sortOrder]);
-
-  const fetchBlogs = async () => {
+  const fetchBlogs = useCallback(async () => {
     try {
       setLoading(true);
       const blogData = await GetBlogPosts();
@@ -57,14 +41,14 @@ const AdminDashboard: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [addToast]);
 
-  const filterAndSortBlogs = () => {
+  const filterAndSortBlogs = useCallback(() => {
     let filtered = [...blogs];
 
     // Apply search filter
     if (searchTerm) {
-      filtered = filtered.filter(blog => 
+      filtered = filtered.filter(blog =>
         blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         blog.content.toLowerCase().includes(searchTerm.toLowerCase())
       );
@@ -78,7 +62,7 @@ const AdminDashboard: React.FC = () => {
     // Apply sorting
     filtered.sort((a, b) => {
       let comparison = 0;
-      
+
       switch (sortBy) {
         case 'title':
           comparison = a.title.localeCompare(b.title);
@@ -93,12 +77,24 @@ const AdminDashboard: React.FC = () => {
           comparison = dateA - dateB;
           break;
       }
-      
+
       return sortOrder === 'asc' ? comparison : -comparison;
     });
 
     setFilteredBlogs(filtered);
-  };
+  }, [blogs, searchTerm, statusFilter, sortBy, sortOrder]);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/auth');
+      return;
+    }
+    fetchBlogs();
+  }, [isAuthenticated, navigate, fetchBlogs]);
+
+  useEffect(() => {
+    filterAndSortBlogs();
+  }, [filterAndSortBlogs]);
 
   const handleDelete = async (blogId: string, title: string) => {
     // Simple confirmation - in a real app, you'd want a proper modal
@@ -193,27 +189,27 @@ const AdminDashboard: React.FC = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        
+
         <div className="filter-controls">
-          <select 
-            value={statusFilter} 
+          <select
+            value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value as 'all' | 'draft' | 'published')}
           >
             <option value="all">All Status</option>
             <option value="published">Published</option>
             <option value="draft">Draft</option>
           </select>
-          
-          <select 
-            value={sortBy} 
+
+          <select
+            value={sortBy}
             onChange={(e) => setSortBy(e.target.value as 'date' | 'title' | 'status')}
           >
             <option value="date">Sort by Date</option>
             <option value="title">Sort by Title</option>
             <option value="status">Sort by Status</option>
           </select>
-          
-          <button 
+
+          <button
             className="sort-order-btn"
             onClick={() => setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc')}
           >
@@ -255,22 +251,22 @@ const AdminDashboard: React.FC = () => {
                     {formatDate(blog.published_at || blog.created_at)}
                   </td>
                   <td className="actions-cell">
-                    <button 
-                      className="action-btn view-btn" 
+                    <button
+                      className="action-btn view-btn"
                       onClick={() => handleView(blog.id)}
                       title="View"
                     >
                       <FontAwesomeIcon icon={faEye} />
                     </button>
-                    <button 
-                      className="action-btn edit-btn" 
+                    <button
+                      className="action-btn edit-btn"
                       onClick={() => handleEdit(blog.id)}
                       title="Edit"
                     >
                       <FontAwesomeIcon icon={faEdit} />
                     </button>
-                    <button 
-                      className="action-btn delete-btn" 
+                    <button
+                      className="action-btn delete-btn"
                       onClick={() => handleDelete(blog.id, blog.title)}
                       title="Delete"
                     >
