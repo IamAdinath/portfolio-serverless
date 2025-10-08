@@ -23,7 +23,7 @@ def lambda_handler(event, context):
         
         # Get file type from query parameters
         query_params = event.get('queryStringParameters') or {}
-        file_type = query_params.get('type', '').lower()
+        file_type = query_params.get('type', '').lower() if query_params else ''
         
         if not file_type:
             return build_response(

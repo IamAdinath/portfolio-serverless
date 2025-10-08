@@ -421,6 +421,15 @@ Resources:
           MEDIA_BUCKET: !Ref MediaBucket
           PROFILE_IMAGE_PATH: !Ref ProfileImagePath
           RESUME_PATH: !Ref ResumePath
+
+  UploadToS3Lambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${ProjectName}-upload-to-s3-${Env}
+      Handler: common.upload_to_s3.lambda_handler
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AmazonS3FullAccess
       Events:
         AddItem:
           Type: Api
