@@ -23,12 +23,14 @@
   color: #2d3748;
   font-size: 2rem;
   font-weight: 700;
+  line-height: 1.2;
 }
 
 .admin-title p {
   margin: 0.5rem 0 0 0;
   color: #718096;
   font-size: 1rem;
+  line-height: 1.4;
 }
 
 .btn-new-blog {
@@ -87,16 +89,26 @@
 
 .admin-controls {
   display: flex;
-  gap: 1rem;
+  gap: 1.5rem;
   margin-bottom: 2rem;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
+  justify-content: space-between;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: visible;
 }
 
 .search-box {
   position: relative;
-  flex: 1;
-  min-width: 300px;
+  flex: 0 1 400px;
+  max-width: 400px;
+  min-width: 200px;
+  margin-bottom: 0.5rem;
+  z-index: 1;
 }
 
 .search-box input {
@@ -125,6 +137,12 @@
   display: flex;
   gap: 0.5rem;
   align-items: center;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+  min-width: fit-content;
+  position: relative;
+  z-index: 10;
+  margin-left: auto;
 }
 
 .filter-controls select {
@@ -134,11 +152,28 @@
   background: white;
   cursor: pointer;
   transition: border-color 0.3s ease;
+  min-width: 130px;
+  max-width: 160px;
+  white-space: nowrap;
+  position: relative;
+  z-index: 15;
 }
 
 .filter-controls select:focus {
   outline: none;
   border-color: #667eea;
+  z-index: 20;
+}
+
+.filter-controls select:focus-within {
+  z-index: 20;
+}
+
+/* Ensure dropdown options appear above other elements */
+.filter-controls select option {
+  background: white;
+  color: #2d3748;
+  padding: 0.5rem;
 }
 
 .sort-order-btn {
@@ -150,6 +185,10 @@
   font-weight: 700;
   font-size: 1.2rem;
   transition: all 0.3s ease;
+  min-width: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .sort-order-btn:hover {
@@ -190,6 +229,8 @@
 
 .blog-title-cell {
   max-width: 300px;
+  min-width: 200px;
+  word-wrap: break-word;
 }
 
 .blog-title {
@@ -319,6 +360,25 @@
 }
 
 /* Responsive Design */
+@media (max-width: 900px) {
+  .admin-controls {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+  
+  .search-box {
+    flex: 1 1 100%;
+    max-width: none;
+    margin-bottom: 1rem;
+  }
+  
+  .filter-controls {
+    margin-left: 0;
+    flex: 1 1 auto;
+    justify-content: flex-start;
+  }
+}
+
 @media (max-width: 768px) {
   .admin-dashboard {
     padding: 1rem;
@@ -333,14 +393,34 @@
   .admin-controls {
     flex-direction: column;
     align-items: stretch;
+    gap: 1rem;
+    justify-content: stretch;
   }
   
   .search-box {
     min-width: auto;
+    margin-bottom: 0;
+    flex: 1 1 auto;
+    max-width: none;
   }
   
   .filter-controls {
-    justify-content: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-left: 0;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .filter-controls select {
+    flex: 1;
+    min-width: 110px;
+    max-width: none;
+  }
+  
+  .sort-order-btn {
+    flex-shrink: 0;
+    min-width: 48px;
   }
   
   .blogs-table {
