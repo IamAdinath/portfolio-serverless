@@ -97,8 +97,19 @@ def lambda_handler(event, context):
         # Update the blog
         now = datetime.utcnow().isoformat()
         
+        # Determine published_at value based on status
+        if blog_status == "published":
+            # If already published, keep existing published_at, otherwise use current time
+            if existing_blog.get("status") == "published":
+                published_at_value = existing_blog.get("published_at", now)
+            else:
+                published_at_value = now  # First time publishing
+        else:
+            # For drafts, use draft prefix to maintain GSI compatibility
+            published_at_value = f"draft_{now}"
+        
         # Prepare update expression
-        update_expression = "SET title = :title, content = :content, tags = :tags, reading_time = :reading_time, images = :images, updated_at = :updated_at, #status = :status, status_published_at = :status_published_at"
+        update_expression = "SET title = :title, content = :content, tags = :tags, reading_time = :reading_time, images = :images, updated_at = :updated_at, #status = :status, status_published_at = :status_published_at, published_at = :published_at, author_index = :author_index"
         expression_attribute_values = {
             ":title": title,
             ":content": content or "<p></p>",
@@ -108,15 +119,12 @@ def lambda_handler(event, context):
             ":updated_at": now,
             ":status": blog_status,
             ":status_published_at": f"{blog_status}_{now}",
+            ":published_at": published_at_value,
+            ":author_index": f"{user_id}_{published_at_value}",
         }
         expression_attribute_names = {
             "#status": "status"  # status is a reserved word in DynamoDB
         }
-        
-        # If publishing for the first time, set published_at
-        if blog_status == "published" and existing_blog.get("status") != "published":
-            update_expression += ", published_at = :published_at"
-            expression_attribute_values[":published_at"] = now
         
         # Perform the update
         table.update_item(
