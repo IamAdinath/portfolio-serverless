@@ -1,36 +1,126 @@
-// Footer.tsx
+// Footer.tsx - Modern Portfolio Footer
 import React from 'react';
-import { Pane, Link, IconButton, Text } from 'evergreen-ui';
+import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGithub, faLinkedin, faTwitter, faGoogle, faMedium, faStackOverflow } from '@fortawesome/free-brands-svg-icons';
+import { 
+  faGithub, 
+  faLinkedin, 
+  faTwitter, 
+  faMedium, 
+  faStackOverflow 
+} from '@fortawesome/free-brands-svg-icons';
+import { 
+  faEnvelope, 
+  faHeart, 
+  faCode,
+  faArrowUp
+} from '@fortawesome/free-solid-svg-icons';
+import './Footer.css';
 
 const Footer: React.FC = () => {
+  const currentYear = new Date().getFullYear();
+
+  const socialLinks = [
+    { icon: faLinkedin, url: 'https://www.linkedin.com/in/primewhites/', label: 'LinkedIn' },
+    { icon: faGithub, url: 'https://github.com/IamAdinath', label: 'GitHub' },
+    { icon: faTwitter, url: 'https://twitter.com/prime_whites', label: 'Twitter' },
+    { icon: faMedium, url: 'https://medium.com/@adinath.17', label: 'Medium' },
+    { icon: faStackOverflow, url: 'https://stackoverflow.com/users/14975561/adinath-gore', label: 'Stack Overflow' },
+    { icon: faEnvelope, url: 'mailto:iamadinath@protonmail.com', label: 'Email' },
+  ];
+
+  const quickLinks = [
+    { label: 'Home', path: '/' },
+    { label: 'About', path: '/about' },
+    { label: 'Resume', path: '/resume' },
+    { label: 'Blogs', path: '/blogs' },
+  ];
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
-    <Pane display="flex" flexDirection="column" justifyContent="center" alignItems="center" padding={16} background="tint2">
-      <Pane display="flex" alignItems="center" marginBottom={8}>
-        <Link href="https://twitter.com/prime_whites" target="_blank" marginRight={8}>
-          <IconButton icon={<FontAwesomeIcon icon={faTwitter} />} />
-        </Link>
-        <Link href="mailto:iamadinath@protonmail.com" marginRight={8}>
-          <IconButton icon={<FontAwesomeIcon icon={faGoogle} />} />
-        </Link>
-        <Link href="https://github.com/IamAdinath" target="_blank" marginRight={8}>
-          <IconButton icon={<FontAwesomeIcon icon={faGithub} />} />
-        </Link>
-        <Link href="https://www.linkedin.com/in/primewhites" target="_blank" marginRight={8}>
-          <IconButton icon={<FontAwesomeIcon icon={faLinkedin} />} />
-        </Link>
-        <Link href="https://medium.com/@adinath.17" target="_blank">
-          <IconButton icon={<FontAwesomeIcon icon={faMedium} />} />
-        </Link>
-        <Link href="https://stackoverflow.com/users/14975561/adinath-gore" target="_blank">
-          <IconButton icon={<FontAwesomeIcon icon={faStackOverflow} />} />
-        </Link>
-      </Pane>
-      <Text size={300} color="muted">
-        © {new Date().getFullYear()} Adinath Gore. All rights reserved.
-      </Text>
-    </Pane>
+    <footer className="modern-footer">
+      <div className="footer-container">
+        {/* Main Footer Content */}
+        <div className="footer-main">
+          {/* Brand Section */}
+          <div className="footer-brand">
+            <div className="footer-logo">
+              <span className="footer-logo-initials">AG</span>
+              <span className="footer-logo-name">Adinath Gore</span>
+            </div>
+            <p className="footer-tagline">
+              Full-Stack Developer & Cloud Architect passionate about creating 
+              scalable web applications and innovative digital solutions.
+            </p>
+            <div className="footer-social">
+              {socialLinks.map((social, index) => (
+                <a
+                  key={index}
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="social-icon"
+                  title={social.label}
+                >
+                  <FontAwesomeIcon icon={social.icon} />
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* Quick Links */}
+          <div className="footer-links">
+            <h4>Quick Links</h4>
+            <ul>
+              {quickLinks.map((link, index) => (
+                <li key={index}>
+                  <Link to={link.path} className="footer-nav-link">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Contact Info */}
+          <div className="footer-contact">
+            <h4>Get In Touch</h4>
+            <div className="footer-contact-item">
+              <FontAwesomeIcon icon={faEnvelope} />
+              <a href="mailto:iamadinath@protonmail.com">
+                iamadinath@protonmail.com
+              </a>
+            </div>
+            <div className="footer-contact-item">
+              <FontAwesomeIcon icon={faCode} />
+              <span>Available for freelance projects</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer Bottom */}
+        <div className="footer-bottom">
+          <div className="footer-copyright">
+            <p>
+              © {currentYear} Adinath Gore. Made with{' '}
+              <FontAwesomeIcon icon={faHeart} className="heart-icon" />{' '}
+              using React & AWS
+            </p>
+          </div>
+          
+          <button 
+            onClick={scrollToTop}
+            className="scroll-to-top"
+            title="Back to top"
+          >
+            <FontAwesomeIcon icon={faArrowUp} />
+          </button>
+        </div>
+      </div>
+    </footer>
   );
 };
 

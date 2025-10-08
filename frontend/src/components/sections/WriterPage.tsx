@@ -348,18 +348,33 @@ const WriterPage = () => {
           </div>
         </div>
       </div>
-      <input type="text" className="title-input" placeholder="Post Title..." value={title} onChange={(e) => setTitle(e.target.value)} />
+      <input
+        type="text"
+        className="title-input"
+        placeholder="Enter your blog title..."
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        maxLength={100}
+      />
       <div className="editor-wrapper" onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop}>
         <MenuBar editor={editor} onImageUpload={handleImageUpload} />
-        <EditorContent editor={editor} />
-        {isDragging && <div className="drop-zone-overlay">Drop image here</div>}
+        <EditorContent
+          editor={editor}
+          placeholder="Start writing your blog post..."
+        />
+        {isDragging && (
+          <div className="drop-zone-overlay">
+            📸 Drop your image here to upload
+          </div>
+        )}
       </div>
       <button
         className="publish-button"
         onClick={handlePublish}
         disabled={isPublishing || !blogId || !title.trim()}
+        title={!title.trim() ? 'Enter a title to publish' : 'Publish your blog post'}
       >
-        {isPublishing ? 'Publishing...' : 'Publish'}
+        {isPublishing ? 'Publishing...' : 'Publish Post'}
       </button>
     </div>
   );

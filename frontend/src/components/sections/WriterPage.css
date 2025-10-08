@@ -1,39 +1,55 @@
-/* src/components/WriterPage.css */
+/* WriterPage.css - Modern Blog Editor Design */
 
-/* --- General Layout --- */
+/* Container */
 .writer-container {
-  max-width: 800px;
-  margin: 40px auto;
-  padding: 0 20px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  color: #111;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Inter', 'Segoe UI', 'Roboto', sans-serif;
+  color: #2d3748;
+  background: linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 50%, #2d2d2d 100%);
+  min-height: 100vh;
 }
 
-/* --- Writer Header --- */
+/* Writer Header */
 .writer-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 30px;
-  padding: 20px 0;
-  border-bottom: 1px solid #e2e8f0;
+  padding: 25px 30px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.writer-header:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
 }
 
 .writer-header-left h1 {
-  margin: 0 0 5px 0;
-  font-weight: 600;
+  margin: 0 0 8px 0;
   font-size: 1.8rem;
-  color: #2d3748;
+  font-weight: 700;
+  background: linear-gradient(135deg, #000000 0%, #4a4a4a 50%, #1a1a1a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .save-status {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: #718096;
-  font-style: italic;
-  padding: 4px 8px;
-  border-radius: 4px;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 20px;
   background: #f7fafc;
   border: 1px solid #e2e8f0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .save-status.blocked {
@@ -41,6 +57,16 @@
   border-color: #fc8181;
   color: #c53030;
   font-weight: 600;
+}
+
+.save-status::before {
+  content: '●';
+  font-size: 0.6rem;
+  color: #48bb78;
+}
+
+.save-status.blocked::before {
+  color: #e53e3e;
 }
 
 .writer-header-right {
@@ -62,204 +88,395 @@
 
 .logout-btn {
   padding: 8px 16px;
-  background: #f7fafc;
+  background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
   border: 1px solid #e2e8f0;
-  border-radius: 6px;
+  border-radius: 8px;
   color: #4a5568;
   font-size: 0.9rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .logout-btn:hover {
-  background: #edf2f7;
+  background: linear-gradient(135deg, #edf2f7 0%, #e2e8f0 100%);
   border-color: #cbd5e0;
   color: #2d3748;
+  transform: translateY(-1px);
 }
 
-/* --- Menu Bar --- */
+/* Title Input */
+.title-input {
+  width: 100%;
+  padding: 20px 25px;
+  font-size: 1.5rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 15px;
+  background: white;
+  color: #2d3748;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.title-input:focus {
+  outline: none;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.title-input::placeholder {
+  color: #a0aec0;
+  font-weight: 400;
+}
+
+/* Editor Wrapper */
+.editor-wrapper {
+  position: relative;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  margin-bottom: 25px;
+  transition: all 0.3s ease;
+}
+
+.editor-wrapper:hover {
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.1);
+}
+
+/* Menu Bar */
 .menu-bar {
   display: flex;
   flex-wrap: wrap;
-  gap: 5px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-bottom: none;
-  background-color: #f9f9f9;
-  border-radius: 8px 8px 0 0;
+  gap: 8px;
+  padding: 20px 25px;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .menu-bar button {
   font-family: inherit;
-  font-size: 14px;
-  background: none;
-  border: 1px solid #ddd;
-  padding: 5px 10px;
-  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  background: white;
+  border: 1px solid #e2e8f0;
+  padding: 8px 14px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.2s, color 0.2s;
+  transition: all 0.2s ease;
+  color: #4a5568;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .menu-bar button:hover {
-  background-color: #eee;
+  background: #f7fafc;
+  border-color: #cbd5e0;
+  color: #2d3748;
+  transform: translateY(-1px);
 }
 
 .menu-bar button.is-active {
-  background-color: #111;
-  color: #fff;
+  background: linear-gradient(135deg, #000000 0%, #434343 50%, #1a1a1a 100%);
+  color: white;
+  border-color: #2d2d2d;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* --- Editor Wrapper & Drop Zone --- */
-.editor-wrapper {
-  position: relative; /* Needed for the overlay */
+.menu-bar button.is-active:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
 }
 
+/* Editor Content */
+.ProseMirror {
+  padding: 30px 25px;
+  min-height: 400px;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #2d3748;
+  outline: none;
+  font-family: 'Inter', 'Georgia', serif;
+}
+
+.ProseMirror h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 1.5em 0 0.5em 0;
+  color: #1a202c;
+  line-height: 1.3;
+}
+
+.ProseMirror h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 1.3em 0 0.4em 0;
+  color: #2d3748;
+  line-height: 1.4;
+}
+
+.ProseMirror p {
+  margin: 1em 0;
+}
+
+.ProseMirror ul {
+  padding-left: 1.5em;
+  margin: 1em 0;
+}
+
+.ProseMirror li {
+  margin: 0.5em 0;
+}
+
+.ProseMirror pre {
+  background: #1a202c;
+  color: #e2e8f0;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 1.5em 0;
+  overflow-x: auto;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.ProseMirror code {
+  background: #f7fafc;
+  color: #e53e3e;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.9em;
+}
+
+.ProseMirror img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 1.5em 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.ProseMirror blockquote {
+  border-left: 4px solid #e2e8f0;
+  padding-left: 1.5em;
+  margin: 1.5em 0;
+  color: #4a5568;
+  font-style: italic;
+}
+
+/* Drop Zone */
 .drop-zone-overlay {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background: rgba(59, 130, 246, 0.1);
+  border: 2px dashed #3b82f6;
+  border-radius: 15px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
-  color: white;
-  font-weight: bold;
-  border: 2px dashed #fff;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #3b82f6;
   z-index: 10;
-  pointer-events: none; /* Allows clicks to pass through if needed, though not for drop */
+  backdrop-filter: blur(2px);
 }
 
-
-/* --- Tiptap Editor Content Styling --- */
-/* This is the main class for the editable area */
-.ProseMirror {
-  min-height: 400px;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 0 0 8px 8px;
-  outline: none; /* Removes the default focus outline */
-  line-height: 1.6;
-  font-size: 16px;
-}
-
-.ProseMirror:focus {
-  border-color: #333;
-}
-
-/* --- Styling for elements INSIDE the editor --- */
-.ProseMirror p {
-  margin: 0 0 1em;
-}
-
-.ProseMirror h1,
-.ProseMirror h2,
-.ProseMirror h3 {
-  line-height: 1.2;
-  margin: 1.5em 0 0.5em;
-}
-
-.ProseMirror ul,
-.ProseMirror ol {
-  padding-left: 20px;
-}
-
-/* Image styles */
-.ProseMirror img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-  margin: 1em 0;
-  border-radius: 4px;
-}
-
-/* Code block styles */
-.ProseMirror pre {
-  background: #0D0D0D;
-  color: #FFF;
-  font-family: 'JetBrains Mono', 'Fira Code', monospace;
-  padding: 0.75rem 1rem;
-  border-radius: 0.5rem;
-  margin: 1em 0;
-}
-
-.ProseMirror pre code {
-  color: inherit;
-  padding: 0;
-  background: none;
-  font-size: 0.9rem;
-}
-
-/* Syntax highlighting styles from highlight.js */
-.ProseMirror .hljs-comment,
-.ProseMirror .hljs-quote {
-  color: #616161;
-}
-
-.ProseMirror .hljs-variable,
-.ProseMirror .hljs-template-variable,
-.ProseMirror .hljs-attribute,
-.ProseMirror .hljs-tag,
-.ProseMirror .hljs-name,
-.ProseMirror .hljs-regexp,
-.ProseMirror .hljs-link,
-.ProseMirror .hljs-selector-id,
-.ProseMirror .hljs-selector-class {
-  color: #F98181;
-}
-
-.ProseMirror .hljs-keyword,
-.ProseMirror .hljs-selector-tag,
-.ProseMirror .hljs-built_in,
-.ProseMirror .hljs-type {
-    color: #90A9F9;
-}
-
-.ProseMirror .hljs-string,
-.ProseMirror .hljs-symbol,
-.ProseMirror .hljs-bullet {
-    color: #A5D6A7;
-}
-
-.ProseMirror .hljs-number {
-    color: #FFAB40;
-}
-
-/* --- Save Button --- */
-.save-button {
-  display: block;
-  width: 100%;
-  margin-top: 20px;
-  padding: 12px;
-  font-size: 16px;
-  font-weight: bold;
-  color: #fff;
-  background-color: #131313;
+/* Publish Button */
+.publish-button {
+  background: linear-gradient(135deg, #000000 0%, #434343 50%, #1a1a1a 100%);
+  color: white;
+  padding: 15px 30px;
   border: none;
-  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.2s;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
-.save-button:hover {
-  background-color: #2fc99e;
+.publish-button:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+  background: linear-gradient(135deg, #1a1a1a 0%, #000000 50%, #2d2d2d 100%);
 }
 
-/* Add this to WriterPage.css */
+.publish-button:active:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.publish-button:disabled {
+  background: linear-gradient(135deg, #a0aec0 0%, #cbd5e0 100%);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.publish-button::before {
+  content: '🚀';
+  font-size: 1.1em;
+}
+
+.publish-button:disabled::before {
+  content: '⏳';
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .writer-container {
+    padding: 15px;
+  }
+
+  .writer-header {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .writer-header-left h1 {
+    font-size: 1.5rem;
+  }
+
+  .title-input {
+    font-size: 1.3rem;
+    padding: 18px 20px;
+  }
+
+  .menu-bar {
+    padding: 15px 20px;
+    gap: 6px;
+  }
+
+  .menu-bar button {
+    padding: 6px 10px;
+    font-size: 0.85rem;
+  }
+
+  .ProseMirror {
+    padding: 25px 20px;
+    font-size: 1rem;
+  }
+
+  .publish-button {
+    width: 100%;
+    justify-content: center;
+    padding: 18px 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .writer-container {
+    padding: 10px;
+  }
+
+  .writer-header {
+    padding: 15px;
+  }
+
+  .title-input {
+    font-size: 1.2rem;
+    padding: 15px 18px;
+  }
+
+  .menu-bar {
+    padding: 12px 15px;
+  }
+
+  .ProseMirror {
+    padding: 20px 15px;
+    min-height: 300px;
+  }
+
+  .user-info {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+/* Loading States */
+.writer-container.loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* Animations */
+@keyframes writer-fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.writer-header,
+.title-input,
+.editor-wrapper,
+.publish-button {
+  animation: writer-fadeInUp 0.6s ease-out;
+}
+
+.writer-header {
+  animation-delay: 0.1s;
+}
+
 .title-input {
-  width: 100%;
-  padding: 15px;
-  font-size: 2rem;
-  font-weight: bold;
-  border: none;
-  border-bottom: 1px solid #ccc;
-  margin-bottom: 20px;
-  outline: none;
-  box-sizing: border-box; /* Important */
+  animation-delay: 0.2s;
 }
 
-.title-input:focus {
-  border-bottom-color: #333;
+.editor-wrapper {
+  animation-delay: 0.3s;
+}
+
+.publish-button {
+  animation-delay: 0.4s;
+}
+
+/* Focus States */
+.title-input:focus,
+.ProseMirror:focus {
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Selection Styles */
+.ProseMirror ::selection {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+/* Placeholder Styles */
+.ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: #a0aec0;
+  pointer-events: none;
+  height: 0;
+}
+
+/* Drag Cursor */
+.ProseMirror-dropcursor {
+  border-left: 2px solid #000000;
+  margin-left: -1px;
+  margin-right: -1px;
+  pointer-events: none;
+}
+
+/* Image Resize Handles */
+.ProseMirror img.ProseMirror-selectednode {
+  outline: 2px solid #000000;
+  outline-offset: 2px;
 }
