@@ -22,7 +22,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faImage } from '@fortawesome/free-solid-svg-icons';
 
 // --- Syntax Highlighting Imports ---
-import 'highlight.js/styles/github-dark.css'; // Or your preferred theme
+// Using custom CSS instead of highlight.js theme for cleaner look
 import ts from 'highlight.js/lib/languages/typescript';
 import js from 'highlight.js/lib/languages/javascript';
 import css from 'highlight.js/lib/languages/css';
@@ -30,9 +30,12 @@ import json from 'highlight.js/lib/languages/json';
 import html from 'highlight.js/lib/languages/xml';
 
 // --- Your Project Imports ---
+import { Link, useSearchParams } from 'react-router-dom';
 import './WriterPage.css';
-import { CreateDraftBlogPost, UpdateBlogPost, getPresignedUrl } from '../common/userAPI';
+import { CreateDraftBlogPost, UpdateBlogPost, GetBlogPostById, getPresignedUrl } from '../common/userAPI';
+import { safeApiCall } from '../../utils/apiRetryManager';
 import { useToast } from '../common/ToastProvider';
+import { usePageTitle } from '../common/usePageTitle';
 import { useAuth } from '../../contexts/AuthContext';
 import { useDebounce } from '../../hooks/useDebounce'; // Assuming this hook exists
 
@@ -83,13 +86,26 @@ const MenuBar = ({ editor, onImageUpload }: { editor: Editor | null, onImageUplo
 
 // --- Main Writer Page Component ---
 const WriterPage = () => {
+  const [searchParams] = useSearchParams();
+  const editBlogId = searchParams.get('id');
+  
   const [blogId, setBlogId] = useState<string | null>(null);
   const [title, setTitle] = useState('');
   const [status, setStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
   const [isDragging, setIsDragging] = useState(false);
+  const [isLoadingExisting, setIsLoadingExisting] = useState(false);
 
   const { addToast } = useToast();
   const { user, logout } = useAuth();
+  const hasLoadedBlog = useRef(false);
+  
+  usePageTitle(editBlogId ? 'Edit Blog' : 'Write Blog');
+
+  // Reset loading state when editBlogId changes
+  useEffect(() => {
+    hasLoadedBlog.current = false;
+    setIsLoadingExisting(false);
+  }, [editBlogId]);
   const imageCounter = useRef(0);
 
   const debouncedTitle = useDebounce(title, 1500);
@@ -113,9 +129,82 @@ const WriterPage = () => {
     },
   });
 
+  // Effect to load existing blog data when editing (only once)
+  useEffect(() => {
+    let isMounted = true;
+    let timeoutId: NodeJS.Timeout;
+    
+    const loadExistingBlog = async () => {
+      console.log('Load check:', { editBlogId, hasEditor: !!editor, isLoadingExisting, hasLoadedBlog: hasLoadedBlog.current });
+      
+      if (editBlogId && editor && !hasLoadedBlog.current) {
+        console.log('Starting to load blog:', editBlogId);
+        hasLoadedBlog.current = true;
+        try {
+          setIsLoadingExisting(true);
+          
+          // Set a timeout to prevent infinite loading
+          timeoutId = setTimeout(() => {
+            if (isMounted) {
+              setIsLoadingExisting(false);
+              addToast('error', 'Loading timeout. Please try again.');
+              hasLoadedBlog.current = false;
+            }
+          }, 10000); // 10 second timeout
+          // Temporarily bypass safeApiCall for debugging
+          console.log('Calling GetBlogPostById with ID:', editBlogId);
+          const blogData = await GetBlogPostById(editBlogId);
+          console.log('Received blog data:', blogData);
+          
+          if (!isMounted) return; // Prevent state updates if component unmounted
+          
+          console.log('Blog data loaded:', { title: blogData.title, contentLength: blogData.content?.length });
+          
+          // Set the title
+          setTitle(blogData.title || '');
+          
+          // Set the editor content with proper HTML
+          if (blogData.content) {
+            editor.commands.setContent(blogData.content);
+          }
+          
+          // Set the blog ID to prevent re-loading
+          setBlogId(editBlogId);
+          
+          // Set status to saved since we're loading existing content
+          setStatus('saved');
+          setLastSaveTime(Date.now());
+          
+          addToast('success', 'Blog loaded for editing');
+        } catch (error) {
+          console.error('Failed to load blog for editing:', error);
+          hasLoadedBlog.current = false; // Reset on error to allow retry
+          if (isMounted) {
+            addToast('error', `Failed to load blog: ${error instanceof Error ? error.message : 'Unknown error'}`);
+          }
+        } finally {
+          clearTimeout(timeoutId);
+          if (isMounted) {
+            setIsLoadingExisting(false);
+          }
+        }
+      }
+    };
+
+    // Only load if we have an editBlogId and editor is ready
+    if (editBlogId && editor) {
+      loadExistingBlog();
+    }
+
+    return () => {
+      isMounted = false;
+      clearTimeout(timeoutId);
+    };
+  }, [editBlogId, editor]); // Removed addToast and other dependencies that cause loops
+
   // Effect to create the initial draft when a title is entered (only once)
   useEffect(() => {
-    if (debouncedTitle.trim() && !blogId && status !== 'saving' && !isBlocked) {
+    if (debouncedTitle.trim() && !blogId && !editBlogId && status !== 'saving' && !isBlocked && !isLoadingExisting) {
       setStatus('saving');
       const createDraft = async () => {
         try {
@@ -329,11 +418,59 @@ const WriterPage = () => {
     }
   }, [handleImageUpload]);
 
+  // Show loading state when loading existing blog
+  if (isLoadingExisting) {
+    return (
+      <div className="writer-container">
+        <div className="loading-container">
+          <div className="loading-spinner"></div>
+          <p>Loading blog for editing...</p>
+          <button 
+            onClick={() => {
+              setIsLoadingExisting(false);
+              hasLoadedBlog.current = false;
+              addToast('info', 'Loading cancelled. You can try again.');
+            }}
+            className="btn-cancel-loading"
+          >
+            Cancel Loading
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Show retry option if we have editBlogId but no content loaded
+  if (editBlogId && !title && !isLoadingExisting && hasLoadedBlog.current) {
+    return (
+      <div className="writer-container">
+        <div className="loading-container">
+          <p>Failed to load blog content</p>
+          <button 
+            onClick={() => {
+              hasLoadedBlog.current = false;
+              setIsLoadingExisting(false);
+            }}
+            className="btn-cancel-loading"
+          >
+            Retry Loading
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="writer-container">
       <div className="writer-header">
         <div className="writer-header-left">
-          <h1>Create a New Post</h1>
+          <h1>{editBlogId ? 'Edit Blog Post' : 'Create a New Post'}</h1>
+          {/* Debug info - remove in production */}
+          {editBlogId && (
+            <div style={{ fontSize: '12px', color: '#666', marginTop: '5px' }}>
+              Debug: editBlogId={editBlogId}, blogId={blogId}, hasLoaded={hasLoadedBlog.current.toString()}, title="{title}"
+            </div>
+          )}
           {(isBlocked || status === 'saving' || (status === 'saved' && lastSaveTime > 0)) && (
             <span className={`save-status ${isBlocked ? 'blocked' : ''}`}>
               {isBlocked ? `Auto-save disabled (${failureCount} failures)` :
@@ -345,6 +482,9 @@ const WriterPage = () => {
         <div className="writer-header-right">
           <div className="user-info">
             <span className="welcome-text">Welcome, {user?.username}</span>
+            <Link to="/admin" className="admin-link" title="Admin Dashboard">
+              Admin
+            </Link>
             <button className="logout-btn" onClick={logout} title="Logout">
               Logout
             </button>
