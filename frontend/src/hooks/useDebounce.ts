@@ -1,4 +1,4 @@
-// src/hooks/useDebounce.ts
+// useDebounce.ts - Simple debounce hook
 import { useState, useEffect } from 'react';
 
 export function useDebounce<T>(value: T, delay: number): T {

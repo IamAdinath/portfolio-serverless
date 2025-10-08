@@ -1,8 +1,8 @@
-// src/components/sections/AuthPage.tsx
-import React, { useState } from 'react';
-import { signIn, signUp, fetchAuthSession } from 'aws-amplify/auth';
+// src/components/sections/AuthPage.tsx - Streamlined with Auth Context
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './AuthPage.css'; 
-import { requestUserConfirmation } from '../common/userAPI';
+import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../common/ToastProvider';
 import { usePageTitle } from '../common/usePageTitle';
 
@@ -13,47 +13,55 @@ const AuthPage: React.FC = () => {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [loading, setLoading] = useState(false);
 
+  const { login, register, isLoading, isAuthenticated } = useAuth();
   const { addToast } = useToast();
+  const navigate = useNavigate();
+  const location = useLocation();
+  
   usePageTitle(isLogin ? 'Login' : 'Sign Up');
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      const from = (location.state as any)?.from?.pathname || '/';
+      navigate(from, { replace: true });
+    }
+  }, [isAuthenticated, navigate, location]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
 
     try {
       if (isLogin) {
-        await signIn({ username, password });
-        const session = await fetchAuthSession();
-        const idToken = session.tokens?.idToken?.toString();
-        if (idToken) localStorage.setItem('token', idToken);
+        await login(username, password);
         addToast('success', 'Logged in successfully!');
+        
+        // Redirect to intended page or home
+        const from = (location.state as any)?.from?.pathname || '/';
+        navigate(from, { replace: true });
       } else {
         if (password !== confirmPassword) {
           addToast('error', 'Passwords do not match!');
           return;
         }
 
-        await signUp({
-          username,
-          password,
-          options: { userAttributes: { email, name, preferred_username: username } },
-        });
+        if (!email.trim() || !name.trim()) {
+          addToast('error', 'Please fill in all fields');
+          return;
+        }
 
-        await requestUserConfirmation({ username });
-        await signIn({ username, password });
-        const session = await fetchAuthSession();
-        const idToken = session.tokens?.idToken?.toString();
-        if (idToken) localStorage.setItem('token', idToken);
-        addToast('success', 'Signed up and logged in successfully!');
+        await register(username, email, name, password);
+        addToast('success', 'Account created and logged in successfully!');
+        
+        // Redirect to intended page or home
+        const from = (location.state as any)?.from?.pathname || '/';
+        navigate(from, { replace: true });
       }
     } catch (error: any) {
-      console.error(error);
-      const msg = (typeof error === 'object' && error?.message?.trim()) || 'Something went wrong';
+      console.error('Auth error:', error);
+      const msg = error?.message || 'Authentication failed. Please try again.';
       addToast('error', msg);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -108,8 +116,8 @@ const AuthPage: React.FC = () => {
               </div>
             )}
           </div>
-          <button className="submit-btn" type="submit" disabled={loading}>
-            {loading ? (isLogin ? 'Logging in...' : 'Signing up...') : (isLogin ? 'Login' : 'Sign Up')}
+          <button className="submit-btn" type="submit" disabled={isLoading}>
+            {isLoading ? (isLogin ? 'Logging in...' : 'Signing up...') : (isLogin ? 'Login' : 'Sign Up')}
           </button>
         </form>
       </div>

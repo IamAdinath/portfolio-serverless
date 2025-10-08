@@ -33,6 +33,7 @@ import html from 'highlight.js/lib/languages/xml';
 import './WriterPage.css';
 import { CreateDraftBlogPost, UpdateBlogPost, getPresignedUrl } from '../common/userAPI';
 import { useToast } from '../common/ToastProvider';
+import { useAuth } from '../../contexts/AuthContext';
 import { useDebounce } from '../../hooks/useDebounce'; // Assuming this hook exists
 
 // --- Tiptap Setup ---
@@ -84,13 +85,18 @@ const MenuBar = ({ editor, onImageUpload }: { editor: Editor | null, onImageUplo
 const WriterPage = () => {
   const [blogId, setBlogId] = useState<string | null>(null);
   const [title, setTitle] = useState('');
-
   const [status, setStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
   const [isDragging, setIsDragging] = useState(false);
+
   const { addToast } = useToast();
+  const { user, logout } = useAuth();
   const imageCounter = useRef(0);
 
   const debouncedTitle = useDebounce(title, 1500);
+  const [lastSaveTime, setLastSaveTime] = useState<number>(0);
+  const [isPublishing, setIsPublishing] = useState(false);
+  const [failureCount, setFailureCount] = useState<number>(0);
+  const [isBlocked, setIsBlocked] = useState<boolean>(false);
 
   const editor = useEditor({
     extensions: [
@@ -107,9 +113,9 @@ const WriterPage = () => {
     },
   });
 
-  // Effect to create the initial draft when a title is entered
+  // Effect to create the initial draft when a title is entered (only once)
   useEffect(() => {
-    if (debouncedTitle.trim() && !blogId) {
+    if (debouncedTitle.trim() && !blogId && status !== 'saving' && !isBlocked) {
       setStatus('saving');
       const createDraft = async () => {
         try {
@@ -117,17 +123,27 @@ const WriterPage = () => {
           if (newPost && newPost.id) {
             setBlogId(newPost.id);
             setStatus('saved');
+            setLastSaveTime(Date.now());
+            setFailureCount(0); // Reset failure count on success
             addToast('info', 'Draft created. Auto-saving is now active.');
           }
         } catch (error) {
           console.error("Draft creation failed:", error);
-          addToast('error', 'Could not create draft.');
+          const newFailureCount = failureCount + 1;
+          setFailureCount(newFailureCount);
+
+          if (newFailureCount >= 5) {
+            setIsBlocked(true);
+            addToast('error', 'Too many failures. Auto-save disabled. Please refresh the page.');
+          } else {
+            addToast('error', `Could not create draft. Attempt ${newFailureCount}/5`);
+          }
           setStatus('idle');
         }
       };
       createDraft();
     }
-  }, [debouncedTitle, blogId, addToast]);
+  }, [debouncedTitle, blogId, status, isBlocked]); // Removed failureCount and addToast to prevent loops
 
 
 
@@ -185,26 +201,116 @@ const WriterPage = () => {
     }
   }, [editor, blogId, addToast]);
 
+  // Simplified: Let auto-save handle all updates including title changes
+
+  // Auto-save functionality with debouncing (disabled during publishing)
+  useEffect(() => {
+    if (blogId && editor && status === 'idle' && !isBlocked && !isPublishing) {
+      const currentTime = Date.now();
+      // Only auto-save if it's been more than 10 seconds since last save
+      if (currentTime - lastSaveTime > 10000) {
+        const autoSave = async () => {
+          try {
+            setStatus('saving');
+            const contentHTML = editor.getHTML();
+
+            // Validate content before sending
+            if (!title.trim()) {
+              console.warn('Auto-save skipped: No title');
+              setStatus('idle');
+              return;
+            }
+
+            const finalImageUrls = Array.from(
+              new DOMParser()
+                .parseFromString(contentHTML, 'text/html')
+                .querySelectorAll('img')
+            ).map(img => img.src).filter(src => !src.startsWith('blob:'));
+
+            const blogPostPayload = {
+              title: title.trim(),
+              content: contentHTML || '<p></p>', // Ensure content is never empty
+              images: finalImageUrls,
+              status: 'draft'
+            };
+
+            console.log('Auto-saving draft:', blogPostPayload);
+            await UpdateBlogPost(blogId, blogPostPayload);
+            setStatus('saved');
+            setLastSaveTime(currentTime);
+            setFailureCount(0); // Reset failure count on success
+          } catch (error) {
+            console.error('Auto-save failed:', error);
+            const newFailureCount = failureCount + 1;
+            setFailureCount(newFailureCount);
+
+            if (newFailureCount >= 5) {
+              setIsBlocked(true);
+              addToast('error', 'Too many auto-save failures. Auto-save disabled.');
+            } else {
+              console.warn(`Auto-save failed. Attempt ${newFailureCount}/5`);
+            }
+            setStatus('idle');
+          }
+        };
+
+        const timeoutId = setTimeout(autoSave, 2000);
+        return () => clearTimeout(timeoutId);
+      }
+    }
+  }, [editor?.getHTML(), title, blogId, status, lastSaveTime, isBlocked, failureCount, isPublishing]);
 
   const handlePublish = async () => {
-    if (!editor || !title.trim() || !blogId) {
+    if (!editor || !title.trim() || !blogId || isPublishing || isBlocked) {
+      if (isPublishing) {
+        addToast('warning', 'Publishing in progress, please wait...');
+        return;
+      }
+      if (isBlocked) {
+        addToast('error', 'Publishing disabled due to repeated failures. Please refresh the page.');
+        return;
+      }
       addToast('error', 'Please enter a title before publishing.');
       return;
     }
+
+    setIsPublishing(true);
     setStatus('saving');
-    const contentHTML = editor.getHTML();
-    const finalImageUrls = Array.from(new DOMParser().parseFromString(contentHTML, 'text/html').querySelectorAll('img')).map(img => img.src).filter(src => !src.startsWith('blob:'));
-    const blogPostPayload = { title: title, content: contentHTML, images: finalImageUrls, status: 'published' };
+
     try {
-      await UpdateBlogPost(blogId, blogPostPayload);
+      const contentHTML = editor.getHTML();
+      const finalImageUrls = Array.from(
+        new DOMParser()
+          .parseFromString(contentHTML, 'text/html')
+          .querySelectorAll('img')
+      ).map(img => img.src).filter(src => !src.startsWith('blob:'));
+
+      const blogPostPayload = {
+        title: title.trim(),
+        content: contentHTML || '<p></p>', // Ensure content is never empty
+        images: finalImageUrls,
+        status: 'published'
+      };
+
+      console.log('Publishing blog with payload:', blogPostPayload);
+      const result = await UpdateBlogPost(blogId, blogPostPayload);
+      console.log('Publish result:', result);
       addToast('success', 'Blog post published successfully!');
+
+      // Clear the form after successful publish
       setTitle('');
       editor.commands.clearContent(true);
       setBlogId(null);
       setStatus('idle');
+      setLastSaveTime(0);
+      setFailureCount(0);
+      setIsBlocked(false);
     } catch (error: any) {
-      addToast('error', 'Failed to publish post.');
+      console.error('Publish failed:', error);
+      addToast('error', 'Failed to publish post. Please try again.');
       setStatus('saved');
+    } finally {
+      setIsPublishing(false);
     }
   };
 
@@ -223,10 +329,24 @@ const WriterPage = () => {
   return (
     <div className="writer-container">
       <div className="writer-header">
-        <h1>Create a New Post</h1>
-        <span className="save-status">
-          {status === 'saving' ? 'Saving...' : status === 'saved' ? 'All changes saved' : ''}
-        </span>
+        <div className="writer-header-left">
+          <h1>Create a New Post</h1>
+          {(isBlocked || status === 'saving' || (status === 'saved' && lastSaveTime > 0)) && (
+            <span className={`save-status ${isBlocked ? 'blocked' : ''}`}>
+              {isBlocked ? `Auto-save disabled (${failureCount} failures)` :
+                status === 'saving' ? 'Saving...' :
+                  status === 'saved' ? `Saved ${new Date(lastSaveTime).toLocaleTimeString()}` : ''}
+            </span>
+          )}
+        </div>
+        <div className="writer-header-right">
+          <div className="user-info">
+            <span className="welcome-text">Welcome, {user?.username}</span>
+            <button className="logout-btn" onClick={logout} title="Logout">
+              Logout
+            </button>
+          </div>
+        </div>
       </div>
       <input type="text" className="title-input" placeholder="Post Title..." value={title} onChange={(e) => setTitle(e.target.value)} />
       <div className="editor-wrapper" onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop}>
@@ -234,8 +354,12 @@ const WriterPage = () => {
         <EditorContent editor={editor} />
         {isDragging && <div className="drop-zone-overlay">Drop image here</div>}
       </div>
-      <button className="publish-button" onClick={handlePublish} disabled={status === 'saving' || !blogId}>
-        {status === 'saving' ? 'Publishing...' : 'Publish'}
+      <button
+        className="publish-button"
+        onClick={handlePublish}
+        disabled={isPublishing || !blogId || !title.trim()}
+      >
+        {isPublishing ? 'Publishing...' : 'Publish'}
       </button>
     </div>
   );
