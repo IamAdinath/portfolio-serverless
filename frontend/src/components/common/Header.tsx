@@ -1,8 +1,9 @@
-// src/components/common/Header.tsx
-import React from 'react';
-import { Pane, IconButton, Text, Menu, Popover, TickIcon } from 'evergreen-ui';
+// src/components/common/Header.tsx - Modern Portfolio Header
+import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars, faTimes, faUser, faSignOutAlt, faPen } from '@fortawesome/free-solid-svg-icons';
 import './Header.css';
 
 const publicNavLinks = [
@@ -30,7 +31,7 @@ const useMediaQuery = (query: string) => {
 };
 
 const Header: React.FC = () => {
-  const isSmallScreen = useMediaQuery('(max-width: 768px)');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { isAuthenticated, user, logout } = useAuth();
@@ -42,106 +43,109 @@ const Header: React.FC = () => {
     ...(isAuthenticated ? [] : [{ label: 'Login', path: '/auth' }]),
   ];
 
-  const renderNavLinks = (isMenu: boolean = false) => {
-    const links = navLinks.map((link) => {
-      const isActive = location.pathname === link.path;
+  const handleNavClick = (path: string) => {
+    navigate(path);
+    setIsMobileMenuOpen(false);
+  };
 
-      if (isMenu) {
-        return (
-          <Menu.Item
-            key={link.path}
-            onSelect={() => navigate(link.path)}
-            icon={isActive ? <TickIcon color="success" /> : undefined}
-            style={{ fontWeight: isActive ? 600 : 400 }}
-          >
-            {link.label}
-          </Menu.Item>
-        );
-      }
-
-      return (
-        <Link
-          key={link.path}
-          to={link.path}
-          className={`nav-link ${isActive ? 'active' : ''}`}
-        >
-          {link.label}
-        </Link>
-      );
-    });
-
-    // Add logout option for authenticated users
-    if (isAuthenticated && isMenu) {
-      links.push(
-        <Menu.Item
-          key="logout"
-          onSelect={() => logout()}
-          intent="danger"
-        >
-          Logout ({user?.username})
-        </Menu.Item>
-      );
-    }
-
-    return links;
+  const handleLogout = () => {
+    logout();
+    setIsMobileMenuOpen(false);
   };
 
   return (
-    <Pane
-      is="header"
-      className="app-header"
-      display="flex"
-      paddingX={24}
-      paddingY={16}
-      background="white"
-      borderBottom="1px solid #EAEAEA"
-      alignItems="center"
-      justifyContent="space-between"
-    >
-      <Link to="/" style={{ textDecoration: 'none' }}>
-        <Text fontWeight={600} fontSize="18px" color="neutral">
-          AG
-        </Text>
-      </Link>
+    <header className="modern-header">
+      <div className="header-container">
+        {/* Logo */}
+        <Link to="/" className="logo">
+          <div className="logo-text">
+            <span className="logo-initials">AG</span>
+            <span className="logo-name">Adinath Gore</span>
+          </div>
+        </Link>
 
-      {isSmallScreen ? (
-        <Popover
-          position="bottom-right"
-          content={
-            <Menu>
-              <Menu.Group>{renderNavLinks(true)}</Menu.Group>
-            </Menu>
-          }
-        >
+        {/* Desktop Navigation */}
+        <nav className="desktop-nav">
+          <div className="nav-links">
+            {navLinks.map((link) => {
+              const isActive = location.pathname === link.path;
+              return (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  className={`nav-link ${isActive ? 'active' : ''}`}
+                >
+                  {link.path === '/writer' && <FontAwesomeIcon icon={faPen} />}
+                  {link.label}
+                </Link>
+              );
+            })}
+          </div>
 
-          <IconButton icon="menu" height={32} />
-        </Popover>
-      ) : (
-        <Pane is="nav" display="flex" alignItems="center" gap="2rem">
-          {renderNavLinks(false)}
+          {/* User Info (Desktop) */}
           {isAuthenticated && (
-            <Pane display="flex" alignItems="center" gap="1rem">
-              <Text fontSize="14px" color="muted">
-                {user?.username}
-              </Text>
+            <div className="user-section">
+              <div className="user-info">
+                <FontAwesomeIcon icon={faUser} className="user-icon" />
+                <span className="username">{user?.username}</span>
+              </div>
+              <button onClick={logout} className="logout-btn" title="Logout">
+                <FontAwesomeIcon icon={faSignOutAlt} />
+              </button>
+            </div>
+          )}
+        </nav>
+
+        {/* Mobile Menu Button */}
+        <button 
+          className="mobile-menu-btn"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          aria-label="Toggle menu"
+        >
+          <FontAwesomeIcon icon={isMobileMenuOpen ? faTimes : faBars} />
+        </button>
+      </div>
+
+      {/* Mobile Navigation */}
+      <div className={`mobile-nav ${isMobileMenuOpen ? 'open' : ''}`}>
+        <div className="mobile-nav-content">
+          {navLinks.map((link) => {
+            const isActive = location.pathname === link.path;
+            return (
               <button
-                onClick={logout}
-                style={{
-                  background: 'none',
-                  border: '1px solid #ccc',
-                  padding: '4px 8px',
-                  borderRadius: '4px',
-                  cursor: 'pointer',
-                  fontSize: '12px'
-                }}
+                key={link.path}
+                onClick={() => handleNavClick(link.path)}
+                className={`mobile-nav-link ${isActive ? 'active' : ''}`}
               >
+                {link.path === '/writer' && <FontAwesomeIcon icon={faPen} />}
+                {link.label}
+              </button>
+            );
+          })}
+          
+          {isAuthenticated && (
+            <div className="mobile-user-section">
+              <div className="mobile-user-info">
+                <FontAwesomeIcon icon={faUser} />
+                <span>{user?.username}</span>
+              </div>
+              <button onClick={handleLogout} className="mobile-logout-btn">
+                <FontAwesomeIcon icon={faSignOutAlt} />
                 Logout
               </button>
-            </Pane>
+            </div>
           )}
-        </Pane>
+        </div>
+      </div>
+
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <div 
+          className="mobile-menu-overlay"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
       )}
-    </Pane>
+    </header>
   );
 };
 
