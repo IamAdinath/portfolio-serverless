@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRocket, faCode, faUser, faBlog, faQuoteLeft, faArrowRight, faDownload, faStar } from '@fortawesome/free-solid-svg-icons';
 import { faLinkedin, faGithub, faMedium } from '@fortawesome/free-brands-svg-icons';
 import { usePageTitle } from './components/common/usePageTitle';
+import ProfileImage from './components/common/ProfileImage';
 import './Portfolio.css';
 
 const Portfolio: React.FC = () => {
@@ -98,14 +99,9 @@ const Portfolio: React.FC = () => {
           </div>
           <div className="portfolio-hero-image">
             <div className="portfolio-profile-card">
-              <img
-                src="https://media.licdn.com/dms/image/v2/D4D03AQEnfQc0ihZNJw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1703858333994?e=1762387200&v=beta&t=T2i9BvRabZqceqYKNadrTyP6VxoSSojrvezqw-ojCRs"
-                alt="Adinath Gore"
+              <ProfileImage 
                 className="portfolio-profile-image"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.src = "https://via.placeholder.com/300x300/f7fafc/2d2d2d?text=AG";
-                }}
+                size="large"
               />
               <div className="portfolio-profile-badge">
                 <FontAwesomeIcon icon={faRocket} />

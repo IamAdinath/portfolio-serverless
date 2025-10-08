@@ -93,7 +93,7 @@ export async function ResumeLink() {
       throw error;
     }
 
-    return jsonResponse as { url: string };
+    return jsonResponse.downloadUrl;
 
   } catch (error) {
     console.error('Network or other error in ResumeLink:', error);
@@ -104,6 +104,39 @@ export async function ResumeLink() {
     throw apiError;
   }
   
+}
+
+export async function GetProfileImage() {
+  const endpoint = `${API_BASE_URL}/get-profile-image`;
+
+  try {
+    const response = await fetch(endpoint, {
+      method: 'GET',
+      headers: base_headers,
+    });
+
+    const jsonResponse = await response.json().catch(() => ({
+      message: `Request failed with status ${response.status} and no JSON error body.`,
+    }));
+
+    if (!response.ok) {
+      const error: ApiError = new Error(jsonResponse.message || `API Error: ${response.status} ${response.statusText}`);
+      error.statusCode = response.status;
+      error.details = jsonResponse;
+      console.error('GetProfileImage API error:', error.details);
+      throw error;
+    }
+
+    return jsonResponse.imageUrl;
+
+  } catch (error) {
+    console.error('Network or other error in GetProfileImage:', error);
+    if ((error as ApiError).statusCode) {
+      throw error;
+    }
+    const apiError: ApiError = new Error((error as Error).message || 'An unexpected error occurred during profile image request.');
+    throw apiError;
+  }
 }
 
 export async function GetFile(fileURL: string) {

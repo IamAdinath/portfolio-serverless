@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLinkedin, faGithub, faMedium, faTwitter, faStackOverflow } from '@fortawesome/free-brands-svg-icons';
 import { faUser, faHeart, faCode, faRocket, faLightbulb, faCoffee } from '@fortawesome/free-solid-svg-icons';
 import { usePageTitle } from '../common/usePageTitle';
+import ProfileImage from '../common/ProfileImage';
 
 const AboutMe: React.FC = () => {
   usePageTitle('About Me');
@@ -25,15 +26,9 @@ const AboutMe: React.FC = () => {
                 Note: LinkedIn images may have authentication requirements.
                 For production, consider uploading your professional photo to your own server/CDN.
               */}
-              <img
-                src="https://media.licdn.com/dms/image/v2/D4D03AQEnfQc0ihZNJw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1703858333994?e=1762387200&v=beta&t=T2i9BvRabZqceqYKNadrTyP6VxoSSojrvezqw-ojCRs"
-                alt="Adinath Gore - Software Engineer"
+              <ProfileImage 
                 className="profile-image"
-                onError={(e) => {
-                  // Fallback to a professional placeholder if LinkedIn image fails to load
-                  const target = e.target as HTMLImageElement;
-                  target.src = "https://via.placeholder.com/400x400/f7fafc/2d2d2d?text=AG";
-                }}
+                size="medium"
               />
               <div className="profile-badge">
                 <FontAwesomeIcon icon={faUser} />

@@ -8,28 +8,21 @@ const StickmanDownload: React.FC = () => {
     try {
       setIsAnimating(true);
 
-      const response = await ResumeLink();
-      const presignedUrl = response.url;
+      const presignedUrl = await ResumeLink();
 
       setTimeout(async () => {
         if (presignedUrl) {
           try {
-            const fileResponse = await GetFile(presignedUrl);
-            if (!fileResponse) throw new Error('Failed to fetch file');
-
-            // const blob = await fileResponse();
-            const blobUrl = window.URL.createObjectURL(fileResponse);
-
+            // Create a direct download link using the presigned URL
             const link = document.createElement('a');
-            link.href = blobUrl;
+            link.href = presignedUrl;
             link.download = 'Adinath_Gore_Resume.pdf';
+            link.target = '_blank'; // Open in new tab as fallback
             document.body.appendChild(link);
             link.click();
             link.remove();
-
-            window.URL.revokeObjectURL(blobUrl);
           } catch (error) {
-            console.error('Error downloading file blob:', error);
+            console.error('Error downloading file:', error);
             alert('Failed to download file. Please try again.');
           }
         }
