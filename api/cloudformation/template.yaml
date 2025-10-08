@@ -359,25 +359,7 @@ Resources:
             - s3:GetObject
             Resource: !Sub arn:aws:s3:::${MediaBucket}/*
   
-  DownloadResumeLambda:
-    Type: AWS::Serverless::Function
-    Properties:
-      FunctionName: !Sub ${ProjectName}-download-resume-${Env}
-      Handler: resume.download.lambda_handler
-      Policies:
-        - AWSLambdaBasicExecutionRole
-        - AmazonS3FullAccess
-      Environment:
-        Variables:
-          RESUME_BUCKET: !Ref MediaBucket
-          RESUME_KEY: resume/resume.pdf
-      Events:
-        AddItem:
-          Type: Api
-          Properties:
-            RestApiId: !Ref PortfolioAPI
-            Path: /download-resume
-            Method: GET
+
 
   CognitoAuth:
     Type: AWS::ApiGateway::Authorizer
@@ -419,43 +401,26 @@ Resources:
         - AWSLambdaBasicExecutionRole
         - AmazonS3FullAccess
 
-  GetProfileImageLambda:
+  GetMediaLambda:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Sub ${ProjectName}-get-profile-image-${Env}
-      Handler: media.get_profile_image.lambda_handler
+      FunctionName: !Sub ${ProjectName}-get-media-${Env}
+      Handler: media.get_media.lambda_handler
       Policies:
         - AWSLambdaBasicExecutionRole
         - AmazonS3ReadOnlyAccess
       Events:
-        GetProfileImage:
+        GetMedia:
           Type: Api
           Properties:
             RestApiId: !Ref PortfolioAPI
-            Path: /get-profile-image
+            Path: /get-media
             Method: GET
       Environment:
         Variables:
           MEDIA_BUCKET: !Ref MediaBucket
-
-  DownloadResumeLambda:
-    Type: AWS::Serverless::Function
-    Properties:
-      FunctionName: !Sub ${ProjectName}-download-resume-${Env}
-      Handler: media.download_resume.lambda_handler
-      Policies:
-        - AWSLambdaBasicExecutionRole
-        - AmazonS3ReadOnlyAccess
-      Events:
-        DownloadResume:
-          Type: Api
-          Properties:
-            RestApiId: !Ref PortfolioAPI
-            Path: /download-resume
-            Method: GET
-      Environment:
-        Variables:
-          MEDIA_BUCKET: !Ref MediaBucket
+          PROFILE_IMAGE_PATH: !Ref ProfileImagePath
+          RESUME_PATH: !Ref ResumePath
       Events:
         AddItem:
           Type: Api
@@ -519,6 +484,14 @@ Parameters:
   LinkedInClientSecret:
     Type: String
     Description: LinkedIn OAuth Client Secret
+  ProfileImagePath:
+    Type: String
+    Description: S3 path to profile image
+    Default: public/Adinath_Gore.jpg
+  ResumePath:
+    Type: String
+    Description: S3 path to resume file
+    Default: public/Adinath_Gore_Resume.pdf
 
 Outputs:
   ApiBaseUrl:

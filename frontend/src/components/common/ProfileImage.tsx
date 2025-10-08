@@ -32,10 +32,6 @@ const ProfileImage: React.FC<ProfileImageProps> = ({
       } catch (err) {
         console.error('Failed to load profile image:', err);
         setError(true);
-        // Fallback to placeholder
-        if (showFallback) {
-          setImageUrl("https://via.placeholder.com/400x400/f7fafc/2d2d2d?text=AG");
-        }
       } finally {
         setLoading(false);
       }
@@ -44,10 +40,8 @@ const ProfileImage: React.FC<ProfileImageProps> = ({
     fetchProfileImage();
   }, [showFallback]);
 
-  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+  const handleImageError = () => {
     if (showFallback && !error) {
-      const target = e.target as HTMLImageElement;
-      target.src = "https://via.placeholder.com/400x400/f7fafc/2d2d2d?text=AG";
       setError(true);
     }
   };
@@ -60,11 +54,19 @@ const ProfileImage: React.FC<ProfileImageProps> = ({
     );
   }
 
+  if (error || !imageUrl) {
+    return (
+      <div className={`${className} ${sizeClasses[size]} bg-gradient-to-br from-gray-100 to-gray-300 rounded-full flex items-center justify-center border-2 border-gray-400`}>
+        <span className="text-gray-700 font-bold text-2xl">AG</span>
+      </div>
+    );
+  }
+
   return (
     <img
       src={imageUrl}
       alt="Adinath Gore - Software Engineer"
-      className={`${className} ${sizeClasses[size]}`}
+      className={`${className} ${sizeClasses[size]} rounded-full object-cover`}
       onError={handleImageError}
     />
   );
