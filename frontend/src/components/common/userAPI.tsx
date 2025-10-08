@@ -176,6 +176,9 @@ export async function UpdateBlogPost(id: string, payload: BlogPostPayload) {
   if (!token) {
     throw new Error('Authentication required. Please log in.');
   }
+  
+  console.log(`Updating blog ${id} with payload:`, payload);
+  
   try {
     const response = await fetch(endpoint, {
       method: 'POST',
@@ -188,6 +191,11 @@ export async function UpdateBlogPost(id: string, payload: BlogPostPayload) {
     }));
 
     if (!response.ok) {
+      // If update endpoint doesn't exist (404), log it but still throw error
+      if (response.status === 404) {
+        console.error('Update endpoint not found. Make sure to deploy the UpdateBlogsLambda function.');
+      }
+      
       const error: ApiError = new Error(jsonResponse.message || `API Error: ${response.status} ${response.statusText}`);
       error.statusCode = response.status;
       error.details = jsonResponse;
@@ -195,6 +203,7 @@ export async function UpdateBlogPost(id: string, payload: BlogPostPayload) {
       throw error;
     }
 
+    console.log('Update successful:', jsonResponse);
     return jsonResponse;
 
   } catch (error) {

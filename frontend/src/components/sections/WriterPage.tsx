@@ -113,7 +113,7 @@ const WriterPage = () => {
     },
   });
 
-  // Effect to create the initial draft when a title is entered
+  // Effect to create the initial draft when a title is entered (only once)
   useEffect(() => {
     if (debouncedTitle.trim() && !blogId && status !== 'saving' && !isBlocked) {
       setStatus('saving');
@@ -123,6 +123,7 @@ const WriterPage = () => {
           if (newPost && newPost.id) {
             setBlogId(newPost.id);
             setStatus('saved');
+            setLastSaveTime(Date.now());
             setFailureCount(0); // Reset failure count on success
             addToast('info', 'Draft created. Auto-saving is now active.');
           }
@@ -142,7 +143,7 @@ const WriterPage = () => {
       };
       createDraft();
     }
-  }, [debouncedTitle, blogId, status, isBlocked, failureCount, addToast]);
+  }, [debouncedTitle, blogId, status, isBlocked]); // Removed failureCount and addToast to prevent loops
 
 
 
@@ -200,10 +201,11 @@ const WriterPage = () => {
     }
   }, [editor, blogId, addToast]);
 
+  // Simplified: Let auto-save handle all updates including title changes
 
-  // Auto-save functionality with debouncing
+  // Auto-save functionality with debouncing (disabled during publishing)
   useEffect(() => {
-    if (blogId && editor && status === 'idle' && !isBlocked) {
+    if (blogId && editor && status === 'idle' && !isBlocked && !isPublishing) {
       const currentTime = Date.now();
       // Only auto-save if it's been more than 10 seconds since last save
       if (currentTime - lastSaveTime > 10000) {
@@ -232,6 +234,7 @@ const WriterPage = () => {
               status: 'draft'
             };
 
+            console.log('Auto-saving draft:', blogPostPayload);
             await UpdateBlogPost(blogId, blogPostPayload);
             setStatus('saved');
             setLastSaveTime(currentTime);
@@ -255,7 +258,7 @@ const WriterPage = () => {
         return () => clearTimeout(timeoutId);
       }
     }
-  }, [editor?.getHTML(), title, blogId, status, lastSaveTime, isBlocked, failureCount]);
+  }, [editor?.getHTML(), title, blogId, status, lastSaveTime, isBlocked, failureCount, isPublishing]);
 
   const handlePublish = async () => {
     if (!editor || !title.trim() || !blogId || isPublishing || isBlocked) {
@@ -289,7 +292,9 @@ const WriterPage = () => {
         status: 'published'
       };
 
-      await UpdateBlogPost(blogId, blogPostPayload);
+      console.log('Publishing blog with payload:', blogPostPayload);
+      const result = await UpdateBlogPost(blogId, blogPostPayload);
+      console.log('Publish result:', result);
       addToast('success', 'Blog post published successfully!');
 
       // Clear the form after successful publish
