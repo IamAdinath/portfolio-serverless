@@ -129,21 +129,22 @@ const WriterPage = () => {
           }
         } catch (error) {
           console.error("Draft creation failed:", error);
-          const newFailureCount = failureCount + 1;
-          setFailureCount(newFailureCount);
-
-          if (newFailureCount >= 5) {
-            setIsBlocked(true);
-            addToast('error', 'Too many failures. Auto-save disabled. Please refresh the page.');
-          } else {
-            addToast('error', `Could not create draft. Attempt ${newFailureCount}/5`);
-          }
+          setFailureCount(prev => {
+            const newFailureCount = prev + 1;
+            if (newFailureCount >= 5) {
+              setIsBlocked(true);
+              addToast('error', 'Too many failures. Auto-save disabled. Please refresh the page.');
+            } else {
+              addToast('error', `Could not create draft. Attempt ${newFailureCount}/5`);
+            }
+            return newFailureCount;
+          });
           setStatus('idle');
         }
       };
       createDraft();
     }
-  }, [debouncedTitle, blogId, status, isBlocked]); // Removed failureCount and addToast to prevent loops
+  }, [debouncedTitle, blogId, status, isBlocked, addToast]);
 
 
 
@@ -204,6 +205,7 @@ const WriterPage = () => {
   // Simplified: Let auto-save handle all updates including title changes
 
   // Auto-save functionality with debouncing (disabled during publishing)
+  const editorContent = editor?.getHTML();
   useEffect(() => {
     if (blogId && editor && status === 'idle' && !isBlocked && !isPublishing) {
       const currentTime = Date.now();
@@ -241,15 +243,16 @@ const WriterPage = () => {
             setFailureCount(0); // Reset failure count on success
           } catch (error) {
             console.error('Auto-save failed:', error);
-            const newFailureCount = failureCount + 1;
-            setFailureCount(newFailureCount);
-
-            if (newFailureCount >= 5) {
-              setIsBlocked(true);
-              addToast('error', 'Too many auto-save failures. Auto-save disabled.');
-            } else {
-              console.warn(`Auto-save failed. Attempt ${newFailureCount}/5`);
-            }
+            setFailureCount(prev => {
+              const newFailureCount = prev + 1;
+              if (newFailureCount >= 5) {
+                setIsBlocked(true);
+                addToast('error', 'Too many auto-save failures. Auto-save disabled.');
+              } else {
+                console.warn(`Auto-save failed. Attempt ${newFailureCount}/5`);
+              }
+              return newFailureCount;
+            });
             setStatus('idle');
           }
         };
@@ -258,7 +261,7 @@ const WriterPage = () => {
         return () => clearTimeout(timeoutId);
       }
     }
-  }, [editor?.getHTML(), title, blogId, status, lastSaveTime, isBlocked, failureCount, isPublishing]);
+  }, [editorContent, title, blogId, status, lastSaveTime, isBlocked, isPublishing, editor, addToast]);
 
   const handlePublish = async () => {
     if (!editor || !title.trim() || !blogId || isPublishing || isBlocked) {

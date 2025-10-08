@@ -17,18 +17,7 @@ const authNavLinks = [
   { label: 'Write', path: '/writer' },
 ];
 
-const useMediaQuery = (query: string) => {
-  const [matches, setMatches] = React.useState(window.matchMedia(query).matches);
 
-  React.useEffect(() => {
-    const mediaQuery = window.matchMedia(query);
-    const handler = (event: MediaQueryListEvent) => setMatches(event.matches);
-    mediaQuery.addEventListener('change', handler);
-    return () => mediaQuery.removeEventListener('change', handler);
-  }, [query]);
-
-  return matches;
-};
 
 const Header: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
