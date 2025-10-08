@@ -22,6 +22,15 @@ const headers: HttpHeaders = {
 const base_headers: HttpHeaders = {
   'Content-Type': 'application/json'
 }
+
+// Helper function to get authenticated headers
+const getAuthHeaders = (): HttpHeaders => {
+  const token = localStorage.getItem('authToken');
+  return {
+    ...base_headers,
+    ...(token && { 'Authorization': `Bearer ${token}` })
+  };
+};
 /**
  * Calls the backend API to trigger administrative confirmation of a newly signed-up user.
  * This endpoint on your backend must be appropriately secured.
@@ -126,18 +135,14 @@ export async function GetFile(fileURL: string) {
 
 export async function CreateDraftBlogPost(payload: BlogPostPayload) {
   const endpoint = `${API_BASE_URL}/create-blog`;
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('authToken');
   if (!token) {
-    throw new Error('No token found');
-  }
-  const auth_header: HttpHeaders = {
-    'Content-Type': 'application/json',
-    'Authorization': token
+    throw new Error('Authentication required. Please log in.');
   }
   try {
     const response = await fetch(endpoint, {
       method: 'POST',
-      headers: auth_header,
+      headers: getAuthHeaders(),
       body: JSON.stringify(payload),
     });
 
@@ -167,18 +172,14 @@ export async function CreateDraftBlogPost(payload: BlogPostPayload) {
 
 export async function UpdateBlogPost(id: string, payload: BlogPostPayload) {
   const endpoint = `${API_BASE_URL}/update-blog?id=${id}`;
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('authToken');
   if (!token) {
-    throw new Error('No token found');
-  }
-  const auth_header: HttpHeaders = {
-    'Content-Type': 'application/json',
-    'Authorization': token
+    throw new Error('Authentication required. Please log in.');
   }
   try {
     const response = await fetch(endpoint, {
       method: 'POST',
-      headers: auth_header,
+      headers: getAuthHeaders(),
       body: JSON.stringify(payload),
     });
 
