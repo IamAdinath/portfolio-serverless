@@ -150,6 +150,28 @@ Resources:
         Variables:
           BLOGS_TABLE: !Ref BlogsTable
           ENV : !Ref Env
+
+  UpdateBlogsLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${ProjectName}-update-blogs-${Env}
+      Handler: blogs.update.lambda_handler
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AmazonDynamoDBFullAccess
+      Events:
+        UpdateItem:
+          Type: Api
+          Properties:
+            RestApiId: !Ref PortfolioAPI
+            Path: /update-blog
+            Method: POST
+            Auth:
+              Authorizer: CognitoAuth
+      Environment:
+        Variables:
+          BLOGS_TABLE: !Ref BlogsTable
+          ENV : !Ref Env
   
   BlogUserPool:
     Type: AWS::Cognito::UserPool
