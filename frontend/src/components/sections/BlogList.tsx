@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import BlogCard from '../common/BlogCard';
 import './BlogList.css';
 import { usePageTitle } from '../common/usePageTitle';
-import { GetBlogPosts } from '../common/userAPI';
+import { GetAllPublishedBlogs } from '../common/userAPI';
 import { Blog, DateFormatOptions } from '../../types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBlog, faCalendar, faClock, faUser } from '@fortawesome/free-solid-svg-icons';
@@ -45,10 +45,15 @@ const BlogList: React.FC = () => {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const data = await GetBlogPosts();
+        const data = await GetAllPublishedBlogs();
         setBlogs(data);
       } catch (err: any) {
-        setError(err.message || 'Failed to load blogs');
+        // Check if it's a circuit breaker error
+        if (err.message?.includes('temporarily blocked')) {
+          setError('Too many failed requests. Please reload the page to try again.');
+        } else {
+          setError(err.message || 'Failed to load blogs');
+        }
       } finally {
         setLoading(false);
       }

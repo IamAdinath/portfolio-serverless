@@ -8,6 +8,7 @@ import type {
   PresignedUrlApiResponse,
   HttpHeaders
 } from '../../types';
+import { safeApiCall } from '../../utils/apiRetryManager';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -231,36 +232,108 @@ export async function UpdateBlogPost(id: string, payload: BlogPostPayload) {
   }
 };
 
-export async function GetBlogPosts() {
+// Legacy function for backward compatibility - gets all published blogs
+export async function GetAllPublishedBlogs() {
   const endpoint = `${API_BASE_URL}/get-blogs`;
-  try {
-    const response = await fetch(endpoint, {
-      method: 'GET',
-      headers: base_headers,
-    });
+  
+  return safeApiCall(
+    'get-blogs',
+    async () => {
+      const response = await fetch(endpoint, {
+        method: 'GET',
+        headers: base_headers,
+      });
 
-    const jsonResponse = await response.json().catch(() => ({
-      message: `Request failed with status ${response.status} and no JSON error body.`,
-    }));
+      const jsonResponse = await response.json().catch(() => ({
+        message: `Request failed with status ${response.status} and no JSON error body.`,
+      }));
 
-    if (!response.ok) {
-      const error: ApiError = new Error(jsonResponse.message || `API Error: ${response.status} ${response.statusText}`);
-      error.statusCode = response.status;
-      error.details = jsonResponse;
-      console.error('GetBlogPosts API error:', error.details);
-      throw error;
+      if (!response.ok) {
+        const error: ApiError = new Error(jsonResponse.message || `API Error: ${response.status} ${response.statusText}`);
+        error.statusCode = response.status;
+        error.details = jsonResponse;
+        console.error('GetAllPublishedBlogs API error:', error.details);
+        throw error;
+      }
+      
+      return jsonResponse.blogs;
     }
-    const BlogList = jsonResponse.blogs;
-    return BlogList;
+  );
+}
 
-  } catch (error) {
-    console.error('Network or other error in GetBlogPosts:', error);
-    if ((error as ApiError).statusCode) {
-      throw error;
-    }
-    const apiError: ApiError = new Error((error as Error).message || 'An unexpected error occurred during blog post retrieval.');
-    throw apiError;
+// New paginated function for admin dashboard
+export async function GetBlogPosts(pageSize: number = 10, pageToken?: string, status: string = 'all') {
+  const params = new URLSearchParams({
+    pageSize: pageSize.toString(),
+    status: status
+  });
+  
+  if (pageToken) {
+    params.append('lastKey', pageToken);
   }
+  
+  const endpoint = `${API_BASE_URL}/list-blogs?${params.toString()}`;
+  
+  return safeApiCall(
+    'list-blogs',
+    async () => {
+      const response = await fetch(endpoint, {
+        method: 'GET',
+        headers: base_headers,
+      });
+
+      const jsonResponse = await response.json().catch(() => ({
+        message: `Request failed with status ${response.status} and no JSON error body.`,
+      }));
+
+      if (!response.ok) {
+        const error: ApiError = new Error(jsonResponse.message || `API Error: ${response.status} ${response.statusText}`);
+        error.statusCode = response.status;
+        error.details = jsonResponse;
+        console.error('GetBlogPosts API error:', error.details);
+        throw error;
+      }
+      
+      return {
+        blogs: jsonResponse.blogs || [],
+        hasMore: jsonResponse.hasMore || false,
+        nextPageToken: jsonResponse.nextPageToken,
+        count: jsonResponse.count || 0
+      };
+    }
+  );
+}
+
+export async function GetBlogStats(blogId?: string) {
+  const endpoint = blogId 
+    ? `${API_BASE_URL}/blog-stats?id=${blogId}`
+    : `${API_BASE_URL}/blog-stats`;
+    
+  const endpointKey = blogId ? `blog-stats-${blogId}` : 'blog-stats-dashboard';
+    
+  return safeApiCall(
+    endpointKey,
+    async () => {
+      const response = await fetch(endpoint, {
+        method: 'GET',
+        headers: getAuthHeaders(),
+      });
+
+      const jsonResponse = await response.json().catch(() => ({
+        message: `Request failed with status ${response.status} and no JSON error body.`,
+      }));
+
+      if (!response.ok) {
+        const error: ApiError = new Error(jsonResponse.message || `API Error: ${response.status} ${response.statusText}`);
+        error.statusCode = response.status;
+        error.details = jsonResponse;
+        console.error('GetBlogStats API error:', error.details);
+        throw error;
+      }
+
+      return jsonResponse;
+    }
+  );
 };
 
 
