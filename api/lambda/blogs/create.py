@@ -57,6 +57,9 @@ def lambda_handler(event, context):
 
         blog_id = str(uuid.uuid4())
         now = datetime.utcnow().isoformat()
+        # For GSI compatibility, always set published_at (use created_at for drafts)
+        published_at_value = now if blog_status == "published" else f"draft_{now}"
+        
         item = {
             "id": blog_id,
             "author": user_id,
@@ -69,8 +72,8 @@ def lambda_handler(event, context):
             "updated_at": now,
             "status": blog_status,
             "status_published_at": f"{blog_status}_{now}",
-            "author_index": f"{user_id}_{now}",
-            "published_at": now if blog_status == "published" else None,
+            "author_index": f"{user_id}_{published_at_value}",
+            "published_at": published_at_value,
         }
 
         table = dynamodb.Table(BLOGS_TABLE)

@@ -326,12 +326,13 @@ const WriterPage = () => {
       <div className="writer-header">
         <div className="writer-header-left">
           <h1>Create a New Post</h1>
-          <span className={`save-status ${isBlocked ? 'blocked' : ''}`}>
-            {isBlocked ? `Auto-save disabled (${failureCount} failures)` :
-              status === 'saving' ? 'Saving...' :
-                status === 'saved' ? `Saved ${new Date(lastSaveTime).toLocaleTimeString()}` :
-                  blogId ? 'Ready to save' : 'Enter title to start'}
-          </span>
+          {(isBlocked || status === 'saving' || (status === 'saved' && lastSaveTime > 0)) && (
+            <span className={`save-status ${isBlocked ? 'blocked' : ''}`}>
+              {isBlocked ? `Auto-save disabled (${failureCount} failures)` :
+                status === 'saving' ? 'Saving...' :
+                  status === 'saved' ? `Saved ${new Date(lastSaveTime).toLocaleTimeString()}` : ''}
+            </span>
+          )}
         </div>
         <div className="writer-header-right">
           <div className="user-info">
