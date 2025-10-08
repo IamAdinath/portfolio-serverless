@@ -1,10 +1,11 @@
 import React from 'react';
 import './AboutMe.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLinkedin, faGithub, faMedium, faTwitter, faStackOverflow } from '@fortawesome/free-brands-svg-icons';
+import { faLinkedin, faGithub, faMedium, faStackOverflow } from '@fortawesome/free-brands-svg-icons';
 import { faUser, faHeart, faCode, faRocket, faLightbulb, faCoffee } from '@fortawesome/free-solid-svg-icons';
 import { usePageTitle } from '../common/usePageTitle';
 import ProfileImage from '../common/ProfileImage';
+import { SOCIAL_LINKS } from '../../constants';
 
 const AboutMe: React.FC = () => {
   usePageTitle('About Me');
@@ -44,23 +45,23 @@ const AboutMe: React.FC = () => {
           </div>
           
           <div className="social-links">
-            <a href="https://www.linkedin.com/in/primewhites/" target="_blank" rel="noopener noreferrer" className="social-link linkedin">
+            <a href={SOCIAL_LINKS.LINKEDIN} target="_blank" rel="noopener noreferrer" className="social-link linkedin">
               <FontAwesomeIcon icon={faLinkedin} />
               <span>LinkedIn</span>
             </a>
-            <a href="https://github.com/IamAdinath" target="_blank" rel="noopener noreferrer" className="social-link github">
+            <a href={SOCIAL_LINKS.GITHUB} target="_blank" rel="noopener noreferrer" className="social-link github">
               <FontAwesomeIcon icon={faGithub} />
               <span>GitHub</span>
             </a>
-            <a href="https://twitter.com/prime_whites" target="_blank" rel="noopener noreferrer" className="social-link twitter">
+            {/* <a href={SOCIAL_LINKS.TWITTER} target="_blank" rel="noopener noreferrer" className="social-link twitter">
               <FontAwesomeIcon icon={faTwitter} />
               <span>Twitter</span>
-            </a>
-            <a href="https://medium.com/@adinath.17" target="_blank" rel="noopener noreferrer" className="social-link medium">
+            </a> */}
+            <a href={SOCIAL_LINKS.MEDIUM} target="_blank" rel="noopener noreferrer" className="social-link medium">
               <FontAwesomeIcon icon={faMedium} />
               <span>Medium</span>
             </a>
-            <a href="https://stackoverflow.com/users/14975561/adinath-gore" target="_blank" rel="noopener noreferrer" className="social-link stackoverflow">
+            <a href={SOCIAL_LINKS.STACKOVERFLOW} target="_blank" rel="noopener noreferrer" className="social-link stackoverflow">
               <FontAwesomeIcon icon={faStackOverflow} />
               <span>Stack Overflow</span>
             </a>

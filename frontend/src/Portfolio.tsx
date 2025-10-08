@@ -6,6 +6,7 @@ import { faRocket, faCode, faUser, faBlog, faQuoteLeft, faArrowRight, faDownload
 import { faLinkedin, faGithub, faMedium } from '@fortawesome/free-brands-svg-icons';
 import { usePageTitle } from './components/common/usePageTitle';
 import ProfileImage from './components/common/ProfileImage';
+import { SOCIAL_LINKS } from './constants';
 import './Portfolio.css';
 
 const Portfolio: React.FC = () => {
@@ -199,13 +200,13 @@ const Portfolio: React.FC = () => {
           <h3>Let's Connect</h3>
           <p>Ready to discuss your next project or just want to say hello?</p>
           <div className="portfolio-social-links">
-            <a href="https://www.linkedin.com/in/primewhites/" target="_blank" rel="noopener noreferrer" className="portfolio-social-link linkedin">
+            <a href={SOCIAL_LINKS.LINKEDIN} target="_blank" rel="noopener noreferrer" className="portfolio-social-link linkedin">
               <FontAwesomeIcon icon={faLinkedin} />
             </a>
-            <a href="https://github.com/IamAdinath" target="_blank" rel="noopener noreferrer" className="portfolio-social-link github">
+            <a href={SOCIAL_LINKS.GITHUB} target="_blank" rel="noopener noreferrer" className="portfolio-social-link github">
               <FontAwesomeIcon icon={faGithub} />
             </a>
-            <a href="https://medium.com/@adinath.17" target="_blank" rel="noopener noreferrer" className="portfolio-social-link medium">
+            <a href={SOCIAL_LINKS.MEDIUM} target="_blank" rel="noopener noreferrer" className="portfolio-social-link medium">
               <FontAwesomeIcon icon={faMedium} />
             </a>
           </div>

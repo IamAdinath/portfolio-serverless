@@ -5,7 +5,7 @@ import { faLinkedin, faMedium } from '@fortawesome/free-brands-svg-icons';
 import { faMobileAndroid, faEnvelope, faAward, faCertificate, faCode, faBriefcase } from '@fortawesome/free-solid-svg-icons';
 import StickmanDownload from '../common/stickManDownload';
 import { usePageTitle } from '../common/usePageTitle';
-import { CONTACT } from '../../constants';
+import { CONTACT, SOCIAL_LINKS } from '../../constants';
 
 const Resume: React.FC = () => {
     usePageTitle('Resume');
@@ -34,11 +34,11 @@ const Resume: React.FC = () => {
                     </div>
                     <div className="contact-item">
                         <FontAwesomeIcon icon={faLinkedin} className="contact-icon" />
-                        <a href="https://www.linkedin.com/in/primewhites/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                        <a href={SOCIAL_LINKS.LINKEDIN} target="_blank" rel="noopener noreferrer">LinkedIn</a>
                     </div>
                     <div className="contact-item">
                         <FontAwesomeIcon icon={faMedium} className="contact-icon" />
-                        <a href="https://medium.com/@adinath.17" target="_blank" rel="noopener noreferrer">Blogs</a>
+                        <a href={SOCIAL_LINKS.MEDIUM} target="_blank" rel="noopener noreferrer">Blogs</a>
                     </div>
                 </div>
             </header>

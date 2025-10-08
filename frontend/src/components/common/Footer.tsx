@@ -2,16 +2,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-  faGithub, 
-  faLinkedin, 
-  faTwitter, 
-  faMedium, 
-  faStackOverflow 
+import {
+  faGithub,
+  faLinkedin,
+  faMedium,
+  faStackOverflow
 } from '@fortawesome/free-brands-svg-icons';
-import { 
-  faEnvelope, 
-  faHeart, 
+import {
+  faEnvelope,
+  faHeart,
   faCode,
   faArrowUp
 } from '@fortawesome/free-solid-svg-icons';
@@ -24,7 +23,7 @@ const Footer: React.FC = () => {
   const socialLinks = [
     { icon: faLinkedin, url: SOCIAL_LINKS.LINKEDIN, label: 'LinkedIn' },
     { icon: faGithub, url: SOCIAL_LINKS.GITHUB, label: 'GitHub' },
-    { icon: faTwitter, url: SOCIAL_LINKS.TWITTER, label: 'Twitter' },
+    // { icon: faTwitter, url: SOCIAL_LINKS.TWITTER, label: 'Twitter' }, // Hidden for now
     { icon: faMedium, url: SOCIAL_LINKS.MEDIUM, label: 'Medium' },
     { icon: faStackOverflow, url: SOCIAL_LINKS.STACKOVERFLOW, label: 'Stack Overflow' },
     { icon: faEnvelope, url: `mailto:${CONTACT.EMAIL}`, label: 'Email' },
@@ -53,7 +52,7 @@ const Footer: React.FC = () => {
               <span className="footer-logo-name">Adinath Gore</span>
             </div>
             <p className="footer-tagline">
-              Full-Stack Developer & Cloud Architect passionate about creating 
+              Full-Stack Developer & Cloud Architect passionate about creating
               scalable web applications and innovative digital solutions.
             </p>
             <div className="footer-social">
@@ -111,8 +110,8 @@ const Footer: React.FC = () => {
               using React & AWS
             </p>
           </div>
-          
-          <button 
+
+          <button
             onClick={scrollToTop}
             className="scroll-to-top"
             title="Back to top"

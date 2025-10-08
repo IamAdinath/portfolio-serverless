@@ -335,24 +335,27 @@ export async function uploadFileToS3(fileName: string, file_content: any): Promi
     console.error('File name or type is missing for presigned URL request.');
     return null;
   }
+
   const body = {
     "fileName": fileName,
     "file_content": file_content,
-  }
+  };
 
   try {
     const response = await fetch(endpoint, {
       method: 'POST',
       headers: base_headers,
+      body: JSON.stringify(body),
     });
 
     if (!response.ok) {
-      throw new Error(`Failed to get presigned URL: ${response.status} ${response.statusText}`);
+      throw new Error(`Failed to upload file: ${response.status} ${response.statusText}`);
     }
 
     const jsonResponse = await response.json();
+    return jsonResponse;
   } catch (error) {
-    console.error('Error getting presigned URL:', error);
+    console.error('Error uploading file:', error);
     throw error;
   }
 }
