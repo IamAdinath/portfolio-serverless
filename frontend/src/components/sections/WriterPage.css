@@ -255,24 +255,71 @@
 }
 
 .ProseMirror pre {
-  background: #1a202c;
-  color: #e2e8f0;
-  padding: 20px;
-  border-radius: 8px;
-  margin: 1.5em 0;
-  overflow-x: auto;
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-  font-size: 0.9rem;
-  line-height: 1.5;
+  background: #1a202c !important;
+  color: #e2e8f0 !important;
+  padding: 16px 20px !important;
+  border-radius: 6px !important;
+  margin: 1.5em 0 !important;
+  overflow-x: auto !important;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Consolas', monospace !important;
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+  white-space: pre !important;
+  word-wrap: normal !important;
+  word-break: normal !important;
+  tab-size: 2 !important;
+  border: none !important;
+}
+
+/* Override highlight.js styles */
+.ProseMirror pre code {
+  background: transparent !important;
+  color: inherit !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  font-family: inherit !important;
+  font-size: inherit !important;
+  white-space: pre !important;
+  word-wrap: normal !important;
+  word-break: normal !important;
+}
+
+/* Simplify syntax highlighting colors */
+.ProseMirror pre .hljs-keyword,
+.ProseMirror pre .hljs-built_in,
+.ProseMirror pre .hljs-type {
+  color: #81c784 !important;
+}
+
+.ProseMirror pre .hljs-string,
+.ProseMirror pre .hljs-attr {
+  color: #ffb74d !important;
+}
+
+.ProseMirror pre .hljs-number,
+.ProseMirror pre .hljs-literal {
+  color: #f48fb1 !important;
+}
+
+.ProseMirror pre .hljs-comment {
+  color: #90a4ae !important;
+  font-style: italic;
+}
+
+.ProseMirror pre .hljs-function,
+.ProseMirror pre .hljs-title {
+  color: #64b5f6 !important;
 }
 
 .ProseMirror code {
-  background: #f7fafc;
-  color: #e53e3e;
+  background: #f1f5f9;
+  color: #475569;
   padding: 2px 6px;
-  border-radius: 4px;
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-  font-size: 0.9em;
+  border-radius: 3px;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Consolas', monospace;
+  font-size: 0.85em;
+  font-weight: 500;
+  white-space: nowrap;
 }
 
 .ProseMirror img {
@@ -353,6 +400,54 @@
 
 .publish-button:disabled::before {
   content: '⏳';
+}
+
+/* Loading State */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  color: #e2e8f0;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(226, 232, 240, 0.3);
+  border-top: 4px solid #e2e8f0;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-container p {
+  margin: 0 0 1rem 0;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.btn-cancel-loading {
+  background: #f7fafc;
+  border: 2px solid #e2e8f0;
+  color: #4a5568;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-cancel-loading:hover {
+  background: #edf2f7;
+  border-color: #cbd5e0;
+  transform: translateY(-1px);
 }
 
 /* Responsive Design */
