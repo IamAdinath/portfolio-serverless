@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 def lambda_handler(event, context):
     logger.info(f"Received event: {event}")
     table_name = os.getenv("BLOGS_TABLE")
-    media_bucket = os.getenv("MEDIA_BCUKET")
+    media_bucket = os.getenv("MEDIA_BUCKET")
     if not table_name:
         return build_response(
             StatusCodes.INTERNAL_SERVER_ERROR,
@@ -26,7 +26,7 @@ def lambda_handler(event, context):
         return build_response(
             StatusCodes.INTERNAL_SERVER_ERROR,
             Headers.CORS,
-            {"error": "MEDIA_BCUKET env variable not set"},
+            {"error": "MEDIA_BUCKET env variable not set"},
         )
 
     table = dynamodb.Table(table_name)

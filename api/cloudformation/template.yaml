@@ -127,7 +127,7 @@ Resources:
       Environment:
         Variables:
           BLOGS_TABLE: !Ref BlogsTable
-          MEDIA_BCUKET: !Ref MediaBucket
+          MEDIA_BUCKET: !Ref MediaBucket
 
   CreateBlogsLambda:
     Type: AWS::Serverless::Function
@@ -408,7 +408,7 @@ Resources:
       Environment:
         Variables:
           BLOGS_TABLE: !Ref BlogsTable
-          MEDIA_BCUKET: !Ref MediaBucket
+          MEDIA_BUCKET: !Ref MediaBucket
 
   UploadToS3Lambda:
     Type: AWS::Serverless::Function
@@ -418,6 +418,44 @@ Resources:
       Policies:
         - AWSLambdaBasicExecutionRole
         - AmazonS3FullAccess
+
+  GetProfileImageLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${ProjectName}-get-profile-image-${Env}
+      Handler: media.get_profile_image.lambda_handler
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AmazonS3ReadOnlyAccess
+      Events:
+        GetProfileImage:
+          Type: Api
+          Properties:
+            RestApiId: !Ref PortfolioAPI
+            Path: /get-profile-image
+            Method: GET
+      Environment:
+        Variables:
+          MEDIA_BUCKET: !Ref MediaBucket
+
+  DownloadResumeLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${ProjectName}-download-resume-${Env}
+      Handler: media.download_resume.lambda_handler
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AmazonS3ReadOnlyAccess
+      Events:
+        DownloadResume:
+          Type: Api
+          Properties:
+            RestApiId: !Ref PortfolioAPI
+            Path: /download-resume
+            Method: GET
+      Environment:
+        Variables:
+          MEDIA_BUCKET: !Ref MediaBucket
       Events:
         AddItem:
           Type: Api
