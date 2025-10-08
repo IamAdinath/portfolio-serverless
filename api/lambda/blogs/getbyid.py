@@ -15,7 +15,7 @@ logger.setLevel(logging.INFO)
 def lambda_handler(event, context):
     logger.info(f"Received event: {event}")
     table_name = os.getenv("BLOGS_TABLE")
-    media_bucket = os.getenv("MEDIA_BCUKET")
+    media_bucket = os.getenv("MEDIA_BUCKET")
     if not table_name:
         logger.error("BLOGS_TABLE env variable is not set")
         return build_response(
@@ -25,11 +25,11 @@ def lambda_handler(event, context):
         )
 
     if not media_bucket:
-        logger.error("MEDIA_BCUKET env variable is not set")
+        logger.error("MEDIA_BUCKET env variable is not set")
         return build_response(
             StatusCodes.INTERNAL_SERVER_ERROR,
             Headers.CORS,
-            {"error": "MEDIA_BCUKET env variable not set"},
+            {"error": "MEDIA_BUCKET env variable not set"},
         )
 
     blog_id = event.get("queryStringParameters", {}).get("id")

@@ -127,7 +127,7 @@ Resources:
       Environment:
         Variables:
           BLOGS_TABLE: !Ref BlogsTable
-          MEDIA_BCUKET: !Ref MediaBucket
+          MEDIA_BUCKET: !Ref MediaBucket
 
   CreateBlogsLambda:
     Type: AWS::Serverless::Function
@@ -359,25 +359,7 @@ Resources:
             - s3:GetObject
             Resource: !Sub arn:aws:s3:::${MediaBucket}/*
   
-  DownloadResumeLambda:
-    Type: AWS::Serverless::Function
-    Properties:
-      FunctionName: !Sub ${ProjectName}-download-resume-${Env}
-      Handler: resume.download.lambda_handler
-      Policies:
-        - AWSLambdaBasicExecutionRole
-        - AmazonS3FullAccess
-      Environment:
-        Variables:
-          RESUME_BUCKET: !Ref MediaBucket
-          RESUME_KEY: resume/resume.pdf
-      Events:
-        AddItem:
-          Type: Api
-          Properties:
-            RestApiId: !Ref PortfolioAPI
-            Path: /download-resume
-            Method: GET
+
 
   CognitoAuth:
     Type: AWS::ApiGateway::Authorizer
@@ -408,7 +390,37 @@ Resources:
       Environment:
         Variables:
           BLOGS_TABLE: !Ref BlogsTable
-          MEDIA_BCUKET: !Ref MediaBucket
+          MEDIA_BUCKET: !Ref MediaBucket
+
+  UploadToS3Lambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${ProjectName}-upload-to-s3-${Env}
+      Handler: common.upload_to_s3.lambda_handler
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AmazonS3FullAccess
+
+  GetMediaLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${ProjectName}-get-media-${Env}
+      Handler: media.get_media.lambda_handler
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AmazonS3ReadOnlyAccess
+      Events:
+        GetMedia:
+          Type: Api
+          Properties:
+            RestApiId: !Ref PortfolioAPI
+            Path: /get-media
+            Method: GET
+      Environment:
+        Variables:
+          MEDIA_BUCKET: !Ref MediaBucket
+          PROFILE_IMAGE_PATH: !Ref ProfileImagePath
+          RESUME_PATH: !Ref ResumePath
 
   UploadToS3Lambda:
     Type: AWS::Serverless::Function
@@ -481,6 +493,14 @@ Parameters:
   LinkedInClientSecret:
     Type: String
     Description: LinkedIn OAuth Client Secret
+  ProfileImagePath:
+    Type: String
+    Description: S3 path to profile image
+    Default: public/Adinath_Gore.jpg
+  ResumePath:
+    Type: String
+    Description: S3 path to resume file
+    Default: public/Adinath_Gore_Resume.pdf
 
 Outputs:
   ApiBaseUrl:

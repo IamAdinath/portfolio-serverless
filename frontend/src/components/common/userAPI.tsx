@@ -72,8 +72,9 @@ export async function requestUserConfirmation(payload: ConfirmUserPayload): Prom
   }
 }
 
-export async function ResumeLink() {
-  const endpoint = `${API_BASE_URL}/download-resume`;
+// Unified media API function
+async function getMediaFile(fileType: 'profile' | 'resume') {
+  const endpoint = `${API_BASE_URL}/get-media?type=${fileType}`;
 
   try {
     const response = await fetch(endpoint, {
@@ -89,21 +90,35 @@ export async function ResumeLink() {
       const error: ApiError = new Error(jsonResponse.message || `API Error: ${response.status} ${response.statusText}`);
       error.statusCode = response.status;
       error.details = jsonResponse;
-      console.error('ResumeLink API error:', error.details);
+      console.error(`Get${fileType}File API error:`, error.details);
       throw error;
     }
 
-    return jsonResponse as { url: string };
+    return jsonResponse;
 
   } catch (error) {
-    console.error('Network or other error in ResumeLink:', error);
+    console.error(`Network or other error in get${fileType}File:`, error);
     if ((error as ApiError).statusCode) {
       throw error;
     }
-    const apiError: ApiError = new Error((error as Error).message || 'An unexpected error occurred during resume download request.');
+    const apiError: ApiError = new Error((error as Error).message || `An unexpected error occurred during ${fileType} file request.`);
     throw apiError;
   }
-  
+}
+
+export async function ResumeLink() {
+  const response = await getMediaFile('resume');
+  return response.downloadUrl;
+}
+
+export async function DownloadResume() {
+  const response = await getMediaFile('resume');
+  return response;
+}
+
+export async function GetProfileImage() {
+  const response = await getMediaFile('profile');
+  return response.imageUrl;
 }
 
 export async function GetFile(fileURL: string) {
