@@ -11,14 +11,16 @@ import {
 import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../common/ToastProvider';
 import { usePageTitle } from '../common/usePageTitle';
+import { useConfirmation } from '../../hooks/useConfirmation';
 import { GetBlogPosts, DeleteBlogPost } from '../common/userAPI';
 import { BlogPostData } from '../../types';
 import ErrorBoundary from '../common/ErrorBoundary';
+import ConfirmationModal from '../common/ConfirmationModal';
 import './AdminDashboard.css';
 
 const AdminDashboard: React.FC = () => {
   usePageTitle('Admin Dashboard');
-  
+
   const [blogs, setBlogs] = useState<BlogPostData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -28,12 +30,13 @@ const AdminDashboard: React.FC = () => {
   const { user, isAuthenticated } = useAuth();
   const { addToast } = useToast();
   const navigate = useNavigate();
+  const { confirmationState, showConfirmation, hideConfirmation } = useConfirmation();
 
   const fetchBlogs = useCallback(async (pageToken?: string, append: boolean = false) => {
     try {
       setLoading(true);
       setError(null);
-      
+
       const response = await GetBlogPosts(10, pageToken, 'all');
 
       if (append) {
@@ -60,18 +63,26 @@ const AdminDashboard: React.FC = () => {
     fetchBlogs();
   }, [isAuthenticated, navigate, fetchBlogs]);
 
-  const handleDelete = async (blogId: string, title: string) => {
-    const confirmed = window.confirm(`Are you sure you want to delete "${title}"?\n\nThis action cannot be undone.`);
-    if (!confirmed) return;
-
-    try {
-      await DeleteBlogPost(blogId);
-      setBlogs(prev => prev.filter(blog => blog.id !== blogId));
-      addToast('success', `"${title}" deleted successfully`);
-    } catch (error) {
-      console.error('Failed to delete blog:', error);
-      addToast('error', 'Failed to delete blog. Please try again.');
-    }
+  const handleDelete = (blogId: string, title: string) => {
+    showConfirmation({
+      title: 'Delete Blog Post',
+      message: `Are you sure you want to delete "${title}"? This action cannot be undone.`,
+      confirmText: 'Delete',
+      cancelText: 'Cancel',
+      type: 'danger',
+      onConfirm: async () => {
+        try {
+          await DeleteBlogPost(blogId);
+          setBlogs(prev => prev.filter(blog => blog.id !== blogId));
+          addToast('success', `"${title}" deleted successfully`);
+        } catch (error) {
+          console.error('Failed to delete blog:', error);
+          addToast('error', 'Failed to delete blog. Please try again.');
+        } finally {
+          hideConfirmation();
+        }
+      }
+    });
   };
 
   const handleEdit = (blogId: string) => {
@@ -241,8 +252,8 @@ const AdminDashboard: React.FC = () => {
             <div className="pagination-info">
               Showing {blogs.length} blogs
             </div>
-            <button 
-              className="btn-load-more" 
+            <button
+              className="btn-load-more"
               onClick={handleLoadMore}
               disabled={loading}
             >
@@ -250,6 +261,17 @@ const AdminDashboard: React.FC = () => {
             </button>
           </div>
         )}
+
+        <ConfirmationModal
+          isOpen={confirmationState.isOpen}
+          title={confirmationState.title}
+          message={confirmationState.message}
+          confirmText={confirmationState.confirmText}
+          cancelText={confirmationState.cancelText}
+          type={confirmationState.type}
+          onConfirm={confirmationState.onConfirm}
+          onCancel={hideConfirmation}
+        />
       </div>
     </ErrorBoundary>
   );
