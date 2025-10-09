@@ -21,10 +21,7 @@ class AnalyticsTracker {
   constructor() {
     this.apiBaseUrl = process.env.REACT_APP_API_BASE_URL || '';
     this.sessionId = this.getOrCreateSessionId();
-    this.isEnabled = process.env.NODE_ENV === 'production'; // Only track in production
-    
-    // Initialize page view tracking
-    this.initializeTracking();
+    this.isEnabled = false; // Start disabled, enable later
   }
 
   private getOrCreateSessionId(): string {
@@ -38,8 +35,8 @@ class AnalyticsTracker {
 
   private generateUUID(): string {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-      const r = Math.random() * 16 | 0;
-      const v = c === 'x' ? r : (r & 0x3 | 0x8);
+      const r = (Math.random() * 16) | 0;
+      const v = c === 'x' ? r : ((r & 0x3) | 0x8);
       return v.toString(16);
     });
   }
@@ -173,6 +170,8 @@ class AnalyticsTracker {
 
   public enable(): void {
     this.isEnabled = true;
+    // Initialize tracking when enabled
+    this.initializeTracking();
   }
 
   public disable(): void {

@@ -45,6 +45,41 @@ interface AnalyticsData {
   };
 }
 
+const generateEmptyData = (range: string): AnalyticsData => {
+  const days = range === '1d' ? 1 : range === '7d' ? 7 : range === '30d' ? 30 : 90;
+  
+  // Generate empty daily stats for the range
+  const dailyStats = [];
+  const today = new Date();
+  
+  for (let i = days - 1; i >= 0; i--) {
+    const date = new Date(today);
+    date.setDate(date.getDate() - i);
+    
+    dailyStats.push({
+      date: date.toISOString().split('T')[0],
+      views: 0,
+      visitors: 0
+    });
+  }
+  
+  return {
+    totalPageViews: 0,
+    uniqueVisitors: 0,
+    avgSessionDuration: '0m 0s',
+    bounceRate: '0%',
+    topPages: [],
+    trafficSources: [],
+    dailyStats,
+    trends: {
+      pageViews: { value: 0, trend: 'neutral' },
+      visitors: { value: 0, trend: 'neutral' },
+      sessionDuration: { value: 0, trend: 'neutral' },
+      bounceRate: { value: 0, trend: 'neutral' },
+    },
+  };
+};
+
 const WebAnalytics: React.FC = () => {
   usePageTitle('Web Analytics');
   
@@ -65,46 +100,12 @@ const WebAnalytics: React.FC = () => {
         setAnalyticsData(response);
         addToast('success', 'Real analytics data loaded');
       } catch (apiError) {
-        console.warn('Analytics API not available, using mock data:', apiError);
-        addToast('info', 'Using demo data - deploy analytics infrastructure for real data');
+        console.warn('Analytics API not available, showing empty state:', apiError);
+        addToast('info', 'Analytics API not available - showing empty state until data is collected');
         
-        // Mock data fallback
-        const mockData: AnalyticsData = {
-          totalPageViews: 12547,
-          uniqueVisitors: 8932,
-          avgSessionDuration: '3m 42s',
-          bounceRate: '42.3%',
-          topPages: [
-            { path: '/blog/react-best-practices', views: 2341, title: 'React Best Practices' },
-            { path: '/blog/javascript-tips', views: 1876, title: 'JavaScript Tips & Tricks' },
-            { path: '/blog/web-performance', views: 1654, title: 'Web Performance Optimization' },
-            { path: '/portfolio', views: 1432, title: 'Portfolio' },
-            { path: '/blog/css-grid-guide', views: 1287, title: 'CSS Grid Complete Guide' },
-          ],
-          trafficSources: [
-            { source: 'Organic Search', visitors: 4521, percentage: 50.6 },
-            { source: 'Direct', visitors: 2234, percentage: 25.0 },
-            { source: 'Social Media', visitors: 1342, percentage: 15.0 },
-            { source: 'Referral', visitors: 835, percentage: 9.4 },
-          ],
-          dailyStats: [
-            { date: '2024-01-01', views: 1234, visitors: 876 },
-            { date: '2024-01-02', views: 1456, visitors: 1023 },
-            { date: '2024-01-03', views: 1678, visitors: 1187 },
-            { date: '2024-01-04', views: 1543, visitors: 1098 },
-            { date: '2024-01-05', views: 1789, visitors: 1234 },
-            { date: '2024-01-06', views: 1987, visitors: 1456 },
-            { date: '2024-01-07', views: 2134, visitors: 1567 },
-          ],
-          trends: {
-            pageViews: { value: 12.5, trend: 'up' },
-            visitors: { value: 8.3, trend: 'up' },
-            sessionDuration: { value: 5.2, trend: 'down' },
-            bounceRate: { value: 3.1, trend: 'up' },
-          },
-        };
-
-        setAnalyticsData(mockData);
+        // Generate empty data structure for the date range
+        const emptyData = generateEmptyData(range);
+        setAnalyticsData(emptyData);
       }
     } catch (error: any) {
       console.error('Failed to fetch analytics data:', error);
@@ -174,7 +175,12 @@ const WebAnalytics: React.FC = () => {
               <FontAwesomeIcon icon={faChartLine} />
               Web Analytics
             </h2>
-            <p>Track your website performance and visitor insights</p>
+            <p>
+              {analyticsData.totalPageViews > 0 
+                ? 'Track your website performance and visitor insights'
+                : 'Analytics will show data once visitors start browsing your site'
+              }
+            </p>
           </div>
           <div className="date-range-selector">
             <select
@@ -255,19 +261,26 @@ const WebAnalytics: React.FC = () => {
           <div className="analytics-section">
             <h3>Top Pages</h3>
             <div className="top-pages-list">
-              {analyticsData.topPages.map((page, index) => (
-                <div key={page.path} className="page-item">
-                  <div className="page-rank">{index + 1}</div>
-                  <div className="page-info">
-                    <div className="page-title">{page.title}</div>
-                    <div className="page-path">{page.path}</div>
+              {analyticsData.topPages.length > 0 ? (
+                analyticsData.topPages.map((page, index) => (
+                  <div key={page.path} className="page-item">
+                    <div className="page-rank">{index + 1}</div>
+                    <div className="page-info">
+                      <div className="page-title">{page.title}</div>
+                      <div className="page-path">{page.path}</div>
+                    </div>
+                    <div className="page-views">
+                      <div className="views-count">{formatNumber(page.views)}</div>
+                      <div className="views-label">views</div>
+                    </div>
                   </div>
-                  <div className="page-views">
-                    <div className="views-count">{formatNumber(page.views)}</div>
-                    <div className="views-label">views</div>
-                  </div>
+                ))
+              ) : (
+                <div className="empty-state">
+                  <p>No page data available yet</p>
+                  <small>Data will appear once visitors start browsing your site</small>
                 </div>
-              ))}
+              )}
             </div>
           </div>
 
@@ -275,23 +288,30 @@ const WebAnalytics: React.FC = () => {
           <div className="analytics-section">
             <h3>Traffic Sources</h3>
             <div className="traffic-sources">
-              {analyticsData.trafficSources.map((source) => (
-                <div key={source.source} className="source-item">
-                  <div className="source-info">
-                    <div className="source-name">{source.source}</div>
-                    <div className="source-visitors">{formatNumber(source.visitors)} visitors</div>
-                  </div>
-                  <div className="source-percentage">
-                    <div className="percentage-bar">
-                      <div
-                        className="percentage-fill"
-                        style={{ width: `${source.percentage}%` }}
-                      ></div>
+              {analyticsData.trafficSources.length > 0 ? (
+                analyticsData.trafficSources.map((source) => (
+                  <div key={source.source} className="source-item">
+                    <div className="source-info">
+                      <div className="source-name">{source.source}</div>
+                      <div className="source-visitors">{formatNumber(source.visitors)} visitors</div>
                     </div>
-                    <span className="percentage-text">{source.percentage}%</span>
+                    <div className="source-percentage">
+                      <div className="percentage-bar">
+                        <div
+                          className="percentage-fill"
+                          style={{ width: `${source.percentage}%` }}
+                        ></div>
+                      </div>
+                      <span className="percentage-text">{source.percentage}%</span>
+                    </div>
                   </div>
+                ))
+              ) : (
+                <div className="empty-state">
+                  <p>No traffic source data available yet</p>
+                  <small>Data will appear once visitors start arriving from different sources</small>
                 </div>
-              ))}
+              )}
             </div>
           </div>
         </div>
@@ -301,38 +321,57 @@ const WebAnalytics: React.FC = () => {
           <h3>
             <FontAwesomeIcon icon={faCalendarAlt} />
             Daily Statistics
+            {analyticsData.dailyStats.length > 30 && (
+              <small style={{ fontSize: '0.75rem', fontWeight: 'normal', color: '#718096', marginLeft: '0.5rem' }}>
+                (scroll to see all data)
+              </small>
+            )}
           </h3>
           <div className="daily-stats-chart">
-            <div className="chart-container">
-              {analyticsData.dailyStats.map((stat, index) => {
-                const maxViews = Math.max(...analyticsData.dailyStats.map(s => s.views));
-                const height = (stat.views / maxViews) * 100;
-                
-                return (
-                  <div key={stat.date} className="chart-bar">
-                    <div className="bar-container">
-                      <div
-                        className="bar-fill"
-                        style={{ height: `${height}%` }}
-                        title={`${stat.views} views, ${stat.visitors} visitors`}
-                      ></div>
-                    </div>
-                    <div className="bar-label">
-                      {new Date(stat.date).toLocaleDateString('en-US', { 
-                        month: 'short', 
-                        day: 'numeric' 
-                      })}
-                    </div>
+            {analyticsData.totalPageViews > 0 ? (
+              <>
+                <div 
+                  className="chart-container"
+                  style={{
+                    minWidth: `${analyticsData.dailyStats.length * 45}px`
+                  }}
+                >
+                  {analyticsData.dailyStats.map((stat, index) => {
+                    const maxViews = Math.max(...analyticsData.dailyStats.map(s => s.views));
+                    const height = maxViews > 0 ? (stat.views / maxViews) * 100 : 0;
+                    
+                    return (
+                      <div key={stat.date} className="chart-bar">
+                        <div className="bar-container">
+                          <div
+                            className="bar-fill"
+                            style={{ height: `${height}%` }}
+                            title={`${stat.views} views, ${stat.visitors} visitors`}
+                          ></div>
+                        </div>
+                        <div className="bar-label">
+                          {new Date(stat.date).toLocaleDateString('en-US', { 
+                            month: 'short', 
+                            day: 'numeric' 
+                          })}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className="chart-legend">
+                  <div className="legend-item">
+                    <div className="legend-color views"></div>
+                    <span>Page Views</span>
                   </div>
-                );
-              })}
-            </div>
-            <div className="chart-legend">
-              <div className="legend-item">
-                <div className="legend-color views"></div>
-                <span>Page Views</span>
+                </div>
+              </>
+            ) : (
+              <div className="empty-state">
+                <p>No daily statistics available yet</p>
+                <small>Chart will show data once visitors start browsing your site</small>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>

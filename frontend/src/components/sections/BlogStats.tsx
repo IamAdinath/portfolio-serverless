@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
@@ -50,13 +50,7 @@ const BlogStats: React.FC = () => {
 
   usePageTitle(stats ? `Stats - ${stats.title}` : 'Blog Stats');
 
-  useEffect(() => {
-    if (blogId) {
-      fetchStats();
-    }
-  }, [blogId]);
-
-  const fetchStats = async () => {
+  const fetchStats = useCallback(async () => {
     if (!blogId) return;
     
     try {
@@ -76,7 +70,13 @@ const BlogStats: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [blogId, addToast, navigate]);
+
+  useEffect(() => {
+    if (blogId) {
+      fetchStats();
+    }
+  }, [blogId, fetchStats]);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
