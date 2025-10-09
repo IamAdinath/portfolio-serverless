@@ -118,7 +118,7 @@ const WebAnalytics: React.FC = () => {
 
   useEffect(() => {
     fetchAnalyticsData(dateRange);
-  }, [dateRange]);
+  }, [dateRange, addToast]);
 
   const getTrendIcon = (trend: 'up' | 'down' | 'neutral') => {
     switch (trend) {

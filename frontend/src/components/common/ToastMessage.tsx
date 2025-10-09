@@ -21,13 +21,27 @@ export const ToastMessage: React.FC<ToastMessageProps> = ({ toast, onDismiss }) 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    // Clear any timers when the component unmounts
+    // Auto-dismiss toast after 5 seconds (except for error toasts)
+    if (toast.type !== 'error') {
+      const timer = timerRef.current;
+      timerRef.current = setTimeout(() => {
+        onDismiss();
+      }, 5000);
+      
+      // Clear any existing timer
+      if (timer) {
+        clearTimeout(timer);
+      }
+    }
+
+    // Clear timer when component unmounts
     return () => {
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
+      const timer = timerRef.current;
+      if (timer) {
+        clearTimeout(timer);
       }
     };
-  }, []);
+  }, [toast.type, onDismiss]);
 
   return (
     <div className={`toast-message ${className}`}>
