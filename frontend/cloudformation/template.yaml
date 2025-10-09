@@ -150,17 +150,34 @@ Resources:
         RemoveHeadersConfig:
           Items:
             - Header: server
+            - Header: x-powered-by
+        CustomHeadersConfig:
+          Items:
+            - Header: Permissions-Policy
+              Value: "geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), speaker=(), vibrate=(), fullscreen=(self), sync-xhr=()"
+              Override: true
+            - Header: Cross-Origin-Embedder-Policy
+              Value: "require-corp"
+              Override: true
+            - Header: Cross-Origin-Opener-Policy
+              Value: "same-origin"
+              Override: true
+            - Header: Cross-Origin-Resource-Policy
+              Value: "same-origin"
+              Override: true
         ServerTimingHeadersConfig:
           Enabled: true
           SamplingRate: 50
         SecurityHeadersConfig:
           StrictTransportSecurity:
             AccessControlMaxAgeSec: 31536000
+            IncludeSubdomains: true
+            Preload: true
             Override: true
           ContentTypeOptions:
             Override: true
           FrameOptions:
-            FrameOption: SAMEORIGIN
+            FrameOption: DENY
             Override: true
           ReferrerPolicy:
             Override: true
@@ -168,8 +185,9 @@ Resources:
           XSSProtection:
             Override: true
             Protection: true
+            ModeBlock: true
           ContentSecurityPolicy:
-            ContentSecurityPolicy: !Sub "img-src 'self'; script-src ${Hostname} 'sha256-UR0iHsZVfsKqSr7yAVEyYw7qoSY2X0JnEIXNLstrEwk='; style-src 'self' 'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU='; object-src 'self';"
+            ContentSecurityPolicy: !Sub "default-src 'self'; img-src 'self' data: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://fonts.googleapis.com https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; connect-src 'self' https://*.amazonaws.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests;"
             Override: true
 
 

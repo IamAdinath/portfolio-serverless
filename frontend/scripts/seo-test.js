@@ -7,7 +7,6 @@
 
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
 
 console.log('🔍 Starting Local SEO Validation...\n');
 
@@ -193,7 +192,6 @@ if (fs.existsSync(staticDir)) {
   }
   
   // Check for compressed HTML files
-  const htmlFiles = fs.readdirSync(buildDir).filter(file => file.endsWith('.html'));
   const gzippedHtml = fs.readdirSync(buildDir).filter(file => file.endsWith('.html.gz'));
   const brotliHtml = fs.readdirSync(buildDir).filter(file => file.endsWith('.html.br'));
   
