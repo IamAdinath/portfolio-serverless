@@ -1,6 +1,7 @@
 {
-  "short_name": "React App",
-  "name": "Adinath Gore's Portfolio",
+  "short_name": "Adinath Gore",
+  "name": "Adinath Gore - Full Stack Developer",
+  "description": "Portfolio of Adinath Gore, Full Stack Developer specializing in React, Node.js, and AWS",
   "icons": [
     {
       "src": "favicon.ico",
@@ -20,6 +21,7 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#667eea",
+  "background_color": "#ffffff",
+  "categories": ["portfolio", "developer", "technology"]
 }

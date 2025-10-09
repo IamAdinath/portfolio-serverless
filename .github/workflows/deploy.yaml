@@ -72,7 +72,6 @@ jobs:
         working-directory: frontend
         run: |
           npm ci --prefer-offline --no-audit
-          npm install react-helmet-async
 
       - name: Generate SEO assets
         working-directory: frontend
@@ -179,7 +178,7 @@ jobs:
             echo "✅ Title tag found"
           else
             echo "❌ Title tag missing"
-            exit 1
+            ERRORS=$((ERRORS + 1))
           fi
           
           if grep -q 'name="description"' frontend/build/index.html; then
@@ -251,7 +250,6 @@ jobs:
         working-directory: frontend
         run: |
           npm ci --prefer-offline --no-audit
-          npm install react-helmet-async
 
       - name: Generate dynamic sitemap
         working-directory: frontend

@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import { apiRetryManager } from './utils/apiRetryManager';
 import { analyticsTracker } from './utils/analytics';
 import Header from './components/common/Header';
@@ -34,9 +35,10 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <AuthProvider>
-      <ToastProvider> 
-        <Router>
+    <HelmetProvider>
+      <AuthProvider>
+        <ToastProvider> 
+          <Router>
           <Header />
           <Routes>
             <Route path="/" element={<Portfolio />} />
@@ -67,9 +69,10 @@ const App: React.FC = () => {
             <Route path="/blog/:blogId" element={<Blog />} />
           </Routes>
           <Footer />
-        </Router>
-      </ToastProvider>
-    </AuthProvider>
+          </Router>
+        </ToastProvider>
+      </AuthProvider>
+    </HelmetProvider>
   );
 };
 

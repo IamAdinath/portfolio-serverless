@@ -1,3 +1,11 @@
-# https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
+Allow: /
+Disallow: /admin
+Disallow: /writer
+Disallow: /auth
+
+# Sitemap location
+Sitemap: https://adinathgore.com/sitemap.xml
+
+# Crawl delay
+Crawl-delay: 1

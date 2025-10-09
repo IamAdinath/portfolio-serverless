@@ -5,12 +5,30 @@ import { faLinkedin, faMedium } from '@fortawesome/free-brands-svg-icons';
 import { faMobileAndroid, faEnvelope, faAward, faCertificate, faCode, faBriefcase } from '@fortawesome/free-solid-svg-icons';
 import StickmanDownload from '../common/stickManDownload';
 import { usePageTitle } from '../common/usePageTitle';
+import SEOHead from '../common/SEOHead';
 import { CONTACT, SOCIAL_LINKS } from '../../constants';
 
 const Resume: React.FC = () => {
     usePageTitle('Resume');
     return (
-        <div className="resume-container">
+        <>
+            <SEOHead
+                title="Resume - Adinath Gore | Full Stack Developer"
+                description="Download Adinath Gore's resume. Experienced Full Stack Developer with expertise in React, Node.js, AWS, and modern web technologies. View professional experience, skills, and certifications."
+                keywords={[
+                    'Adinath Gore Resume',
+                    'Full Stack Developer Resume',
+                    'Software Engineer CV',
+                    'React Developer Resume',
+                    'Node.js Developer',
+                    'AWS Certified',
+                    'Professional Experience',
+                    'Download Resume'
+                ]}
+                url="/resume"
+                type="profile"
+            />
+            <div className="resume-container">
             {/* Header Section */}
             <header className="header-card">
                 <div className="profile-section">
@@ -282,6 +300,7 @@ const Resume: React.FC = () => {
 
             </div> {/* End Main Content Area */}
         </div>
+        </>
     );
 };
 
