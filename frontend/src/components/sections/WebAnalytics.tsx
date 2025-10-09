@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faEye,
@@ -89,7 +89,7 @@ const WebAnalytics: React.FC = () => {
   const [dateRange, setDateRange] = useState('7d');
   const { addToast } = useToast();
 
-  const fetchAnalyticsData = async (range: string) => {
+  const fetchAnalyticsData = useCallback(async (range: string) => {
     try {
       setLoading(true);
       setError(null);
@@ -114,11 +114,11 @@ const WebAnalytics: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [addToast]);
 
   useEffect(() => {
     fetchAnalyticsData(dateRange);
-  }, [dateRange, addToast]);
+  }, [dateRange, fetchAnalyticsData]);
 
   const getTrendIcon = (trend: 'up' | 'down' | 'neutral') => {
     switch (trend) {
