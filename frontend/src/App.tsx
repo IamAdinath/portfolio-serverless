@@ -11,6 +11,7 @@ import AuthPage from './components/sections/AuthPage';
 import WriterPage from './components/sections/WriterPage';
 import AdminDashboard from './components/sections/AdminDashboard';
 import BlogStats from './components/sections/BlogStats';
+import WebAnalytics from './components/sections/WebAnalytics';
 import { ToastProvider } from './components/common/ToastProvider';
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/common/ProtectedRoute';
@@ -46,6 +47,11 @@ const App: React.FC = () => {
             <Route path="/admin/stats/:blogId" element={
               <ProtectedRoute>
                 <BlogStats />
+              </ProtectedRoute>
+            } />
+            <Route path="/admin/analytics" element={
+              <ProtectedRoute>
+                <WebAnalytics />
               </ProtectedRoute>
             } />
             <Route path="/blog/:blogId" element={<Blog />} />

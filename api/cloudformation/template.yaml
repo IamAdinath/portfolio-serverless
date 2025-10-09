@@ -234,6 +234,23 @@ Resources:
       Environment:
         Variables:
           BLOGS_TABLE: !Ref BlogsTable
+
+  WebAnalyticsLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${ProjectName}-web-analytics-${Env}
+      Handler: analytics.web_analytics.lambda_handler
+      Policies:
+        - AWSLambdaBasicExecutionRole
+      Events:
+        WebAnalytics:
+          Type: Api
+          Properties:
+            RestApiId: !Ref PortfolioAPI
+            Path: /web-analytics
+            Method: GET
+            Auth:
+              Authorizer: CognitoAuth
   
   BlogUserPool:
     Type: AWS::Cognito::UserPool
