@@ -35,7 +35,7 @@ const AdminDashboard: React.FC = () => {
   const [uploadingResume, setUploadingResume] = useState(false);
   const [uploadingProfile, setUploadingProfile] = useState(false);
 
-  const { user, isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth();
   const { addToast } = useToast();
   const navigate = useNavigate();
   const { confirmationState, showConfirmation, hideConfirmation } = useConfirmation();

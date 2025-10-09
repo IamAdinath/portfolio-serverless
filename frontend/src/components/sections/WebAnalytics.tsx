@@ -330,7 +330,12 @@ const WebAnalytics: React.FC = () => {
           <div className="daily-stats-chart">
             {analyticsData.totalPageViews > 0 ? (
               <>
-                <div className="chart-container">
+                <div 
+                  className="chart-container"
+                  style={{
+                    minWidth: `${analyticsData.dailyStats.length * 45}px`
+                  }}
+                >
                   {analyticsData.dailyStats.map((stat, index) => {
                     const maxViews = Math.max(...analyticsData.dailyStats.map(s => s.views));
                     const height = maxViews > 0 ? (stat.views / maxViews) * 100 : 0;

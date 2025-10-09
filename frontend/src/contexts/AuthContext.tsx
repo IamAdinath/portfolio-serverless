@@ -1,5 +1,5 @@
 // AuthContext.tsx - Streamlined Authentication System
-import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useEffect, useState, useCallback, ReactNode } from 'react';
 import { signIn, signUp, signOut, fetchAuthSession, getCurrentUser } from 'aws-amplify/auth';
 import { requestUserConfirmation } from '../components/common/userAPI';
 import { setUserId } from '../utils/analytics';
@@ -33,12 +33,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Check if user is authenticated on app load
-  useEffect(() => {
-    checkAuthState();
-  }, []);
-
-  const checkAuthState = async () => {
+  const checkAuthState = useCallback(async () => {
     try {
       setIsLoading(true);
       const currentUser = await getCurrentUser();
@@ -64,7 +59,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
+
+  // Check if user is authenticated on app load
+  useEffect(() => {
+    checkAuthState();
+  }, [checkAuthState]);
 
   const login = async (username: string, password: string): Promise<void> => {
     try {
