@@ -6,6 +6,7 @@ import { faRocket, faCode, faUser, faBlog, faQuoteLeft, faArrowRight, faDownload
 import { faLinkedin, faGithub, faMedium } from '@fortawesome/free-brands-svg-icons';
 import { usePageTitle } from './components/common/usePageTitle';
 import ProfileImage from './components/common/ProfileImage';
+import SEOHead from './components/common/SEOHead';
 import { SOCIAL_LINKS } from './constants';
 import './Portfolio.css';
 
@@ -61,7 +62,26 @@ const Portfolio: React.FC = () => {
   ];
 
   return (
-    <div className="portfolio-main-container">
+    <>
+      <SEOHead
+        title="Adinath Gore - Full Stack Developer & Software Engineer"
+        description="Experienced Full Stack Developer specializing in React, Node.js, AWS, and modern web technologies. View my portfolio, projects, and professional experience."
+        keywords={[
+          'Adinath Gore',
+          'Full Stack Developer',
+          'Software Engineer',
+          'React Developer',
+          'Node.js Developer',
+          'AWS Developer',
+          'JavaScript',
+          'TypeScript',
+          'Portfolio',
+          'Web Development'
+        ]}
+        url="/"
+        type="profile"
+      />
+      <div className="portfolio-main-container">
       {/* Hero Section */}
       <section className="portfolio-hero-section">
         <div className="portfolio-hero-content">
@@ -213,6 +233,7 @@ const Portfolio: React.FC = () => {
         </div>
       </section>
     </div>
+    </>
   );
 };
 

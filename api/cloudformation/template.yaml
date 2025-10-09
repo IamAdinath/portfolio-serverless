@@ -498,6 +498,16 @@ Resources:
             Action: 
             - s3:GetObject
             Resource: !Sub arn:aws:s3:::${MediaBucket}/*
+          - Sid: AllowCloudFrontAccess
+            Effect: Allow
+            Principal:
+              Service: cloudfront.amazonaws.com
+            Action:
+              - s3:GetObject
+            Resource: !Sub arn:aws:s3:::${MediaBucket}/*
+            Condition:
+              StringEquals:
+                'AWS:SourceArn': !Sub 'arn:aws:cloudfront::${AWS::AccountId}:distribution/*'
   
 
 
@@ -602,6 +612,75 @@ Resources:
           MEDIA_BUCKET: !Ref MediaBucket
           ENV : !Ref Env
 
+  GenerateSitemapLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${ProjectName}-generate-sitemap-${Env}
+      Handler: seo.generate_sitemap.lambda_handler
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AmazonDynamoDBReadOnlyAccess
+        - AmazonS3FullAccess
+      Events:
+        GenerateSitemap:
+          Type: Api
+          Properties:
+            RestApiId: !Ref PortfolioAPI
+            Path: /generate-sitemap
+            Method: GET
+        ScheduledSitemapGeneration:
+          Type: Schedule
+          Properties:
+            Schedule: rate(1 day)
+            Description: "Generate sitemap daily"
+      Environment:
+        Variables:
+          BLOGS_TABLE: !Ref BlogsTable
+          MEDIA_BUCKET: !Ref MediaBucket
+          DOMAIN_NAME: !Ref DomainName
+          ENV: !Ref Env
+
+  SEOAnalyticsLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${ProjectName}-seo-analytics-${Env}
+      Handler: seo.seo_analytics.lambda_handler
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AmazonDynamoDBFullAccess
+      Events:
+        SEOAnalytics:
+          Type: Api
+          Properties:
+            RestApiId: !Ref PortfolioAPI
+            Path: /seo-analytics
+            Method: GET
+            Auth:
+              Authorizer: CognitoAuth
+      Environment:
+        Variables:
+          ANALYTICS_TABLE: !Ref AnalyticsTable
+          BLOGS_TABLE: !Ref BlogsTable
+
+  RobotsLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${ProjectName}-robots-txt-${Env}
+      Handler: seo.robots_txt.lambda_handler
+      Policies:
+        - AWSLambdaBasicExecutionRole
+      Events:
+        RobotsTxt:
+          Type: Api
+          Properties:
+            RestApiId: !Ref PortfolioAPI
+            Path: /robots.txt
+            Method: GET
+      Environment:
+        Variables:
+          DOMAIN_NAME: !Ref DomainName
+          ENV: !Ref Env
+
 Parameters:
   ProjectName:
     Default: portfolio
@@ -641,6 +720,10 @@ Parameters:
     Type: String
     Description: S3 path to resume file
     Default: public/Adinath_Gore_Resume.pdf
+  DomainName:
+    Type: String
+    Description: Domain name for the website
+    Default: adinathgore.com
 
 Outputs:
   ApiBaseUrl:

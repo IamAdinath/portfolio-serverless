@@ -33,7 +33,6 @@ import html from 'highlight.js/lib/languages/xml';
 import { Link, useSearchParams } from 'react-router-dom';
 import './WriterPage.css';
 import { CreateDraftBlogPost, UpdateBlogPost, GetBlogPostById, getPresignedUrl } from '../common/userAPI';
-import { safeApiCall } from '../../utils/apiRetryManager';
 import { useToast } from '../common/ToastProvider';
 import { usePageTitle } from '../common/usePageTitle';
 import { useAuth } from '../../contexts/AuthContext';
@@ -201,7 +200,7 @@ const WriterPage = () => {
       isMounted = false;
       clearTimeout(timeoutId);
     };
-  }, [editBlogId, editor]); // Removed addToast and other dependencies that cause loops
+  }, [editBlogId, editor, addToast, isLoadingExisting]); // Added missing dependencies
 
   // Effect to create the initial draft when a title is entered (only once)
   useEffect(() => {
@@ -234,7 +233,7 @@ const WriterPage = () => {
       };
       createDraft();
     }
-  }, [debouncedTitle, blogId, status, isBlocked, addToast]);
+  }, [debouncedTitle, blogId, status, isBlocked, addToast, editBlogId, isLoadingExisting]);
 
 
 

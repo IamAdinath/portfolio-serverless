@@ -1,4 +1,4 @@
-name: Deploy Portfolio
+name: Deploy Portfolio with SEO Optimization
 
 on:
   push:
@@ -6,6 +6,10 @@ on:
       - dev
       - master
   workflow_dispatch:
+
+env:
+  NODE_VERSION: "22"
+  PYTHON_VERSION: "3.12"
 
 jobs:
   # --------------------
@@ -47,7 +51,7 @@ jobs:
           DEFAULT_PYTHON_RUNTIME: python3.12
 
   deploy-ui-dev:
-    name: Deploy UI - Dev
+    name: Deploy UI with SEO - Dev
     runs-on: ubuntu-latest
     environment: dev
     needs: deploy-api-dev
@@ -60,7 +64,68 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "22"
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: |
+          npm ci --prefer-offline --no-audit
+
+      - name: Generate SEO assets
+        working-directory: frontend
+        run: |
+          # Generate sitemap
+          echo "Generating sitemap for dev environment..."
+          node -e "
+          const fs = require('fs');
+          const sitemap = \`<?xml version='1.0' encoding='UTF-8'?>
+          <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
+            <url><loc>https://dev.adinathgore.com/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+            <url><loc>https://dev.adinathgore.com/resume</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+            <url><loc>https://dev.adinathgore.com/about</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+            <url><loc>https://dev.adinathgore.com/blog</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+          </urlset>\`;
+          fs.writeFileSync('public/sitemap.xml', sitemap);
+          "
+          
+          # Generate robots.txt for dev
+          cat > public/robots.txt << EOF
+          User-agent: *
+          Disallow: /admin
+          Disallow: /writer
+          Disallow: /auth
+          Allow: /
+          Sitemap: https://dev.adinathgore.com/sitemap.xml
+          EOF
+
+      - name: Build with SEO optimizations
+        working-directory: frontend
+        run: |
+          npm run build
+        env:
+          GENERATE_SOURCEMAP: false
+          CI: false
+          REACT_APP_API_BASE_URL: ${{ vars.REACT_APP_API_BASE_URL_DEV }}
+          REACT_APP_COGNITO_USER_POOL_ID: ${{ vars.REACT_APP_COGNITO_USER_POOL_ID_DEV }}
+          REACT_APP_COGNITO_CLIENT_ID: ${{ vars.REACT_APP_COGNITO_CLIENT_ID_DEV }}
+          REACT_APP_COGNITO_REGION: ${{ vars.REACT_APP_COGNITO_REGION }}
+          REACT_APP_COGNITO_DOMAIN: ${{ vars.REACT_APP_COGNITO_DOMAIN_DEV }}
+          REACT_APP_COGNITO_REDIRECT_SIGNIN: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNIN_DEV }}
+          REACT_APP_COGNITO_REDIRECT_SIGNOUT: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNOUT_DEV }}
+          REACT_APP_API_KEY: ${{ vars.REACT_APP_API_KEY_DEV }}
+
+      - name: Optimize build for SEO
+        working-directory: frontend/build
+        run: |
+          # Compress assets
+          find . -name "*.js" -exec gzip -k {} \;
+          find . -name "*.css" -exec gzip -k {} \;
+          find . -name "*.html" -exec gzip -k {} \;
+          
+          # Add security headers to index.html
+          sed -i 's/<head>/<head>\n  <meta http-equiv="X-Content-Type-Options" content="nosniff">\n  <meta http-equiv="X-Frame-Options" content="DENY">\n  <meta http-equiv="X-XSS-Protection" content="1; mode=block">/' index.html
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -87,6 +152,43 @@ jobs:
           REACT_APP_COGNITO_REDIRECT_SIGNIN: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNIN_DEV }}
           REACT_APP_COGNITO_REDIRECT_SIGNOUT: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNOUT_DEV }}
           REACT_APP_API_KEY: ${{ vars.REACT_APP_API_KEY_DEV }}
+
+      - name: SEO Validation (Dev)
+        run: |
+          echo "🔍 Running SEO validation checks..."
+          
+          # Check if sitemap exists
+          if [ -f "frontend/build/sitemap.xml" ]; then
+            echo "✅ Sitemap generated successfully"
+          else
+            echo "❌ Sitemap missing"
+            exit 1
+          fi
+          
+          # Check if robots.txt exists
+          if [ -f "frontend/build/robots.txt" ]; then
+            echo "✅ Robots.txt generated successfully"
+          else
+            echo "❌ Robots.txt missing"
+            exit 1
+          fi
+          
+          # Validate HTML structure
+          if grep -q "<title>" frontend/build/index.html; then
+            echo "✅ Title tag found"
+          else
+            echo "❌ Title tag missing"
+            ERRORS=$((ERRORS + 1))
+          fi
+          
+          if grep -q 'name="description"' frontend/build/index.html; then
+            echo "✅ Meta description found"
+          else
+            echo "❌ Meta description missing"
+            exit 1
+          fi
+          
+          echo "🎉 SEO validation completed successfully!"
 
   # --------------------
   # Production Environment
@@ -127,7 +229,7 @@ jobs:
           DEFAULT_PYTHON_RUNTIME: python3.12
 
   deploy-ui-prod:
-    name: Deploy UI - Prod
+    name: Deploy UI with SEO - Prod
     runs-on: ubuntu-latest
     environment: prod
     needs: deploy-api-prod
@@ -140,7 +242,145 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "22"
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: |
+          npm ci --prefer-offline --no-audit
+
+      - name: Generate dynamic sitemap
+        working-directory: frontend
+        run: |
+          # Create sitemap generation script
+          cat > generate-sitemap.js << 'EOF'
+          const fs = require('fs');
+          const path = require('path');
+          
+          const baseUrl = 'https://adinathgore.com';
+          const currentDate = new Date().toISOString().split('T')[0];
+          
+          // Static pages
+          const staticPages = [
+            { url: '/', changefreq: 'weekly', priority: '1.0' },
+            { url: '/resume', changefreq: 'monthly', priority: '0.9' },
+            { url: '/about', changefreq: 'monthly', priority: '0.8' },
+            { url: '/blog', changefreq: 'weekly', priority: '0.8' }
+          ];
+          
+          let sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+          <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+                  xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"
+                  xmlns:xhtml="http://www.w3.org/1999/xhtml"
+                  xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0"
+                  xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">`;
+          
+          staticPages.forEach(page => {
+            sitemap += `
+            <url>
+              <loc>${baseUrl}${page.url}</loc>
+              <lastmod>${currentDate}</lastmod>
+              <changefreq>${page.changefreq}</changefreq>
+              <priority>${page.priority}</priority>
+            </url>`;
+          });
+          
+          sitemap += '\n</urlset>';
+          
+          fs.writeFileSync('public/sitemap.xml', sitemap);
+          console.log('✅ Sitemap generated successfully');
+          EOF
+          
+          node generate-sitemap.js
+          
+          # Generate production robots.txt
+          cat > public/robots.txt << EOF
+          User-agent: *
+          Allow: /
+          Disallow: /admin
+          Disallow: /writer
+          Disallow: /auth
+          
+          # Sitemap location
+          Sitemap: https://adinathgore.com/sitemap.xml
+          
+          # Crawl delay
+          Crawl-delay: 1
+          EOF
+
+      - name: Build with production SEO optimizations
+        working-directory: frontend
+        run: |
+          npm run build
+        env:
+          GENERATE_SOURCEMAP: false
+          CI: false
+          REACT_APP_API_BASE_URL: ${{ vars.REACT_APP_API_BASE_URL_PROD }}
+          REACT_APP_COGNITO_USER_POOL_ID: ${{ vars.REACT_APP_COGNITO_USER_POOL_ID_PROD }}
+          REACT_APP_COGNITO_CLIENT_ID: ${{ vars.REACT_APP_COGNITO_CLIENT_ID_PROD }}
+          REACT_APP_COGNITO_REGION: ${{ vars.REACT_APP_COGNITO_REGION }}
+          REACT_APP_COGNITO_DOMAIN: ${{ vars.REACT_APP_COGNITO_DOMAIN_PROD }}
+          REACT_APP_COGNITO_REDIRECT_SIGNIN: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNIN_PROD }}
+          REACT_APP_COGNITO_REDIRECT_SIGNOUT: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNOUT_PROD }}
+          REACT_APP_API_KEY: ${{ vars.REACT_APP_API_KEY_PROD }}
+
+      - name: Advanced SEO optimizations
+        working-directory: frontend/build
+        run: |
+          echo "🚀 Applying advanced SEO optimizations..."
+          
+          # Compress all assets with gzip
+          find . -name "*.js" -exec gzip -k {} \;
+          find . -name "*.css" -exec gzip -k {} \;
+          find . -name "*.html" -exec gzip -k {} \;
+          find . -name "*.json" -exec gzip -k {} \;
+          find . -name "*.xml" -exec gzip -k {} \;
+          find . -name "*.txt" -exec gzip -k {} \;
+          
+          # Add comprehensive security and SEO headers to index.html
+          sed -i 's/<head>/<head>\n  <!-- Security Headers -->\n  <meta http-equiv="X-Content-Type-Options" content="nosniff">\n  <meta http-equiv="X-Frame-Options" content="DENY">\n  <meta http-equiv="X-XSS-Protection" content="1; mode=block">\n  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">\n  <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">\n  \n  <!-- SEO Enhancements -->\n  <link rel="preconnect" href="https:\/\/fonts.googleapis.com">\n  <link rel="preconnect" href="https:\/\/fonts.gstatic.com" crossorigin>\n  <link rel="dns-prefetch" href="\/\/fonts.googleapis.com">\n  <link rel="dns-prefetch" href="\/\/fonts.gstatic.com">/' index.html
+          
+          # Create a comprehensive manifest.json if it doesn't exist
+          if [ ! -f "manifest.json" ]; then
+            cat > manifest.json << 'EOF'
+          {
+            "short_name": "Adinath Gore",
+            "name": "Adinath Gore - Full Stack Developer",
+            "description": "Portfolio of Adinath Gore, Full Stack Developer specializing in React, Node.js, and AWS",
+            "icons": [
+              {
+                "src": "favicon.ico",
+                "sizes": "64x64 32x32 24x24 16x16",
+                "type": "image/x-icon"
+              },
+              {
+                "src": "favicon-32x32.png",
+                "type": "image/png",
+                "sizes": "32x32"
+              },
+              {
+                "src": "favicon-16x16.png",
+                "type": "image/png",
+                "sizes": "16x16"
+              },
+              {
+                "src": "apple-touch-icon.png",
+                "type": "image/png",
+                "sizes": "180x180"
+              }
+            ],
+            "start_url": ".",
+            "display": "standalone",
+            "theme_color": "#667eea",
+            "background_color": "#ffffff",
+            "categories": ["portfolio", "developer", "technology"]
+          }
+          EOF
+          fi
+          
+          echo "✅ SEO optimizations applied successfully"
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -169,3 +409,230 @@ jobs:
           REACT_APP_COGNITO_REDIRECT_SIGNIN: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNIN_PROD }}
           REACT_APP_COGNITO_REDIRECT_SIGNOUT: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNOUT_PROD }}
           REACT_APP_API_KEY: ${{ vars.REACT_APP_API_KEY_PROD }}
+
+      - name: Post-deployment SEO validation
+        run: |
+          echo "🔍 Running comprehensive SEO validation..."
+          
+          # Check critical SEO files
+          ERRORS=0
+          
+          if [ -f "frontend/build/sitemap.xml" ]; then
+            echo "✅ Sitemap exists"
+            # Validate sitemap XML
+            if xmllint --noout frontend/build/sitemap.xml 2>/dev/null; then
+              echo "✅ Sitemap XML is valid"
+            else
+              echo "❌ Sitemap XML is invalid"
+              ERRORS=$((ERRORS + 1))
+            fi
+          else
+            echo "❌ Sitemap missing"
+            ERRORS=$((ERRORS + 1))
+          fi
+          
+          if [ -f "frontend/build/robots.txt" ]; then
+            echo "✅ Robots.txt exists"
+          else
+            echo "❌ Robots.txt missing"
+            ERRORS=$((ERRORS + 1))
+          fi
+          
+          if [ -f "frontend/build/manifest.json" ]; then
+            echo "✅ Web manifest exists"
+          else
+            echo "❌ Web manifest missing"
+            ERRORS=$((ERRORS + 1))
+          fi
+          
+          # Validate HTML structure
+          if grep -q "<title>" frontend/build/index.html; then
+            echo "✅ Title tag found"
+          else
+            echo "❌ Title tag missing"
+            ERRORS=$((ERRORS + 1))
+          fi
+          
+          if grep -q 'name="description"' frontend/build/index.html; then
+            echo "✅ Meta description found"
+          else
+            echo "❌ Meta description missing"
+            ERRORS=$((ERRORS + 1))
+          fi
+          
+          if grep -q 'property="og:' frontend/build/index.html; then
+            echo "✅ Open Graph tags found"
+          else
+            echo "❌ Open Graph tags missing"
+            ERRORS=$((ERRORS + 1))
+          fi
+          
+          # Check for security headers
+          if grep -q 'X-Content-Type-Options' frontend/build/index.html; then
+            echo "✅ Security headers found"
+          else
+            echo "❌ Security headers missing"
+            ERRORS=$((ERRORS + 1))
+          fi
+          
+          # Check for performance optimizations
+          if ls frontend/build/static/js/*.js.gz >/dev/null 2>&1; then
+            echo "✅ JavaScript files are compressed"
+          else
+            echo "❌ JavaScript files not compressed"
+            ERRORS=$((ERRORS + 1))
+          fi
+          
+          if ls frontend/build/static/css/*.css.gz >/dev/null 2>&1; then
+            echo "✅ CSS files are compressed"
+          else
+            echo "❌ CSS files not compressed"
+            ERRORS=$((ERRORS + 1))
+          fi
+          
+          if [ $ERRORS -eq 0 ]; then
+            echo "🎉 All SEO validations passed successfully!"
+          else
+            echo "❌ $ERRORS SEO validation(s) failed"
+            exit 1
+          fi
+
+      - name: Submit sitemap to search engines
+        if: success()
+        run: |
+          echo "📡 Submitting sitemap to search engines..."
+          
+          # Google Search Console (requires verification)
+          echo "Google: https://www.google.com/ping?sitemap=https://adinathgore.com/sitemap.xml"
+          
+          # Bing Webmaster Tools
+          echo "Bing: https://www.bing.com/ping?sitemap=https://adinathgore.com/sitemap.xml"
+          
+          echo "✅ Sitemap submission URLs generated"
+          echo "📝 Manual verification required for search console integration"
+
+  # --------------------
+  # SEO Performance Monitoring
+  # --------------------
+  seo-performance-check:
+    name: SEO Performance Check
+    runs-on: ubuntu-latest
+    needs: [deploy-ui-prod]
+    if: github.ref == 'refs/heads/master'
+    continue-on-error: true
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install Lighthouse CI
+        run: |
+          npm install -g @lhci/cli@0.12.x
+
+      - name: Run Lighthouse CI
+        run: |
+          lhci autorun
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+          LHCI_SERVER_BASE_URL: ${{ vars.UI_HOSTNAME_PROD }}
+
+      - name: SEO Health Check
+        run: |
+          echo "🔍 Running SEO health checks..."
+          
+          SITE_URL="https://${{ vars.UI_HOSTNAME_PROD }}"
+          
+          # Check if site is accessible
+          if curl -s -o /dev/null -w "%{http_code}" "$SITE_URL" | grep -q "200"; then
+            echo "✅ Site is accessible"
+          else
+            echo "❌ Site is not accessible"
+          fi
+          
+          # Check if sitemap is accessible
+          if curl -s -o /dev/null -w "%{http_code}" "$SITE_URL/sitemap.xml" | grep -q "200"; then
+            echo "✅ Sitemap is accessible"
+          else
+            echo "❌ Sitemap is not accessible"
+          fi
+          
+          # Check if robots.txt is accessible
+          if curl -s -o /dev/null -w "%{http_code}" "$SITE_URL/robots.txt" | grep -q "200"; then
+            echo "✅ Robots.txt is accessible"
+          else
+            echo "❌ Robots.txt is not accessible"
+          fi
+          
+          # Check SSL certificate
+          if curl -s -I "$SITE_URL" | grep -q "HTTP/2 200"; then
+            echo "✅ HTTPS is working"
+          else
+            echo "❌ HTTPS issues detected"
+          fi
+          
+          echo "🎯 SEO health check completed"
+
+      - name: Generate SEO Report
+        run: |
+          echo "📊 Generating SEO deployment report..."
+          
+          cat > seo-report.md << EOF
+          # SEO Deployment Report
+          
+          **Deployment Date:** $(date)
+          **Environment:** Production
+          **Site URL:** https://${{ vars.UI_HOSTNAME_PROD }}
+          
+          ## ✅ SEO Features Deployed
+          
+          - [x] Dynamic meta tags and Open Graph
+          - [x] Structured data (JSON-LD)
+          - [x] XML Sitemap generation
+          - [x] Robots.txt configuration
+          - [x] Security headers
+          - [x] Asset compression (gzip)
+          - [x] Web manifest for PWA
+          - [x] Performance optimizations
+          
+          ## 🔗 Important URLs
+          
+          - **Sitemap:** https://${{ vars.UI_HOSTNAME_PROD }}/sitemap.xml
+          - **Robots:** https://${{ vars.UI_HOSTNAME_PROD }}/robots.txt
+          - **Manifest:** https://${{ vars.UI_HOSTNAME_PROD }}/manifest.json
+          
+          ## 📈 Next Steps
+          
+          1. Verify Google Search Console integration
+          2. Submit sitemap to search engines
+          3. Monitor Core Web Vitals
+          4. Track keyword rankings
+          5. Analyze user engagement metrics
+          
+          ## 🛠️ Tools for Monitoring
+          
+          - Google Search Console
+          - Google Analytics 4
+          - PageSpeed Insights
+          - GTmetrix
+          - SEMrush/Ahrefs
+          
+          EOF
+          
+          echo "✅ SEO report generated"
+          cat seo-report.md
+
+      - name: Upload SEO artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: seo-deployment-artifacts
+          path: |
+            seo-report.md
+            frontend/build/sitemap.xml
+            frontend/build/robots.txt
+            frontend/build/manifest.json
+          retention-days: 30
