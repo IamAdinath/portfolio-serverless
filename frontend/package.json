@@ -40,7 +40,11 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "seo:test": "node scripts/seo-test.js",
+    "seo:validate": "npm run build && npm run seo:test",
+    "lighthouse": "lhci autorun",
+    "serve": "npx serve -s build -l 3000"
   },
   "eslintConfig": {
     "extends": [
