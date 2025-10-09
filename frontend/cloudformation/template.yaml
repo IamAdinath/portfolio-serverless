@@ -91,11 +91,36 @@ Resources:
             QueryString: false
             Cookies:
               Forward: none
-          ViewerProtocolPolicy: allow-all
+          ViewerProtocolPolicy: redirect-to-https
+          Compress: true
+          ResponseHeadersPolicyId: !Ref PortfolioHeaderPolicy
+          CachePolicyId: !Ref PortfolioCachePolicy
         PriceClass: PriceClass_200
         ViewerCertificate:
           AcmCertificateArn: !Sub arn:aws:acm:${AWS::Region}:${AWS::AccountId}:certificate/${SSLCertArn}
           SslSupportMethod: "sni-only"
+
+  PortfolioCachePolicy:
+    Type: AWS::CloudFront::CachePolicy
+    Properties:
+      CachePolicyConfig:
+        Name: !Sub ${AWS::StackName}-cache-policy
+        Comment: !Sub "Cache policy for ${ProjectName} Production with compression optimization"
+        DefaultTTL: 86400  # 1 day
+        MaxTTL: 31536000   # 1 year
+        MinTTL: 0
+        ParametersInCacheKeyAndForwardedToOrigin:
+          EnableAcceptEncodingGzip: true
+          EnableAcceptEncodingBrotli: true
+          QueryStringsConfig:
+            QueryStringBehavior: none
+          HeadersConfig:
+            HeaderBehavior: whitelist
+            Headers:
+              - Accept-Encoding
+              - CloudFront-Viewer-Country
+          CookiesConfig:
+            CookieBehavior: none
 
   PortfolioHeaderPolicy:
     Type: AWS::CloudFront::ResponseHeadersPolicy

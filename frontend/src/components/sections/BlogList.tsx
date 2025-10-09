@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import BlogCard from '../common/BlogCard';
 import './BlogList.css';
 import { usePageTitle } from '../common/usePageTitle';
+import SEOHead from '../common/SEOHead';
 import { GetAllPublishedBlogs } from '../common/userAPI';
 import { Blog, DateFormatOptions } from '../../types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -89,7 +90,25 @@ const BlogList: React.FC = () => {
   const uniqueAuthors = new Set(blogs.map(blog => blog.author)).size;
 
   return (
-    <div className="bloglist-main-container">
+    <>
+      <SEOHead
+        title="Blog Posts - Adinath Gore | Tech Insights & Tutorials"
+        description="Explore Adinath Gore's blog featuring insights on web development, cloud architecture, React, Node.js, AWS, and modern technology trends. Learn from practical tutorials and industry experiences."
+        keywords={[
+          'Adinath Gore Blog',
+          'Web Development Blog',
+          'React Tutorials',
+          'Node.js Articles',
+          'AWS Cloud Blog',
+          'Software Engineering',
+          'Tech Insights',
+          'Programming Tutorials',
+          'Full Stack Development'
+        ]}
+        url="/blogs"
+        type="website"
+      />
+      <div className="bloglist-main-container">
       {/* Header Section */}
       <div className="bloglist-header">
         <h1>
@@ -148,6 +167,7 @@ const BlogList: React.FC = () => {
         )}
       </div>
     </div>
+    </>
   );
 };
 

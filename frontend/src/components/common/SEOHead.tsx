@@ -106,6 +106,10 @@ const SEOHead: React.FC<SEOHeadProps> = ({
       <meta httpEquiv="X-Frame-Options" content="DENY" />
       <meta httpEquiv="X-XSS-Protection" content="1; mode=block" />
       <meta httpEquiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
+      <meta httpEquiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload" />
+      
+      {/* HTTPS Enforcement */}
+      <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests" />
 
       {/* Performance Hints */}
       <link rel="preconnect" href="https://fonts.googleapis.com" />
