@@ -164,30 +164,44 @@ if (fs.existsSync(staticDir)) {
   const jsDir = path.join(staticDir, 'js');
   const cssDir = path.join(staticDir, 'css');
   
-  // Check for gzipped JS files
+  // Check for compressed JS files (gzip and brotli)
   if (fs.existsSync(jsDir)) {
     const jsFiles = fs.readdirSync(jsDir);
     const gzippedJs = jsFiles.filter(file => file.endsWith('.gz'));
+    const brotliJs = jsFiles.filter(file => file.endsWith('.br'));
     
-    if (gzippedJs.length > 0) {
-      console.log(`✅ Found ${gzippedJs.length} compressed JS files`);
+    if (gzippedJs.length > 0 || brotliJs.length > 0) {
+      console.log(`✅ Found ${gzippedJs.length} gzipped and ${brotliJs.length} brotli compressed JS files`);
     } else {
       warnings.push('No compressed JS files found');
       console.log('⚠️ No compressed JS files found');
     }
   }
   
-  // Check for gzipped CSS files
+  // Check for compressed CSS files (gzip and brotli)
   if (fs.existsSync(cssDir)) {
     const cssFiles = fs.readdirSync(cssDir);
     const gzippedCss = cssFiles.filter(file => file.endsWith('.gz'));
+    const brotliCss = cssFiles.filter(file => file.endsWith('.br'));
     
-    if (gzippedCss.length > 0) {
-      console.log(`✅ Found ${gzippedCss.length} compressed CSS files`);
+    if (gzippedCss.length > 0 || brotliCss.length > 0) {
+      console.log(`✅ Found ${gzippedCss.length} gzipped and ${brotliCss.length} brotli compressed CSS files`);
     } else {
       warnings.push('No compressed CSS files found');
       console.log('⚠️ No compressed CSS files found');
     }
+  }
+  
+  // Check for compressed HTML files
+  const htmlFiles = fs.readdirSync(buildDir).filter(file => file.endsWith('.html'));
+  const gzippedHtml = fs.readdirSync(buildDir).filter(file => file.endsWith('.html.gz'));
+  const brotliHtml = fs.readdirSync(buildDir).filter(file => file.endsWith('.html.br'));
+  
+  if (gzippedHtml.length > 0 || brotliHtml.length > 0) {
+    console.log(`✅ Found ${gzippedHtml.length} gzipped and ${brotliHtml.length} brotli compressed HTML files`);
+  } else {
+    warnings.push('No compressed HTML files found');
+    console.log('⚠️ No compressed HTML files found');
   }
 }
 

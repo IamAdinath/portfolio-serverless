@@ -17,6 +17,7 @@ import WebAnalytics from './components/sections/WebAnalytics';
 import { ToastProvider } from './components/common/ToastProvider';
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/common/ProtectedRoute';
+import SecurityConfig from './components/common/SecurityConfig';
 import Blog from './components/sections/Blog';
 
 const App: React.FC = () => {
@@ -36,6 +37,7 @@ const App: React.FC = () => {
 
   return (
     <HelmetProvider>
+      <SecurityConfig />
       <AuthProvider>
         <ToastProvider> 
           <Router>

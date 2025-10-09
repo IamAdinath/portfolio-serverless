@@ -71,6 +71,16 @@ jobs:
       - name: Install dependencies
         working-directory: frontend
         run: |
+          # Verify package.json exists
+          if [ ! -f "package.json" ]; then
+            echo "❌ package.json not found in frontend directory"
+            echo "📁 Contents of frontend directory:"
+            ls -la
+            exit 1
+          fi
+          echo "✅ package.json found"
+          
+          # Install dependencies
           npm ci --prefer-offline --no-audit
 
       - name: Generate SEO assets
@@ -116,13 +126,64 @@ jobs:
           REACT_APP_COGNITO_REDIRECT_SIGNOUT: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNOUT_DEV }}
           REACT_APP_API_KEY: ${{ vars.REACT_APP_API_KEY_DEV }}
 
-      - name: Optimize build for SEO
+      - name: Optimize build for SEO and Compression
         working-directory: frontend/build
         run: |
-          # Compress assets
-          find . -name "*.js" -exec gzip -k {} \;
-          find . -name "*.css" -exec gzip -k {} \;
-          find . -name "*.html" -exec gzip -k {} \;
+          echo "🗜️ Compressing assets with gzip and brotli..."
+          
+          # Install brotli compression tool
+          sudo apt-get update && sudo apt-get install -y brotli
+          
+          # Compress JavaScript files
+          find . -name "*.js" -type f -exec sh -c '
+            echo "Compressing JS: $1"
+            gzip -k -9 "$1"
+            brotli -k -q 11 "$1"
+          ' _ {} \;
+          
+          # Compress CSS files
+          find . -name "*.css" -type f -exec sh -c '
+            echo "Compressing CSS: $1"
+            gzip -k -9 "$1"
+            brotli -k -q 11 "$1"
+          ' _ {} \;
+          
+          # Compress HTML files
+          find . -name "*.html" -type f -exec sh -c '
+            echo "Compressing HTML: $1"
+            gzip -k -9 "$1"
+            brotli -k -q 11 "$1"
+          ' _ {} \;
+          
+          # Compress JSON files (manifest, etc.)
+          find . -name "*.json" -type f -exec sh -c '
+            echo "Compressing JSON: $1"
+            gzip -k -9 "$1"
+            brotli -k -q 11 "$1"
+          ' _ {} \;
+          
+          # Compress XML files (sitemap)
+          find . -name "*.xml" -type f -exec sh -c '
+            echo "Compressing XML: $1"
+            gzip -k -9 "$1"
+            brotli -k -q 11 "$1"
+          ' _ {} \;
+          
+          # Compress TXT files (robots.txt)
+          find . -name "*.txt" -type f -exec sh -c '
+            echo "Compressing TXT: $1"
+            gzip -k -9 "$1"
+            brotli -k -q 11 "$1"
+          ' _ {} \;
+          
+          # Show compression results
+          echo "📊 Compression Results:"
+          echo "Original files:"
+          find . -name "*.js" -o -name "*.css" -o -name "*.html" | head -5 | xargs ls -lh
+          echo "Gzipped files:"
+          find . -name "*.gz" | head -5 | xargs ls -lh
+          echo "Brotli files:"
+          find . -name "*.br" | head -5 | xargs ls -lh
           
           # Add security headers to index.html
           sed -i 's/<head>/<head>\n  <meta http-equiv="X-Content-Type-Options" content="nosniff">\n  <meta http-equiv="X-Frame-Options" content="DENY">\n  <meta http-equiv="X-XSS-Protection" content="1; mode=block">/' index.html
@@ -249,6 +310,16 @@ jobs:
       - name: Install dependencies
         working-directory: frontend
         run: |
+          # Verify package.json exists
+          if [ ! -f "package.json" ]; then
+            echo "❌ package.json not found in frontend directory"
+            echo "📁 Contents of frontend directory:"
+            ls -la
+            exit 1
+          fi
+          echo "✅ package.json found"
+          
+          # Install dependencies
           npm ci --prefer-offline --no-audit
 
       - name: Generate dynamic sitemap
@@ -326,18 +397,56 @@ jobs:
           REACT_APP_COGNITO_REDIRECT_SIGNOUT: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNOUT_PROD }}
           REACT_APP_API_KEY: ${{ vars.REACT_APP_API_KEY_PROD }}
 
-      - name: Advanced SEO optimizations
+      - name: Advanced SEO optimizations and Compression
         working-directory: frontend/build
         run: |
-          echo "🚀 Applying advanced SEO optimizations..."
+          echo "🚀 Applying advanced SEO optimizations and compression..."
           
-          # Compress all assets with gzip
-          find . -name "*.js" -exec gzip -k {} \;
-          find . -name "*.css" -exec gzip -k {} \;
-          find . -name "*.html" -exec gzip -k {} \;
-          find . -name "*.json" -exec gzip -k {} \;
-          find . -name "*.xml" -exec gzip -k {} \;
-          find . -name "*.txt" -exec gzip -k {} \;
+          # Install brotli compression tool
+          sudo apt-get update && sudo apt-get install -y brotli
+          
+          # Advanced compression with both gzip and brotli
+          echo "🗜️ Compressing with gzip (level 9) and brotli (level 11)..."
+          
+          # Compress JavaScript files
+          find . -name "*.js" -type f -exec sh -c '
+            gzip -k -9 "$1"
+            brotli -k -q 11 "$1"
+          ' _ {} \;
+          
+          # Compress CSS files
+          find . -name "*.css" -type f -exec sh -c '
+            gzip -k -9 "$1"
+            brotli -k -q 11 "$1"
+          ' _ {} \;
+          
+          # Compress HTML files
+          find . -name "*.html" -type f -exec sh -c '
+            gzip -k -9 "$1"
+            brotli -k -q 11 "$1"
+          ' _ {} \;
+          
+          # Compress other assets
+          find . -name "*.json" -o -name "*.xml" -o -name "*.txt" -type f -exec sh -c '
+            gzip -k -9 "$1"
+            brotli -k -q 11 "$1"
+          ' _ {} \;
+          
+          # Calculate and display compression ratios
+          echo "📊 Compression Statistics:"
+          for ext in js css html json xml txt; do
+            if find . -name "*.$ext" -type f | head -1 | read file; then
+              original_size=$(find . -name "*.$ext" -type f -exec stat -c%s {} \; | awk '{sum+=$1} END {print sum}')
+              gzip_size=$(find . -name "*.$ext.gz" -type f -exec stat -c%s {} \; | awk '{sum+=$1} END {print sum}')
+              brotli_size=$(find . -name "*.$ext.br" -type f -exec stat -c%s {} \; | awk '{sum+=$1} END {print sum}')
+              
+              if [ "$original_size" -gt 0 ]; then
+                gzip_ratio=$(echo "scale=1; (1 - $gzip_size / $original_size) * 100" | bc -l 2>/dev/null || echo "N/A")
+                brotli_ratio=$(echo "scale=1; (1 - $brotli_size / $original_size) * 100" | bc -l 2>/dev/null || echo "N/A")
+                echo "$ext files: Original ${original_size}B, Gzip ${gzip_size}B (${gzip_ratio}% reduction), Brotli ${brotli_size}B (${brotli_ratio}% reduction)"
+              fi
+            fi
+          done
           
           # Add comprehensive security and SEO headers to index.html
           sed -i 's/<head>/<head>\n  <!-- Security Headers -->\n  <meta http-equiv="X-Content-Type-Options" content="nosniff">\n  <meta http-equiv="X-Frame-Options" content="DENY">\n  <meta http-equiv="X-XSS-Protection" content="1; mode=block">\n  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">\n  <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">\n  \n  <!-- SEO Enhancements -->\n  <link rel="preconnect" href="https:\/\/fonts.googleapis.com">\n  <link rel="preconnect" href="https:\/\/fonts.gstatic.com" crossorigin>\n  <link rel="dns-prefetch" href="\/\/fonts.googleapis.com">\n  <link rel="dns-prefetch" href="\/\/fonts.gstatic.com">/' index.html
@@ -568,12 +677,40 @@ jobs:
             echo "❌ Robots.txt is not accessible"
           fi
           
-          # Check SSL certificate
-          if curl -s -I "$SITE_URL" | grep -q "HTTP/2 200"; then
+          # Check SSL certificate and HTTPS redirect
+          echo "🔒 Testing HTTPS configuration..."
+          
+          # Test HTTPS connection
+          if curl -s -I "$SITE_URL" | grep -q "HTTP/2 200\|HTTP/1.1 200"; then
             echo "✅ HTTPS is working"
           else
-            echo "❌ HTTPS issues detected"
+            echo "❌ HTTPS connection failed"
           fi
+          
+          # Test HTTP to HTTPS redirect
+          HTTP_URL=$(echo "$SITE_URL" | sed 's/https:/http:/')
+          if curl -s -I "$HTTP_URL" | grep -q "301\|302"; then
+            echo "✅ HTTP to HTTPS redirect is working"
+          else
+            echo "⚠️ HTTP to HTTPS redirect not detected"
+          fi
+          
+          # Test HSTS header
+          if curl -s -I "$SITE_URL" | grep -i "strict-transport-security"; then
+            echo "✅ HSTS header is present"
+          else
+            echo "⚠️ HSTS header not found"
+          fi
+          
+          # Test security headers
+          SECURITY_HEADERS=("x-content-type-options" "x-frame-options" "x-xss-protection")
+          for header in "${SECURITY_HEADERS[@]}"; do
+            if curl -s -I "$SITE_URL" | grep -i "$header"; then
+              echo "✅ $header header is present"
+            else
+              echo "⚠️ $header header not found"
+            fi
+          done
           
           echo "🎯 SEO health check completed"
 

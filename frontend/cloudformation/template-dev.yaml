@@ -85,7 +85,32 @@ Resources:
             Cookies:
               Forward: none
           ViewerProtocolPolicy: redirect-to-https
+          Compress: true
+          ResponseHeadersPolicyId: !Ref PortfolioHeaderPolicy
+          CachePolicyId: !Ref PortfolioCachePolicy
         PriceClass: PriceClass_100
+
+  PortfolioCachePolicy:
+    Type: AWS::CloudFront::CachePolicy
+    Properties:
+      CachePolicyConfig:
+        Name: !Sub ${AWS::StackName}-cache-policy
+        Comment: !Sub "Cache policy for ${ProjectName} Development with compression optimization"
+        DefaultTTL: 300    # 5 minutes for dev
+        MaxTTL: 86400      # 1 day for dev
+        MinTTL: 0
+        ParametersInCacheKeyAndForwardedToOrigin:
+          EnableAcceptEncodingGzip: true
+          EnableAcceptEncodingBrotli: true
+          QueryStringsConfig:
+            QueryStringBehavior: none
+          HeadersConfig:
+            HeaderBehavior: whitelist
+            Headers:
+              - Accept-Encoding
+              - CloudFront-Viewer-Country
+          CookiesConfig:
+            CookieBehavior: none
 
   PortfolioHeaderPolicy:
     Type: AWS::CloudFront::ResponseHeadersPolicy

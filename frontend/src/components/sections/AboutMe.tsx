@@ -5,13 +5,31 @@ import { faLinkedin, faGithub, faMedium, faStackOverflow } from '@fortawesome/fr
 import { faUser, faHeart, faCode, faRocket, faLightbulb, faCoffee } from '@fortawesome/free-solid-svg-icons';
 import { usePageTitle } from '../common/usePageTitle';
 import ProfileImage from '../common/ProfileImage';
+import SEOHead from '../common/SEOHead';
 import { SOCIAL_LINKS } from '../../constants';
 
 const AboutMe: React.FC = () => {
   usePageTitle('About Me');
   
   return (
-    <div className="about-container">
+    <>
+      <SEOHead
+        title="About Me - Adinath Gore | Full Stack Developer"
+        description="Learn about Adinath Gore, a passionate Full Stack Developer with 5+ years of experience in React, Node.js, AWS, and modern web technologies. Discover my journey, skills, and passion for creating innovative solutions."
+        keywords={[
+          'About Adinath Gore',
+          'Full Stack Developer Story',
+          'Software Engineer Background',
+          'React Developer Experience',
+          'Node.js Expert',
+          'AWS Professional',
+          'Web Development Journey',
+          'Programming Passion'
+        ]}
+        url="/about"
+        type="profile"
+      />
+      <div className="about-container">
       {/* Hero Section */}
       <section className="hero-card">
         <div className="hero-content">
@@ -177,6 +195,7 @@ const AboutMe: React.FC = () => {
         </section>
       </div>
     </div>
+    </>
   );
 };
 

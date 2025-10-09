@@ -215,6 +215,56 @@ const Portfolio: React.FC = () => {
       </section>
 
       {/* Connect Section */}
+      {/* Site Navigation */}
+      <section className="portfolio-navigation-section">
+        <div className="portfolio-navigation-content">
+          <h3>Explore My Work</h3>
+          <p>Discover more about my experience, projects, and insights</p>
+          <div className="portfolio-nav-grid">
+            <div className="portfolio-nav-card">
+              <h4>
+                <FontAwesomeIcon icon={faUser} />
+                About Me
+              </h4>
+              <p>Learn about my journey, skills, and passion for development</p>
+              <Link to="/about" className="portfolio-nav-link">
+                Read My Story <FontAwesomeIcon icon={faArrowRight} />
+              </Link>
+            </div>
+            <div className="portfolio-nav-card">
+              <h4>
+                <FontAwesomeIcon icon={faDownload} />
+                Resume
+              </h4>
+              <p>View my professional experience, skills, and achievements</p>
+              <Link to="/resume" className="portfolio-nav-link">
+                View Resume <FontAwesomeIcon icon={faArrowRight} />
+              </Link>
+            </div>
+            <div className="portfolio-nav-card">
+              <h4>
+                <FontAwesomeIcon icon={faBlog} />
+                Blog Posts
+              </h4>
+              <p>Read my thoughts on technology, development, and industry trends</p>
+              <Link to="/blogs" className="portfolio-nav-link">
+                Read Articles <FontAwesomeIcon icon={faArrowRight} />
+              </Link>
+            </div>
+            <div className="portfolio-nav-card">
+              <h4>
+                <FontAwesomeIcon icon={faCode} />
+                Projects
+              </h4>
+              <p>Explore my portfolio of web applications and software solutions</p>
+              <Link to="/about#projects" className="portfolio-nav-link">
+                View Projects <FontAwesomeIcon icon={faArrowRight} />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="portfolio-connect-section">
         <div className="portfolio-connect-content">
           <h3>Let's Connect</h3>
