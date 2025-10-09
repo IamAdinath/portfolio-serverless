@@ -92,6 +92,44 @@ Resources:
         - AttributeName: user_id
           KeyType: RANGE
 
+  AnalyticsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub ${ProjectName}-Analytics-${Env}
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+        - AttributeName: date
+          AttributeType: S
+        - AttributeName: timestamp
+          AttributeType: S
+        - AttributeName: page_path
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: date_timestamp_index
+          KeySchema:
+            - AttributeName: date
+              KeyType: HASH
+            - AttributeName: timestamp
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+        - IndexName: page_path_timestamp_index
+          KeySchema:
+            - AttributeName: page_path
+              KeyType: HASH
+            - AttributeName: timestamp
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+      TimeToLiveSpecification:
+        AttributeName: ttl
+        Enabled: true
+
   PortfolioAPI:
     Type: AWS::Serverless::Api
     Properties:
@@ -234,6 +272,46 @@ Resources:
       Environment:
         Variables:
           BLOGS_TABLE: !Ref BlogsTable
+
+  WebAnalyticsLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${ProjectName}-web-analytics-${Env}
+      Handler: analytics.web_analytics.lambda_handler
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AmazonDynamoDBReadOnlyAccess
+      Events:
+        WebAnalytics:
+          Type: Api
+          Properties:
+            RestApiId: !Ref PortfolioAPI
+            Path: /web-analytics
+            Method: GET
+            Auth:
+              Authorizer: CognitoAuth
+      Environment:
+        Variables:
+          ANALYTICS_TABLE: !Ref AnalyticsTable
+
+  AnalyticsTrackerLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${ProjectName}-analytics-tracker-${Env}
+      Handler: analytics.analytics_tracker.lambda_handler
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AmazonDynamoDBFullAccess
+      Events:
+        TrackAnalytics:
+          Type: Api
+          Properties:
+            RestApiId: !Ref PortfolioAPI
+            Path: /track-analytics
+            Method: POST
+      Environment:
+        Variables:
+          ANALYTICS_TABLE: !Ref AnalyticsTable
   
   BlogUserPool:
     Type: AWS::Cognito::UserPool

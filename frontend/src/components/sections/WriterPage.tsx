@@ -37,6 +37,7 @@ import { safeApiCall } from '../../utils/apiRetryManager';
 import { useToast } from '../common/ToastProvider';
 import { usePageTitle } from '../common/usePageTitle';
 import { useAuth } from '../../contexts/AuthContext';
+import { trackFormSubmit } from '../../utils/analytics';
 import { useDebounce } from '../../hooks/useDebounce'; // Assuming this hook exists
 
 // --- Tiptap Setup ---
@@ -388,6 +389,9 @@ const WriterPage = () => {
       const result = await UpdateBlogPost(blogId, blogPostPayload);
       console.log('Publish result:', result);
       addToast('success', 'Blog post published successfully!');
+      
+      // Track blog publish event
+      trackFormSubmit('blog_publish', true);
 
       // Clear the form after successful publish
       setTitle('');
@@ -401,6 +405,9 @@ const WriterPage = () => {
       console.error('Publish failed:', error);
       addToast('error', 'Failed to publish post. Please try again.');
       setStatus('saved');
+      
+      // Track failed blog publish event
+      trackFormSubmit('blog_publish', false);
     } finally {
       setIsPublishing(false);
     }

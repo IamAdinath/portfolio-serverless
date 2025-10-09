@@ -1,7 +1,8 @@
 // AuthContext.tsx - Streamlined Authentication System
-import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useEffect, useState, useCallback, ReactNode } from 'react';
 import { signIn, signUp, signOut, fetchAuthSession, getCurrentUser } from 'aws-amplify/auth';
 import { requestUserConfirmation } from '../components/common/userAPI';
+import { setUserId } from '../utils/analytics';
 
 // Types
 interface User {
@@ -32,25 +33,24 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Check if user is authenticated on app load
-  useEffect(() => {
-    checkAuthState();
-  }, []);
-
-  const checkAuthState = async () => {
+  const checkAuthState = useCallback(async () => {
     try {
       setIsLoading(true);
       const currentUser = await getCurrentUser();
       const session = await fetchAuthSession();
       
       if (currentUser && session.tokens?.idToken) {
-        setUser({
+        const userData = {
           username: currentUser.username,
           email: currentUser.signInDetails?.loginId,
-        });
+        };
+        setUser(userData);
         
         // Store token in localStorage for API calls
         localStorage.setItem('authToken', session.tokens.idToken.toString());
+        
+        // Set user ID for analytics tracking
+        setUserId(currentUser.username);
       }
     } catch (error) {
       // User is not authenticated
@@ -59,7 +59,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
+
+  // Check if user is authenticated on app load
+  useEffect(() => {
+    checkAuthState();
+  }, [checkAuthState]);
 
   const login = async (username: string, password: string): Promise<void> => {
     try {
@@ -71,12 +76,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const session = await fetchAuthSession();
       
       if (session.tokens?.idToken) {
-        setUser({
+        const userData = {
           username: currentUser.username,
           email: currentUser.signInDetails?.loginId,
-        });
+        };
+        setUser(userData);
         
         localStorage.setItem('authToken', session.tokens.idToken.toString());
+        
+        // Set user ID for analytics tracking
+        setUserId(currentUser.username);
       }
     } catch (error) {
       throw error;

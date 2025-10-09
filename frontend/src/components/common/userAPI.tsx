@@ -336,6 +336,35 @@ export async function GetBlogStats(blogId?: string) {
   );
 };
 
+export async function GetWebAnalytics(dateRange: string = '7d') {
+  const endpoint = `${API_BASE_URL}/web-analytics?range=${dateRange}`;
+  const endpointKey = `web-analytics-${dateRange}`;
+    
+  return safeApiCall(
+    endpointKey,
+    async () => {
+      const response = await fetch(endpoint, {
+        method: 'GET',
+        headers: getAuthHeaders(),
+      });
+
+      const jsonResponse = await response.json().catch(() => ({
+        message: `Request failed with status ${response.status} and no JSON error body.`,
+      }));
+
+      if (!response.ok) {
+        const error: ApiError = new Error(jsonResponse.message || `API Error: ${response.status} ${response.statusText}`);
+        error.statusCode = response.status;
+        error.details = jsonResponse;
+        console.error('GetWebAnalytics API error:', error.details);
+        throw error;
+      }
+
+      return jsonResponse;
+    }
+  );
+};
+
 
 export async function GetBlogPostById(id: string) {
   const endpoint = `${API_BASE_URL}/get-blog?id=${id}`;

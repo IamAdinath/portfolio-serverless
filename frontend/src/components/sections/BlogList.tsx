@@ -7,7 +7,7 @@ import { usePageTitle } from '../common/usePageTitle';
 import { GetAllPublishedBlogs } from '../common/userAPI';
 import { Blog, DateFormatOptions } from '../../types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBlog, faCalendar, faClock, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faBlog, faClock } from '@fortawesome/free-solid-svg-icons';
 
 // --- NEW HELPER FUNCTIONS ---
 
