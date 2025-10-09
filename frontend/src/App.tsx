@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { apiRetryManager } from './utils/apiRetryManager';
+import { analyticsTracker } from './utils/analytics';
 import Header from './components/common/Header';
 import Footer from './components/common/Footer';
 import AboutMe from './components/sections/AboutMe';
@@ -18,9 +19,14 @@ import ProtectedRoute from './components/common/ProtectedRoute';
 import Blog from './components/sections/Blog';
 
 const App: React.FC = () => {
-  // Reset API retry manager on app load
+  // Reset API retry manager and initialize analytics on app load
   useEffect(() => {
     apiRetryManager.resetAll();
+    
+    // Initialize analytics tracking
+    if (process.env.NODE_ENV === 'production') {
+      analyticsTracker.enable();
+    }
   }, []);
 
   return (

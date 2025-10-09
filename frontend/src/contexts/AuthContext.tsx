@@ -2,6 +2,7 @@
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { signIn, signUp, signOut, fetchAuthSession, getCurrentUser } from 'aws-amplify/auth';
 import { requestUserConfirmation } from '../components/common/userAPI';
+import { setUserId } from '../utils/analytics';
 
 // Types
 interface User {
@@ -44,13 +45,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const session = await fetchAuthSession();
       
       if (currentUser && session.tokens?.idToken) {
-        setUser({
+        const userData = {
           username: currentUser.username,
           email: currentUser.signInDetails?.loginId,
-        });
+        };
+        setUser(userData);
         
         // Store token in localStorage for API calls
         localStorage.setItem('authToken', session.tokens.idToken.toString());
+        
+        // Set user ID for analytics tracking
+        setUserId(currentUser.username);
       }
     } catch (error) {
       // User is not authenticated
@@ -71,12 +76,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const session = await fetchAuthSession();
       
       if (session.tokens?.idToken) {
-        setUser({
+        const userData = {
           username: currentUser.username,
           email: currentUser.signInDetails?.loginId,
-        });
+        };
+        setUser(userData);
         
         localStorage.setItem('authToken', session.tokens.idToken.toString());
+        
+        // Set user ID for analytics tracking
+        setUserId(currentUser.username);
       }
     } catch (error) {
       throw error;

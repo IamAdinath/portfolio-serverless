@@ -3,6 +3,7 @@ import './stickManDownload.css';
 import { DownloadResume } from './userAPI';
 import { downloadFile } from '../../utils/downloadUtils';
 import { useToast } from './ToastProvider';
+import { trackDownload } from '../../utils/analytics';
 import { APP_CONFIG, FILES } from '../../constants';
 
 const StickmanDownload: React.FC = () => {
@@ -23,6 +24,9 @@ const StickmanDownload: React.FC = () => {
           try {
             await downloadFile(presignedUrl, filename);
             addToast('success', 'Resume downloaded successfully!');
+            
+            // Track download event
+            trackDownload(filename, 'pdf');
           } catch (error) {
             console.error('Error downloading file:', error);
             addToast('error', 'Failed to download file. Please try again.');

@@ -63,8 +63,10 @@ const WebAnalytics: React.FC = () => {
       try {
         const response = await GetWebAnalytics(range);
         setAnalyticsData(response);
+        addToast('success', 'Real analytics data loaded');
       } catch (apiError) {
         console.warn('Analytics API not available, using mock data:', apiError);
+        addToast('info', 'Using demo data - deploy analytics infrastructure for real data');
         
         // Mock data fallback
         const mockData: AnalyticsData = {
