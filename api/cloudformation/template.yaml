@@ -272,6 +272,7 @@ Resources:
       Environment:
         Variables:
           BLOGS_TABLE: !Ref BlogsTable
+<<<<<<< HEAD
 
   WebAnalyticsLambda:
     Type: AWS::Serverless::Function
@@ -312,6 +313,8 @@ Resources:
       Environment:
         Variables:
           ANALYTICS_TABLE: !Ref AnalyticsTable
+=======
+>>>>>>> master
   
   BlogUserPool:
     Type: AWS::Cognito::UserPool
