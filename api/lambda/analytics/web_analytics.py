@@ -39,32 +39,17 @@ def lambda_handler(event, context):
         
     except Exception as e:
         print(f"Error in web analytics: {str(e)}")
-        # Fallback to mock data if database is not available
-        try:
-            days = parse_date_range(date_range)
-            fallback_data = generate_mock_analytics_data(days)
-            return {
-                'statusCode': 200,
-                'headers': {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Headers': 'Content-Type,Authorization',
-                    'Access-Control-Allow-Methods': 'GET,OPTIONS'
-                },
-                'body': json.dumps(fallback_data)
-            }
-        except:
-            return {
-                'statusCode': 500,
-                'headers': {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
-                },
-                'body': json.dumps({
-                    'error': 'Internal server error',
-                    'message': str(e)
-                })
-            }
+        return {
+            'statusCode': 500,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
+            'body': json.dumps({
+                'error': 'Internal server error',
+                'message': str(e)
+            })
+        }
 
 def parse_date_range(date_range: str) -> int:
     """Parse date range string to number of days"""
@@ -106,15 +91,15 @@ def get_real_analytics_data(analytics_table, start_date: datetime, days: int) ->
         
     except Exception as e:
         print(f"Error querying analytics data: {str(e)}")
-        # Fallback to mock data
-        return generate_mock_analytics_data(days)
+        # Return empty data if there's an error
+        return generate_empty_analytics_data(days)
 
 def process_analytics_data(items: List[Dict], days: int) -> Dict[str, Any]:
     """
     Process raw analytics data into dashboard format
     """
     if not items:
-        return generate_mock_analytics_data(days)
+        return generate_empty_analytics_data(days)
     
     # Calculate basic metrics
     total_page_views = len(items)
@@ -140,15 +125,13 @@ def process_analytics_data(items: List[Dict], days: int) -> Dict[str, Any]:
         page_views[(page_path, page_title)] += 1
         
         # Referrers
-        if referrer:
+        if referrer and referrer.strip():
             if 'google' in referrer.lower():
                 referrers['Organic Search'] += 1
-            elif 'facebook' in referrer.lower() or 'twitter' in referrer.lower() or 'linkedin' in referrer.lower():
+            elif any(social in referrer.lower() for social in ['facebook', 'twitter', 'linkedin', 'instagram']):
                 referrers['Social Media'] += 1
-            elif referrer != window.location.origin:
-                referrers['Referral'] += 1
             else:
-                referrers['Direct'] += 1
+                referrers['Referral'] += 1
         else:
             referrers['Direct'] += 1
     
@@ -183,86 +166,65 @@ def process_analytics_data(items: List[Dict], days: int) -> Dict[str, Any]:
             'percentage': round(percentage, 1)
         })
     
-    # Calculate trends (compare with previous period)
-    # For simplicity, using mock trend data - in production, compare with previous period
+    # Calculate trends (would need previous period data for real trends)
+    # For now, return neutral trends - implement real trend calculation later
     trends = {
-        'pageViews': {'value': 12.5, 'trend': 'up' if total_page_views > 0 else 'neutral'},
-        'visitors': {'value': 8.3, 'trend': 'up' if unique_visitors > 0 else 'neutral'},
-        'sessionDuration': {'value': 5.2, 'trend': 'down'},
-        'bounceRate': {'value': 3.1, 'trend': 'up'}
+        'pageViews': {'value': 0, 'trend': 'neutral'},
+        'visitors': {'value': 0, 'trend': 'neutral'},
+        'sessionDuration': {'value': 0, 'trend': 'neutral'},
+        'bounceRate': {'value': 0, 'trend': 'neutral'}
     }
+    
+    # Calculate session duration and bounce rate from real data
+    # For now, return placeholder values - implement real calculation later
+    avg_session_duration = '0m 0s'  # Would need session start/end tracking
+    bounce_rate = '0%'  # Would need session tracking to calculate bounces
+    
+    if total_page_views > 0:
+        # Basic placeholder calculation - replace with real session analysis
+        avg_session_duration = f"{total_page_views // unique_visitors if unique_visitors > 0 else 0}m 0s"
+        bounce_rate = f"{max(0, 100 - (total_page_views * 10 // unique_visitors if unique_visitors > 0 else 0))}%"
     
     return {
         'totalPageViews': total_page_views,
         'uniqueVisitors': unique_visitors,
-        'avgSessionDuration': '3m 42s',  # Would need session tracking for real data
-        'bounceRate': '42.3%',  # Would need session tracking for real data
+        'avgSessionDuration': avg_session_duration,
+        'bounceRate': bounce_rate,
         'topPages': top_pages,
         'trafficSources': traffic_sources,
         'dailyStats': daily_stats_list,
         'trends': trends
     }
 
-def generate_mock_analytics_data(days: int) -> Dict[str, Any]:
+def generate_empty_analytics_data(days: int) -> Dict[str, Any]:
     """
-    Generate mock analytics data as fallback when real data is not available
+    Generate empty analytics data structure when no real data is available
     """
     
-    # Base metrics that scale with time range
-    base_daily_views = 1800
-    base_daily_visitors = 1200
-    
-    total_views = base_daily_views * days
-    total_visitors = int(base_daily_visitors * days * 0.85)  # Some visitors return
-    
-    # Generate daily stats
+    # Generate empty daily stats for the date range
     daily_stats = []
-    end_date = datetime.now()
+    end_date = datetime.now(timezone.utc)
     
     for i in range(days):
         date = end_date - timedelta(days=days-1-i)
-        # Add some randomness to make it look realistic
-        daily_views = int(base_daily_views * (0.8 + 0.4 * (i % 7) / 6))
-        daily_visitors = int(daily_views * 0.7)
-        
         daily_stats.append({
             'date': date.strftime('%Y-%m-%d'),
-            'views': daily_views,
-            'visitors': daily_visitors
+            'views': 0,
+            'visitors': 0
         })
     
-    # Calculate trends (mock positive/negative trends)
-    trends = {
-        'pageViews': {'value': 12.5, 'trend': 'up'},
-        'visitors': {'value': 8.3, 'trend': 'up'},
-        'sessionDuration': {'value': 5.2, 'trend': 'down'},
-        'bounceRate': {'value': 3.1, 'trend': 'up'}
-    }
-    
-    # Top pages (would come from actual analytics)
-    top_pages = [
-        {'path': '/blog/react-best-practices', 'views': int(total_views * 0.18), 'title': 'React Best Practices'},
-        {'path': '/blog/javascript-tips', 'views': int(total_views * 0.15), 'title': 'JavaScript Tips & Tricks'},
-        {'path': '/blog/web-performance', 'views': int(total_views * 0.13), 'title': 'Web Performance Optimization'},
-        {'path': '/portfolio', 'views': int(total_views * 0.11), 'title': 'Portfolio'},
-        {'path': '/blog/css-grid-guide', 'views': int(total_views * 0.10), 'title': 'CSS Grid Complete Guide'},
-    ]
-    
-    # Traffic sources (would come from actual analytics)
-    traffic_sources = [
-        {'source': 'Organic Search', 'visitors': int(total_visitors * 0.506), 'percentage': 50.6},
-        {'source': 'Direct', 'visitors': int(total_visitors * 0.25), 'percentage': 25.0},
-        {'source': 'Social Media', 'visitors': int(total_visitors * 0.15), 'percentage': 15.0},
-        {'source': 'Referral', 'visitors': int(total_visitors * 0.094), 'percentage': 9.4},
-    ]
-    
     return {
-        'totalPageViews': total_views,
-        'uniqueVisitors': total_visitors,
-        'avgSessionDuration': '3m 42s',
-        'bounceRate': '42.3%',
-        'topPages': top_pages,
-        'trafficSources': traffic_sources,
+        'totalPageViews': 0,
+        'uniqueVisitors': 0,
+        'avgSessionDuration': '0m 0s',
+        'bounceRate': '0%',
+        'topPages': [],
+        'trafficSources': [],
         'dailyStats': daily_stats,
-        'trends': trends
+        'trends': {
+            'pageViews': {'value': 0, 'trend': 'neutral'},
+            'visitors': {'value': 0, 'trend': 'neutral'},
+            'sessionDuration': {'value': 0, 'trend': 'neutral'},
+            'bounceRate': {'value': 0, 'trend': 'neutral'}
+        }
     }

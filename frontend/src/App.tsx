@@ -23,10 +23,14 @@ const App: React.FC = () => {
   useEffect(() => {
     apiRetryManager.resetAll();
     
-    // Initialize analytics tracking
-    if (process.env.NODE_ENV === 'production') {
-      analyticsTracker.enable();
-    }
+    // Initialize analytics tracking after Router is ready
+    const timer = setTimeout(() => {
+      if (process.env.NODE_ENV === 'production') {
+        analyticsTracker.enable();
+      }
+    }, 100);
+    
+    return () => clearTimeout(timer);
   }, []);
 
   return (

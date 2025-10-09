@@ -21,10 +21,7 @@ class AnalyticsTracker {
   constructor() {
     this.apiBaseUrl = process.env.REACT_APP_API_BASE_URL || '';
     this.sessionId = this.getOrCreateSessionId();
-    this.isEnabled = process.env.NODE_ENV === 'production'; // Only track in production
-    
-    // Initialize page view tracking
-    this.initializeTracking();
+    this.isEnabled = false; // Start disabled, enable later
   }
 
   private getOrCreateSessionId(): string {
@@ -173,6 +170,8 @@ class AnalyticsTracker {
 
   public enable(): void {
     this.isEnabled = true;
+    // Initialize tracking when enabled
+    this.initializeTracking();
   }
 
   public disable(): void {
