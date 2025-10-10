@@ -76,24 +76,73 @@ function deploy() {
     # Upload to s3 (code)
     aws --region ${REGION} ${AWS_PROFILE_OPTION} s3 cp ../cloudformation/${CODE_ZIP} s3://${CODE_BUCKET}/${CODE_PATH}/${CODE_ZIP}
 
-    # deploy
-    aws --region ${REGION} cloudformation deploy \
-    --template-file template.yaml \
-    --s3-bucket ${CODE_BUCKET} \
-    --s3-prefix ${CODE_PATH} \
-    --stack-name ${STACK_NAME} \
-    --capabilities CAPABILITY_NAMED_IAM \
-    --no-fail-on-empty-changeset \
-    --parameter-overrides \
-    ProjectName=${PROJECT_NAME} \
-    Env=${ENV} \
-    CodeBucket=${CODE_BUCKET} \
-    CodePath="${CODE_PATH}/${CODE_ZIP}" \
-    PythonRuntime=${DEFAULT_PYTHON_RUNTIME}\
-    GoogleClientId=""\
-    GoogleClientSecret=""\
-    LinkedInClientId=""\
-    LinkedInClientSecret=""
+    # Clean up any obsolete changesets first
+    echo "Cleaning up old changesets..."
+    OLD_CHANGESETS=$(aws --region ${REGION} cloudformation list-change-sets \
+        --stack-name ${STACK_NAME} \
+        --query 'Summaries[?ExecutionStatus==`OBSOLETE` || ExecutionStatus==`FAILED`].ChangeSetName' \
+        --output text 2>/dev/null || echo "")
+    
+    if [ -n "$OLD_CHANGESETS" ]; then
+        for changeset in $OLD_CHANGESETS; do
+            echo "Deleting old changeset: $changeset"
+            aws --region ${REGION} cloudformation delete-change-set \
+                --stack-name ${STACK_NAME} \
+                --change-set-name "$changeset" 2>/dev/null || true
+        done
+    fi
+
+    # Deploy with retry logic
+    echo "Deploying CloudFormation stack..."
+    RETRY_COUNT=0
+    MAX_RETRIES=3
+    
+    while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+        if aws --region ${REGION} cloudformation deploy \
+            --template-file template.yaml \
+            --s3-bucket ${CODE_BUCKET} \
+            --s3-prefix ${CODE_PATH} \
+            --stack-name ${STACK_NAME} \
+            --capabilities CAPABILITY_NAMED_IAM \
+            --no-fail-on-empty-changeset \
+            --parameter-overrides \
+                ProjectName=${PROJECT_NAME} \
+                Env=${ENV} \
+                CodeBucket=${CODE_BUCKET} \
+                CodePath="${CODE_PATH}/${CODE_ZIP}" \
+                PythonRuntime=${DEFAULT_PYTHON_RUNTIME} \
+                GoogleClientId="" \
+                GoogleClientSecret="" \
+                LinkedInClientId="" \
+                LinkedInClientSecret=""; then
+            echo "✅ Deployment successful"
+            break
+        else
+            RETRY_COUNT=$((RETRY_COUNT + 1))
+            echo "⚠️ Deployment failed, retrying ($RETRY_COUNT/$MAX_RETRIES)..."
+            
+            if [ $RETRY_COUNT -lt $MAX_RETRIES ]; then
+                # Clean up any failed changesets and wait before retry
+                OLD_CHANGESETS=$(aws --region ${REGION} cloudformation list-change-sets \
+                    --stack-name ${STACK_NAME} \
+                    --query 'Summaries[?ExecutionStatus==`OBSOLETE` || ExecutionStatus==`FAILED`].ChangeSetName' \
+                    --output text 2>/dev/null || echo "")
+                
+                if [ -n "$OLD_CHANGESETS" ]; then
+                    for changeset in $OLD_CHANGESETS; do
+                        aws --region ${REGION} cloudformation delete-change-set \
+                            --stack-name ${STACK_NAME} \
+                            --change-set-name "$changeset" 2>/dev/null || true
+                    done
+                fi
+                
+                sleep 10
+            else
+                echo "❌ Deployment failed after $MAX_RETRIES attempts"
+                exit 1
+            fi
+        fi
+    done
 }
 
 validate_parameters
