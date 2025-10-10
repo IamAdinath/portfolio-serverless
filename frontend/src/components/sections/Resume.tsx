@@ -14,13 +14,14 @@ const Resume: React.FC = () => {
         <>
             <SEOHead
                 title="Resume - Adinath Gore | Full Stack Developer"
-                description="Download Adinath Gore's resume. Experienced Full Stack Developer with expertise in React, Node.js, AWS, and modern web technologies. View professional experience, skills, and certifications."
+                description="Download Adinath Gore's resume. Experienced Full Stack Developer with expertise in React, Python, Django, Serverless, AWS, and modern web technologies. View professional experience, skills, and certifications."
                 keywords={[
                     'Adinath Gore Resume',
                     'Full Stack Developer Resume',
                     'Software Engineer CV',
                     'React Developer Resume',
-                    'Node.js Developer',
+                    'Python Developer',
+                    'Cloud Engineer',
                     'AWS Certified',
                     'Professional Experience',
                     'Download Resume'

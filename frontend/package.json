@@ -39,9 +39,11 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "npm run sitemap:generate && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "sitemap:generate": "node scripts/generate-sitemap.js",
+    "sitemap:validate": "node -e \"const fs=require('fs'); const xml=fs.readFileSync('public/sitemap.xml','utf8'); console.log(xml.includes('<?xml') && xml.includes('<urlset') ? '✅ Sitemap is valid' : '❌ Sitemap is invalid');\"",
     "seo:test": "node scripts/seo-test.js",
     "seo:validate": "npm run build && npm run seo:test",
     "lighthouse": "lhci autorun",
