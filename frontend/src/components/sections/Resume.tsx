@@ -13,16 +13,16 @@ const Resume: React.FC = () => {
     return (
         <>
             <SEOHead
-                title="Resume - Adinath Gore | Full Stack Developer"
-                description="Download Adinath Gore's resume. Experienced Full Stack Developer with expertise in React, Python, Django, Serverless, AWS, and modern web technologies. View professional experience, skills, and certifications."
+                title="Resume - Adinath Gore | Python Developer & Cloud Engineer"
+                description="Download Adinath Gore's resume. Experienced Python Developer and Cloud Engineer with expertise in Django, Flask, AWS, serverless architecture, and cloud solutions. View professional experience, skills, and certifications."
                 keywords={[
                     'Adinath Gore Resume',
-                    'Full Stack Developer Resume',
-                    'Software Engineer CV',
-                    'React Developer Resume',
-                    'Python Developer',
+                    'Python Developer Resume',
+                    'Cloud Engineer CV',
+                    'Django Developer Resume',
+                    'AWS Developer',
                     'Cloud Engineer',
-                    'AWS Certified',
+                    'DevOps Engineer',
                     'Professional Experience',
                     'Download Resume'
                 ]}
@@ -69,9 +69,9 @@ const Resume: React.FC = () => {
                 </div>
                 <div className="card-content">
                     <p>
-                        I am a dedicated problem solver with a strong background in software engineering, showcasing over 5 years of experience.
-                        My technical expertise spans a variety of technologies, including proficiency in Python, AWS cloud services, and databases
-                        like PostgreSQL, MySQL, MongoDB, and DynamoDB.
+                        I am a dedicated Python Developer and Cloud Engineer with over 5 years of experience building scalable cloud solutions.
+                        My expertise focuses on Python development, AWS cloud services, serverless architecture, and database management
+                        including PostgreSQL, MySQL, MongoDB, and DynamoDB. I specialize in designing and implementing robust cloud infrastructure.
                     </p>
                 </div>
             </section>
@@ -88,13 +88,13 @@ const Resume: React.FC = () => {
                         </div>
                         <div className="card-content">
                             <div className="skills-category">
-                                <h4>Languages & Frameworks</h4>
+                                <h4>Python & Frameworks</h4>
                                 <div className="skills-list">
                                     <span className="skill-tag">Python</span>
                                     <span className="skill-tag">Django</span>
                                     <span className="skill-tag">Flask</span>
-                                    <span className="skill-tag">JavaScript</span>
-                                    <span className="skill-tag">TypeScript</span>
+                                    <span className="skill-tag">FastAPI</span>
+                                    <span className="skill-tag">Celery</span>
                                 </div>
                             </div>
                             <div className="skills-category">
@@ -102,10 +102,14 @@ const Resume: React.FC = () => {
                                 <div className="skills-list">
                                     <span className="skill-tag">AWS</span>
                                     <span className="skill-tag">Lambda</span>
-                                    <span className="skill-tag">CloudFront</span>
+                                    <span className="skill-tag">CloudFormation</span>
                                     <span className="skill-tag">API Gateway</span>
+                                    <span className="skill-tag">EC2</span>
+                                    <span className="skill-tag">S3</span>
+                                    <span className="skill-tag">CloudFront</span>
                                     <span className="skill-tag">CI/CD</span>
                                     <span className="skill-tag">Serverless</span>
+                                    <span className="skill-tag">Docker</span>
                                 </div>
                             </div>
                             <div className="skills-category">

@@ -55,28 +55,27 @@ const Portfolio: React.FC = () => {
   ];
 
   const skills = [
-    { name: 'Full-Stack Development', level: 95 },
-    { name: 'Cloud Architecture', level: 90 },
-    { name: 'API Development', level: 92 },
-    { name: 'Team Leadership', level: 88 },
+    { name: 'Python Development', level: 95 },
+    { name: 'Cloud Engineering', level: 92 },
+    { name: 'AWS Services', level: 90 },
+    { name: 'DevOps & CI/CD', level: 88 },
   ];
 
   return (
     <>
       <SEOHead
-        title="Adinath Gore - Full Stack Developer & Software Engineer"
-        description="Experienced Full Stack Developer specializing in React, Node.js, AWS, and modern web technologies. View my portfolio, projects, and professional experience."
+        title="Adinath Gore - Python Developer & Cloud Engineer"
+        description="Experienced Python Developer and Cloud Engineer specializing in AWS, Django, Flask, serverless architecture, and cloud solutions. View my portfolio, projects, and professional experience."
         keywords={[
           'Adinath Gore',
-          'Full Stack Developer',
-          'Software Engineer',
-          'React Developer',
-          'Node.js Developer',
+          'Python Developer',
+          'Cloud Engineer',
           'AWS Developer',
-          'JavaScript',
-          'TypeScript',
-          'Portfolio',
-          'Web Development'
+          'Django Developer',
+          'Flask Developer',
+          'Serverless Architecture',
+          'Cloud Solutions',
+          'Portfolio'
         ]}
         url="/"
         type="profile"
@@ -87,11 +86,11 @@ const Portfolio: React.FC = () => {
         <div className="portfolio-hero-content">
           <div className="portfolio-hero-text">
             <h1>Hi, I'm Adinath Gore</h1>
-            <h2>Full-Stack Developer & Cloud Architect</h2>
+            <h2>Python Developer & Cloud Engineer</h2>
             <p className="portfolio-hero-description">
-              Passionate about creating scalable web applications and cloud solutions. 
-              With 5+ years of experience, I help businesses build robust digital experiences 
-              that drive growth and innovation.
+              Passionate about building scalable cloud solutions and Python applications. 
+              With 5+ years of experience, I help businesses leverage cloud technologies 
+              and develop robust backend systems that drive growth and innovation.
             </p>
             <div className="portfolio-hero-stats">
               <div className="portfolio-stat">
