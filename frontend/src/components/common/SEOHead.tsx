@@ -31,7 +31,7 @@ const SEOHead: React.FC<SEOHeadProps> = ({
     'Portfolio',
     'Blog'
   ],
-  image = '/og-image.jpg',
+  image = '/favicon.ico',
   url = 'https://adinathgore.com',
   type = 'website',
   author = 'Adinath Gore',
