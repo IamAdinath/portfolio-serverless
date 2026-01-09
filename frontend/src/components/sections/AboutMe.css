@@ -1,0 +1,433 @@
+/* AboutMe.css */
+
+/* Container */
+.about-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Inter', 'Segoe UI', 'Roboto', sans-serif;
+  color: #2d3748;
+  background: linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 50%, #2d2d2d 100%);
+  min-height: 100vh;
+}
+
+/* Hero Card */
+.hero-card {
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  margin-bottom: 30px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hero-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+}
+
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* Profile Section */
+.profile-section {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.profile-image-container {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.profile-image {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #f7fafc;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.profile-image:hover {
+  transform: scale(1.05);
+}
+
+.profile-badge {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #000000 0%, #434343 50%, #1a1a1a 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.2rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.profile-info h1 {
+  font-size: 3rem;
+  margin: 0 0 10px 0;
+  background: linear-gradient(135deg, #000000 0%, #4a4a4a 50%, #1a1a1a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+}
+
+.profile-info h2 {
+  font-size: 1.5rem;
+  color: #4a5568;
+  margin: 0 0 15px 0;
+  font-weight: 500;
+}
+
+.profile-tagline {
+  color: #718096;
+  font-size: 1.2rem;
+  margin: 0;
+  font-style: italic;
+}
+
+.heart-icon {
+  color: #e53e3e;
+  animation: heartbeat 2s infinite;
+}
+
+@keyframes heartbeat {
+  0%, 50%, 100% { transform: scale(1); }
+  25%, 75% { transform: scale(1.1); }
+}
+
+/* Social Links */
+.social-links {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.social-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.social-link.linkedin {
+  background: #0077b5;
+  color: white;
+}
+
+.social-link.github {
+  background: #333;
+  color: white;
+}
+
+.social-link.twitter {
+  background: #1da1f2;
+  color: white;
+}
+
+.social-link.medium {
+  background: #00ab6c;
+  color: white;
+}
+
+.social-link.stackoverflow {
+  background: #f48024;
+  color: white;
+}
+
+.social-link:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* About Content */
+.about-content {
+  display: grid;
+  gap: 30px;
+}
+
+/* About Cards */
+.about-card {
+  background: white;
+  border-radius: 20px;
+  padding: 0;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.about-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+}
+
+.card-header {
+  background: linear-gradient(135deg, #000000 0%, #434343 50%, #1a1a1a 100%);
+  color: white;
+  padding: 25px 30px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.card-header h3 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.section-icon {
+  font-size: 1.5rem;
+  opacity: 0.9;
+}
+
+.card-content {
+  padding: 30px;
+}
+
+.card-content p {
+  line-height: 1.7;
+  color: #4a5568;
+  margin-bottom: 20px;
+}
+
+.card-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* Skills Grid */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+}
+
+.skill-item {
+  padding: 20px;
+  background: #f7fafc;
+  border-radius: 12px;
+  border-left: 4px solid #2d2d2d;
+  transition: all 0.3s ease;
+}
+
+.skill-item:hover {
+  background: #edf2f7;
+  transform: translateX(5px);
+}
+
+.skill-item h4 {
+  margin: 0 0 10px 0;
+  color: #2d3748;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.skill-item p {
+  margin: 0;
+  color: #4a5568;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* Philosophy Items */
+.philosophy-items {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.philosophy-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 20px;
+  background: #f7fafc;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.philosophy-item:hover {
+  background: #edf2f7;
+  transform: translateY(-2px);
+}
+
+.philosophy-icon {
+  font-size: 1.5rem;
+  color: #2d2d2d;
+  margin-top: 5px;
+}
+
+.philosophy-item h4 {
+  margin: 0 0 8px 0;
+  color: #2d3748;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.philosophy-item p {
+  margin: 0;
+  color: #4a5568;
+  line-height: 1.5;
+}
+
+/* Fun Facts */
+.fun-facts .card-header {
+  background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
+  color: #2d3748;
+}
+
+.fun-facts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 25px;
+}
+
+.fun-fact {
+  text-align: center;
+  padding: 25px 15px;
+  background: #f7fafc;
+  border-radius: 15px;
+  transition: all 0.3s ease;
+}
+
+.fun-fact:hover {
+  background: #edf2f7;
+  transform: translateY(-5px);
+}
+
+.fact-number {
+  display: block;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #2d2d2d;
+  margin-bottom: 8px;
+}
+
+.fact-label {
+  display: block;
+  color: #4a5568;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .about-container {
+    padding: 15px;
+  }
+
+  .profile-section {
+    flex-direction: column;
+    text-align: center;
+    gap: 25px;
+  }
+
+  .profile-info h1 {
+    font-size: 2.5rem;
+  }
+
+  .social-links {
+    justify-content: center;
+  }
+
+  .hero-card,
+  .about-card {
+    padding: 25px;
+  }
+
+  .card-header {
+    padding: 20px 25px;
+  }
+
+  .card-content {
+    padding: 25px;
+  }
+
+  .skills-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .fun-facts-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .about-container {
+    padding: 10px;
+  }
+
+  .profile-info h1 {
+    font-size: 2rem;
+  }
+
+  .profile-image {
+    width: 150px;
+    height: 150px;
+  }
+
+  .social-link {
+    padding: 10px 15px;
+    font-size: 0.9rem;
+  }
+
+  .fun-facts-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Animation for page load */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-card,
+.about-card {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.hero-card {
+  animation-delay: 0.1s;
+}
+
+.about-card:nth-child(1) {
+  animation-delay: 0.2s;
+}
+
+.about-card:nth-child(2) {
+  animation-delay: 0.3s;
+}
+
+.about-card:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+.about-card:nth-child(4) {
+  animation-delay: 0.5s;
+}

@@ -1,0 +1,329 @@
+name: Deploy Portfolio
+name: Deploy Portfolio
+
+on:
+  push:
+    branches:
+      - dev
+      - master
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: "22"
+  PYTHON_VERSION: "3.12"
+
+jobs:
+  # --------------------
+  # Development Environment
+  # --------------------
+  deploy-api-dev:
+    name: Deploy API - Dev
+    runs-on: ubuntu-latest
+    environment: dev
+    if: github.ref == 'refs/heads/dev'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.API_AWS_REGION }}
+
+      - name: Deploy API Stack
+        working-directory: api/cloudformation/
+        run: |
+          chmod +x ./deploy.sh
+          ./deploy.sh
+        env:
+          PROJECT_NAME: ${{ vars.PROJECT_NAME }}
+          ENV: dev
+          REGION: ${{ vars.API_AWS_REGION }}
+          STACK_NAME: ${{ vars.API_STACK_NAME_DEV }}
+          CODE_BUCKET: ${{ vars.API_BUCKET_NAME_DEV }}
+          DEFAULT_PYTHON_RUNTIME: python3.12
+
+  deploy-ui-dev:
+    name: Deploy UI - Dev
+    runs-on: ubuntu-latest
+    environment: dev
+    needs: deploy-api-dev
+    if: github.ref == 'refs/heads/dev'
+    outputs:
+      ui-url: ${{ steps.deploy.outputs.ui-url }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: |
+          # Verify package.json exists
+          if [ ! -f "package.json" ]; then
+            echo "❌ package.json not found in frontend directory"
+            echo "📁 Contents of frontend directory:"
+            ls -la
+            exit 1
+          fi
+          echo "✅ package.json found"
+          
+          # Install dependencies
+          npm ci --prefer-offline --no-audit
+
+      - name: Build application
+        working-directory: frontend
+        run: |
+          npm run build
+        env:
+          GENERATE_SOURCEMAP: false
+          CI: false
+          REACT_APP_API_BASE_URL: ${{ vars.REACT_APP_API_BASE_URL_DEV }}
+          REACT_APP_COGNITO_USER_POOL_ID: ${{ vars.REACT_APP_COGNITO_USER_POOL_ID_DEV }}
+          REACT_APP_COGNITO_CLIENT_ID: ${{ vars.REACT_APP_COGNITO_CLIENT_ID_DEV }}
+          REACT_APP_COGNITO_REGION: ${{ vars.REACT_APP_COGNITO_REGION }}
+          REACT_APP_COGNITO_DOMAIN: ${{ vars.REACT_APP_COGNITO_DOMAIN_DEV }}
+          REACT_APP_COGNITO_REDIRECT_SIGNIN: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNIN_DEV }}
+          REACT_APP_COGNITO_REDIRECT_SIGNOUT: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNOUT_DEV }}
+          REACT_APP_API_KEY: ${{ vars.REACT_APP_API_KEY_DEV }}
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.UI_AWS_REGION }}
+
+      - name: Deploy UI Stack (Dev)
+        id: deploy
+        working-directory: frontend/cloudformation/
+        run: |
+          chmod +x ./deploy-dev.sh
+          ./deploy-dev.sh
+          
+          # Get CloudFront URL
+          UI_URL=$(aws cloudformation describe-stacks \
+            --stack-name ${PROJECT_NAME}-${ENV}-UI \
+            --region ${REGION} \
+            --query "Stacks[0].Outputs[?OutputKey=='CloudFrontURL'].OutputValue" \
+            --output text)
+          
+          echo "ui-url=${UI_URL}" >> $GITHUB_OUTPUT
+          echo "✅ UI deployed to: ${UI_URL}"
+        env:
+          PROJECT_NAME: ${{ vars.PROJECT_NAME }}
+          ENV: dev
+          REGION: ${{ vars.UI_AWS_REGION }}
+          UI_BUCKET_NAME: ${{ vars.UI_BUCKET_NAME_DEV }}
+          REACT_APP_API_BASE_URL: ${{ vars.REACT_APP_API_BASE_URL_DEV }}
+          REACT_APP_COGNITO_USER_POOL_ID: ${{ vars.REACT_APP_COGNITO_USER_POOL_ID_DEV }}
+          REACT_APP_COGNITO_CLIENT_ID: ${{ vars.REACT_APP_COGNITO_CLIENT_ID_DEV }}
+          REACT_APP_COGNITO_REGION: ${{ vars.REACT_APP_COGNITO_REGION }}
+          REACT_APP_COGNITO_DOMAIN: ${{ vars.REACT_APP_COGNITO_DOMAIN_DEV }}
+          REACT_APP_COGNITO_REDIRECT_SIGNIN: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNIN_DEV }}
+          REACT_APP_COGNITO_REDIRECT_SIGNOUT: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNOUT_DEV }}
+          REACT_APP_API_KEY: ${{ vars.REACT_APP_API_KEY_DEV }}
+
+  # --------------------
+  # Production Environment
+  # --------------------
+  deploy-api-prod:
+    name: Deploy API - Prod
+    runs-on: ubuntu-latest
+    environment: prod
+    if: github.ref == 'refs/heads/master'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.API_AWS_REGION }}
+
+      - name: Deploy API Stack
+        working-directory: api/cloudformation/
+        run: |
+          chmod +x ./deploy.sh
+          ./deploy.sh
+        env:
+          PROJECT_NAME: ${{ vars.PROJECT_NAME }}
+          ENV: prod
+          REGION: ${{ vars.API_AWS_REGION }}
+          STACK_NAME: ${{ vars.API_STACK_NAME_PROD }}
+          CODE_BUCKET: ${{ vars.API_BUCKET_NAME_PROD }}
+          DEFAULT_PYTHON_RUNTIME: python3.12
+
+  deploy-ui-prod:
+    name: Deploy UI - Prod
+    runs-on: ubuntu-latest
+    environment: prod
+    needs: deploy-api-prod
+    if: github.ref == 'refs/heads/master'
+    outputs:
+      ui-url: ${{ steps.deploy.outputs.ui-url }}
+      distribution-id: ${{ steps.deploy.outputs.distribution-id }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: |
+          # Verify package.json exists
+          if [ ! -f "package.json" ]; then
+            echo "❌ package.json not found in frontend directory"
+            echo "📁 Contents of frontend directory:"
+            ls -la
+            exit 1
+          fi
+          echo "✅ package.json found"
+          
+          # Install dependencies
+          npm ci --prefer-offline --no-audit
+
+      - name: Build application
+        working-directory: frontend
+        run: |
+          npm run build
+        env:
+          GENERATE_SOURCEMAP: false
+          CI: false
+          REACT_APP_API_BASE_URL: ${{ vars.REACT_APP_API_BASE_URL_PROD }}
+          REACT_APP_COGNITO_USER_POOL_ID: ${{ vars.REACT_APP_COGNITO_USER_POOL_ID_PROD }}
+          REACT_APP_COGNITO_CLIENT_ID: ${{ vars.REACT_APP_COGNITO_CLIENT_ID_PROD }}
+          REACT_APP_COGNITO_REGION: ${{ vars.REACT_APP_COGNITO_REGION }}
+          REACT_APP_COGNITO_DOMAIN: ${{ vars.REACT_APP_COGNITO_DOMAIN_PROD }}
+          REACT_APP_COGNITO_REDIRECT_SIGNIN: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNIN_PROD }}
+          REACT_APP_COGNITO_REDIRECT_SIGNOUT: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNOUT_PROD }}
+          REACT_APP_API_KEY: ${{ vars.REACT_APP_API_KEY_PROD }}
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.UI_AWS_REGION }}
+
+      - name: Deploy UI Stack (Prod)
+        id: deploy
+        working-directory: frontend/cloudformation/
+        run: |
+          chmod +x ./deploy-prod.sh
+          ./deploy-prod.sh
+          
+          # Get outputs
+          STACK_NAME="${PROJECT_NAME}-${ENV}-UI"
+          UI_URL=$(aws cloudformation describe-stacks \
+            --stack-name ${STACK_NAME} \
+            --region ${REGION} \
+            --query "Stacks[0].Outputs[?OutputKey=='CloudFrontURL'].OutputValue" \
+            --output text)
+          
+          DISTRIBUTION_ID=$(aws cloudformation describe-stacks \
+            --stack-name ${STACK_NAME} \
+            --region ${REGION} \
+            --query "Stacks[0].Outputs[?OutputKey=='CloudFrontDistributionID'].OutputValue" \
+            --output text)
+          
+          echo "ui-url=${UI_URL}" >> $GITHUB_OUTPUT
+          echo "distribution-id=${DISTRIBUTION_ID}" >> $GITHUB_OUTPUT
+          echo "✅ UI deployed to: ${UI_URL}"
+        env:
+          PROJECT_NAME: ${{ vars.PROJECT_NAME }}
+          ENV: prod
+          REGION: ${{ vars.UI_AWS_REGION }}
+          HOSTNAME: ${{ vars.UI_HOSTNAME_PROD }}
+          UI_BUCKET_NAME: ${{ vars.UI_BUCKET_NAME_PROD }}
+          ACM_CERTIFICATE_ARN: ${{ vars.ACM_CERTIFICATE_ARN }}
+          REACT_APP_API_BASE_URL: ${{ vars.REACT_APP_API_BASE_URL_PROD }}
+          REACT_APP_COGNITO_USER_POOL_ID: ${{ vars.REACT_APP_COGNITO_USER_POOL_ID_PROD }}
+          REACT_APP_COGNITO_CLIENT_ID: ${{ vars.REACT_APP_COGNITO_CLIENT_ID_PROD }}
+          REACT_APP_COGNITO_REGION: ${{ vars.REACT_APP_COGNITO_REGION }}
+          REACT_APP_COGNITO_DOMAIN: ${{ vars.REACT_APP_COGNITO_DOMAIN_PROD }}
+          REACT_APP_COGNITO_REDIRECT_SIGNIN: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNIN_PROD }}
+          REACT_APP_COGNITO_REDIRECT_SIGNOUT: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNOUT_PROD }}
+          REACT_APP_API_KEY: ${{ vars.REACT_APP_API_KEY_PROD }}
+
+  # --------------------
+  # Performance Monitoring
+  # --------------------
+  performance-monitoring:
+    name: Performance Monitoring
+    runs-on: ubuntu-latest
+    needs: [deploy-ui-prod]
+    if: github.ref == 'refs/heads/master'
+    continue-on-error: true
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install Lighthouse CI
+        run: |
+          npm install -g @lhci/cli@0.12.x
+
+      - name: Run Lighthouse CI
+        run: |
+          lhci autorun
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+          LHCI_SERVER_BASE_URL: ${{ vars.UI_HOSTNAME_PROD }}
+
+      - name: Basic Health Check
+        run: |
+          echo "🔍 Running basic health checks..."
+          
+          SITE_URL="https://${{ vars.UI_HOSTNAME_PROD }}"
+          
+          # Check if site is accessible
+          if curl -s -o /dev/null -w "%{http_code}" "$SITE_URL" | grep -q "200"; then
+            echo "✅ Site is accessible"
+          else
+            echo "❌ Site is not accessible"
+          fi
+          
+          # Test HTTPS connection
+          if curl -s -I "$SITE_URL" | grep -q "HTTP/2 200\|HTTP/1.1 200"; then
+            echo "✅ HTTPS is working"
+          else
+            echo "❌ HTTPS connection failed"
+          fi
+          
+          echo "🎯 Health check completed"
