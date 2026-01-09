@@ -128,7 +128,7 @@ const SEOHead: React.FC<SEOHeadProps> = ({
           "image": fullImage,
           "sameAs": [
             "https://www.linkedin.com/in/iamadinath/",
-            "https://github.com/adinath-gore",
+            "https://github.com/IamAdinath",
             "https://medium.com/@Iam_Adinath",
             "https://stackoverflow.com/users/14975561/adinath-gore"
           ],
