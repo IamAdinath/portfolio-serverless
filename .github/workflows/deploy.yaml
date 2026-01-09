@@ -102,7 +102,6 @@ jobs:
           REACT_APP_API_KEY: ${{ vars.REACT_APP_API_KEY_DEV }}
 
 
-
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -289,6 +288,7 @@ jobs:
           REACT_APP_COGNITO_REDIRECT_SIGNOUT: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNOUT_PROD }}
           REACT_APP_API_KEY: ${{ vars.REACT_APP_API_KEY_PROD }}
 
+      - name: Advanced SEO optimizations and Compression
       - name: Advanced SEO optimizations and Compression
         working-directory: frontend/build
         run: |
