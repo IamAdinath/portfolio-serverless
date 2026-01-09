@@ -12,7 +12,7 @@ export const CONTACT = {
 // Social Media Links
 export const SOCIAL_LINKS = {
   LINKEDIN: 'https://www.linkedin.com/in/iamadinath/',
-  GITHUB: 'https://github.com/adinath-gore',
+  GITHUB: 'https://github.com/IamAdinath',
   TWITTER: 'https://twitter.com/prime_whites', // Hidden for now
   MEDIUM: 'https://medium.com/@Iam_Adinath',
   STACKOVERFLOW: 'https://stackoverflow.com/users/14975561/adinath-gore',
