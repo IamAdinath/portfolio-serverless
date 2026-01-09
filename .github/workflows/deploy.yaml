@@ -1,4 +1,5 @@
 name: Deploy Portfolio
+name: Deploy Portfolio
 
 on:
   push:
@@ -100,6 +101,7 @@ jobs:
           REACT_APP_COGNITO_REDIRECT_SIGNIN: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNIN_DEV }}
           REACT_APP_COGNITO_REDIRECT_SIGNOUT: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNOUT_DEV }}
           REACT_APP_API_KEY: ${{ vars.REACT_APP_API_KEY_DEV }}
+
 
 
       - name: Configure AWS Credentials
@@ -288,7 +290,6 @@ jobs:
           REACT_APP_COGNITO_REDIRECT_SIGNOUT: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNOUT_PROD }}
           REACT_APP_API_KEY: ${{ vars.REACT_APP_API_KEY_PROD }}
 
-      - name: Advanced SEO optimizations and Compression
       - name: Advanced SEO optimizations and Compression
         working-directory: frontend/build
         run: |
