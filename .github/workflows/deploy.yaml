@@ -1,4 +1,4 @@
-name: Deploy Portfolio with SEO Optimization
+name: Deploy Portfolio
 
 on:
   push:
@@ -51,11 +51,13 @@ jobs:
           DEFAULT_PYTHON_RUNTIME: python3.12
 
   deploy-ui-dev:
-    name: Deploy UI with SEO - Dev
+    name: Deploy UI - Dev
     runs-on: ubuntu-latest
     environment: dev
     needs: deploy-api-dev
     if: github.ref == 'refs/heads/dev'
+    outputs:
+      ui-url: ${{ steps.deploy.outputs.ui-url }}
 
     steps:
       - name: Checkout code
@@ -83,34 +85,7 @@ jobs:
           # Install dependencies
           npm ci --prefer-offline --no-audit
 
-      - name: Generate SEO assets
-        working-directory: frontend
-        run: |
-          # Generate sitemap
-          echo "Generating sitemap for dev environment..."
-          node -e "
-          const fs = require('fs');
-          const sitemap = \`<?xml version='1.0' encoding='UTF-8'?>
-          <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
-            <url><loc>https://dev.adinathgore.com/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
-            <url><loc>https://dev.adinathgore.com/resume</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-            <url><loc>https://dev.adinathgore.com/about</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-            <url><loc>https://dev.adinathgore.com/blog</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-          </urlset>\`;
-          fs.writeFileSync('public/sitemap.xml', sitemap);
-          "
-          
-          # Generate robots.txt for dev
-          cat > public/robots.txt << EOF
-          User-agent: *
-          Disallow: /admin
-          Disallow: /writer
-          Disallow: /auth
-          Allow: /
-          Sitemap: https://dev.adinathgore.com/sitemap.xml
-          EOF
-
-      - name: Build with SEO optimizations
+      - name: Build application
         working-directory: frontend
         run: |
           npm run build
@@ -126,67 +101,6 @@ jobs:
           REACT_APP_COGNITO_REDIRECT_SIGNOUT: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNOUT_DEV }}
           REACT_APP_API_KEY: ${{ vars.REACT_APP_API_KEY_DEV }}
 
-      - name: Optimize build for SEO and Compression
-        working-directory: frontend/build
-        run: |
-          echo "🗜️ Compressing assets with gzip and brotli..."
-          
-          # Install brotli compression tool
-          sudo apt-get update && sudo apt-get install -y brotli
-          
-          # Compress JavaScript files
-          find . -name "*.js" -type f -exec sh -c '
-            echo "Compressing JS: $1"
-            gzip -k -9 "$1"
-            brotli -k -q 11 "$1"
-          ' _ {} \;
-          
-          # Compress CSS files
-          find . -name "*.css" -type f -exec sh -c '
-            echo "Compressing CSS: $1"
-            gzip -k -9 "$1"
-            brotli -k -q 11 "$1"
-          ' _ {} \;
-          
-          # Compress HTML files
-          find . -name "*.html" -type f -exec sh -c '
-            echo "Compressing HTML: $1"
-            gzip -k -9 "$1"
-            brotli -k -q 11 "$1"
-          ' _ {} \;
-          
-          # Compress JSON files (manifest, etc.)
-          find . -name "*.json" -type f -exec sh -c '
-            echo "Compressing JSON: $1"
-            gzip -k -9 "$1"
-            brotli -k -q 11 "$1"
-          ' _ {} \;
-          
-          # Compress XML files (sitemap)
-          find . -name "*.xml" -type f -exec sh -c '
-            echo "Compressing XML: $1"
-            gzip -k -9 "$1"
-            brotli -k -q 11 "$1"
-          ' _ {} \;
-          
-          # Compress TXT files (robots.txt)
-          find . -name "*.txt" -type f -exec sh -c '
-            echo "Compressing TXT: $1"
-            gzip -k -9 "$1"
-            brotli -k -q 11 "$1"
-          ' _ {} \;
-          
-          # Show compression results
-          echo "📊 Compression Results:"
-          echo "Original files:"
-          find . -name "*.js" -o -name "*.css" -o -name "*.html" | head -5 | xargs ls -lh
-          echo "Gzipped files:"
-          find . -name "*.gz" | head -5 | xargs ls -lh
-          echo "Brotli files:"
-          find . -name "*.br" | head -5 | xargs ls -lh
-          
-          # Add security headers to index.html
-          sed -i 's/<head>/<head>\n  <meta http-equiv="X-Content-Type-Options" content="nosniff">\n  <meta http-equiv="X-Frame-Options" content="DENY">\n  <meta http-equiv="X-XSS-Protection" content="1; mode=block">/' index.html
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -196,10 +110,21 @@ jobs:
           aws-region: ${{ vars.UI_AWS_REGION }}
 
       - name: Deploy UI Stack (Dev)
+        id: deploy
         working-directory: frontend/cloudformation/
         run: |
           chmod +x ./deploy-dev.sh
           ./deploy-dev.sh
+          
+          # Get CloudFront URL
+          UI_URL=$(aws cloudformation describe-stacks \
+            --stack-name ${PROJECT_NAME}-${ENV}-UI \
+            --region ${REGION} \
+            --query "Stacks[0].Outputs[?OutputKey=='CloudFrontURL'].OutputValue" \
+            --output text)
+          
+          echo "ui-url=${UI_URL}" >> $GITHUB_OUTPUT
+          echo "✅ UI deployed to: ${UI_URL}"
         env:
           PROJECT_NAME: ${{ vars.PROJECT_NAME }}
           ENV: dev
@@ -213,43 +138,6 @@ jobs:
           REACT_APP_COGNITO_REDIRECT_SIGNIN: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNIN_DEV }}
           REACT_APP_COGNITO_REDIRECT_SIGNOUT: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNOUT_DEV }}
           REACT_APP_API_KEY: ${{ vars.REACT_APP_API_KEY_DEV }}
-
-      - name: SEO Validation (Dev)
-        run: |
-          echo "🔍 Running SEO validation checks..."
-          
-          # Check if sitemap exists
-          if [ -f "frontend/build/sitemap.xml" ]; then
-            echo "✅ Sitemap generated successfully"
-          else
-            echo "❌ Sitemap missing"
-            exit 1
-          fi
-          
-          # Check if robots.txt exists
-          if [ -f "frontend/build/robots.txt" ]; then
-            echo "✅ Robots.txt generated successfully"
-          else
-            echo "❌ Robots.txt missing"
-            exit 1
-          fi
-          
-          # Validate HTML structure
-          if grep -q "<title>" frontend/build/index.html; then
-            echo "✅ Title tag found"
-          else
-            echo "❌ Title tag missing"
-            ERRORS=$((ERRORS + 1))
-          fi
-          
-          if grep -q 'name="description"' frontend/build/index.html; then
-            echo "✅ Meta description found"
-          else
-            echo "❌ Meta description missing"
-            exit 1
-          fi
-          
-          echo "🎉 SEO validation completed successfully!"
 
   # --------------------
   # Production Environment
@@ -290,11 +178,14 @@ jobs:
           DEFAULT_PYTHON_RUNTIME: python3.12
 
   deploy-ui-prod:
-    name: Deploy UI with SEO - Prod
+    name: Deploy UI - Prod
     runs-on: ubuntu-latest
     environment: prod
     needs: deploy-api-prod
     if: github.ref == 'refs/heads/master'
+    outputs:
+      ui-url: ${{ steps.deploy.outputs.ui-url }}
+      distribution-id: ${{ steps.deploy.outputs.distribution-id }}
 
     steps:
       - name: Checkout code
@@ -398,6 +289,7 @@ jobs:
           REACT_APP_API_KEY: ${{ vars.REACT_APP_API_KEY_PROD }}
 
       - name: Advanced SEO optimizations and Compression
+      - name: Advanced SEO optimizations and Compression
         working-directory: frontend/build
         run: |
           echo "🚀 Applying advanced SEO optimizations and compression..."
@@ -499,10 +391,29 @@ jobs:
           aws-region: ${{ vars.UI_AWS_REGION }}
 
       - name: Deploy UI Stack (Prod)
+        id: deploy
         working-directory: frontend/cloudformation/
         run: |
           chmod +x ./deploy-prod.sh
           ./deploy-prod.sh
+          
+          # Get outputs
+          STACK_NAME="${PROJECT_NAME}-${ENV}-UI"
+          UI_URL=$(aws cloudformation describe-stacks \
+            --stack-name ${STACK_NAME} \
+            --region ${REGION} \
+            --query "Stacks[0].Outputs[?OutputKey=='CloudFrontURL'].OutputValue" \
+            --output text)
+          
+          DISTRIBUTION_ID=$(aws cloudformation describe-stacks \
+            --stack-name ${STACK_NAME} \
+            --region ${REGION} \
+            --query "Stacks[0].Outputs[?OutputKey=='CloudFrontDistributionID'].OutputValue" \
+            --output text)
+          
+          echo "ui-url=${UI_URL}" >> $GITHUB_OUTPUT
+          echo "distribution-id=${DISTRIBUTION_ID}" >> $GITHUB_OUTPUT
+          echo "✅ UI deployed to: ${UI_URL}"
         env:
           PROJECT_NAME: ${{ vars.PROJECT_NAME }}
           ENV: prod
@@ -519,112 +430,11 @@ jobs:
           REACT_APP_COGNITO_REDIRECT_SIGNOUT: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNOUT_PROD }}
           REACT_APP_API_KEY: ${{ vars.REACT_APP_API_KEY_PROD }}
 
-      - name: Post-deployment SEO validation
-        run: |
-          echo "🔍 Running comprehensive SEO validation..."
-          
-          # Check critical SEO files
-          ERRORS=0
-          
-          if [ -f "frontend/build/sitemap.xml" ]; then
-            echo "✅ Sitemap exists"
-            # Validate sitemap XML
-            if xmllint --noout frontend/build/sitemap.xml 2>/dev/null; then
-              echo "✅ Sitemap XML is valid"
-            else
-              echo "❌ Sitemap XML is invalid"
-              ERRORS=$((ERRORS + 1))
-            fi
-          else
-            echo "❌ Sitemap missing"
-            ERRORS=$((ERRORS + 1))
-          fi
-          
-          if [ -f "frontend/build/robots.txt" ]; then
-            echo "✅ Robots.txt exists"
-          else
-            echo "❌ Robots.txt missing"
-            ERRORS=$((ERRORS + 1))
-          fi
-          
-          if [ -f "frontend/build/manifest.json" ]; then
-            echo "✅ Web manifest exists"
-          else
-            echo "❌ Web manifest missing"
-            ERRORS=$((ERRORS + 1))
-          fi
-          
-          # Validate HTML structure
-          if grep -q "<title>" frontend/build/index.html; then
-            echo "✅ Title tag found"
-          else
-            echo "❌ Title tag missing"
-            ERRORS=$((ERRORS + 1))
-          fi
-          
-          if grep -q 'name="description"' frontend/build/index.html; then
-            echo "✅ Meta description found"
-          else
-            echo "❌ Meta description missing"
-            ERRORS=$((ERRORS + 1))
-          fi
-          
-          if grep -q 'property="og:' frontend/build/index.html; then
-            echo "✅ Open Graph tags found"
-          else
-            echo "❌ Open Graph tags missing"
-            ERRORS=$((ERRORS + 1))
-          fi
-          
-          # Check for security headers
-          if grep -q 'X-Content-Type-Options' frontend/build/index.html; then
-            echo "✅ Security headers found"
-          else
-            echo "❌ Security headers missing"
-            ERRORS=$((ERRORS + 1))
-          fi
-          
-          # Check for performance optimizations
-          if ls frontend/build/static/js/*.js.gz >/dev/null 2>&1; then
-            echo "✅ JavaScript files are compressed"
-          else
-            echo "❌ JavaScript files not compressed"
-            ERRORS=$((ERRORS + 1))
-          fi
-          
-          if ls frontend/build/static/css/*.css.gz >/dev/null 2>&1; then
-            echo "✅ CSS files are compressed"
-          else
-            echo "❌ CSS files not compressed"
-            ERRORS=$((ERRORS + 1))
-          fi
-          
-          if [ $ERRORS -eq 0 ]; then
-            echo "🎉 All SEO validations passed successfully!"
-          else
-            echo "❌ $ERRORS SEO validation(s) failed"
-            exit 1
-          fi
-
-      - name: Submit sitemap to search engines
-        if: success()
-        run: |
-          echo "📡 Submitting sitemap to search engines..."
-          
-          # Google Search Console (requires verification)
-          echo "Google: https://www.google.com/ping?sitemap=https://adinathgore.com/sitemap.xml"
-          
-          # Bing Webmaster Tools
-          echo "Bing: https://www.bing.com/ping?sitemap=https://adinathgore.com/sitemap.xml"
-          
-          echo "✅ Sitemap submission URLs generated"
-          echo "📝 Manual verification required for search console integration"
-
   # --------------------
-  # SEO Performance Monitoring
+  # Performance Monitoring
   # --------------------
-  seo-performance-check:
-    name: SEO Performance Check
+  performance-monitoring:
+    name: Performance Monitoring
     runs-on: ubuntu-latest
     needs: [deploy-ui-prod]
     if: github.ref == 'refs/heads/master'

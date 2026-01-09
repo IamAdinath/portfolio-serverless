@@ -27,5 +27,5 @@ npm install
 **build**
 
 ```
-npm run
+npm start
 ```

@@ -16,18 +16,17 @@ interface SEOHeadProps {
 }
 
 const SEOHead: React.FC<SEOHeadProps> = ({
-  title = 'Adinath Gore - Full Stack Developer & Software Engineer',
-  description = 'Experienced Full Stack Developer specializing in React, Node.js, AWS, and modern web technologies. View my portfolio, blog, and professional experience.',
+  title = 'Adinath Gore - Python Developer & Cloud Engineer',
+  description = 'Experienced Python Developer and Cloud Engineer specializing in Django, Flask, AWS, serverless architecture, and cloud solutions. View my portfolio, blog, and professional experience.',
   keywords = [
     'Adinath Gore',
-    'Full Stack Developer',
-    'Software Engineer',
-    'React Developer',
-    'Node.js Developer',
+    'Python Developer',
+    'Cloud Engineer',
+    'Django Developer',
+    'Flask Developer',
     'AWS Developer',
-    'JavaScript',
-    'TypeScript',
-    'Web Development',
+    'Serverless Architecture',
+    'Cloud Solutions',
     'Portfolio',
     'Blog'
   ],
@@ -123,7 +122,7 @@ const SEOHead: React.FC<SEOHeadProps> = ({
           "@context": "https://schema.org",
           "@type": "Person",
           "name": "Adinath Gore",
-          "jobTitle": "Full Stack Developer",
+          "jobTitle": "Python Developer & Cloud Engineer",
           "description": description,
           "url": "https://adinathgore.com",
           "image": fullImage,
@@ -134,13 +133,14 @@ const SEOHead: React.FC<SEOHeadProps> = ({
             "https://stackoverflow.com/users/14975561/adinath-gore"
           ],
           "knowsAbout": [
-            "JavaScript",
-            "TypeScript",
-            "React",
-            "Node.js",
+            "Python",
+            "Django",
+            "Flask",
             "AWS",
-            "Full Stack Development",
-            "Software Engineering"
+            "Cloud Engineering",
+            "Serverless Architecture",
+            "DevOps",
+            "Cloud Solutions"
           ],
           "alumniOf": {
             "@type": "EducationalOrganization",
