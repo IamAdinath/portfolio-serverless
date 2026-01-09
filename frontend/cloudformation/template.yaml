@@ -65,6 +65,7 @@ Resources:
               OriginAccessIdentity: !Sub 'origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}'
         Aliases:
         - !Ref Hostname
+        - !Sub "www.${Hostname}"
         Enabled: true
         Comment: !Sub "Cloudfront Distribution for ${ProjectName} UI - Production"
         DefaultRootObject: index.html
@@ -143,6 +144,7 @@ Resources:
           AccessControlAllowOrigins:
             Items:
             - !Ref Hostname
+            - !Sub "www.${Hostname}"
           AccessControlExposeHeaders:
             Items:
             - ALL
