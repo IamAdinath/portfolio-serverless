@@ -1,5 +1,4 @@
 name: Deploy Portfolio
-name: Deploy Portfolio
 
 on:
   push:
@@ -101,8 +100,6 @@ jobs:
           REACT_APP_COGNITO_REDIRECT_SIGNIN: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNIN_DEV }}
           REACT_APP_COGNITO_REDIRECT_SIGNOUT: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNOUT_DEV }}
           REACT_APP_API_KEY: ${{ vars.REACT_APP_API_KEY_DEV }}
-
-
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -215,66 +212,7 @@ jobs:
           # Install dependencies
           npm ci --prefer-offline --no-audit
 
-      - name: Generate dynamic sitemap
-        working-directory: frontend
-        run: |
-          # Create sitemap generation script
-          cat > generate-sitemap.js << 'EOF'
-          const fs = require('fs');
-          const path = require('path');
-          
-          const baseUrl = 'https://adinathgore.com';
-          const currentDate = new Date().toISOString().split('T')[0];
-          
-          // Static pages
-          const staticPages = [
-            { url: '/', changefreq: 'weekly', priority: '1.0' },
-            { url: '/resume', changefreq: 'monthly', priority: '0.9' },
-            { url: '/about', changefreq: 'monthly', priority: '0.8' },
-            { url: '/blog', changefreq: 'weekly', priority: '0.8' }
-          ];
-          
-          let sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-          <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-                  xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"
-                  xmlns:xhtml="http://www.w3.org/1999/xhtml"
-                  xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0"
-                  xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">`;
-          
-          staticPages.forEach(page => {
-            sitemap += `
-            <url>
-              <loc>${baseUrl}${page.url}</loc>
-              <lastmod>${currentDate}</lastmod>
-              <changefreq>${page.changefreq}</changefreq>
-              <priority>${page.priority}</priority>
-            </url>`;
-          });
-          
-          sitemap += '\n</urlset>';
-          
-          fs.writeFileSync('public/sitemap.xml', sitemap);
-          console.log('✅ Sitemap generated successfully');
-          EOF
-          
-          node generate-sitemap.js
-          
-          # Generate production robots.txt
-          cat > public/robots.txt << EOF
-          User-agent: *
-          Allow: /
-          Disallow: /admin
-          Disallow: /writer
-          Disallow: /auth
-          
-          # Sitemap location
-          Sitemap: https://adinathgore.com/sitemap.xml
-          
-          # Crawl delay
-          Crawl-delay: 1
-          EOF
-
-      - name: Build with production SEO optimizations
+      - name: Build application
         working-directory: frontend
         run: |
           npm run build
@@ -289,100 +227,6 @@ jobs:
           REACT_APP_COGNITO_REDIRECT_SIGNIN: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNIN_PROD }}
           REACT_APP_COGNITO_REDIRECT_SIGNOUT: ${{ vars.REACT_APP_COGNITO_REDIRECT_SIGNOUT_PROD }}
           REACT_APP_API_KEY: ${{ vars.REACT_APP_API_KEY_PROD }}
-
-      - name: Advanced SEO optimizations and Compression
-        working-directory: frontend/build
-        run: |
-          echo "🚀 Applying advanced SEO optimizations and compression..."
-          
-          # Install brotli compression tool
-          sudo apt-get update && sudo apt-get install -y brotli
-          
-          # Advanced compression with both gzip and brotli
-          echo "🗜️ Compressing with gzip (level 9) and brotli (level 11)..."
-          
-          # Compress JavaScript files
-          find . -name "*.js" -type f -exec sh -c '
-            gzip -k -9 "$1"
-            brotli -k -q 11 "$1"
-          ' _ {} \;
-          
-          # Compress CSS files
-          find . -name "*.css" -type f -exec sh -c '
-            gzip -k -9 "$1"
-            brotli -k -q 11 "$1"
-          ' _ {} \;
-          
-          # Compress HTML files
-          find . -name "*.html" -type f -exec sh -c '
-            gzip -k -9 "$1"
-            brotli -k -q 11 "$1"
-          ' _ {} \;
-          
-          # Compress other assets
-          find . -name "*.json" -o -name "*.xml" -o -name "*.txt" -type f -exec sh -c '
-            gzip -k -9 "$1"
-            brotli -k -q 11 "$1"
-          ' _ {} \;
-          
-          # Calculate and display compression ratios
-          echo "📊 Compression Statistics:"
-          for ext in js css html json xml txt; do
-            if find . -name "*.$ext" -type f | head -1 | read file; then
-              original_size=$(find . -name "*.$ext" -type f -exec stat -c%s {} \; | awk '{sum+=$1} END {print sum}')
-              gzip_size=$(find . -name "*.$ext.gz" -type f -exec stat -c%s {} \; | awk '{sum+=$1} END {print sum}')
-              brotli_size=$(find . -name "*.$ext.br" -type f -exec stat -c%s {} \; | awk '{sum+=$1} END {print sum}')
-              
-              if [ "$original_size" -gt 0 ]; then
-                gzip_ratio=$(echo "scale=1; (1 - $gzip_size / $original_size) * 100" | bc -l 2>/dev/null || echo "N/A")
-                brotli_ratio=$(echo "scale=1; (1 - $brotli_size / $original_size) * 100" | bc -l 2>/dev/null || echo "N/A")
-                echo "$ext files: Original ${original_size}B, Gzip ${gzip_size}B (${gzip_ratio}% reduction), Brotli ${brotli_size}B (${brotli_ratio}% reduction)"
-              fi
-            fi
-          done
-          
-          # Add comprehensive security and SEO headers to index.html
-          sed -i 's/<head>/<head>\n  <!-- Security Headers -->\n  <meta http-equiv="X-Content-Type-Options" content="nosniff">\n  <meta http-equiv="X-Frame-Options" content="DENY">\n  <meta http-equiv="X-XSS-Protection" content="1; mode=block">\n  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">\n  <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">\n  \n  <!-- SEO Enhancements -->\n  <link rel="preconnect" href="https:\/\/fonts.googleapis.com">\n  <link rel="preconnect" href="https:\/\/fonts.gstatic.com" crossorigin>\n  <link rel="dns-prefetch" href="\/\/fonts.googleapis.com">\n  <link rel="dns-prefetch" href="\/\/fonts.gstatic.com">/' index.html
-          
-          # Create a comprehensive manifest.json if it doesn't exist
-          if [ ! -f "manifest.json" ]; then
-            cat > manifest.json << 'EOF'
-          {
-            "short_name": "Adinath Gore",
-            "name": "Adinath Gore - Full Stack Developer",
-            "description": "Portfolio of Adinath Gore, Full Stack Developer specializing in React, Node.js, and AWS",
-            "icons": [
-              {
-                "src": "favicon.ico",
-                "sizes": "64x64 32x32 24x24 16x16",
-                "type": "image/x-icon"
-              },
-              {
-                "src": "favicon-32x32.png",
-                "type": "image/png",
-                "sizes": "32x32"
-              },
-              {
-                "src": "favicon-16x16.png",
-                "type": "image/png",
-                "sizes": "16x16"
-              },
-              {
-                "src": "apple-touch-icon.png",
-                "type": "image/png",
-                "sizes": "180x180"
-              }
-            ],
-            "start_url": ".",
-            "display": "standalone",
-            "theme_color": "#667eea",
-            "background_color": "#ffffff",
-            "categories": ["portfolio", "developer", "technology"]
-          }
-          EOF
-          fi
-          
-          echo "✅ SEO optimizations applied successfully"
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -461,9 +305,9 @@ jobs:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
           LHCI_SERVER_BASE_URL: ${{ vars.UI_HOSTNAME_PROD }}
 
-      - name: SEO Health Check
+      - name: Basic Health Check
         run: |
-          echo "🔍 Running SEO health checks..."
+          echo "🔍 Running basic health checks..."
           
           SITE_URL="https://${{ vars.UI_HOSTNAME_PROD }}"
           
@@ -474,23 +318,6 @@ jobs:
             echo "❌ Site is not accessible"
           fi
           
-          # Check if sitemap is accessible
-          if curl -s -o /dev/null -w "%{http_code}" "$SITE_URL/sitemap.xml" | grep -q "200"; then
-            echo "✅ Sitemap is accessible"
-          else
-            echo "❌ Sitemap is not accessible"
-          fi
-          
-          # Check if robots.txt is accessible
-          if curl -s -o /dev/null -w "%{http_code}" "$SITE_URL/robots.txt" | grep -q "200"; then
-            echo "✅ Robots.txt is accessible"
-          else
-            echo "❌ Robots.txt is not accessible"
-          fi
-          
-          # Check SSL certificate and HTTPS redirect
-          echo "🔒 Testing HTTPS configuration..."
-          
           # Test HTTPS connection
           if curl -s -I "$SITE_URL" | grep -q "HTTP/2 200\|HTTP/1.1 200"; then
             echo "✅ HTTPS is working"
@@ -498,89 +325,4 @@ jobs:
             echo "❌ HTTPS connection failed"
           fi
           
-          # Test HTTP to HTTPS redirect
-          HTTP_URL=$(echo "$SITE_URL" | sed 's/https:/http:/')
-          if curl -s -I "$HTTP_URL" | grep -q "301\|302"; then
-            echo "✅ HTTP to HTTPS redirect is working"
-          else
-            echo "⚠️ HTTP to HTTPS redirect not detected"
-          fi
-          
-          # Test HSTS header
-          if curl -s -I "$SITE_URL" | grep -i "strict-transport-security"; then
-            echo "✅ HSTS header is present"
-          else
-            echo "⚠️ HSTS header not found"
-          fi
-          
-          # Test security headers
-          SECURITY_HEADERS=("x-content-type-options" "x-frame-options" "x-xss-protection")
-          for header in "${SECURITY_HEADERS[@]}"; do
-            if curl -s -I "$SITE_URL" | grep -i "$header"; then
-              echo "✅ $header header is present"
-            else
-              echo "⚠️ $header header not found"
-            fi
-          done
-          
-          echo "🎯 SEO health check completed"
-
-      - name: Generate SEO Report
-        run: |
-          echo "📊 Generating SEO deployment report..."
-          
-          cat > seo-report.md << EOF
-          # SEO Deployment Report
-          
-          **Deployment Date:** $(date)
-          **Environment:** Production
-          **Site URL:** https://${{ vars.UI_HOSTNAME_PROD }}
-          
-          ## ✅ SEO Features Deployed
-          
-          - [x] Dynamic meta tags and Open Graph
-          - [x] Structured data (JSON-LD)
-          - [x] XML Sitemap generation
-          - [x] Robots.txt configuration
-          - [x] Security headers
-          - [x] Asset compression (gzip)
-          - [x] Web manifest for PWA
-          - [x] Performance optimizations
-          
-          ## 🔗 Important URLs
-          
-          - **Sitemap:** https://${{ vars.UI_HOSTNAME_PROD }}/sitemap.xml
-          - **Robots:** https://${{ vars.UI_HOSTNAME_PROD }}/robots.txt
-          - **Manifest:** https://${{ vars.UI_HOSTNAME_PROD }}/manifest.json
-          
-          ## 📈 Next Steps
-          
-          1. Verify Google Search Console integration
-          2. Submit sitemap to search engines
-          3. Monitor Core Web Vitals
-          4. Track keyword rankings
-          5. Analyze user engagement metrics
-          
-          ## 🛠️ Tools for Monitoring
-          
-          - Google Search Console
-          - Google Analytics 4
-          - PageSpeed Insights
-          - GTmetrix
-          - SEMrush/Ahrefs
-          
-          EOF
-          
-          echo "✅ SEO report generated"
-          cat seo-report.md
-
-      - name: Upload SEO artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: seo-deployment-artifacts
-          path: |
-            seo-report.md
-            frontend/build/sitemap.xml
-            frontend/build/robots.txt
-            frontend/build/manifest.json
-          retention-days: 30
+          echo "🎯 Health check completed"
