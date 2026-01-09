@@ -1,4 +1,5 @@
 name: Deploy Portfolio
+name: Deploy Portfolio
 
 on:
   push:
