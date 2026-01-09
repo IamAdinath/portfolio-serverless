@@ -118,7 +118,6 @@ Resources:
           HeadersConfig:
             HeaderBehavior: whitelist
             Headers:
-              - Accept-Encoding
               - CloudFront-Viewer-Country
           CookiesConfig:
             CookieBehavior: none
