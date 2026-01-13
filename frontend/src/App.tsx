@@ -107,37 +107,43 @@ const App: React.FC = () => {
       <AuthProvider>
         <ToastProvider> 
           <Router>
+          {/* Skip Navigation Link for Keyboard Users */}
+          <a href="#main-content" className="skip-nav-link">
+            Skip to main content
+          </a>
           <Header />
-          <Suspense fallback={<PageLoader />}>
-            <Routes>
-              <Route path="/" element={<Portfolio />} />
-              <Route path="/about" element={<AboutMe />} />
-              <Route path="/blogs" element={<BlogList />} />
-              <Route path="/resume" element={<Resume />} />
-              <Route path="/auth" element={<AuthPage />} />
-              <Route path="/writer" element={
-                <ProtectedRoute>
-                  <WriterPage />
-                </ProtectedRoute>
-              } />
-              <Route path="/admin" element={
-                <ProtectedRoute>
-                  <AdminDashboard />
-                </ProtectedRoute>
-              } />
-              <Route path="/admin/stats/:blogId" element={
-                <ProtectedRoute>
-                  <BlogStats />
-                </ProtectedRoute>
-              } />
-              <Route path="/admin/analytics" element={
-                <ProtectedRoute>
-                  <WebAnalytics />
-                </ProtectedRoute>
-              } />
-              <Route path="/blog/:blogId" element={<Blog />} />
-            </Routes>
-          </Suspense>
+          <main role="main" id="main-content">
+            <Suspense fallback={<PageLoader />}>
+              <Routes>
+                <Route path="/" element={<Portfolio />} />
+                <Route path="/about" element={<AboutMe />} />
+                <Route path="/blogs" element={<BlogList />} />
+                <Route path="/resume" element={<Resume />} />
+                <Route path="/auth" element={<AuthPage />} />
+                <Route path="/writer" element={
+                  <ProtectedRoute>
+                    <WriterPage />
+                  </ProtectedRoute>
+                } />
+                <Route path="/admin" element={
+                  <ProtectedRoute>
+                    <AdminDashboard />
+                  </ProtectedRoute>
+                } />
+                <Route path="/admin/stats/:blogId" element={
+                  <ProtectedRoute>
+                    <BlogStats />
+                  </ProtectedRoute>
+                } />
+                <Route path="/admin/analytics" element={
+                  <ProtectedRoute>
+                    <WebAnalytics />
+                  </ProtectedRoute>
+                } />
+                <Route path="/blog/:blogId" element={<Blog />} />
+              </Routes>
+            </Suspense>
+          </main>
           <Footer />
           </Router>
         </ToastProvider>

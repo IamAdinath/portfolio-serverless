@@ -55,7 +55,7 @@ const Header: React.FC = () => {
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="desktop-nav">
+        <nav className="desktop-nav" role="navigation" aria-label="Main navigation">
           <div className="nav-links">
             {navLinks.map((link) => {
               const isActive = location.pathname === link.path;
@@ -90,14 +90,16 @@ const Header: React.FC = () => {
         <button 
           className="mobile-menu-btn"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          aria-label="Toggle menu"
+          aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={isMobileMenuOpen}
+          aria-controls="mobile-navigation"
         >
           <FontAwesomeIcon icon={isMobileMenuOpen ? faTimes : faBars} />
         </button>
       </div>
 
       {/* Mobile Navigation */}
-      <div className={`mobile-nav ${isMobileMenuOpen ? 'open' : ''}`}>
+      <nav className={`mobile-nav ${isMobileMenuOpen ? 'open' : ''}`} role="navigation" aria-label="Mobile navigation" aria-hidden={!isMobileMenuOpen} id="mobile-navigation">
         <div className="mobile-nav-content">
           {navLinks.map((link) => {
             const isActive = location.pathname === link.path;
@@ -126,7 +128,7 @@ const Header: React.FC = () => {
             </div>
           )}
         </div>
-      </div>
+      </nav>
 
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
