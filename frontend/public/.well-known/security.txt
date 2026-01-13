@@ -1,0 +1,21 @@
+Contact: mailto:security@adinathgore.com
+Contact: https://adinathgore.com/contact
+Expires: 2025-12-31T23:59:59.000Z
+Encryption: https://adinathgore.com/pgp-key.txt
+Preferred-Languages: en
+Canonical: https://adinathgore.com/.well-known/security.txt
+Policy: https://adinathgore.com/security-policy
+Acknowledgments: https://adinathgore.com/security-acknowledgments
+
+# Security Policy
+# 
+# This file contains contact information for security researchers
+# to report security vulnerabilities in this website.
+#
+# Please report security issues responsibly and allow reasonable
+# time for fixes before public disclosure.
+#
+# Scope: This website (adinathgore.com) and its subdomains
+# Out of scope: Third-party services and dependencies
+#
+# Thank you for helping keep this website secure!

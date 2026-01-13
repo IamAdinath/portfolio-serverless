@@ -1,27 +1,98 @@
 {
+  "name": "Adinath Gore - Python Developer & Cloud Engineer Portfolio",
   "short_name": "Adinath Gore",
-  "name": "Adinath Gore - Full Stack Developer",
-  "description": "Portfolio of Adinath Gore, Full Stack Developer specializing in React, Node.js, and AWS",
+  "description": "Professional portfolio of Adinath Gore, experienced Python Developer and Cloud Engineer specializing in AWS, Django, Flask, and serverless architecture",
+  "lang": "en",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#667eea",
+  "background_color": "#ffffff",
+  "categories": ["portfolio", "developer", "technology", "python", "cloud", "aws"],
+  "screenshots": [
+    {
+      "src": "screenshot-wide.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Portfolio Homepage"
+    },
+    {
+      "src": "screenshot-narrow.png",
+      "sizes": "750x1334",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Portfolio Mobile View"
+    }
+  ],
   "icons": [
     {
       "src": "favicon.ico",
       "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "type": "image/x-icon",
+      "purpose": "any"
+    },
+    {
+      "src": "favicon-16x16.png",
+      "type": "image/png",
+      "sizes": "16x16",
+      "purpose": "any"
+    },
+    {
+      "src": "favicon-32x32.png",
+      "type": "image/png",
+      "sizes": "32x32",
+      "purpose": "any"
+    },
+    {
+      "src": "apple-touch-icon.png",
+      "type": "image/png",
+      "sizes": "180x180",
+      "purpose": "any"
     },
     {
       "src": "logo192.png",
       "type": "image/png",
-      "sizes": "192x192"
+      "sizes": "192x192",
+      "purpose": "any maskable"
     },
     {
       "src": "logo512.png",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "512x512",
+      "purpose": "any maskable"
     }
   ],
-  "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#667eea",
-  "background_color": "#ffffff",
-  "categories": ["portfolio", "developer", "technology"]
+  "shortcuts": [
+    {
+      "name": "About Me",
+      "short_name": "About",
+      "description": "Learn about Adinath Gore's background and experience",
+      "url": "/about",
+      "icons": [{ "src": "favicon-32x32.png", "sizes": "32x32" }]
+    },
+    {
+      "name": "Resume",
+      "short_name": "Resume",
+      "description": "View professional resume and experience",
+      "url": "/resume",
+      "icons": [{ "src": "favicon-32x32.png", "sizes": "32x32" }]
+    },
+    {
+      "name": "Blog",
+      "short_name": "Blog",
+      "description": "Read latest articles and insights",
+      "url": "/blogs",
+      "icons": [{ "src": "favicon-32x32.png", "sizes": "32x32" }]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  }
 }

@@ -1,0 +1,19 @@
+# ads.txt file for adinathgore.com
+# This file is used to authorize digital advertising sellers
+# More info: https://iabtechlab.com/ads-txt/
+
+# Currently no advertising partners authorized
+# Contact: contact@adinathgore.com for advertising inquiries
+
+# Format: <Field #1>, <Field #2>, <Field #3>, <Field #4>
+# Field #1: Domain name of the advertising system
+# Field #2: Publisher's Account ID
+# Field #3: Type of Account/Relationship
+# Field #4: Certification Authority ID (Optional)
+
+# Example (commented out):
+# google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0
+# adsystem.com, 12345, RESELLER, 1234567890abcdef
+
+# No current advertising relationships
+# Last updated: 2025-01-13

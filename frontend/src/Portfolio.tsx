@@ -269,14 +269,38 @@ const Portfolio: React.FC = () => {
             <h3>Let's Connect</h3>
             <p>Ready to discuss your next project or just want to say hello?</p>
             <div className="portfolio-social-links">
-              <a href={SOCIAL_LINKS.LINKEDIN} target="_blank" rel="noopener noreferrer" className="portfolio-social-link linkedin">
+              <a 
+                href={SOCIAL_LINKS.LINKEDIN} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="portfolio-social-link linkedin"
+                aria-label="Visit Adinath Gore's LinkedIn profile"
+                title="LinkedIn Profile"
+              >
                 <FontAwesomeIcon icon={faLinkedin} />
+                <span className="sr-only">LinkedIn</span>
               </a>
-              <a href={SOCIAL_LINKS.GITHUB} target="_blank" rel="noopener noreferrer" className="portfolio-social-link github">
+              <a 
+                href={SOCIAL_LINKS.GITHUB} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="portfolio-social-link github"
+                aria-label="Visit Adinath Gore's GitHub profile"
+                title="GitHub Profile"
+              >
                 <FontAwesomeIcon icon={faGithub} />
+                <span className="sr-only">GitHub</span>
               </a>
-              <a href={SOCIAL_LINKS.MEDIUM} target="_blank" rel="noopener noreferrer" className="portfolio-social-link medium">
+              <a 
+                href={SOCIAL_LINKS.MEDIUM} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="portfolio-social-link medium"
+                aria-label="Visit Adinath Gore's Medium blog"
+                title="Medium Blog"
+              >
                 <FontAwesomeIcon icon={faMedium} />
+                <span className="sr-only">Medium</span>
               </a>
             </div>
           </div>
