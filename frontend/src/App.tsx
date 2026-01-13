@@ -5,8 +5,10 @@ import { apiRetryManager } from './utils/apiRetryManager';
 import { analyticsTracker } from './utils/analytics';
 import { initializePerformanceOptimizations } from './utils/performanceOptimizations';
 import { initializeApiDebugging } from './utils/apiDebugger';
+import { preloadLCPImage } from './utils/lcpOptimization';
 import Header from './components/common/Header';
 import Footer from './components/common/Footer';
+import LCPOptimization from './components/common/LCPOptimization';
 import { ToastProvider } from './components/common/ToastProvider';
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/common/ProtectedRoute';
@@ -43,6 +45,9 @@ const PageLoader: React.FC = () => (
 const App: React.FC = () => {
   // Reset API retry manager and initialize analytics on app load
   useEffect(() => {
+    // Preload LCP image as early as possible for better performance
+    preloadLCPImage();
+    
     // Initialize performance optimizations first
     initializePerformanceOptimizations();
     
@@ -99,6 +104,7 @@ const App: React.FC = () => {
 
   return (
     <HelmetProvider>
+      <LCPOptimization />
       <SecurityConfig />
       <AuthProvider>
         <ToastProvider> 

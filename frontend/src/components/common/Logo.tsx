@@ -26,21 +26,31 @@ const Logo: React.FC<LogoProps> = ({
     large: { width: 192, height: 192 }
   };
 
+  // For LCP optimization, ensure the image is rendered immediately
+  const imgProps: React.ImgHTMLAttributes<HTMLImageElement> = {
+    src: logoAsset,
+    alt: "Adinath Gore - Logo",
+    className: `${className} ${sizeClasses[size]} object-contain`,
+    loading: loading,
+    width: sizePixels[size].width,
+    height: sizePixels[size].height,
+    decoding: priority ? 'sync' : 'async',
+    style: {
+      // Ensure image takes space even while loading for LCP
+      minWidth: sizePixels[size].width,
+      minHeight: sizePixels[size].height,
+    }
+  };
+
+  // Add fetchPriority for LCP images (TypeScript workaround)
+  if (priority) {
+    (imgProps as any).fetchPriority = 'high';
+  }
+
   return (
-    <img
-      src={logoAsset}
+    <img 
+      {...imgProps}
       alt="Adinath Gore - Logo"
-      className={`${className} ${sizeClasses[size]} object-contain`}
-      loading={loading}
-      {...(priority && { fetchPriority: 'high' as any })}
-      width={sizePixels[size].width}
-      height={sizePixels[size].height}
-      decoding={priority ? 'sync' : 'async'}
-      style={{
-        // Ensure image takes space even while loading for LCP
-        minWidth: sizePixels[size].width,
-        minHeight: sizePixels[size].height,
-      }}
     />
   );
 };
