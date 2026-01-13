@@ -4,6 +4,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faTimes, faUser, faSignOutAlt, faPen } from '@fortawesome/free-solid-svg-icons';
+import SmallLogo from './SmallLogo';
 import './Header.css';
 
 const publicNavLinks = [
@@ -48,10 +49,7 @@ const Header: React.FC = () => {
       <div className="header-container">
         {/* Logo */}
         <Link to="/" className="logo">
-          <div className="logo-text">
-            <span className="logo-initials">AG</span>
-            <span className="logo-name">Adinath Gore</span>
-          </div>
+          <SmallLogo />
         </Link>
 
         {/* Desktop Navigation */}

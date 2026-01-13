@@ -50,18 +50,9 @@
   gap: 12px;
 }
 
+/* Keep logo-initials for backward compatibility but hide it since we're using images now */
 .logo-initials {
-  width: 40px;
-  height: 40px;
-  background: linear-gradient(135deg, #000000 0%, #434343 50%, #1a1a1a 100%);
-  color: white;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 1.1rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: none;
 }
 
 .logo-name {
@@ -341,10 +332,9 @@
     height: 60px;
   }
 
+  /* Hide logo-initials in mobile view since we're using images now */
   .logo-initials {
-    width: 36px;
-    height: 36px;
-    font-size: 1rem;
+    display: none;
   }
 
   .mobile-nav-content {

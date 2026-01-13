@@ -34,17 +34,9 @@
 
 .logo:hover { transform: scale(1.05); }
 
+/* Hide logo-initials since we're using actual image logos now */
 .logo-initials {
-  width: 40px;
-  height: 40px;
-  background: var(--gradient-primary);
-  color: white;
-  border-radius: var(--radius-lg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: var(--font-weight-bold);
-  box-shadow: var(--shadow-md);
+  display: none;
 }
 
 /* Navigation */

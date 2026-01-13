@@ -14,6 +14,7 @@ import {
   faCode,
   faArrowUp
 } from '@fortawesome/free-solid-svg-icons';
+import SmallLogo from './SmallLogo';
 import './Footer.css';
 import { CONTACT, SOCIAL_LINKS } from '../../constants';
 
@@ -48,7 +49,7 @@ const Footer: React.FC = () => {
           {/* Brand Section */}
           <div className="footer-brand">
             <div className="footer-logo">
-              <span className="footer-logo-initials">AG</span>
+              <SmallLogo showText={false} size="medium" />
               <span className="footer-logo-name">Adinath Gore</span>
             </div>
             <p className="footer-tagline">
