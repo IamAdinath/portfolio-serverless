@@ -88,7 +88,13 @@ const BlogCard: React.FC<BlogCardProps> = ({
         
         {thumbnail && (
           <div className="blogcard-thumbnail-container">
-            <img src={thumbnail} alt={`Thumbnail for ${title}`} className="blogcard-thumbnail" />
+            <img 
+              src={thumbnail} 
+              alt={`Thumbnail for ${title}`} 
+              className="blogcard-thumbnail"
+              loading="lazy"
+              decoding="async"
+            />
           </div>
         )}
       </article>

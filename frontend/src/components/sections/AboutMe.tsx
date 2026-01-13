@@ -48,6 +48,7 @@ const AboutMe: React.FC = () => {
               <ProfileImage 
                 className="profile-image"
                 size="medium"
+                loading="lazy"
               />
               <div className="profile-badge">
                 <FontAwesomeIcon icon={faUser} />

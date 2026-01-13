@@ -42,7 +42,10 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "serve": "npx serve -s build -l 3000"
+    "serve": "npx serve -s build -l 3000",
+    "analyze": "npm run build && npx webpack-bundle-analyzer build/static/js/*.js",
+    "analyze-css": "node public/optimize-build.js",
+    "optimize": "npm run analyze-css && npm run build"
   },
   "eslintConfig": {
     "extends": [

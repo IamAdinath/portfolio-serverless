@@ -1,21 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import { GetProfileImage } from './userAPI';
+import React from 'react';
 import { FILES } from '../../constants';
+import { useProfileImagePreload } from '../../hooks/useProfileImagePreload';
 
 interface ProfileImageProps {
   size?: 'small' | 'medium' | 'large';
   className?: string;
   showFallback?: boolean;
+  priority?: boolean; // For LCP optimization
+  loading?: 'lazy' | 'eager'; // Control loading behavior
 }
 
 const ProfileImage: React.FC<ProfileImageProps> = ({
   size = 'medium',
   className = '',
-  showFallback = true
+  showFallback = true,
+  priority = false,
+  loading = 'eager'
 }) => {
-  const [imageUrl, setImageUrl] = useState<string>('');
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const { imageUrl, isLoading, error } = useProfileImagePreload();
 
   const sizeClasses = {
     small: 'w-16 h-16',
@@ -23,52 +25,52 @@ const ProfileImage: React.FC<ProfileImageProps> = ({
     large: 'w-48 h-48'
   };
 
-  useEffect(() => {
-    const fetchProfileImage = async () => {
-      try {
-        setLoading(true);
-        const url = await GetProfileImage();
-        setImageUrl(url);
-        setError(false);
-      } catch (err) {
-        console.error('Failed to load profile image:', err);
-        setError(true);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProfileImage();
-  }, [showFallback]);
-
-  const handleImageError = () => {
-    if (showFallback && !error) {
-      setError(true);
-    }
+  const sizePixels = {
+    small: { width: 64, height: 64 },
+    medium: { width: 128, height: 128 },
+    large: { width: 192, height: 192 }
   };
 
-  if (loading) {
-    return (
-      <div className={`${className} ${sizeClasses[size]} bg-gray-200 rounded-full flex items-center justify-center`}>
-        <span className="text-gray-500 text-xs">Loading...</span>
-      </div>
-    );
+  // Optimized fallback with better styling
+  const FallbackComponent = () => (
+    <div className={`${className} ${sizeClasses[size]} bg-gradient-to-br from-gray-100 to-gray-300 rounded-full flex items-center justify-center border-2 border-gray-400`}>
+      <span className="text-gray-700 font-bold text-2xl">AG</span>
+    </div>
+  );
+
+  // Show fallback immediately if there's an error or no fallback requested
+  if (error && !showFallback) {
+    return null;
   }
 
-  if (error || !imageUrl) {
-    return (
-      <div className={`${className} ${sizeClasses[size]} bg-gradient-to-br from-gray-100 to-gray-300 rounded-full flex items-center justify-center border-2 border-gray-400`}>
-        <span className="text-gray-700 font-bold text-2xl">AG</span>
-      </div>
-    );
+  if (error || (!imageUrl && !isLoading)) {
+    return <FallbackComponent />;
   }
 
+  // Show fallback while loading for non-priority images
+  if (isLoading && !priority) {
+    return <FallbackComponent />;
+  }
+
+  // For priority images, render immediately with proper attributes
   return (
     <img
-      src={imageUrl}
+      src={imageUrl || ''}
       alt={FILES.PROFILE_IMAGE_ALT}
       className={`${className} ${sizeClasses[size]} rounded-full object-cover`}
-      onError={handleImageError}
+      loading={loading}
+      fetchPriority={priority ? 'high' : 'auto'}
+      width={sizePixels[size].width}
+      height={sizePixels[size].height}
+      decoding={priority ? 'sync' : 'async'}
+      style={{
+        // Ensure image takes space even while loading for LCP
+        minWidth: sizePixels[size].width,
+        minHeight: sizePixels[size].height,
+      }}
+      onError={() => {
+        // Fallback handled by hook state
+      }}
     />
   );
 };

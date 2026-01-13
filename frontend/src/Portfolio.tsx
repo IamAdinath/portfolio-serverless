@@ -1,9 +1,19 @@
-// Portfolio.tsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRocket, faCode, faUser, faBlog, faQuoteLeft, faArrowRight, faDownload, faStar } from '@fortawesome/free-solid-svg-icons';
-import { faLinkedin, faGithub, faMedium } from '@fortawesome/free-brands-svg-icons';
+import { 
+  FontAwesomeIcon,
+  faRocket, 
+  faCode, 
+  faUser, 
+  faBlog, 
+  faQuoteLeft, 
+  faArrowRight, 
+  faDownload, 
+  faStar,
+  faLinkedin, 
+  faGithub, 
+  faMedium 
+} from '../utils/iconLibrary';
 import { usePageTitle } from './components/common/usePageTitle';
 import ProfileImage from './components/common/ProfileImage';
 import SEOHead from './components/common/SEOHead';
@@ -122,6 +132,8 @@ const Portfolio: React.FC = () => {
                 <ProfileImage
                   className="portfolio-profile-image"
                   size="large"
+                  priority={true}
+                  loading="eager"
                 />
                 <div className="portfolio-profile-badge">
                   <FontAwesomeIcon icon={faRocket} />
