@@ -1,0 +1,71 @@
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+# TEAM
+
+    Developer & Designer: Adinath Gore
+    Contact: contact [at] adinathgore.com
+    Twitter: @adinath_gore
+    LinkedIn: linkedin.com/in/iamadinath
+    GitHub: github.com/IamAdinath
+    Medium: medium.com/@Iam_Adinath
+    Location: Mumbai, Maharashtra, India
+
+# THANKS
+
+    To all the open source contributors
+    React.js community
+    AWS community
+    Python community
+    Stack Overflow community
+
+# TECHNOLOGY COLOPHON
+
+    ## Frontend
+    React.js
+    TypeScript
+    CSS3
+    HTML5
+    FontAwesome Icons
+    React Router
+    React Helmet Async
+
+    ## Backend & Cloud
+    Python
+    Django
+    Flask
+    FastAPI
+    AWS Lambda
+    AWS CloudFormation
+    AWS S3
+    AWS CloudFront
+    AWS API Gateway
+
+    ## Database
+    PostgreSQL
+    MongoDB
+    DynamoDB
+    MySQL
+
+    ## DevOps & Tools
+    Docker
+    GitHub Actions
+    AWS CLI
+    Git
+    VS Code
+    Postman
+
+    ## Hosting & CDN
+    AWS S3 Static Hosting
+    AWS CloudFront CDN
+    AWS Route 53 DNS
+
+# SITE
+
+    Last update: 2025/01/13
+    Language: English
+    Doctype: HTML5
+    IDE: Visual Studio Code
+    Standards: HTML5, CSS3, WCAG 2.1 AA
+    Components: React Components, Service Worker, PWA
+    Software: React.js, AWS Services

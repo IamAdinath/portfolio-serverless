@@ -1,13 +1,142 @@
+/**
+ * Optimized main CSS entry point
+ * Imports only essential styles and uses CSS variables for consistency
+ */
+
+/* CSS Variables - Load first for all components */
+@import './styles/variables.css';
+
+/* Critical CSS - Above the fold styles */
+@import './styles/critical.css';
+
+/* Utility classes - Reduces component CSS duplication */
+@import './styles/utilities.css';
+
+/* Component styles - Optimized using variables and utilities */
+@import './styles/components.css';
+
+/* Base styles */
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: var(--font-family-base);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color: var(--color-text);
+  line-height: var(--line-height-normal);
+  background: var(--gradient-background);
+  min-height: 100vh;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: var(--font-family-mono);
+}
+
+/* Remove default styles */
+* {
+  box-sizing: border-box;
+}
+
+/* Focus styles for accessibility */
+*:focus {
+  outline: 2px solid rgba(0, 0, 0, 0.2);
+  outline-offset: 2px;
+}
+
+/* Skip navigation link for keyboard accessibility */
+.skip-nav-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: var(--color-primary);
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: 600;
+  z-index: 1000;
+  transition: top 0.3s ease;
+}
+
+.skip-nav-link:focus {
+  top: 6px;
+  outline: 2px solid white;
+  outline-offset: 2px;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Loading states */
+.loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* Page loader */
+.page-loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+  font-size: var(--font-size-lg);
+  color: var(--color-text-muted);
+}
+
+/* Animation utilities */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heartbeat {
+  0%, 50%, 100% { transform: scale(1); }
+  25%, 75% { transform: scale(1.1); }
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.animate-fadeInDown {
+  animation: fadeInDown 0.6s ease-out;
+}
+
+.animate-heartbeat {
+  animation: heartbeat 2s infinite;
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  
+  .card {
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+  }
 }

@@ -24,7 +24,15 @@ cd frontend
 npm install
 ```
 
-**build**
+**Environment Setup**
+
+Copy `.env.development` to `.env.local` and fill in your actual values:
+
+```
+cp .env.development .env.local
+```
+
+**Start Development Server**
 
 ```
 npm start

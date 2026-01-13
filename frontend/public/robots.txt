@@ -3,9 +3,32 @@ Allow: /
 Disallow: /admin
 Disallow: /writer
 Disallow: /auth
+Disallow: /private/
+Disallow: /*.json$
+Disallow: /*?*
+Disallow: /api/
+
+# Allow specific bots
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
 
 # Sitemap location
 Sitemap: https://adinathgore.com/sitemap.xml
 
 # Crawl delay
 Crawl-delay: 1
+
+# Host directive
+Host: https://adinathgore.com

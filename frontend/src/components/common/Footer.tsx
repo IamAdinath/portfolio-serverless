@@ -14,6 +14,7 @@ import {
   faCode,
   faArrowUp
 } from '@fortawesome/free-solid-svg-icons';
+import SmallLogo from './SmallLogo';
 import './Footer.css';
 import { CONTACT, SOCIAL_LINKS } from '../../constants';
 
@@ -48,14 +49,14 @@ const Footer: React.FC = () => {
           {/* Brand Section */}
           <div className="footer-brand">
             <div className="footer-logo">
-              <span className="footer-logo-initials">AG</span>
+              <SmallLogo showText={false} size="medium" />
               <span className="footer-logo-name">Adinath Gore</span>
             </div>
             <p className="footer-tagline">
               Full-Stack Developer & Cloud Architect passionate about creating
               scalable web applications and innovative digital solutions.
             </p>
-            <div className="footer-social">
+            <div className="footer-social" role="list" aria-label="Social media links">
               {socialLinks.map((social, index) => (
                 <a
                   key={index}
@@ -64,8 +65,9 @@ const Footer: React.FC = () => {
                   rel="noopener noreferrer"
                   className="social-icon"
                   title={social.label}
+                  aria-label={`Visit ${social.label} profile`}
                 >
-                  <FontAwesomeIcon icon={social.icon} />
+                  <FontAwesomeIcon icon={social.icon} aria-hidden="true" />
                 </a>
               ))}
             </div>
@@ -74,15 +76,17 @@ const Footer: React.FC = () => {
           {/* Quick Links */}
           <div className="footer-links">
             <h4>Quick Links</h4>
-            <ul>
-              {quickLinks.map((link, index) => (
-                <li key={index}>
-                  <Link to={link.path} className="footer-nav-link">
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <nav aria-label="Footer navigation">
+              <ul>
+                {quickLinks.map((link, index) => (
+                  <li key={index}>
+                    <Link to={link.path} className="footer-nav-link">
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
           </div>
 
           {/* Contact Info */}
@@ -115,8 +119,9 @@ const Footer: React.FC = () => {
             onClick={scrollToTop}
             className="scroll-to-top"
             title="Back to top"
+            aria-label="Scroll back to top of page"
           >
-            <FontAwesomeIcon icon={faArrowUp} />
+            <FontAwesomeIcon icon={faArrowUp} aria-hidden="true" />
           </button>
         </div>
       </div>

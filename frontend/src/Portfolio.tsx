@@ -1,13 +1,25 @@
-// Portfolio.tsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRocket, faCode, faUser, faBlog, faQuoteLeft, faArrowRight, faDownload, faStar } from '@fortawesome/free-solid-svg-icons';
-import { faLinkedin, faGithub, faMedium } from '@fortawesome/free-brands-svg-icons';
+import { Helmet } from 'react-helmet-async';
+import { 
+  FontAwesomeIcon,
+  faRocket, 
+  faCode, 
+  faUser, 
+  faBlog, 
+  faQuoteLeft, 
+  faArrowRight, 
+  faDownload, 
+  faStar,
+  faLinkedin, 
+  faGithub, 
+  faMedium 
+} from './utils/iconLibrary';
 import { usePageTitle } from './components/common/usePageTitle';
-import ProfileImage from './components/common/ProfileImage';
+import Logo from './components/common/Logo';
 import SEOHead from './components/common/SEOHead';
 import { SOCIAL_LINKS } from './constants';
+import logoAsset from './assets/Logo_old.png';
 import './Portfolio.css';
 
 const Portfolio: React.FC = () => {
@@ -80,6 +92,17 @@ const Portfolio: React.FC = () => {
         url="/"
         type="profile"
       />
+      
+      {/* LCP Image Optimization - Ensure logo is preloaded for better performance */}
+      <Helmet>
+        <link 
+          rel="preload" 
+          as="image" 
+          href={logoAsset} 
+          fetchPriority="high"
+        />
+      </Helmet>
+      
       <div className="portfolio-main-container">
         {/* Hero Section */}
         <section className="portfolio-hero-section">
@@ -119,9 +142,11 @@ const Portfolio: React.FC = () => {
             </div>
             <div className="portfolio-hero-image">
               <div className="portfolio-profile-card">
-                <ProfileImage
+                <Logo
                   className="portfolio-profile-image"
                   size="large"
+                  priority={true}
+                  loading="eager"
                 />
                 <div className="portfolio-profile-badge">
                   <FontAwesomeIcon icon={faRocket} />
@@ -269,14 +294,38 @@ const Portfolio: React.FC = () => {
             <h3>Let's Connect</h3>
             <p>Ready to discuss your next project or just want to say hello?</p>
             <div className="portfolio-social-links">
-              <a href={SOCIAL_LINKS.LINKEDIN} target="_blank" rel="noopener noreferrer" className="portfolio-social-link linkedin">
+              <a 
+                href={SOCIAL_LINKS.LINKEDIN} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="portfolio-social-link linkedin"
+                aria-label="Visit Adinath Gore's LinkedIn profile"
+                title="LinkedIn Profile"
+              >
                 <FontAwesomeIcon icon={faLinkedin} />
+                <span className="sr-only">LinkedIn</span>
               </a>
-              <a href={SOCIAL_LINKS.GITHUB} target="_blank" rel="noopener noreferrer" className="portfolio-social-link github">
+              <a 
+                href={SOCIAL_LINKS.GITHUB} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="portfolio-social-link github"
+                aria-label="Visit Adinath Gore's GitHub profile"
+                title="GitHub Profile"
+              >
                 <FontAwesomeIcon icon={faGithub} />
+                <span className="sr-only">GitHub</span>
               </a>
-              <a href={SOCIAL_LINKS.MEDIUM} target="_blank" rel="noopener noreferrer" className="portfolio-social-link medium">
+              <a 
+                href={SOCIAL_LINKS.MEDIUM} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="portfolio-social-link medium"
+                aria-label="Visit Adinath Gore's Medium blog"
+                title="Medium Blog"
+              >
                 <FontAwesomeIcon icon={faMedium} />
+                <span className="sr-only">Medium</span>
               </a>
             </div>
           </div>

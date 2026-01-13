@@ -54,6 +54,36 @@ const SEOHead: React.FC<SEOHeadProps> = ({
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
       <meta name="language" content="English" />
+      <meta name="geo.region" content="IN-MH" />
+      <meta name="geo.placename" content="Maharashtra, India" />
+      <meta name="geo.position" content="19.0760;72.8777" />
+      <meta name="ICBM" content="19.0760, 72.8777" />
+      
+      {/* Additional SEO Meta Tags */}
+      <meta name="classification" content="Portfolio, Software Development, Cloud Engineering" />
+      <meta name="category" content="Technology, Software Development, Cloud Computing" />
+      <meta name="coverage" content="Worldwide" />
+      <meta name="distribution" content="Global" />
+      <meta name="rating" content="General" />
+      <meta name="revisit-after" content="7 days" />
+      <meta name="target" content="all" />
+      <meta name="audience" content="all" />
+      <meta name="pagename" content={fullTitle} />
+      <meta name="subtitle" content="Professional Python Developer and Cloud Engineer Portfolio" />
+      <meta name="abstract" content={description} />
+      <meta name="topic" content="Software Development, Cloud Engineering, Python Programming" />
+      <meta name="summary" content="Adinath Gore's professional portfolio showcasing Python development and cloud engineering expertise" />
+      <meta name="designer" content="Adinath Gore" />
+      <meta name="copyright" content="© 2024 Adinath Gore. All rights reserved." />
+      <meta name="reply-to" content="contact@adinathgore.com" />
+      <meta name="owner" content="Adinath Gore" />
+      <meta name="url" content={fullUrl} />
+      <meta name="identifier-URL" content={fullUrl} />
+      <meta name="directory" content="submission" />
+      <meta name="pagetype" content="Portfolio Website" />
+      <meta name="HandheldFriendly" content="True" />
+      <meta name="MobileOptimized" content="320" />
+      <meta name="format-detection" content="telephone=no" />
 
       {/* Open Graph Meta Tags */}
       <meta property="og:title" content={fullTitle} />
@@ -63,6 +93,18 @@ const SEOHead: React.FC<SEOHeadProps> = ({
       <meta property="og:type" content={type} />
       <meta property="og:site_name" content="Adinath Gore Portfolio" />
       <meta property="og:locale" content="en_US" />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta property="og:image:alt" content="Adinath Gore - Python Developer & Cloud Engineer" />
+      <meta property="og:updated_time" content={modifiedTime || new Date().toISOString()} />
+      
+      {/* Additional Open Graph Tags */}
+      <meta property="og:email" content="contact@adinathgore.com" />
+      <meta property="og:phone_number" content="+91-9595xxxxxx" />
+      <meta property="og:country-name" content="India" />
+      <meta property="og:region" content="Maharashtra" />
+      <meta property="og:postal-code" content="400001" />
+      <meta property="og:locality" content="Mumbai" />
 
       {/* Twitter Card Meta Tags */}
       <meta name="twitter:card" content="summary_large_image" />
@@ -71,6 +113,15 @@ const SEOHead: React.FC<SEOHeadProps> = ({
       <meta name="twitter:image" content={fullImage} />
       <meta name="twitter:creator" content="@adinath_gore" />
       <meta name="twitter:site" content="@adinath_gore" />
+      <meta name="twitter:image:alt" content="Adinath Gore - Python Developer & Cloud Engineer Portfolio" />
+      <meta name="twitter:domain" content="adinathgore.com" />
+      <meta name="twitter:url" content={fullUrl} />
+      
+      {/* Additional Twitter Tags */}
+      <meta name="twitter:label1" content="Experience" />
+      <meta name="twitter:data1" content="5+ Years" />
+      <meta name="twitter:label2" content="Specialization" />
+      <meta name="twitter:data2" content="Python & Cloud Engineering" />
 
       {/* Article specific meta tags */}
       {type === 'article' && (
@@ -126,6 +177,13 @@ const SEOHead: React.FC<SEOHeadProps> = ({
           "description": description,
           "url": "https://adinathgore.com",
           "image": fullImage,
+          "email": "mailto:contact@adinathgore.com",
+          "telephone": "+91-9595xxxxxx",
+          "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "IN",
+            "addressRegion": "Maharashtra"
+          },
           "sameAs": [
             "https://www.linkedin.com/in/iamadinath/",
             "https://github.com/IamAdinath",
@@ -133,22 +191,110 @@ const SEOHead: React.FC<SEOHeadProps> = ({
             "https://stackoverflow.com/users/14975561/adinath-gore"
           ],
           "knowsAbout": [
-            "Python",
-            "Django",
-            "Flask",
-            "AWS",
+            "Python Programming",
+            "Django Framework",
+            "Flask Framework",
+            "FastAPI",
+            "AWS Cloud Services",
             "Cloud Engineering",
             "Serverless Architecture",
             "DevOps",
-            "Cloud Solutions"
+            "CI/CD",
+            "Docker",
+            "Kubernetes",
+            "PostgreSQL",
+            "MongoDB",
+            "REST APIs",
+            "GraphQL",
+            "Cloud Solutions",
+            "Infrastructure as Code",
+            "Lambda Functions",
+            "CloudFormation"
           ],
+          "hasOccupation": {
+            "@type": "Occupation",
+            "name": "Software Engineer",
+            "occupationLocation": {
+              "@type": "Country",
+              "name": "India"
+            },
+            "skills": [
+              "Python Development",
+              "Cloud Architecture",
+              "AWS Services",
+              "Backend Development",
+              "API Development",
+              "Database Design",
+              "System Architecture"
+            ]
+          },
           "alumniOf": {
             "@type": "EducationalOrganization",
-            "name": "Your University Name"
+            "name": "Engineering College"
           },
           "worksFor": {
             "@type": "Organization",
-            "name": "Your Company Name"
+            "name": "Rackspace Technology"
+          },
+          "award": [
+            "Spot Award - Futops Technologies",
+            "Employee of the Quarter - EC Infosolutions",
+            "Star Performer - Algo.com"
+          ],
+          "certification": [
+            "Artificial Intelligence and Business Strategy - LinkedIn Learning",
+            "Data Science & Machine Learning - Udemy",
+            "Python Certification - HackerRank",
+            "SQL Certification - HackerRank"
+          ]
+        })}
+      </script>
+
+      {/* Website/Portfolio Structured Data */}
+      <script type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "Adinath Gore Portfolio",
+          "url": "https://adinathgore.com",
+          "description": "Professional portfolio of Adinath Gore, Python Developer and Cloud Engineer",
+          "author": {
+            "@type": "Person",
+            "name": "Adinath Gore"
+          },
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://adinathgore.com/search?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        })}
+      </script>
+
+      {/* Professional Service Structured Data */}
+      <script type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "ProfessionalService",
+          "name": "Adinath Gore - Python Development & Cloud Engineering Services",
+          "description": "Professional Python development and cloud engineering services including AWS solutions, serverless architecture, and backend development",
+          "url": "https://adinathgore.com",
+          "serviceType": [
+            "Python Development",
+            "Cloud Engineering",
+            "AWS Solutions",
+            "Serverless Architecture",
+            "Backend Development",
+            "API Development",
+            "Database Design",
+            "DevOps Services"
+          ],
+          "provider": {
+            "@type": "Person",
+            "name": "Adinath Gore"
+          },
+          "areaServed": {
+            "@type": "Country",
+            "name": "India"
           }
         })}
       </script>
