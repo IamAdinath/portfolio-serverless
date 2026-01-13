@@ -3,13 +3,6 @@
  * Ensures only used code is included in the final bundle
  */
 
-// Re-export only used lodash functions instead of importing entire library
-export { debounce } from 'lodash-es/debounce';
-export { throttle } from 'lodash-es/throttle';
-
-// Re-export only used date-fns functions
-export { format, parseISO, isValid } from 'date-fns';
-
 // Optimized imports for commonly used utilities
 export const createOptimizedImports = () => {
   // This helps webpack understand what can be tree-shaken
@@ -17,11 +10,9 @@ export const createOptimizedImports = () => {
     // Only import specific FontAwesome icons
     icons: () => import('../utils/iconLibrary'),
     
-    // Only import specific date utilities
-    dateUtils: () => import('date-fns/format'),
-    
-    // Only import specific animation components
-    animations: () => import('framer-motion/dist/framer-motion'),
+    // Only import specific utilities that exist
+    cssLoader: () => import('../utils/cssLoader'),
+    apiDebugger: () => import('../utils/apiDebugger'),
   };
 };
 
@@ -30,9 +21,21 @@ export const createOptimizedImports = () => {
  */
 export const markUnusedExports = () => {
   // This helps bundlers identify unused code
-  if (process.env.NODE_ENV === 'production') {
-    // Remove development-only code
+  if (typeof process !== 'undefined' && process.env?.NODE_ENV === 'production') {
+    // Remove development-only code in production
     console.log = () => {};
     console.warn = () => {};
   }
+};
+
+/**
+ * Utility functions for tree shaking analysis
+ */
+export const analyzeBundle = () => {
+  console.log('Tree shaking analysis would run here');
+  return {
+    unusedExports: [],
+    optimizationOpportunities: [],
+    bundleSize: 'Unknown'
+  };
 };

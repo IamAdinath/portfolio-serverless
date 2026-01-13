@@ -13,7 +13,7 @@ import {
   faLinkedin, 
   faGithub, 
   faMedium 
-} from '../utils/iconLibrary';
+} from './utils/iconLibrary';
 import { usePageTitle } from './components/common/usePageTitle';
 import ProfileImage from './components/common/ProfileImage';
 import SEOHead from './components/common/SEOHead';

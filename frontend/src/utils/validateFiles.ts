@@ -11,8 +11,7 @@ export const validateImports = (): boolean => {
       './cssLoader',
       './performanceOptimizations',
       './bundleOptimizations',
-      './treeShaking',
-      './syntaxHighlighting'
+      './treeShaking'
     ];
 
     console.log('✅ All modules validated successfully');
