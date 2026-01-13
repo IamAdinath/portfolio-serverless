@@ -7,42 +7,48 @@
  * Lazy load heavy libraries only when needed
  */
 export const lazyLoadLibraries = {
-  // Lazy load Framer Motion for animations
-  framerMotion: () => import('framer-motion'),
-  
-  // Lazy load Evergreen UI components
-  evergreenUI: () => import('evergreen-ui'),
-  
-  // Lazy load chart libraries if used
-  chartjs: () => import('chart.js'),
-  
-  // Lazy load date utilities
-  dateFns: () => import('date-fns'),
+  // Dynamic library loader - only loads if library exists
+  loadLibrary: async (libraryName: string) => {
+    try {
+      // Use dynamic import with string interpolation to avoid TypeScript errors
+      const module = await import(/* webpackIgnore: true */ libraryName);
+      return module;
+    } catch (error) {
+      console.warn(`Library ${libraryName} not available:`, error);
+      return null;
+    }
+  }
 };
 
 /**
  * Preload critical resources based on route
  */
 export const preloadByRoute = {
-  '/admin': () => {
-    // Preload admin-specific libraries
-    return Promise.all([
-      lazyLoadLibraries.evergreenUI(),
-      import('../components/sections/AdminDashboard'),
-    ]);
+  '/admin': async () => {
+    try {
+      return await import('../components/sections/AdminDashboard');
+    } catch (error) {
+      console.warn('Failed to preload AdminDashboard:', error);
+      return null;
+    }
   },
   
-  '/writer': () => {
-    // Preload editor-specific libraries
-    return Promise.all([
-      import('../components/common/LazyTipTapEditor'),
-      import('../utils/syntaxHighlighting'),
-    ]);
+  '/writer': async () => {
+    try {
+      return await import('../components/sections/WriterPage');
+    } catch (error) {
+      console.warn('Failed to preload WriterPage:', error);
+      return null;
+    }
   },
   
-  '/blogs': () => {
-    // Preload blog-specific components
-    return import('../components/sections/BlogList');
+  '/blogs': async () => {
+    try {
+      return await import('../components/sections/BlogList');
+    } catch (error) {
+      console.warn('Failed to preload BlogList:', error);
+      return null;
+    }
   },
 };
 
@@ -58,7 +64,7 @@ export const initializeRoutePreloading = (): void => {
     const preloader = preloadByRoute[currentPath as keyof typeof preloadByRoute];
     if (preloader) {
       // Delay preloading to not block initial render
-      setTimeout(preloader, 1000);
+      setTimeout(() => preloader().catch(console.error), 1000);
     }
     
     // Preload on hover for navigation links
@@ -92,9 +98,7 @@ export const optimizeStyles = (): void => {
   ];
   
   // This would be handled by PurgeCSS in production
-  if (process.env.NODE_ENV === 'development') {
-    console.log('Style optimization would remove:', unusedFAClasses);
-  }
+  console.log('Style optimization would remove:', unusedFAClasses);
 };
 
 /**
