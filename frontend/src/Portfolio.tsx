@@ -15,7 +15,7 @@ import {
   faMedium 
 } from './utils/iconLibrary';
 import { usePageTitle } from './components/common/usePageTitle';
-import ProfileImage from './components/common/ProfileImage';
+import Logo from './components/common/Logo';
 import SEOHead from './components/common/SEOHead';
 import { SOCIAL_LINKS } from './constants';
 import './Portfolio.css';
@@ -129,7 +129,7 @@ const Portfolio: React.FC = () => {
             </div>
             <div className="portfolio-hero-image">
               <div className="portfolio-profile-card">
-                <ProfileImage
+                <Logo
                   className="portfolio-profile-image"
                   size="large"
                   priority={true}

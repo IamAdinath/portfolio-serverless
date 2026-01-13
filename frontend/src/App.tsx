@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { apiRetryManager } from './utils/apiRetryManager';
 import { analyticsTracker } from './utils/analytics';
-import { preloadProfileImage } from './hooks/useProfileImagePreload';
 import { initializePerformanceOptimizations } from './utils/performanceOptimizations';
 import { initializeApiDebugging } from './utils/apiDebugger';
 import Header from './components/common/Header';
@@ -58,9 +57,6 @@ const App: React.FC = () => {
     };
     
     apiRetryManager.resetAll();
-    
-    // Preload profile image for better LCP performance
-    preloadProfileImage().catch(console.error);
     
     // Initialize bundle optimizations after initial render
     setTimeout(initBundleOptimizations, 100);

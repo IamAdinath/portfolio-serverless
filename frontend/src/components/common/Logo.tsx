@@ -1,19 +1,16 @@
 import React from 'react';
-import { FILES } from '../../constants';
-import profileImageAsset from '../../assets/profile-image.png';
+import logoAsset from '../../assets/Logo_old.png';
 
-interface ProfileImageProps {
+interface LogoProps {
   size?: 'small' | 'medium' | 'large';
   className?: string;
-  showFallback?: boolean;
   priority?: boolean; // For LCP optimization
   loading?: 'lazy' | 'eager'; // Control loading behavior
 }
 
-const ProfileImage: React.FC<ProfileImageProps> = ({
+const Logo: React.FC<LogoProps> = ({
   size = 'medium',
   className = '',
-  showFallback = true,
   priority = false,
   loading = 'eager'
 }) => {
@@ -29,17 +26,11 @@ const ProfileImage: React.FC<ProfileImageProps> = ({
     large: { width: 192, height: 192 }
   };
 
-  // Handle image load error
-  const handleImageError = () => {
-    if (!showFallback) return;
-    // Could implement fallback logic here if needed
-  };
-
   return (
     <img
-      src={profileImageAsset}
-      alt={FILES.PROFILE_IMAGE_ALT}
-      className={`${className} ${sizeClasses[size]} rounded-full object-cover`}
+      src={logoAsset}
+      alt="Adinath Gore - Logo"
+      className={`${className} ${sizeClasses[size]} object-contain`}
       loading={loading}
       {...(priority && { fetchPriority: 'high' as any })}
       width={sizePixels[size].width}
@@ -50,9 +41,8 @@ const ProfileImage: React.FC<ProfileImageProps> = ({
         minWidth: sizePixels[size].width,
         minHeight: sizePixels[size].height,
       }}
-      onError={handleImageError}
     />
   );
 };
 
-export default ProfileImage;
+export default Logo;
