@@ -13,9 +13,9 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { useToast } from '../common/ToastProvider';
 import { usePageTitle } from '../common/usePageTitle';
-import { GetWebAnalytics } from '../common/userAPI';
+import { GetWebAnalytics } from '../common/apiService';
 import ErrorBoundary from '../common/ErrorBoundary';
-import './WebAnalytics.css';
+import './AnalyticsPage.css';
 
 interface AnalyticsData {
   totalPageViews: number;
@@ -80,7 +80,7 @@ const generateEmptyData = (range: string): AnalyticsData => {
   };
 };
 
-const WebAnalytics: React.FC = () => {
+const AnalyticsPage: React.FC = () => {
   usePageTitle('Web Analytics');
   
   const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null);
@@ -379,4 +379,4 @@ const WebAnalytics: React.FC = () => {
   );
 };
 
-export default WebAnalytics;
+export default AnalyticsPage;

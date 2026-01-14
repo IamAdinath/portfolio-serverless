@@ -26,27 +26,27 @@ export const lazyLoadLibraries = {
 export const preloadByRoute = {
   '/admin': async () => {
     try {
-      return await import('../components/sections/AdminDashboard');
+      return await import('../components/sections/AdminDashboardPage');
     } catch (error) {
-      console.warn('Failed to preload AdminDashboard:', error);
+      console.warn('Failed to preload AdminDashboardPage:', error);
       return null;
     }
   },
   
   '/writer': async () => {
     try {
-      return await import('../components/sections/WriterPage');
+      return await import('../components/sections/BlogEditorPage');
     } catch (error) {
-      console.warn('Failed to preload WriterPage:', error);
+      console.warn('Failed to preload BlogEditorPage:', error);
       return null;
     }
   },
   
   '/blogs': async () => {
     try {
-      return await import('../components/sections/BlogList');
+      return await import('../components/sections/BlogListPage');
     } catch (error) {
-      console.warn('Failed to preload BlogList:', error);
+      console.warn('Failed to preload BlogListPage:', error);
       return null;
     }
   },

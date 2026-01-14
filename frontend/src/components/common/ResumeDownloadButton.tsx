@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import './stickManDownload.css';
-import { DownloadResume } from './userAPI';
+import './ResumeDownloadButton.css';
+import { DownloadResume } from './apiService';
 import { downloadFile } from '../../utils/downloadUtils';
 import { useToast } from './ToastProvider';
 import { trackDownload } from '../../utils/analytics';
@@ -8,7 +8,7 @@ import { APP_CONFIG, FILES } from '../../constants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
 
-const StickmanDownload: React.FC = () => {
+const ResumeDownloadButton: React.FC = () => {
   const [isAnimating, setIsAnimating] = useState(false);
   const { addToast } = useToast();
 
@@ -65,4 +65,4 @@ const StickmanDownload: React.FC = () => {
   );
 };
 
-export default StickmanDownload;
+export default ResumeDownloadButton;

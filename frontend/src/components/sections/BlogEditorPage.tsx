@@ -1,4 +1,4 @@
-// src/components/sections/WriterPage.tsx - THE DEFINITIVE, FINAL VERSION
+// src/components/sections/BlogEditorPage.tsx - THE DEFINITIVE, FINAL VERSION
 import React, { useCallback, useState, useRef, useEffect } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import type { Editor } from '@tiptap/core';
@@ -31,8 +31,8 @@ import html from 'highlight.js/lib/languages/xml';
 
 // --- Your Project Imports ---
 import { Link, useSearchParams } from 'react-router-dom';
-import './WriterPage.css';
-import { CreateDraftBlogPost, UpdateBlogPost, GetBlogPostById, getPresignedUrl } from '../common/userAPI';
+import './BlogEditorPage.css';
+import { CreateDraftBlogPost, UpdateBlogPost, GetBlogPostById, getPresignedUrl } from '../common/apiService';
 import { useToast } from '../common/ToastProvider';
 import { usePageTitle } from '../common/usePageTitle';
 import { useAuth } from '../../contexts/AuthContext';
@@ -85,7 +85,7 @@ const MenuBar = ({ editor, onImageUpload }: { editor: Editor | null, onImageUplo
 };
 
 // --- Main Writer Page Component ---
-const WriterPage = () => {
+const BlogEditorPage = () => {
   const [searchParams] = useSearchParams();
   const editBlogId = searchParams.get('id');
   
@@ -529,4 +529,4 @@ const WriterPage = () => {
   );
 };
 
-export default WriterPage;
+export default BlogEditorPage;

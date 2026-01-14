@@ -1,6 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import logoAsset from '../../assets/Logo_old.png';
+import logoAsset from '../../assets/logo.png';
 
 /**
  * LCP Optimization Component

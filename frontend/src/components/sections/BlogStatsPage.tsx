@@ -13,8 +13,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { usePageTitle } from '../common/usePageTitle';
 import { useToast } from '../common/ToastProvider';
-import { GetBlogStats } from '../common/userAPI';
-import './BlogStats.css';
+import { GetBlogStats } from '../common/apiService';
+import './BlogStatsPage.css';
 
 interface BlogStatsData {
   blogId: string;
@@ -40,7 +40,7 @@ interface BlogStatsData {
   };
 }
 
-const BlogStats: React.FC = () => {
+const BlogStatsPage: React.FC = () => {
   const { blogId } = useParams<{ blogId: string }>();
   const navigate = useNavigate();
   const { addToast } = useToast();
@@ -240,4 +240,4 @@ const BlogStats: React.FC = () => {
   );
 };
 
-export default BlogStats;
+export default BlogStatsPage;

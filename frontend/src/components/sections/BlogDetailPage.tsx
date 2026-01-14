@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { usePageTitle } from '../common/usePageTitle';
-import { GetBlogPostById } from '../common/userAPI';
+import { GetBlogPostById } from '../common/apiService';
 import { BlogPostData } from '../../types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
@@ -17,9 +17,9 @@ import {
   faTwitter, 
   faFacebook 
 } from '@fortawesome/free-brands-svg-icons';
-import './Blog.css';
+import './BlogDetailPage.css';
 
-const Blog: React.FC = () => {
+const BlogDetailPage: React.FC = () => {
   const { blogId } = useParams<{ blogId: string }>();
   const [blog, setBlog] = useState<BlogPostData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -268,4 +268,4 @@ const Blog: React.FC = () => {
   );
 };
 
-export default Blog;
+export default BlogDetailPage;
