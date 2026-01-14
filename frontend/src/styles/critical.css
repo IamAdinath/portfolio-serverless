@@ -22,6 +22,8 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
   color: var(--text);
   overflow-x: hidden;
+  /* Prevent layout shifts from font loading */
+  font-display: swap;
 }
 
 #root {
@@ -38,6 +40,17 @@ html, body {
   font-size: 1.1rem;
   color: #666;
   background: #000000;
+}
+
+/* Layout shift prevention - ensure all animations use transform/opacity only */
+* {
+  /* Prevent layout shifts from animations */
+  will-change: auto;
+}
+
+*:hover, *:focus, *:active {
+  /* Only allow transform and opacity changes for interactions */
+  will-change: transform, opacity;
 }
 
 /* Critical hero section styles */
@@ -108,6 +121,112 @@ html, body {
   /* Prevent layout shift */
   min-width: 40px;
   min-height: 40px;
+}
+
+/* Critical header styles - prevent mobile layout shifts */
+.modern-header {
+  /* Fixed height to prevent layout shift */
+  min-height: 70px;
+  /* Contain animations to prevent layout shifts */
+  contain: layout style paint;
+}
+
+.header-container {
+  /* Fixed height for consistency */
+  height: 70px;
+  /* Prevent flex items from causing shifts */
+  align-items: center;
+}
+
+/* Critical footer styles - prevent mobile layout shifts */
+.modern-footer {
+  /* Contain animations and prevent layout shifts */
+  contain: layout style paint;
+  /* Ensure footer doesn't cause shifts */
+  position: relative;
+}
+
+/* Mobile-specific layout shift prevention */
+@media (max-width: 768px) {
+  .modern-header {
+    min-height: 60px;
+  }
+  
+  .header-container {
+    height: 60px;
+  }
+  
+  /* Prevent mobile menu from causing layout shifts */
+  .mobile-nav {
+    /* Use transform instead of changing layout */
+    position: absolute;
+    top: 100%;
+    width: 100%;
+    /* Prevent content reflow */
+    contain: layout;
+  }
+  
+  /* Optimize footer for mobile to prevent shifts */
+  .modern-footer {
+    /* Disable complex animations on mobile to prevent shifts */
+    animation: none;
+  }
+  
+  .modern-footer::before {
+    /* Simplify background pattern on mobile */
+    background-size: 25px 25px;
+  }
+  
+  /* Prevent footer content from causing shifts */
+  .footer-main {
+    /* Fixed grid behavior */
+    display: block;
+  }
+  
+  .footer-brand,
+  .footer-links,
+  .footer-contact {
+    /* Disable slide animations on mobile */
+    animation: none;
+    margin-bottom: 30px;
+  }
+  
+  /* Ensure social icons don't cause shifts */
+  .footer-social {
+    /* Fixed layout */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+  }
+  
+  .social-icon {
+    /* Fixed dimensions */
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .modern-header {
+    min-height: 60px;
+  }
+  
+  .header-container {
+    height: 60px;
+  }
+  
+  /* Further optimize for very small screens */
+  .modern-footer::before {
+    /* Remove pattern on very small screens */
+    display: none;
+  }
+  
+  .social-icon {
+    width: 36px;
+    height: 36px;
+  }
 }
 
 /* Critical typography */

@@ -8,6 +8,9 @@
 /* Global Typography */
 @import './styles/typography.css';
 
+/* Responsive Sync System */
+@import './styles/responsive-sync.css';
+
 #root {
   background: #000000;
   min-height: 100vh;
