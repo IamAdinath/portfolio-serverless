@@ -1,0 +1,107 @@
+/* Critical CSS - Above the fold styles only */
+/* This will be inlined in the HTML head */
+
+/* Essential CSS Variables */
+:root {
+  --bg: #000000;
+  --accent-cyan: #00E5FF;
+  --text: #EAF0FF;
+  --font-family-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-family-mono: 'Monaco', 'Menlo', 'Courier New', monospace;
+  --font-weight-bold: 700;
+}
+
+/* Critical base styles */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: #000000;
+  font-family: var(--font-family-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+#root {
+  background: #000000;
+  min-height: 100vh;
+}
+
+/* Critical loading state */
+.page-loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+  font-size: 1.1rem;
+  color: #666;
+  background: #000000;
+}
+
+/* Critical hero section styles */
+.portfolio-main-container {
+  font-family: var(--font-family-base);
+  color: #00E5FF;
+  background: #000000;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.portfolio-hero-section {
+  padding: 60px 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.portfolio-hero-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  background: rgba(0, 10, 20, 0.8);
+  padding: 60px;
+  border: 1px solid #00E5FF;
+  position: relative;
+}
+
+/* Critical typography */
+h1 {
+  font-size: 3rem;
+  margin: 0 0 12px 0;
+  color: #FFFFFF;
+  font-family: 'Times New Roman', Times, serif;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+/* Responsive critical styles */
+@media (max-width: 768px) {
+  .portfolio-hero-content {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding: 40px 30px;
+    text-align: center;
+  }
+  
+  h1 {
+    font-size: 2.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 2rem;
+  }
+  
+  .portfolio-hero-content {
+    padding: 30px 20px;
+  }
+}

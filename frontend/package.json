@@ -35,13 +35,16 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && node scripts/optimize-build.js",
+    "build:analyze": "npm run build && npx webpack-bundle-analyzer build/static/js/*.js",
+    "build:fast": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "serve": "npx serve -s build -l 3000",
     "analyze": "npm run build && npx webpack-bundle-analyzer build/static/js/*.js",
     "analyze-css": "node public/optimize-build.js",
-    "optimize": "npm run analyze-css && npm run build"
+    "optimize": "npm run analyze-css && npm run build",
+    "perf": "npm run build && npx lighthouse http://localhost:3000 --view"
   },
   "eslintConfig": {
     "extends": [

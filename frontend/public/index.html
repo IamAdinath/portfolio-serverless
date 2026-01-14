@@ -60,6 +60,10 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com" />
     <link rel="dns-prefetch" href="//cdnjs.cloudflare.com" />
     
+    <!-- Preload critical resources -->
+    <link rel="preload" href="%PUBLIC_URL%/logo.png" as="image" fetchpriority="high" />
+    <link rel="preload" href="%PUBLIC_URL%/profile-image.png" as="image" fetchpriority="high" />
+    
     <!-- Resource hints for better performance -->
     <link rel="prefetch" href="/about" />
     <link rel="prefetch" href="/blogs" />

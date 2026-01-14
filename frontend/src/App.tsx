@@ -9,6 +9,8 @@ import { preloadLCPImage } from './utils/lcpOptimization';
 import Header from './components/common/Header';
 import Footer from './components/common/Footer';
 import LCPOptimization from './components/common/LCPOptimization';
+import CriticalCSSLoader from './components/common/CriticalCSSLoader';
+import PerformanceMonitor from './components/common/PerformanceMonitor';
 import { ToastProvider } from './components/common/ToastProvider';
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/common/ProtectedRoute';
@@ -105,6 +107,8 @@ const App: React.FC = () => {
   return (
     <HelmetProvider>
       <LCPOptimization />
+      <CriticalCSSLoader />
+      <PerformanceMonitor />
       <SecurityConfig />
       <AuthProvider>
         <ToastProvider> 
