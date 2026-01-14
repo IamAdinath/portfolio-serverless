@@ -30,7 +30,7 @@
 .bloglist-header h1 {
   font-size: 3rem;
   margin: 0 0 15px 0;
-  background: linear-gradient(135deg, #000000 0%, #4a4a4a 50%, #1a1a1a 100%);
+  background: var(--gradient-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

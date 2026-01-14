@@ -50,7 +50,7 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #000000 0%, #434343 50%, #1a1a1a 100%);
+  background: var(--gradient-primary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -76,7 +76,7 @@
 }
 
 .blogcard-link:hover .blogcard-title {
-  color: #000000;
+  color: var(--text-bright);
 }
 
 .blogcard-snippet {
@@ -157,7 +157,7 @@
 }
 
 .blogcard-link:hover .blogcard-read-more {
-  color: #000000;
+  color: var(--text-bright);
   transform: translateX(5px);
 }
 

@@ -1,6 +1,6 @@
 /**
  * Critical CSS - Above-the-fold styles only
- * This should be inlined in the HTML head for fastest LCP
+ * Light Theme with Greenish-Blue Gradients
  */
 
 /* Reset and base styles */
@@ -11,86 +11,134 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  font-family: var(--font-family-base);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  line-height: 1.6;
-  color: #2d3748;
+  line-height: var(--line-height-normal);
+  color: var(--text);
+  background: var(--bg);
 }
 
-/* Critical header styles */
+/* Critical header styles - Light Glass */
 .modern-header {
   position: sticky;
-  top: 0;
-  z-index: 1000;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+  top: 20px;
+  z-index: 50;
+  backdrop-filter: var(--glass-backdrop);
+  background: var(--glass-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-2);
+  box-shadow: var(--glass-shadow);
+  margin: 0 20px;
 }
 
 .header-container {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 16px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 70px;
 }
 
-/* Critical hero section styles */
+/* Critical hero section styles - Light Glass */
 .portfolio-hero-section {
-  padding: 60px 20px;
-  max-width: 1400px;
+  padding: 80px 20px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
 .portfolio-hero-content {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 60px;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 40px;
   align-items: center;
-  background: white;
-  border-radius: 20px;
-  padding: 60px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-backdrop);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-2);
+  padding: 40px;
+  box-shadow: var(--glass-shadow);
 }
 
 .portfolio-hero-text h1 {
-  font-size: 3.5rem;
-  margin: 0 0 15px 0;
-  background: linear-gradient(135deg, #000000 0%, #4a4a4a 50%, #1a1a1a 100%);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  margin: 0 0 20px 0;
+  background: var(--gradient-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  font-weight: 700;
+  font-weight: var(--font-weight-extra-bold);
   line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.portfolio-hero-text h2 {
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-weight: 700;
+  color: var(--text-bright);
+  margin-bottom: 24px;
+  letter-spacing: -0.02em;
+}
+
+.portfolio-hero-description {
+  color: var(--text-dim);
+  line-height: 1.7;
+  margin-bottom: 32px;
+  font-size: 1.1rem;
+}
+
+/* Profile card - Light Glass */
+.portfolio-profile-card {
+  border: 1px solid var(--border-bright);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-backdrop);
+  border-radius: var(--radius-2);
+  padding: 24px;
+  box-shadow: var(--glass-shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.portfolio-profile-card::before {
+  content: "";
+  position: absolute;
+  inset: -100px;
+  background: radial-gradient(circle, rgba(34, 197, 94, 0.1), transparent 60%);
+  opacity: 0.5;
+  filter: blur(30px);
+  animation: pulse 3s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.6; }
 }
 
 .portfolio-profile-image {
-  width: 250px;
-  height: 250px;
-  border-radius: 15px;
+  width: 100%;
+  border-radius: var(--radius-2);
+  border: 2px solid var(--border-bright);
+  position: relative;
   object-fit: cover;
-  display: block;
+  filter: drop-shadow(0 0 20px rgba(34, 197, 94, 0.2));
 }
 
 /* Critical mobile styles */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
+  .modern-header {
+    top: 15px;
+    margin: 0 15px;
+  }
+  
   .portfolio-hero-content {
     grid-template-columns: 1fr;
-    gap: 40px;
-    padding: 40px 30px;
+    gap: 30px;
     text-align: center;
+    padding: 30px 20px;
   }
   
-  .portfolio-hero-text h1 {
-    font-size: 2.5rem;
-  }
-  
-  .portfolio-profile-image {
-    width: 200px;
-    height: 200px;
+  .portfolio-hero-section {
+    padding: 60px 15px;
   }
 }

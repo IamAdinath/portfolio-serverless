@@ -109,10 +109,6 @@ const App: React.FC = () => {
       <AuthProvider>
         <ToastProvider> 
           <Router>
-          {/* Skip Navigation Link for Keyboard Users */}
-          <a href="#main-content" className="skip-nav-link">
-            Skip to main content
-          </a>
           <Header />
           <main role="main" id="main-content">
             <Suspense fallback={<PageLoader />}>

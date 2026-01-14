@@ -1,10 +1,13 @@
-/* Footer.css - Modern Portfolio Footer */
+/* Footer.css - Modern Portfolio Footer - Light Theme with Greenish-Blue Gradients */
 
 .modern-footer {
-  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
-  color: #e2e8f0;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-backdrop);
+  border-top: 1px solid var(--border);
+  color: var(--text-dim);
   margin-top: auto;
   animation: footer-fadeInUp 0.6s ease-out;
+  box-shadow: 0 -8px 32px rgba(34, 197, 94, 0.1);
 }
 
 @keyframes footer-fadeInUp {
@@ -57,17 +60,48 @@
   display: none;
 }
 
+/* Brand logo styling for footer - Light Glass */
+.footer-brand-logo {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius);
+  background: var(--gradient-glass);
+  border: 1px solid var(--border-bright);
+  display: grid;
+  place-items: center;
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: var(--glass-backdrop);
+  position: relative;
+  overflow: hidden;
+}
+
+.footer-brand-logo::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(34, 197, 94, 0.1), transparent 70%);
+  opacity: 0.4;
+  animation: pulse 3s ease-in-out infinite;
+}
+
+.footer-brand-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--radius);
+  position: relative;
+  z-index: 1;
+  filter: brightness(1.1) contrast(1.05);
+}
+
 .footer-logo-name {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #ffffff 0%, #f7fafc 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--text-bright);
 }
 
 .footer-tagline {
-  color: #a0aec0;
+  color: var(--text-dim);
   line-height: 1.6;
   margin-bottom: 25px;
   font-size: 0.95rem;
@@ -83,24 +117,24 @@
 .social-icon {
   width: 44px;
   height: 44px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.2);
   border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #e2e8f0;
+  color: var(--text-dim);
   text-decoration: none;
   transition: all 0.3s ease;
   font-size: 1.1rem;
 }
 
 .social-icon:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.4);
-  color: #ffffff;
+  background: rgba(34, 197, 94, 0.2);
+  border-color: rgba(34, 197, 94, 0.4);
+  color: var(--text-bright);
   transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 25px rgba(34, 197, 94, 0.2);
 }
 
 /* Specific social icon colors on hover */
@@ -114,7 +148,7 @@
 /* Footer Links */
 .footer-links h4,
 .footer-contact h4 {
-  color: #ffffff;
+  color: var(--text-bright);
   font-size: 1.1rem;
   font-weight: 600;
   margin-bottom: 20px;
@@ -129,7 +163,7 @@
   left: 0;
   width: 30px;
   height: 2px;
-  background: linear-gradient(135deg, #ffffff 0%, #f7fafc 100%);
+  background: var(--gradient-primary);
   border-radius: 1px;
 }
 
@@ -152,7 +186,7 @@
 }
 
 .footer-nav-link {
-  color: #a0aec0;
+  color: var(--text-dim);
   text-decoration: none;
   font-size: 0.95rem;
   transition: all 0.3s ease;
@@ -160,7 +194,7 @@
 }
 
 .footer-nav-link:hover {
-  color: #ffffff;
+  color: var(--text-bright);
   transform: translateX(5px);
 }
 
@@ -175,12 +209,12 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  color: #a0aec0;
+  color: var(--text-dim);
   font-size: 0.95rem;
 }
 
 .footer-contact-item svg {
-  color: #ffffff;
+  color: var(--text-bright);
   font-size: 1rem;
   width: 20px;
 }
@@ -192,7 +226,7 @@
 }
 
 .footer-contact-item a:hover {
-  color: #ffffff;
+  color: var(--text-bright);
 }
 
 /* Footer Bottom */
@@ -201,7 +235,7 @@
   justify-content: space-between;
   align-items: center;
   padding-top: 30px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--border);
 }
 
 @media (max-width: 768px) {
@@ -213,7 +247,7 @@
 }
 
 .footer-copyright {
-  color: #a0aec0;
+  color: var(--text-dim);
   font-size: 0.9rem;
 }
 
@@ -246,10 +280,10 @@
 .scroll-to-top {
   width: 50px;
   height: 50px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.2);
   border-radius: 50%;
-  color: #e2e8f0;
+  color: var(--text-dim);
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
@@ -259,11 +293,11 @@
 }
 
 .scroll-to-top:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.4);
-  color: #ffffff;
+  background: rgba(34, 197, 94, 0.2);
+  border-color: rgba(34, 197, 94, 0.4);
+  color: var(--text-bright);
   transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 25px rgba(34, 197, 94, 0.2);
 }
 
 /* Responsive Design */
@@ -356,7 +390,7 @@
 .footer-nav-link:focus,
 .social-icon:focus,
 .scroll-to-top:focus {
-  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline: 2px solid rgba(34, 197, 94, 0.5);
   outline-offset: 2px;
 }
 

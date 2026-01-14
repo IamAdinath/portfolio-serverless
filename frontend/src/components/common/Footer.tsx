@@ -49,7 +49,7 @@ const Footer: React.FC = () => {
           {/* Brand Section */}
           <div className="footer-brand">
             <div className="footer-logo">
-              <SmallLogo showText={false} size="medium" />
+              <SmallLogo showText={false} variant="footer" />
               <span className="footer-logo-name">Adinath Gore</span>
             </div>
             <p className="footer-tagline">

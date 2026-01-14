@@ -5,7 +5,7 @@
   bottom: 30px;
   right: 30px;
   padding: 15px 25px;
-  background: linear-gradient(135deg, #000000 0%, #434343 50%, #1a1a1a 100%);
+  background: var(--gradient-primary);
   color: white;
   border: none;
   border-radius: 50px;
@@ -21,7 +21,7 @@
 }
 
 .floating-download-btn:hover {
-  background: linear-gradient(135deg, #2d2d2d 0%, #5a5a5a 50%, #3a3a3a 100%);
+  background: var(--gradient-secondary);
   transform: translateY(-3px) scale(1.05);
   box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
   border-color: rgba(255, 255, 255, 0.2);
