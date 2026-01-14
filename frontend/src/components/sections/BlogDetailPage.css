@@ -395,7 +395,7 @@
 
 .blog-reader-content pre {
   background: #000000 !important;
-  color: #00FF41 !important;
+  color: #66FF66 !important; /* Lighter Matrix green */
   padding: 16px 20px !important;
   border-radius: 0 !important;
   margin: 1.5em 0 !important;
@@ -407,20 +407,20 @@
   word-wrap: normal !important;
   word-break: normal !important;
   tab-size: 2 !important;
-  border: 1px solid rgba(0, 255, 65, 0.3) !important;
-  box-shadow: 0 0 10px rgba(0, 255, 65, 0.1) !important;
+  border: 1px solid rgba(102, 255, 102, 0.3) !important; /* Lighter Matrix green border */
+  box-shadow: 0 0 10px rgba(102, 255, 102, 0.1) !important; /* Lighter Matrix green glow */
 }
 
 .blog-reader-content code {
   background: rgba(0, 0, 0, 0.6) !important;
-  color: #00FF41 !important;
+  color: #66FF66 !important; /* Lighter Matrix green */
   padding: 2px 6px !important;
   border-radius: 0 !important;
   font-family: 'Courier New', 'Monaco', 'Consolas', monospace !important;
   font-size: 0.85em !important;
   font-weight: 500 !important;
   white-space: nowrap !important;
-  border: 1px solid rgba(0, 255, 65, 0.2) !important;
+  border: 1px solid rgba(102, 255, 102, 0.2) !important; /* Lighter Matrix green border */
 }
 
 /* Override highlight.js styles in blog reader */
@@ -437,31 +437,31 @@
   border: none !important;
 }
 
-/* Simplified syntax highlighting for blog reader - Matrix Theme */
+/* Simplified syntax highlighting for blog reader - Lighter Matrix Theme */
 .blog-reader-content pre .hljs-keyword,
 .blog-reader-content pre .hljs-built_in,
 .blog-reader-content pre .hljs-type {
-  color: #00FF41 !important;
+  color: #66FF66 !important; /* Lighter Matrix green */
 }
 
 .blog-reader-content pre .hljs-string,
 .blog-reader-content pre .hljs-attr {
-  color: #39FF14 !important;
+  color: #7FFF7F !important; /* Lighter neon green */
 }
 
 .blog-reader-content pre .hljs-number,
 .blog-reader-content pre .hljs-literal {
-  color: #00FFAA !important;
+  color: #99FF99 !important; /* Lighter chartreuse green */
 }
 
 .blog-reader-content pre .hljs-comment {
-  color: rgba(0, 255, 65, 0.5) !important;
+  color: rgba(102, 255, 102, 0.5) !important; /* Dimmed lighter Matrix green */
   font-style: italic;
 }
 
 .blog-reader-content pre .hljs-function,
 .blog-reader-content pre .hljs-title {
-  color: #7FFF00 !important;
+  color: #66FF66 !important; /* Lighter Matrix green */
 }
 
 .blog-reader-content img {
@@ -709,9 +709,16 @@
   }
 }
 
-/* Selection Styles */
+/* Selection Styles - White Highlight */
 .blog-reader-content ::selection {
-  background: rgba(0, 0, 0, 0.1);
+  background: #FFFFFF;
+  color: #000000;
+}
+
+.blog-reader-content pre ::selection,
+.blog-reader-content code ::selection {
+  background: #FFFFFF;
+  color: #000000;
 }
 
 /* Focus States */
