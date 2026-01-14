@@ -3,9 +3,9 @@
   max-width: 1400px;
   margin: 0 auto;
   padding: 20px;
-  font-family: 'Segoe UI', 'Roboto', sans-serif;
+  font-family: var(--font-family-base);
   color: rgba(0, 229, 255, 0.95);
-  background: #000000;
+  /* background inherited from body */
   min-height: 100vh;
   position: relative;
 }
@@ -38,7 +38,7 @@
   border-radius: 0;
   padding: 40px;
   margin-bottom: 30px;
-  border: 1px solid #00E5FF;
+  border: 1px solid var(--accent-cyan);
   box-shadow: 
     0 0 10px rgba(0, 229, 255, 0.15),
     inset 0 1px 0 rgba(0, 229, 255, 0.1);
@@ -56,7 +56,7 @@
   width: 100%;
   box-sizing: border-box;
   height: 1px;
-  background: linear-gradient(90deg, transparent, #00E5FF, transparent);
+  background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
   animation: cardSweep 3s linear infinite;
 }
 
@@ -70,7 +70,7 @@
   box-shadow: 
     0 0 20px rgba(0, 229, 255, 0.25),
     inset 0 1px 0 rgba(0, 229, 255, 0.15);
-  border-color: #00E5FF;
+  border-color: var(--accent-cyan);
 }
 
 .profile-section {
@@ -85,7 +85,7 @@
   height: 120px;
   border-radius: 50%;
   background: rgba(0, 0, 0, 0.8);
-  border: 2px solid #00E5FF;
+  border: 2px solid var(--accent-cyan);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -96,7 +96,7 @@
 .avatar-text {
   font-size: 2.5rem;
   font-weight: bold;
-  color: #00E5FF;
+  color: var(--accent-cyan);
   text-shadow: 0 0 5px rgba(0, 229, 255, 0.5);
 }
 
@@ -165,14 +165,14 @@
 
 .contact-item:hover {
   background: rgba(0, 229, 255, 0.05);
-  border-color: #00E5FF;
+  border-color: var(--accent-cyan);
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(0, 229, 255, 0.2);
 }
 
 .contact-icon {
   font-size: 1.2rem;
-  color: #00E5FF;
+  color: var(--accent-cyan);
   width: 20px;
   text-align: center;
 }
@@ -190,7 +190,7 @@
 }
 
 .contact-item a:hover {
-  color: #00E5FF;
+  color: var(--accent-cyan);
 }
 
 /* Summary Card - Tron Style */
@@ -200,7 +200,7 @@
   border-radius: 0;
   padding: 0;
   margin-bottom: 30px;
-  border: 1px solid #00E5FF;
+  border: 1px solid var(--accent-cyan);
   box-shadow: 
     0 0 10px rgba(0, 229, 255, 0.15),
     inset 0 1px 0 rgba(0, 229, 255, 0.1);
@@ -215,7 +215,7 @@
   box-shadow: 
     0 0 20px rgba(0, 229, 255, 0.25),
     inset 0 1px 0 rgba(0, 229, 255, 0.15);
-  border-color: #00E5FF;
+  border-color: var(--accent-cyan);
 }
 
 
@@ -245,7 +245,7 @@
   border-radius: 0;
   padding: 0;
   margin-bottom: 30px;
-  border: 1px solid #00E5FF;
+  border: 1px solid var(--accent-cyan);
   box-shadow: 
     0 0 10px rgba(0, 229, 255, 0.15),
     inset 0 1px 0 rgba(0, 229, 255, 0.1);
@@ -262,7 +262,7 @@
   box-shadow: 
     0 0 20px rgba(0, 229, 255, 0.25),
     inset 0 1px 0 rgba(0, 229, 255, 0.15);
-  border-color: #00E5FF;
+  border-color: var(--accent-cyan);
 }
 
 /* Experience Card Container */
@@ -280,14 +280,14 @@
 .experience-card .card-header {
   background: rgba(0, 229, 255, 0.1);
   backdrop-filter: blur(10px);
-  color: #00E5FF;
+  color: var(--accent-cyan);
   padding: 25px 30px;
   display: flex;
   align-items: center;
   gap: 15px;
   border-radius: 0;
   margin-bottom: 0;
-  border: 1px solid #00E5FF;
+  border: 1px solid var(--accent-cyan);
   border-bottom: none;
   box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
 }
@@ -301,7 +301,7 @@
 .card-header {
   background: rgba(0, 229, 255, 0.1);
   backdrop-filter: blur(10px);
-  color: #00E5FF;
+  color: var(--accent-cyan);
   padding: 25px 30px;
   display: flex;
   align-items: center;
@@ -318,7 +318,7 @@
   width: 100%;
   box-sizing: border-box;
   height: 1px;
-  background: linear-gradient(90deg, transparent, #00E5FF, transparent);
+  background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
   animation: headerShine 3s linear infinite;
 }
 
@@ -357,7 +357,7 @@
 }
 
 .skills-category h4 {
-  color: #00E5FF;
+  color: var(--accent-cyan);
   font-size: 1.1rem;
   font-weight: 600;
   margin: 0 0 15px 0;
@@ -376,7 +376,7 @@
 .skill-tag {
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(10px);
-  color: #00E5FF;
+  color: var(--accent-cyan);
   padding: 8px 16px;
   border-radius: 0;
   font-size: 0.9rem;
@@ -408,7 +408,7 @@
 .skill-tag:hover {
   transform: translateY(-2px);
   box-shadow: 0 0 15px rgba(0, 229, 255, 0.3);
-  border-color: #00E5FF;
+  border-color: var(--accent-cyan);
 }
 
 /* Experience Styling - Tron Cards */
@@ -434,7 +434,7 @@
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, #00E5FF, transparent);
+  background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
   opacity: 0;
   transition: opacity 0.3s;
 }
@@ -448,7 +448,7 @@
   box-shadow: 
     0 0 20px rgba(0, 229, 255, 0.25),
     inset 0 1px 0 rgba(0, 229, 255, 0.1);
-  border-color: #00E5FF;
+  border-color: var(--accent-cyan);
 }
 
 .experience-item:last-child {
@@ -476,13 +476,13 @@
   box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
   font-size: 1.4rem;
   font-weight: bold;
-  color: #00E5FF;
+  color: var(--accent-cyan);
 }
 
 .experience-item:hover .company-logo {
   transform: scale(1.05);
   box-shadow: 0 0 15px rgba(0, 229, 255, 0.3);
-  border-color: #00E5FF;
+  border-color: var(--accent-cyan);
 }
 
 .experience-info {
@@ -490,7 +490,7 @@
 }
 
 .experience-info h4 {
-  color: #00E5FF;
+  color: var(--accent-cyan);
   font-size: 1.3rem;
   font-weight: 600;
   margin: 0 0 10px 0;
@@ -541,12 +541,12 @@
   content: "▶";
   position: absolute;
   left: 0;
-  color: #00E5FF;
+  color: var(--accent-cyan);
   font-size: 0.8rem;
 }
 
 .achievements li strong {
-  color: #00E5FF;
+  color: var(--accent-cyan);
   font-weight: 600;
 }
 
@@ -557,7 +557,7 @@
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(10px);
   border-radius: 0;
-  border-left: 2px solid #00E5FF;
+  border-left: 2px solid var(--accent-cyan);
   transition: all 0.3s ease;
   border: 1px solid rgba(0, 229, 255, 0.3);
   border-left-width: 2px;
@@ -568,7 +568,7 @@
   background: rgba(0, 229, 255, 0.05);
   transform: translateX(5px);
   box-shadow: 0 0 15px rgba(0, 229, 255, 0.2);
-  border-left-color: #00E5FF;
+  border-left-color: var(--accent-cyan);
 }
 
 .certification-item:last-child {
@@ -576,7 +576,7 @@
 }
 
 .cert-provider {
-  color: #00E5FF;
+  color: var(--accent-cyan);
   font-weight: 600;
   font-size: 0.9rem;
   text-transform: uppercase;
@@ -594,7 +594,7 @@
 }
 
 .cert-link:hover {
-  color: #00E5FF;
+  color: var(--accent-cyan);
 }
 
 
@@ -608,7 +608,7 @@
   position: relative;
   transition: all 0.3s ease;
   border: 1px solid rgba(0, 229, 255, 0.3);
-  border-left: 3px solid #00E5FF;
+  border-left: 3px solid var(--accent-cyan);
   box-shadow: 0 0 10px rgba(0, 229, 255, 0.15);
   overflow: hidden;
 }
@@ -632,7 +632,7 @@
 .award-item:hover {
   transform: translateY(-3px);
   box-shadow: 0 0 20px rgba(0, 229, 255, 0.25);
-  border-color: #00E5FF;
+  border-color: var(--accent-cyan);
 }
 
 .award-item:last-child {
@@ -648,7 +648,7 @@
 }
 
 .award-title {
-  color: #00E5FF;
+  color: var(--accent-cyan);
   font-weight: 600;
   font-size: 1.1rem;
   margin-bottom: 8px;

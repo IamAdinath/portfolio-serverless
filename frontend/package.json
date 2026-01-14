@@ -5,8 +5,6 @@
   "dependencies": {
     "@aws-amplify/auth": "^6.13.0",
     "@aws-amplify/core": "^6.12.0",
-    "@emotion/react": "^11.11.3",
-    "@emotion/styled": "^11.11.0",
     "@fortawesome/fontawesome-free": "^6.5.1",
     "@fortawesome/free-brands-svg-icons": "^6.5.1",
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
@@ -25,8 +23,6 @@
     "@types/react": "^18.2.45",
     "@types/react-dom": "^18.2.18",
     "aws-amplify": "^6.15.0",
-    "evergreen-ui": "^7.1.9",
-    "framer-motion": "^10.16.16",
     "highlight.js": "^11.11.1",
     "lowlight": "^3.3.0",
     "react": "^18.2.0",
@@ -69,9 +65,6 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@tiptap/core": "^2.24.0",
     "@types/highlight.js": "^9.12.4",
-    "@types/react-router-dom": "^5.3.3",
-    "autoprefixer": "^10.4.21",
-    "postcss": "^8.5.6",
-    "tailwindcss": "^4.1.11"
+    "@types/react-router-dom": "^5.3.3"
   }
 }

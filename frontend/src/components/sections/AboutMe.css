@@ -1,10 +1,5 @@
 /* AboutMe.css - TRON Futuristic Theme */
 
-/* Full-width black background wrapper */
-body {
-  background: #000000;
-}
-
 /* Container with Solid Black Background */
 .about-container {
   max-width: 1400px;
@@ -12,25 +7,14 @@ body {
   padding: 40px 20px;
   font-family: var(--font-family-base);
   color: var(--text);
-  background: #000000;
+  /* background inherited from body */
   min-height: 100vh;
   position: relative;
   width: 100%;
   box-sizing: border-box;
 }
 
-/* Ensure parent elements have black background */
-.about-container::after {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: #000000;
-  z-index: -1;
-  pointer-events: none;
-}
+
 
 .about-container > * {
   position: relative;
@@ -43,7 +27,7 @@ body {
   border-radius: 2px;
   padding: 48px;
   margin-bottom: 32px;
-  border: 1px solid #00E5FF;
+  border: 1px solid var(--accent-cyan);
   box-shadow: 
     inset 0 0 20px rgba(0, 229, 255, 0.05),
     0 0 10px rgba(0, 229, 255, 0.15);
@@ -59,7 +43,7 @@ body {
   left: -100%;
   width: 100%;
   height: 2px;
-  background: linear-gradient(90deg, transparent, #00E5FF, transparent);
+  background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
   animation: borderGlow 3s linear infinite;
   opacity: 0;
   transition: opacity 0.3s;
@@ -105,7 +89,7 @@ body {
   height: 180px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #00E5FF;
+  border: 2px solid var(--accent-cyan);
   box-shadow: 0 0 15px rgba(0, 229, 255, 0.3);
   transition: all var(--transition-base);
   filter: brightness(1.05) contrast(1.1);
@@ -122,31 +106,22 @@ body {
   right: 10px;
   width: 40px;
   height: 40px;
-  background: #000000;
-  border: 2px solid #00E5FF;
+  /* background inherited from body */
+  border: 2px solid var(--accent-cyan);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #00E5FF;
+  color: var(--accent-cyan);
   font-size: 1.2rem;
   box-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
 }
 
-/* h1 styles - White Times New Roman */
-.profile-info h1 {
-  font-size: 3rem;
-  margin: 0 0 12px 0;
-  color: #FFFFFF;
-  font-family: 'Times New Roman', Times, serif;
-  font-weight: var(--font-weight-bold);
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-}
+/* h1 inherits from global typography.css */
 
 .profile-info h2 {
   font-size: 1.5rem;
-  color: #00E5FF;
+  color: var(--accent-cyan);
   margin: 0 0 16px 0;
   font-weight: var(--font-weight-medium);
   letter-spacing: 0.05em;
@@ -191,9 +166,9 @@ body {
   text-decoration: none;
   font-weight: var(--font-weight-medium);
   transition: all var(--transition-base);
-  border: 1px solid #00E5FF;
+  border: 1px solid var(--accent-cyan);
   background: rgba(0, 0, 0, 1);
-  color: #00E5FF;
+  color: var(--accent-cyan);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   font-size: 0.875rem;
@@ -234,7 +209,7 @@ body {
   background: rgba(0, 10, 20, 1);
   border-radius: 0;
   padding: 0;
-  border: 1px solid #00E5FF;
+  border: 1px solid var(--accent-cyan);
   transition: all var(--transition-base);
   overflow: hidden;
   position: relative;
@@ -273,7 +248,7 @@ body {
 
 .card-header {
   background: rgba(0, 229, 255, 0.05);
-  border-bottom: 1px solid #00E5FF;
+  border-bottom: 1px solid var(--accent-cyan);
   color: var(--text-bright);
   padding: 24px 32px;
   display: flex;
@@ -289,22 +264,22 @@ body {
   top: 0;
   bottom: 0;
   width: 2px;
-  background: linear-gradient(180deg, #00E5FF, transparent);
-  box-shadow: 0 0 5px #00E5FF;
+  background: linear-gradient(180deg, var(--accent-cyan), transparent);
+  box-shadow: 0 0 5px var(--accent-cyan);
 }
 
 .card-header h3 {
   margin: 0;
   font-size: 1.5rem;
   font-weight: var(--font-weight-semibold);
-  color: #00E5FF;
+  color: var(--accent-cyan);
   text-transform: uppercase;
   letter-spacing: 0.1em;
 }
 
 .section-icon {
   font-size: 1.5rem;
-  color: #00E5FF;
+  color: var(--accent-cyan);
 }
 
 .card-content {
@@ -348,7 +323,7 @@ body {
   left: 0;
   width: 100%;
   height: 2px;
-  background: linear-gradient(90deg, transparent, #00E5FF, transparent);
+  background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
   transform: translateX(-100%);
   transition: transform 0.5s;
 }
@@ -358,7 +333,7 @@ body {
 }
 
 .skill-item:hover {
-  border-color: #00E5FF;
+  border-color: var(--accent-cyan);
   transform: translateY(-2px);
   box-shadow: 0 0 15px rgba(0, 229, 255, 0.3);
   background: rgba(0, 229, 255, 0.05);
@@ -366,7 +341,7 @@ body {
 
 .skill-item h4 {
   margin: 0 0 10px 0;
-  color: #00E5FF;
+  color: var(--accent-cyan);
   font-size: 1.125rem;
   font-weight: var(--font-weight-semibold);
   text-transform: uppercase;
@@ -395,13 +370,13 @@ body {
   background: rgba(0, 0, 0, 1);
   border-radius: 0;
   border: 1px solid rgba(0, 229, 255, 0.3);
-  border-left: 2px solid #00E5FF;
+  border-left: 2px solid var(--accent-cyan);
   transition: all var(--transition-base);
   position: relative;
 }
 
 .philosophy-item:hover {
-  border-color: #00E5FF;
+  border-color: var(--accent-cyan);
   transform: translateX(8px);
   box-shadow: 0 0 15px rgba(0, 229, 255, 0.2);
   background: rgba(0, 229, 255, 0.05);
@@ -409,13 +384,13 @@ body {
 
 .philosophy-icon {
   font-size: 1.5rem;
-  color: #00E5FF;
+  color: var(--accent-cyan);
   margin-top: 4px;
 }
 
 .philosophy-item h4 {
   margin: 0 0 8px 0;
-  color: #00E5FF;
+  color: var(--accent-cyan);
   font-size: 1.125rem;
   font-weight: var(--font-weight-semibold);
   text-transform: uppercase;
@@ -431,7 +406,7 @@ body {
 /* Fun Facts with Clean Display */
 .fun-facts .card-header {
   background: rgba(0, 229, 255, 0.05);
-  border-bottom: 1px solid #00E5FF;
+  border-bottom: 1px solid var(--accent-cyan);
 }
 
 .fun-facts-grid {
@@ -458,7 +433,7 @@ body {
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, #00E5FF, transparent);
+  background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
   animation: dataFlow 2s linear infinite;
   opacity: 0;
 }
@@ -473,7 +448,7 @@ body {
 }
 
 .fun-fact:hover {
-  border-color: #00E5FF;
+  border-color: var(--accent-cyan);
   transform: translateY(-4px) scale(1.05);
   box-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
   background: rgba(0, 229, 255, 0.05);
@@ -483,7 +458,7 @@ body {
   display: block;
   font-size: 2.5rem;
   font-weight: var(--font-weight-bold);
-  color: #00E5FF;
+  color: var(--accent-cyan);
   margin-bottom: 8px;
   font-family: var(--font-family-mono);
 }
@@ -509,10 +484,7 @@ body {
     gap: 32px;
   }
 
-  /* h1 responsive styles */
-  .profile-info h1 {
-    font-size: 2.25rem;
-  }
+  /* h1 responsive styles inherited from global typography.css */
 
   .hero-card,
   .card-content {
@@ -533,10 +505,7 @@ body {
 }
 
 @media (max-width: 480px) {
-  /* h1 responsive styles */
-  .profile-info h1 {
-    font-size: 2rem;
-  }
+  /* h1 responsive styles inherited from global typography.css */
 
   .profile-image {
     width: 150px;
