@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
 import { 
   FontAwesomeIcon,
   faRocket, 
@@ -16,10 +15,9 @@ import {
   faMedium 
 } from './utils/iconLibrary';
 import { usePageTitle } from './components/common/usePageTitle';
-import Logo from './components/common/Logo';
+import InitialsProfile from './components/common/InitialsProfile';
 import SEOHead from './components/common/SEOHead';
 import { SOCIAL_LINKS } from './constants';
-import logoAsset from './assets/logo.png';
 import './HomePage.css';
 
 const HomePage: React.FC = () => {
@@ -93,16 +91,6 @@ const HomePage: React.FC = () => {
         type="profile"
       />
       
-      {/* LCP Image Optimization - Ensure logo is preloaded for better performance */}
-      <Helmet>
-        <link 
-          rel="preload" 
-          as="image" 
-          href={logoAsset} 
-          fetchPriority="high"
-        />
-      </Helmet>
-      
       <div className="portfolio-main-container">
         {/* Hero Section */}
         <section className="portfolio-hero-section">
@@ -142,11 +130,10 @@ const HomePage: React.FC = () => {
             </div>
             <div className="portfolio-hero-image">
               <div className="portfolio-profile-card">
-                <Logo
+                <InitialsProfile
                   className="portfolio-profile-image"
                   size="large"
-                  priority={true}
-                  loading="eager"
+                  initials="AG"
                 />
                 <div className="portfolio-profile-badge">
                   <FontAwesomeIcon icon={faRocket} />

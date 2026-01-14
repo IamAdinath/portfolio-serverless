@@ -71,6 +71,45 @@ html, body {
   position: relative;
 }
 
+/* Critical hero image container - prevent layout shift */
+.portfolio-hero-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.portfolio-profile-card {
+  position: relative;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.9);
+  border: 2px solid #00E5FF;
+  box-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
+  transition: all 0.3s ease;
+  overflow: hidden;
+  /* Fixed dimensions to prevent layout shift */
+  width: 290px;
+  height: 290px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Critical initials profile styles */
+.initials-profile {
+  flex-shrink: 0;
+  /* Ensure consistent sizing */
+  min-width: 250px;
+  min-height: 250px;
+}
+
+/* Critical header logo styles */
+.brand-logo, .footer-brand-logo {
+  flex-shrink: 0;
+  /* Prevent layout shift */
+  min-width: 40px;
+  min-height: 40px;
+}
+
 /* Critical typography */
 h1 {
   font-size: 3rem;
@@ -91,6 +130,16 @@ h1 {
     text-align: center;
   }
   
+  .portfolio-profile-card {
+    width: 240px;
+    height: 240px;
+  }
+  
+  .initials-profile {
+    min-width: 200px;
+    min-height: 200px;
+  }
+  
   h1 {
     font-size: 2.25rem;
   }
@@ -103,5 +152,15 @@ h1 {
   
   .portfolio-hero-content {
     padding: 30px 20px;
+  }
+  
+  .portfolio-profile-card {
+    width: 190px;
+    height: 190px;
+  }
+  
+  .initials-profile {
+    min-width: 150px;
+    min-height: 150px;
   }
 }

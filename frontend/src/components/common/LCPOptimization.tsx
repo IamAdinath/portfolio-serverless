@@ -1,22 +1,12 @@
 import React from 'react';
-import { Helmet } from 'react-helmet-async';
-import logoAsset from '../../assets/logo.png';
 
 /**
  * LCP Optimization Component
- * Adds preload link for the LCP image to make it discoverable from HTML immediately
+ * Optimizes Largest Contentful Paint by ensuring critical resources are prioritized
+ * Now focuses on CSS and font loading since we use CSS-based logos
  */
 const LCPOptimization: React.FC = () => {
-  return (
-    <Helmet>
-      <link 
-        rel="preload" 
-        as="image" 
-        href={logoAsset} 
-        fetchPriority="high"
-      />
-    </Helmet>
-  );
+  return null; // CSS-based logos don't need image preloading
 };
 
 export default LCPOptimization;
