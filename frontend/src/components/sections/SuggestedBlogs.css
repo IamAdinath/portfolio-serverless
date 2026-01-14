@@ -1,7 +1,7 @@
 /* SuggestedBlogs.css */
 
 .suggested-blogs-main-container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 20px;
   font-family: 'Inter', 'Segoe UI', 'Roboto', sans-serif;
@@ -28,7 +28,7 @@
 .suggested-blogs-header h3 {
   font-size: 2rem;
   margin: 0 0 15px 0;
-  background: linear-gradient(135deg, #000000 0%, #4a4a4a 50%, #1a1a1a 100%);
+  background: var(--gradient-primary);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -121,7 +121,7 @@
 .suggested-blogs-empty-icon {
   font-size: 3rem;
   margin-bottom: 20px;
-  color: #cbd5e0;
+  color: var(--text-dim);
 }
 
 /* Responsive Design */

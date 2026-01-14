@@ -1,6 +1,6 @@
 /* BlogStats.css */
 .blog-stats {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 2rem;
   min-height: 100vh;
@@ -41,9 +41,10 @@
 
 .stats-title h1 {
   margin: 0 0 0.5rem 0;
-  color: #2d3748;
+  color: #FFFFFF;
   font-size: 1.75rem;
   font-weight: 700;
+  font-family: 'Times New Roman', Times, serif;
 }
 
 .stats-meta {

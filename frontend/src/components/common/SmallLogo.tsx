@@ -1,5 +1,5 @@
 import React from 'react';
-import favicon32 from '../../assets/favicon-32x32.png';
+import favicon32 from '../../assets/favicon-96x96.png';
 
 interface SmallLogoProps {
   className?: string;

@@ -1,13 +1,48 @@
-/* Footer.css - Modern Portfolio Footer - Light Theme with Greenish-Blue Gradients */
+/* Footer.css - Balanced Tron Theme */
 
 .modern-footer {
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-backdrop);
-  border-top: 1px solid var(--border);
-  color: var(--text-dim);
+  background: rgba(0, 10, 20, 0.95);
+  border-top: 1px solid #00E5FF;
+  color: rgba(0, 229, 255, 0.95);
   margin-top: auto;
   animation: footer-fadeInUp 0.6s ease-out;
-  box-shadow: 0 -8px 32px rgba(34, 197, 94, 0.1);
+  box-shadow: 0 -8px 32px rgba(0, 229, 255, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle grid pattern */
+.modern-footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    linear-gradient(0deg, rgba(0, 229, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 229, 255, 0.02) 1px, transparent 1px);
+  background-size: 50px 50px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Top accent line */
+.modern-footer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #00E5FF, transparent);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.footer-container {
+  position: relative;
+  z-index: 1;
 }
 
 @keyframes footer-fadeInUp {
@@ -55,59 +90,50 @@
   margin-bottom: 20px;
 }
 
-/* Hide the old CSS-based logo initials since we're using images now */
 .footer-logo-initials {
   display: none;
 }
 
-/* Brand logo styling for footer - Light Glass */
+/* Brand logo - Tron Style */
 .footer-brand-logo {
   width: 40px;
   height: 40px;
-  border-radius: var(--radius);
-  background: var(--gradient-glass);
-  border: 1px solid var(--border-bright);
+  border-radius: 0;
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid #00E5FF;
   display: grid;
   place-items: center;
-  box-shadow: var(--glass-shadow);
-  backdrop-filter: var(--glass-backdrop);
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
   position: relative;
   overflow: hidden;
-}
-
-.footer-brand-logo::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle, rgba(34, 197, 94, 0.1), transparent 70%);
-  opacity: 0.4;
-  animation: pulse 3s ease-in-out infinite;
 }
 
 .footer-brand-logo img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: var(--radius);
+  border-radius: 0;
   position: relative;
   z-index: 1;
-  filter: brightness(1.1) contrast(1.05);
+  filter: brightness(1.1) contrast(1.1);
 }
 
 .footer-logo-name {
   font-size: 1.4rem;
   font-weight: 700;
-  color: var(--text-bright);
+  color: #00E5FF;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .footer-tagline {
-  color: var(--text-dim);
+  color: rgba(0, 229, 255, 0.9);
   line-height: 1.6;
   margin-bottom: 25px;
   font-size: 0.95rem;
 }
 
-/* Social Icons */
+/* Social Icons - Tron Style */
 .footer-social {
   display: flex;
   gap: 15px;
@@ -117,42 +143,53 @@
 .social-icon {
   width: 44px;
   height: 44px;
-  background: rgba(34, 197, 94, 0.1);
-  border: 1px solid rgba(34, 197, 94, 0.2);
-  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  border-radius: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-dim);
+  color: #00E5FF;
   text-decoration: none;
   transition: all 0.3s ease;
   font-size: 1.1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.social-icon::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.social-icon:hover::before {
+  left: 100%;
 }
 
 .social-icon:hover {
-  background: rgba(34, 197, 94, 0.2);
-  border-color: rgba(34, 197, 94, 0.4);
-  color: var(--text-bright);
+  background: rgba(0, 229, 255, 0.1);
+  border-color: #00E5FF;
+  color: #00E5FF;
   transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(34, 197, 94, 0.2);
+  box-shadow: 0 8px 25px rgba(0, 229, 255, 0.3);
 }
-
-/* Specific social icon colors on hover */
-.social-icon:nth-child(1):hover { color: #0077b5; } /* LinkedIn */
-.social-icon:nth-child(2):hover { color: #333; } /* GitHub */
-.social-icon:nth-child(3):hover { color: #1da1f2; } /* Twitter */
-.social-icon:nth-child(4):hover { color: #00ab6c; } /* Medium */
-.social-icon:nth-child(5):hover { color: #f48024; } /* Stack Overflow */
-.social-icon:nth-child(6):hover { color: #ea4335; } /* Email */
 
 /* Footer Links */
 .footer-links h4,
 .footer-contact h4 {
-  color: var(--text-bright);
+  color: #00E5FF;
   font-size: 1.1rem;
   font-weight: 600;
   margin-bottom: 20px;
   position: relative;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .footer-links h4::after,
@@ -162,8 +199,8 @@
   bottom: -8px;
   left: 0;
   width: 30px;
-  height: 2px;
-  background: var(--gradient-primary);
+  height: 1px;
+  background: #00E5FF;
   border-radius: 1px;
 }
 
@@ -186,7 +223,7 @@
 }
 
 .footer-nav-link {
-  color: var(--text-dim);
+  color: rgba(0, 229, 255, 0.9);
   text-decoration: none;
   font-size: 0.95rem;
   transition: all 0.3s ease;
@@ -194,7 +231,7 @@
 }
 
 .footer-nav-link:hover {
-  color: var(--text-bright);
+  color: #00E5FF;
   transform: translateX(5px);
 }
 
@@ -209,12 +246,12 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  color: var(--text-dim);
+  color: rgba(0, 229, 255, 0.9);
   font-size: 0.95rem;
 }
 
 .footer-contact-item svg {
-  color: var(--text-bright);
+  color: #00E5FF;
   font-size: 1rem;
   width: 20px;
 }
@@ -226,16 +263,16 @@
 }
 
 .footer-contact-item a:hover {
-  color: var(--text-bright);
+  color: #00E5FF;
 }
 
-/* Footer Bottom */
+/* Footer Bottom - Tron Style */
 .footer-bottom {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding-top: 30px;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid rgba(0, 229, 255, 0.3);
 }
 
 @media (max-width: 768px) {
@@ -247,7 +284,7 @@
 }
 
 .footer-copyright {
-  color: var(--text-dim);
+  color: rgba(0, 229, 255, 0.6);
   font-size: 0.9rem;
 }
 
@@ -267,7 +304,7 @@
 }
 
 .heart-icon {
-  color: #e53e3e;
+  color: #FF0080;
   animation: heartbeat 2s infinite;
 }
 
@@ -276,28 +313,45 @@
   25%, 75% { transform: scale(1.1); }
 }
 
-/* Scroll to Top Button */
+/* Scroll to Top Button - Tron Style */
 .scroll-to-top {
   width: 50px;
   height: 50px;
-  background: rgba(34, 197, 94, 0.1);
-  border: 1px solid rgba(34, 197, 94, 0.2);
-  border-radius: 50%;
-  color: var(--text-dim);
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid #00E5FF;
+  border-radius: 0;
+  color: #00E5FF;
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.scroll-to-top::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.3), transparent);
+  transition: left 0.5s;
+}
+
+.scroll-to-top:hover::before {
+  left: 100%;
 }
 
 .scroll-to-top:hover {
-  background: rgba(34, 197, 94, 0.2);
-  border-color: rgba(34, 197, 94, 0.4);
-  color: var(--text-bright);
+  background: rgba(0, 229, 255, 0.1);
+  border-color: #00E5FF;
+  color: #00E5FF;
   transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(34, 197, 94, 0.2);
+  box-shadow: 0 8px 25px rgba(0, 229, 255, 0.3);
 }
 
 /* Responsive Design */
@@ -390,16 +444,6 @@
 .footer-nav-link:focus,
 .social-icon:focus,
 .scroll-to-top:focus {
-  outline: 2px solid rgba(34, 197, 94, 0.5);
+  outline: 2px solid rgba(0, 229, 255, 0.5);
   outline-offset: 2px;
-}
-
-/* Hover Effects for Social Icons */
-.social-icon:hover {
-  animation: social-bounce 0.6s ease;
-}
-
-@keyframes social-bounce {
-  0%, 20%, 60%, 100% { transform: translateY(-3px); }
-  40%, 80% { transform: translateY(-6px); }
 }

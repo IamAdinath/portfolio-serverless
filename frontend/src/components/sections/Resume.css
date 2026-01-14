@@ -1,27 +1,76 @@
-/* Container for the entire resume */
+/* BALANCED TRON THEME - Resume Container */
 .resume-container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 20px;
-  font-family: 'Inter', 'Segoe UI', 'Roboto', sans-serif;
-  color: #2d3748;
-  background: linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 50%, #2d2d2d 100%);
+  font-family: 'Segoe UI', 'Roboto', sans-serif;
+  color: rgba(0, 229, 255, 0.95);
+  background: #000000;
   min-height: 100vh;
+  position: relative;
 }
 
-/* Header Card */
+.resume-container::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: 
+    linear-gradient(0deg, rgba(0, 229, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 229, 255, 0.02) 1px, transparent 1px),
+    #000000;
+  background-size: 50px 50px, 50px 50px, 100% 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.resume-container > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Header Card - Tron Style */
 .header-card {
-  background: white;
-  border-radius: 20px;
+  background: rgba(0, 10, 20, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 0;
   padding: 40px;
   margin-bottom: 30px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid #00E5FF;
+  box-shadow: 
+    0 0 10px rgba(0, 229, 255, 0.15),
+    inset 0 1px 0 rgba(0, 229, 255, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.header-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  box-sizing: border-box;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #00E5FF, transparent);
+  animation: cardSweep 3s linear infinite;
+}
+
+@keyframes cardSweep {
+  0% { left: -100%; }
+  100% { left: 100%; }
 }
 
 .header-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+  box-shadow: 
+    0 0 20px rgba(0, 229, 255, 0.25),
+    inset 0 1px 0 rgba(0, 229, 255, 0.15);
+  border-color: #00E5FF;
 }
 
 .profile-section {
@@ -35,39 +84,44 @@
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #000000 0%, #434343 50%, #1a1a1a 100%);
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid #00E5FF;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.3);
+  position: relative;
 }
 
 .avatar-text {
   font-size: 2.5rem;
   font-weight: bold;
-  color: white;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  color: #00E5FF;
+  text-shadow: 0 0 5px rgba(0, 229, 255, 0.5);
 }
 
+/* h1 styles - White Times New Roman */
 .profile-info h1 {
   font-size: 3rem;
   margin: 0 0 10px 0;
-  background: linear-gradient(135deg, #000000 0%, #4a4a4a 50%, #1a1a1a 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #FFFFFF;
+  font-family: 'Times New Roman', Times, serif;
   font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .profile-info h2 {
   font-size: 1.5rem;
-  color: #4a5568;
+  color: rgba(0, 229, 255, 0.95);
   margin: 0 0 10px 0;
   font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .profile-tagline {
-  color: #718096;
+  color: rgba(0, 229, 255, 0.9);
   font-size: 1.1rem;
   margin: 0;
   font-style: italic;
@@ -84,56 +138,85 @@
   align-items: center;
   gap: 12px;
   padding: 15px 20px;
-  background: #f7fafc;
-  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  border-radius: 0;
   transition: all 0.3s ease;
-  border: 2px solid transparent;
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.contact-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  box-sizing: border-box;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.contact-item:hover::before {
+  left: 100%;
 }
 
 .contact-item:hover {
-  background: #edf2f7;
-  border-color: #2d2d2d;
+  background: rgba(0, 229, 255, 0.05);
+  border-color: #00E5FF;
   transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 229, 255, 0.2);
 }
 
 .contact-icon {
   font-size: 1.2rem;
-  color: #2d2d2d;
+  color: #00E5FF;
   width: 20px;
   text-align: center;
 }
 
 .contact-item span {
-  color: #4a5568;
+  color: rgba(0, 229, 255, 0.95);
   font-weight: 500;
 }
 
 .contact-item a {
-  color: #2d2d2d;
+  color: rgba(0, 229, 255, 0.95);
   text-decoration: none;
   font-weight: 500;
-  transition: color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .contact-item a:hover {
-  color: #000000;
+  color: #00E5FF;
 }
 
 
-/* Summary Card */
+/* Summary Card - Tron Style */
 .summary-card {
-  background: white;
-  border-radius: 20px;
+  background: rgba(0, 10, 20, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 0;
   padding: 0;
   margin-bottom: 30px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  border: 1px solid #00E5FF;
+  box-shadow: 
+    0 0 10px rgba(0, 229, 255, 0.15),
+    inset 0 1px 0 rgba(0, 229, 255, 0.1);
   transition: all 0.3s ease;
   overflow: hidden;
+  position: relative;
+  z-index: 2;
 }
 
 .summary-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+  box-shadow: 
+    0 0 20px rgba(0, 229, 255, 0.25),
+    inset 0 1px 0 rgba(0, 229, 255, 0.15);
+  border-color: #00E5FF;
 }
 
 
@@ -154,24 +237,33 @@
   min-width: 0;
 }
 
-/* Card Base Styles */
+/* Card Base Styles - Tron Style */
 .skills-card,
 .certification-card,
 .awards-card {
-  background: white;
-  border-radius: 20px;
+  background: rgba(0, 10, 20, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 0;
   padding: 0;
   margin-bottom: 30px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  border: 1px solid #00E5FF;
+  box-shadow: 
+    0 0 10px rgba(0, 229, 255, 0.15),
+    inset 0 1px 0 rgba(0, 229, 255, 0.1);
   transition: all 0.3s ease;
   overflow: hidden;
+  position: relative;
+  z-index: 2;
 }
 
 .skills-card:hover,
 .certification-card:hover,
 .awards-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+  box-shadow: 
+    0 0 20px rgba(0, 229, 255, 0.25),
+    inset 0 1px 0 rgba(0, 229, 255, 0.15);
+  border-color: #00E5FF;
 }
 
 /* Experience Card Container */
@@ -182,17 +274,23 @@
   margin-bottom: 30px;
   box-shadow: none;
   overflow: visible;
+  position: relative;
+  z-index: 2;
 }
 
 .experience-card .card-header {
-  background: linear-gradient(135deg, #000000 0%, #434343 50%, #1a1a1a 100%);
-  color: white;
+  background: rgba(0, 229, 255, 0.1);
+  backdrop-filter: blur(10px);
+  color: #00E5FF;
   padding: 25px 30px;
   display: flex;
   align-items: center;
   gap: 15px;
-  border-radius: 20px 20px 0 0;
+  border-radius: 0;
   margin-bottom: 0;
+  border: 1px solid #00E5FF;
+  border-bottom: none;
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
 }
 
 .experience-card .card-content {
@@ -200,20 +298,42 @@
   background: transparent;
 }
 
-/* Card Header */
+/* Card Header - Tron */
 .card-header {
-  background: linear-gradient(135deg, #000000 0%, #434343 50%, #1a1a1a 100%);
-  color: white;
+  background: rgba(0, 229, 255, 0.1);
+  backdrop-filter: blur(10px);
+  color: #00E5FF;
   padding: 25px 30px;
   display: flex;
   align-items: center;
   gap: 15px;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  box-sizing: border-box;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #00E5FF, transparent);
+  animation: headerShine 3s linear infinite;
+}
+
+@keyframes headerShine {
+  0% { left: -100%; }
+  100% { left: 100%; }
 }
 
 .card-header h3 {
   margin: 0;
   font-size: 1.4rem;
   font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .section-icon {
@@ -224,10 +344,11 @@
 /* Card Content */
 .card-content {
   padding: 30px;
+  color: rgba(0, 229, 255, 0.95);
 }
 
 
-/* Skills Styling */
+/* Skills Styling - Tron Tags */
 .skills-category {
   margin-bottom: 25px;
 }
@@ -237,12 +358,14 @@
 }
 
 .skills-category h4 {
-  color: #4a5568;
+  color: #00E5FF;
   font-size: 1.1rem;
   font-weight: 600;
   margin: 0 0 15px 0;
   padding-bottom: 8px;
-  border-bottom: 2px solid #2d2d2d;
+  border-bottom: 1px solid rgba(0, 229, 255, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .skills-list {
@@ -252,38 +375,81 @@
 }
 
 .skill-tag {
-  background: linear-gradient(135deg, #000000 0%, #434343 50%, #1a1a1a 100%);
-  color: white;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  color: #00E5FF;
   padding: 8px 16px;
-  border-radius: 25px;
+  border-radius: 0;
   font-size: 0.9rem;
   font-weight: 500;
   transition: all 0.3s ease;
   cursor: default;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  box-shadow: 0 0 5px rgba(0, 229, 255, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.skill-tag::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  box-sizing: border-box;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.skill-tag:hover::before {
+  left: 100%;
 }
 
 .skill-tag:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.3);
+  border-color: #00E5FF;
 }
 
-/* Experience Styling */
+/* Experience Styling - Tron Cards */
 .experience-item {
-  background: white;
-  border-radius: 15px;
+  background: rgba(0, 10, 20, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 0;
   padding: 25px;
   margin-bottom: 25px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  box-shadow: 
+    0 0 10px rgba(0, 229, 255, 0.15),
+    inset 0 1px 0 rgba(0, 229, 255, 0.05);
   transition: all 0.3s ease;
-  border: 1px solid #e2e8f0;
   position: relative;
+  overflow: hidden;
+}
+
+.experience-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #00E5FF, transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.experience-item:hover::before {
+  opacity: 1;
 }
 
 .experience-item:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
-  border-color: #2d2d2d;
+  box-shadow: 
+    0 0 20px rgba(0, 229, 255, 0.25),
+    inset 0 1px 0 rgba(0, 229, 255, 0.1);
+  border-color: #00E5FF;
 }
 
 .experience-item:last-child {
@@ -300,26 +466,24 @@
 .company-logo {
   width: 60px;
   height: 60px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+  border-radius: 0;
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(0, 229, 255, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid #e2e8f0;
   flex-shrink: 0;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
   font-size: 1.4rem;
   font-weight: bold;
-  color: #4a5568;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  color: #00E5FF;
 }
 
 .experience-item:hover .company-logo {
   transform: scale(1.05);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-  border-color: #2d2d2d;
-  color: #2d2d2d;
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.3);
+  border-color: #00E5FF;
 }
 
 .experience-info {
@@ -327,10 +491,12 @@
 }
 
 .experience-info h4 {
-  color: #2d3748;
+  color: #00E5FF;
   font-size: 1.3rem;
   font-weight: 600;
   margin: 0 0 10px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 .experience-meta {
@@ -342,19 +508,20 @@
 }
 
 .company {
-  color: #2d2d2d;
+  color: rgba(0, 229, 255, 0.95);
   font-weight: 600;
   font-size: 1.1rem;
 }
 
 .duration {
-  background: #f7fafc;
-  color: #4a5568;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  color: rgba(0, 229, 255, 0.95);
   padding: 6px 12px;
-  border-radius: 20px;
+  border-radius: 0;
   font-size: 0.9rem;
   font-weight: 500;
-  border: 1px solid #e2e8f0;
+  border: 1px solid rgba(0, 229, 255, 0.3);
 }
 
 .achievements {
@@ -367,7 +534,7 @@
   position: relative;
   padding-left: 25px;
   margin-bottom: 12px;
-  color: #4a5568;
+  color: rgba(0, 229, 255, 0.9);
   line-height: 1.6;
 }
 
@@ -375,28 +542,34 @@
   content: "▶";
   position: absolute;
   left: 0;
-  color: #2d2d2d;
+  color: #00E5FF;
   font-size: 0.8rem;
 }
 
 .achievements li strong {
-  color: #2d2d2d;
+  color: #00E5FF;
   font-weight: 600;
 }
 
-/* Certification Styling */
+/* Certification Styling - Tron */
 .certification-item {
   margin-bottom: 20px;
   padding: 20px;
-  background: #f7fafc;
-  border-radius: 12px;
-  border-left: 4px solid #2d2d2d;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  border-radius: 0;
+  border-left: 2px solid #00E5FF;
   transition: all 0.3s ease;
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  border-left-width: 2px;
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.1);
 }
 
 .certification-item:hover {
-  background: #edf2f7;
+  background: rgba(0, 229, 255, 0.05);
   transform: translateX(5px);
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.2);
+  border-left-color: #00E5FF;
 }
 
 .certification-item:last-child {
@@ -404,7 +577,7 @@
 }
 
 .cert-provider {
-  color: #2d2d2d;
+  color: #00E5FF;
   font-weight: 600;
   font-size: 0.9rem;
   text-transform: uppercase;
@@ -413,33 +586,54 @@
 }
 
 .cert-link {
-  color: #2d3748;
+  color: rgba(0, 229, 255, 0.95);
   text-decoration: none;
   font-weight: 500;
   font-size: 1.05rem;
   line-height: 1.4;
-  transition: color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .cert-link:hover {
-  color: #2d2d2d;
+  color: #00E5FF;
 }
 
 
-/* Awards Styling */
+/* Awards Styling - Tron Trophies */
 .award-item {
   margin-bottom: 25px;
   padding: 20px;
-  background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
-  border-radius: 15px;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(15px);
+  border-radius: 0;
   position: relative;
   transition: all 0.3s ease;
-  box-shadow: 0 5px 15px rgba(255, 234, 167, 0.3);
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  border-left: 3px solid #00E5FF;
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.15);
+  overflow: hidden;
+}
+
+.award-item::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  box-sizing: border-box;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.1), transparent);
+  transition: left 0.5s;
+}
+
+.award-item:hover::after {
+  left: 100%;
 }
 
 .award-item:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(255, 234, 167, 0.4);
+  box-shadow: 0 0 20px rgba(0, 229, 255, 0.25);
+  border-color: #00E5FF;
 }
 
 .award-item:last-child {
@@ -455,22 +649,24 @@
 }
 
 .award-title {
-  color: #2d3748;
+  color: #00E5FF;
   font-weight: 600;
   font-size: 1.1rem;
   margin-bottom: 8px;
   margin-left: 35px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 .award-company {
-  color: #4a5568;
+  color: rgba(0, 229, 255, 0.95);
   font-weight: 500;
   margin-bottom: 5px;
   margin-left: 35px;
 }
 
 .award-date {
-  color: #718096;
+  color: rgba(0, 229, 255, 0.6);
   font-size: 0.9rem;
   font-style: italic;
   margin-left: 35px;
@@ -492,6 +688,7 @@
   .right-column {
     flex: 1 1 100%;
     width: 100%;
+  box-sizing: border-box;
   }
 
   .profile-section {
@@ -500,6 +697,7 @@
     gap: 20px;
   }
 
+  /* h1 responsive styles */
   .profile-info h1 {
     font-size: 2.5rem;
   }
@@ -536,6 +734,7 @@
     padding: 10px;
   }
 
+  /* h1 responsive styles */
   .profile-info h1 {
     font-size: 2rem;
   }

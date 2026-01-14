@@ -14,7 +14,7 @@ const urlsToCache = [
   '/manifest.json',
   '/favicon.ico',
   '/apple-touch-icon.png',
-  '/favicon-32x32.png',
+  '/favicon-96x96.png',
   '/favicon-16x16.png',
   '/sitemap.xml',
   '/robots.txt'
@@ -177,7 +177,7 @@ self.addEventListener('push', (event) => {
   
   const options = {
     body: event.data ? event.data.text() : 'Portfolio updated with new content!',
-    icon: '/favicon-32x32.png',
+    icon: '/favicon-96x96.png',
     badge: '/favicon-16x16.png',
     vibrate: [100, 50, 100],
     data: {

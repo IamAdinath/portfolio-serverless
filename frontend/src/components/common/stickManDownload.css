@@ -1,49 +1,69 @@
-/* StickmanDownload.css */
+/* StickmanDownload.css - Tron Theme */
 
 .floating-download-btn {
   position: fixed;
   bottom: 30px;
   right: 30px;
   padding: 15px 25px;
-  background: var(--gradient-primary);
-  color: white;
-  border: none;
-  border-radius: 50px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #00E5FF;
+  border: 2px solid #00E5FF;
+  border-radius: 0;
   font-weight: 600;
   font-size: 1rem;
   cursor: pointer;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.3);
   z-index: 1000;
   transition: all 0.3s ease;
   animation: bounce 2s infinite;
-  border: 2px solid transparent;
   backdrop-filter: blur(10px);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  position: relative;
+  overflow: hidden;
+}
+
+.floating-download-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.3), transparent);
+  transition: left 0.5s;
+}
+
+.floating-download-btn:hover::after {
+  left: 100%;
 }
 
 .floating-download-btn:hover {
-  background: var(--gradient-secondary);
+  background: rgba(0, 229, 255, 0.1);
   transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
-  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 25px rgba(0, 229, 255, 0.5);
+  border-color: #00E5FF;
   animation: none;
 }
 
 .floating-download-btn:active {
   transform: translateY(-1px) scale(1.02);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 20px rgba(0, 229, 255, 0.4);
 }
 
 .floating-download-btn:disabled {
-  background: linear-gradient(135deg, #666666 0%, #888888 50%, #777777 100%);
+  background: rgba(0, 0, 0, 0.6);
+  border-color: rgba(0, 229, 255, 0.3);
+  color: rgba(0, 229, 255, 0.5);
   cursor: not-allowed;
-  animation: pulse 10s infinite;
+  animation: pulse 2s infinite;
   transform: none;
 }
 
 .floating-download-btn:disabled:hover {
   transform: none;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-  border-color: transparent;
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.2);
+  border-color: rgba(0, 229, 255, 0.3);
 }
 
 /* Bouncy animation */
@@ -65,14 +85,14 @@
     opacity: 1;
   }
   50% {
-    opacity: 0.7;
+    opacity: 0.6;
   }
   100% {
     opacity: 1;
   }
 }
 
-/* Add a subtle glow effect */
+/* Tron glow effect */
 .floating-download-btn::before {
   content: '';
   position: absolute;
@@ -80,8 +100,8 @@
   left: -2px;
   right: -2px;
   bottom: -2px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-  border-radius: 52px;
+  background: linear-gradient(135deg, rgba(0, 229, 255, 0.2) 0%, rgba(0, 229, 255, 0.1) 100%);
+  border-radius: 0;
   z-index: -1;
   opacity: 0;
   transition: opacity 0.3s ease;
@@ -102,15 +122,19 @@
 
 .stickman {
   font-size: 2rem;
+  filter: drop-shadow(0 0 5px rgba(0, 229, 255, 0.5));
 }
 
 .rope {
   width: 80px;
-  height: 3px;
-  background-color: #444;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #00E5FF, transparent);
   margin: 0 10px;
+  box-shadow: 0 0 5px rgba(0, 229, 255, 0.5);
 }
 
 .file-icon {
   font-size: 1.8rem;
+  color: #00E5FF;
+  filter: drop-shadow(0 0 5px rgba(0, 229, 255, 0.5));
 }

@@ -1,9 +1,6 @@
 /**
  * Performance optimization utilities for better LCP and resource loading
- * Now includes CSS optimization
  */
-
-import { initializeCSSOptimization } from './cssLoader';
 
 /**
  * Add preconnect link for API domain to improve connection speed
@@ -91,26 +88,8 @@ export const addResourceHints = (): void => {
  * Optimize CSS loading and delivery
  */
 export const optimizeCSSDelivery = (): void => {
-  // Initialize CSS lazy loading
-  initializeCSSOptimization();
-  
-  // Preload critical CSS
-  const criticalCSS = [
-    '/css/critical.css',
-    '/css/variables.css',
-    '/css/utilities.css'
-  ];
-  
-  criticalCSS.forEach(href => {
-    const link = document.createElement('link');
-    link.rel = 'preload';
-    link.as = 'style';
-    link.href = href;
-    link.onload = () => {
-      link.rel = 'stylesheet';
-    };
-    document.head.appendChild(link);
-  });
+  // CSS is now loaded directly via component imports
+  // No need for dynamic CSS loading
   
   // Remove unused CSS after page load
   setTimeout(() => {

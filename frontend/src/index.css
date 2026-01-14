@@ -1,21 +1,19 @@
 /**
- * Optimized main CSS entry point
- * Imports only essential styles and uses CSS variables for consistency
+ * Main CSS - Dark Professional Theme
  */
 
-/* CSS Variables - Load first for all components */
+/* CSS Variables */
 @import './styles/variables.css';
 
-/* Critical CSS - Above the fold styles */
-@import './styles/critical.css';
+/* Global Typography */
+@import './styles/typography.css';
 
-/* Utility classes - Reduces component CSS duplication */
-@import './styles/utilities.css';
+#root {
+  background: #000000;
+  min-height: 100vh;
+}
 
-/* Component styles - Optimized using variables and utilities */
-@import './styles/components.css';
-
-/* Base styles - Light Theme with Greenish-Blue Gradients */
+/* Base styles */
 body {
   margin: 0;
   font-family: var(--font-family-base);
@@ -23,17 +21,17 @@ body {
   -moz-osx-font-smoothing: grayscale;
   color: var(--text);
   line-height: var(--line-height-normal);
-  background: var(--gradient-background);
+  background: #000000;
   min-height: 100vh;
   overflow-x: hidden;
 }
 
 html, body {
   height: 100%;
-  background: var(--bg);
+  background: #000000;
 }
 
-/* Light theme background effect */
+/* Background gradient effect */
 body::before {
   content: '';
   position: fixed;
@@ -41,43 +39,22 @@ body::before {
   left: 0;
   width: 100%;
   height: 100%;
-  background: var(--gradient-background);
+  background: #000000;
   z-index: -1;
   pointer-events: none;
-}
-
-/* Hide any skip navigation links that might be added by accessibility tools */
-a[href="#main-content"],
-a[href="#main"],
-.skip-link,
-.skip-nav,
-.skip-navigation,
-[class*="skip"] {
-  position: absolute !important;
-  left: -10000px !important;
-  top: auto !important;
-  width: 1px !important;
-  height: 1px !important;
-  overflow: hidden !important;
-  clip: rect(0, 0, 0, 0) !important;
-  white-space: nowrap !important;
-  border: 0 !important;
-  opacity: 0 !important;
-  visibility: hidden !important;
 }
 
 code {
   font-family: var(--font-family-mono);
 }
 
-/* Remove default styles */
 * {
   box-sizing: border-box;
 }
 
-/* Focus styles for accessibility */
+/* Focus styles */
 *:focus {
-  outline: 2px solid rgba(34, 197, 94, 0.5);
+  outline: 2px solid var(--accent-cyan);
   outline-offset: 2px;
 }
 
@@ -86,60 +63,48 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Selection */
+::selection {
+  background: var(--accent-cyan);
+  color: var(--bg);
+}
+
+::-moz-selection {
+  background: var(--accent-cyan);
+  color: var(--bg);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-2);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-blue);
+}
+
 /* Loading states */
 .loading {
   opacity: 0.7;
   pointer-events: none;
 }
 
-/* Page loader */
 .page-loader {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 50vh;
   font-size: var(--font-size-lg);
-  color: var(--color-text-muted);
-}
-
-/* Animation utilities */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes heartbeat {
-  0%, 50%, 100% { transform: scale(1); }
-  25%, 75% { transform: scale(1.1); }
-}
-
-.animate-fadeInUp {
-  animation: fadeInUp 0.6s ease-out;
-}
-
-.animate-fadeInDown {
-  animation: fadeInDown 0.6s ease-out;
-}
-
-.animate-heartbeat {
-  animation: heartbeat 2s infinite;
+  color: var(--text-dim);
 }
 
 /* Print styles */
@@ -152,9 +117,5 @@ html {
     background: white !important;
     color: black !important;
   }
-  
-  .card {
-    box-shadow: none !important;
-    border: 1px solid #ccc !important;
-  }
 }
+

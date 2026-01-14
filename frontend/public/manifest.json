@@ -40,7 +40,7 @@
       "purpose": "any"
     },
     {
-      "src": "favicon-32x32.png",
+      "src": "favicon-96x96.png",
       "type": "image/png",
       "sizes": "32x32",
       "purpose": "any"
@@ -70,21 +70,21 @@
       "short_name": "About",
       "description": "Learn about Adinath Gore's background and experience",
       "url": "/about",
-      "icons": [{ "src": "favicon-32x32.png", "sizes": "32x32" }]
+      "icons": [{ "src": "favicon-96x96.png", "sizes": "32x32" }]
     },
     {
       "name": "Resume",
       "short_name": "Resume",
       "description": "View professional resume and experience",
       "url": "/resume",
-      "icons": [{ "src": "favicon-32x32.png", "sizes": "32x32" }]
+      "icons": [{ "src": "favicon-96x96.png", "sizes": "32x32" }]
     },
     {
       "name": "Blog",
       "short_name": "Blog",
       "description": "Read latest articles and insights",
       "url": "/blogs",
-      "icons": [{ "src": "favicon-32x32.png", "sizes": "32x32" }]
+      "icons": [{ "src": "favicon-96x96.png", "sizes": "32x32" }]
     }
   ],
   "related_applications": [],
