@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLinkedin, faGithub, faMedium, faStackOverflow } from '@fortawesome/free-brands-svg-icons';
 import { faUser, faHeart, faCode, faRocket, faLightbulb, faCoffee } from '@fortawesome/free-solid-svg-icons';
 import { usePageTitle } from '../common/usePageTitle';
-import ProfileImage from '../common/ProfileImage';
+import InitialsProfile from '../common/InitialsProfile';
 import SEOHead from '../common/SEOHead';
 import { SOCIAL_LINKS } from '../../constants';
 
@@ -45,10 +45,10 @@ const AboutPage: React.FC = () => {
                 Note: LinkedIn images may have authentication requirements.
                 For production, consider uploading your professional photo to your own server/CDN.
               */}
-              <ProfileImage 
+              <InitialsProfile 
                 className="profile-image"
                 size="medium"
-                loading="lazy"
+                initials="AG"
               />
               <div className="profile-badge">
                 <FontAwesomeIcon icon={faUser} />

@@ -56,21 +56,22 @@ const Footer: React.FC = () => {
               Full-Stack Developer & Cloud Architect passionate about creating
               scalable web applications and innovative digital solutions.
             </p>
-            <div className="footer-social" role="list" aria-label="Social media links">
+            <ul className="footer-social" aria-label="Social media links">
               {socialLinks.map((social, index) => (
-                <a
-                  key={index}
-                  href={social.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="social-icon"
-                  title={social.label}
-                  aria-label={`Visit ${social.label} profile`}
-                >
-                  <FontAwesomeIcon icon={social.icon} aria-hidden="true" />
-                </a>
+                <li key={index}>
+                  <a
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="social-icon"
+                    title={social.label}
+                    aria-label={`Visit ${social.label} profile`}
+                  >
+                    <FontAwesomeIcon icon={social.icon} aria-hidden="true" />
+                  </a>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
 
           {/* Quick Links */}

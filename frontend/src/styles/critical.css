@@ -1,0 +1,285 @@
+/* Critical CSS - Above the fold styles only */
+/* This will be inlined in the HTML head */
+
+/* Essential CSS Variables */
+:root {
+  --bg: #000000;
+  --accent-cyan: #00E5FF;
+  --text: #EAF0FF;
+  --font-family-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-family-mono: 'Monaco', 'Menlo', 'Courier New', monospace;
+  --font-weight-bold: 700;
+}
+
+/* Critical base styles */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: #000000;
+  font-family: var(--font-family-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: var(--text);
+  overflow-x: hidden;
+  /* Prevent layout shifts from font loading */
+  font-display: swap;
+}
+
+#root {
+  background: #000000;
+  min-height: 100vh;
+}
+
+/* Critical loading state */
+.page-loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+  font-size: 1.1rem;
+  color: #666;
+  background: #000000;
+}
+
+/* Layout shift prevention - ensure all animations use transform/opacity only */
+* {
+  /* Prevent layout shifts from animations */
+  will-change: auto;
+}
+
+*:hover, *:focus, *:active {
+  /* Only allow transform and opacity changes for interactions */
+  will-change: transform, opacity;
+}
+
+/* Critical hero section styles */
+.portfolio-main-container {
+  font-family: var(--font-family-base);
+  color: #00E5FF;
+  background: #000000;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.portfolio-hero-section {
+  padding: 60px 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.portfolio-hero-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  background: rgba(0, 10, 20, 0.8);
+  padding: 60px;
+  border: 1px solid #00E5FF;
+  position: relative;
+}
+
+/* Critical hero image container - prevent layout shift */
+.portfolio-hero-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.portfolio-profile-card {
+  position: relative;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.9);
+  border: 2px solid #00E5FF;
+  box-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
+  transition: all 0.3s ease;
+  overflow: hidden;
+  /* Fixed dimensions to prevent layout shift */
+  width: 290px;
+  height: 290px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Critical initials profile styles */
+.initials-profile {
+  flex-shrink: 0;
+  /* Ensure consistent sizing */
+  min-width: 250px;
+  min-height: 250px;
+}
+
+/* Critical header logo styles */
+.brand-logo, .footer-brand-logo {
+  flex-shrink: 0;
+  /* Prevent layout shift */
+  min-width: 40px;
+  min-height: 40px;
+}
+
+/* Critical header styles - prevent mobile layout shifts */
+.modern-header {
+  /* Fixed height to prevent layout shift */
+  min-height: 70px;
+  /* Contain animations to prevent layout shifts */
+  contain: layout style paint;
+}
+
+.header-container {
+  /* Fixed height for consistency */
+  height: 70px;
+  /* Prevent flex items from causing shifts */
+  align-items: center;
+}
+
+/* Critical footer styles - prevent mobile layout shifts */
+.modern-footer {
+  /* Contain animations and prevent layout shifts */
+  contain: layout style paint;
+  /* Ensure footer doesn't cause shifts */
+  position: relative;
+}
+
+/* Mobile-specific layout shift prevention */
+@media (max-width: 768px) {
+  .modern-header {
+    min-height: 60px;
+  }
+  
+  .header-container {
+    height: 60px;
+  }
+  
+  /* Prevent mobile menu from causing layout shifts */
+  .mobile-nav {
+    /* Use transform instead of changing layout */
+    position: absolute;
+    top: 100%;
+    width: 100%;
+    /* Prevent content reflow */
+    contain: layout;
+  }
+  
+  /* Optimize footer for mobile to prevent shifts */
+  .modern-footer {
+    /* Disable complex animations on mobile to prevent shifts */
+    animation: none;
+  }
+  
+  .modern-footer::before {
+    /* Simplify background pattern on mobile */
+    background-size: 25px 25px;
+  }
+  
+  /* Prevent footer content from causing shifts */
+  .footer-main {
+    /* Fixed grid behavior */
+    display: block;
+  }
+  
+  .footer-brand,
+  .footer-links,
+  .footer-contact {
+    /* Disable slide animations on mobile */
+    animation: none;
+    margin-bottom: 30px;
+  }
+  
+  /* Ensure social icons don't cause shifts */
+  .footer-social {
+    /* Fixed layout */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+  }
+  
+  .social-icon {
+    /* Fixed dimensions */
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .modern-header {
+    min-height: 60px;
+  }
+  
+  .header-container {
+    height: 60px;
+  }
+  
+  /* Further optimize for very small screens */
+  .modern-footer::before {
+    /* Remove pattern on very small screens */
+    display: none;
+  }
+  
+  .social-icon {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* Critical typography */
+h1 {
+  font-size: 3rem;
+  margin: 0 0 12px 0;
+  color: #FFFFFF;
+  font-family: 'Times New Roman', Times, serif;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+/* Responsive critical styles */
+@media (max-width: 768px) {
+  .portfolio-hero-content {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding: 40px 30px;
+    text-align: center;
+  }
+  
+  .portfolio-profile-card {
+    width: 240px;
+    height: 240px;
+  }
+  
+  .initials-profile {
+    min-width: 200px;
+    min-height: 200px;
+  }
+  
+  h1 {
+    font-size: 2.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 2rem;
+  }
+  
+  .portfolio-hero-content {
+    padding: 30px 20px;
+  }
+  
+  .portfolio-profile-card {
+    width: 190px;
+    height: 190px;
+  }
+  
+  .initials-profile {
+    min-width: 150px;
+    min-height: 150px;
+  }
+}

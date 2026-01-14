@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import './ResumeDownloadButton.css';
 import { DownloadResume } from './apiService';
 import { downloadFile } from '../../utils/downloadUtils';
@@ -10,7 +11,30 @@ import { faDownload } from '@fortawesome/free-solid-svg-icons';
 
 const ResumeDownloadButton: React.FC = () => {
   const [isAnimating, setIsAnimating] = useState(false);
+  const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(null);
   const { addToast } = useToast();
+
+  useEffect(() => {
+    // Create a portal container at the body level to avoid any CSS containment issues
+    const container = document.createElement('div');
+    container.id = 'floating-button-portal';
+    container.style.position = 'fixed';
+    container.style.top = '0';
+    container.style.left = '0';
+    container.style.width = '100%';
+    container.style.height = '100%';
+    container.style.pointerEvents = 'none';
+    container.style.zIndex = '10000';
+    
+    document.body.appendChild(container);
+    setPortalContainer(container);
+
+    return () => {
+      if (document.body.contains(container)) {
+        document.body.removeChild(container);
+      }
+    };
+  }, []);
 
   const handleDownload = async () => {
     try {
@@ -45,12 +69,13 @@ const ResumeDownloadButton: React.FC = () => {
     }
   };
 
-  return (
+  const buttonContent = (
     <button
       onClick={handleDownload}
       className="floating-download-btn"
       disabled={isAnimating}
       aria-label="Download Resume"
+      style={{ pointerEvents: 'auto' }}
     >
       {isAnimating ? (
         <>
@@ -63,6 +88,9 @@ const ResumeDownloadButton: React.FC = () => {
       )}
     </button>
   );
+
+  // Render using portal to avoid CSS containment issues
+  return portalContainer ? createPortal(buttonContent, portalContainer) : buttonContent;
 };
 
 export default ResumeDownloadButton;

@@ -1,5 +1,7 @@
 /* ResumeDownloadButton.css - Tron Theme */
 
+/* ResumeDownloadButton.css - Tron Theme */
+
 .floating-download-btn {
   position: fixed;
   bottom: 30px;
@@ -13,7 +15,7 @@
   font-size: 1rem;
   cursor: pointer;
   box-shadow: 0 0 15px rgba(0, 229, 255, 0.3);
-  z-index: 1000;
+  z-index: 10000;
   transition: all 0.3s ease;
   animation: bounce 2s infinite;
   backdrop-filter: blur(10px);

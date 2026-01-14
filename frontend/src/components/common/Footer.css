@@ -9,6 +9,8 @@
   box-shadow: 0 -8px 32px rgba(0, 229, 255, 0.15);
   position: relative;
   overflow: hidden;
+  /* Prevent layout shifts from animations */
+  contain: layout style paint;
 }
 
 /* Subtle grid pattern */
@@ -25,6 +27,9 @@
   background-size: 50px 50px;
   pointer-events: none;
   z-index: 0;
+  /* Prevent layout shifts */
+  will-change: auto;
+  transform: translateZ(0);
 }
 
 /* Top accent line */
@@ -38,6 +43,9 @@
   background: linear-gradient(90deg, transparent, #00E5FF, transparent);
   pointer-events: none;
   z-index: 1;
+  /* Prevent layout shifts */
+  will-change: auto;
+  transform: translateZ(0);
 }
 
 .footer-container {
@@ -138,6 +146,13 @@
   display: flex;
   gap: 15px;
   flex-wrap: wrap;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-social li {
+  margin: 0;
 }
 
 .social-icon {
