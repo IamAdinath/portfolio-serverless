@@ -138,6 +138,13 @@
   display: flex;
   gap: 15px;
   flex-wrap: wrap;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-social li {
+  margin: 0;
 }
 
 .social-icon {
