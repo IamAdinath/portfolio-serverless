@@ -1,7 +1,7 @@
 // AuthContext.tsx - Streamlined Authentication System
 import React, { createContext, useContext, useEffect, useState, useCallback, ReactNode } from 'react';
 import { signIn, signUp, signOut, fetchAuthSession, getCurrentUser } from 'aws-amplify/auth';
-import { requestUserConfirmation } from '../components/common/userAPI';
+import { requestUserConfirmation } from '../components/common/apiService';
 import { setUserId } from '../utils/analytics';
 
 // Types

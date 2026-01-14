@@ -1,6 +1,6 @@
 /* AdminDashboard.css */
 .admin-dashboard {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 2rem;
   min-height: 100vh;
@@ -18,10 +18,11 @@
 
 .admin-title h1 {
   margin: 0;
-  color: #2d3748;
+  color: #FFFFFF;
   font-size: 2rem;
   font-weight: 700;
   line-height: 1.2;
+  font-family: 'Times New Roman', Times, serif;
   display: flex;
   align-items: center;
   gap: 0.75rem;

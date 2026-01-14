@@ -1,0 +1,817 @@
+/* BALANCED TRON THEME - Resume Container */
+.resume-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: var(--font-family-base);
+  color: rgba(0, 229, 255, 0.95);
+  /* background inherited from body */
+  min-height: 100vh;
+  position: relative;
+}
+
+.resume-container::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: 
+    linear-gradient(0deg, rgba(0, 229, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 229, 255, 0.02) 1px, transparent 1px),
+    #000000;
+  background-size: 50px 50px, 50px 50px, 100% 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.resume-container > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Header Card - Tron Style */
+.header-card {
+  background: rgba(0, 10, 20, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 0;
+  padding: 40px;
+  margin-bottom: 30px;
+  border: 1px solid var(--accent-cyan);
+  box-shadow: 
+    0 0 10px rgba(0, 229, 255, 0.15),
+    inset 0 1px 0 rgba(0, 229, 255, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.header-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  box-sizing: border-box;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+  animation: cardSweep 3s linear infinite;
+}
+
+@keyframes cardSweep {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+.header-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 
+    0 0 20px rgba(0, 229, 255, 0.25),
+    inset 0 1px 0 rgba(0, 229, 255, 0.15);
+  border-color: var(--accent-cyan);
+}
+
+.profile-section {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.profile-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid var(--accent-cyan);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.3);
+  position: relative;
+}
+
+.avatar-text {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: var(--accent-cyan);
+  text-shadow: 0 0 5px rgba(0, 229, 255, 0.5);
+}
+
+/* h1 styles - White Times New Roman */
+.profile-info h1 {
+  font-size: 3rem;
+  margin: 0 0 10px 0;
+  color: #FFFFFF;
+  font-family: 'Times New Roman', Times, serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.profile-info h2 {
+  font-size: 1.5rem;
+  color: rgba(0, 229, 255, 0.95);
+  margin: 0 0 10px 0;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.profile-tagline {
+  color: rgba(0, 229, 255, 0.9);
+  font-size: 1.1rem;
+  margin: 0;
+  font-style: italic;
+}
+
+.contact-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px 20px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  border-radius: 0;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.contact-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  box-sizing: border-box;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.contact-item:hover::before {
+  left: 100%;
+}
+
+.contact-item:hover {
+  background: rgba(0, 229, 255, 0.05);
+  border-color: var(--accent-cyan);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 229, 255, 0.2);
+}
+
+.contact-icon {
+  font-size: 1.2rem;
+  color: var(--accent-cyan);
+  width: 20px;
+  text-align: center;
+}
+
+.contact-item span {
+  color: rgba(0, 229, 255, 0.95);
+  font-weight: 500;
+}
+
+.contact-item a {
+  color: rgba(0, 229, 255, 0.95);
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.contact-item a:hover {
+  color: var(--accent-cyan);
+}
+
+/* Summary Card - Tron Style */
+.summary-card {
+  background: rgba(0, 10, 20, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 0;
+  padding: 0;
+  margin-bottom: 30px;
+  border: 1px solid var(--accent-cyan);
+  box-shadow: 
+    0 0 10px rgba(0, 229, 255, 0.15),
+    inset 0 1px 0 rgba(0, 229, 255, 0.1);
+  transition: all 0.3s ease;
+  overflow: hidden;
+  position: relative;
+  z-index: 2;
+}
+
+.summary-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 
+    0 0 20px rgba(0, 229, 255, 0.25),
+    inset 0 1px 0 rgba(0, 229, 255, 0.15);
+  border-color: var(--accent-cyan);
+}
+
+
+/* Main Content Layout */
+.main-content {
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+}
+
+.left-column {
+  flex: 1;
+  min-width: 0;
+}
+
+.right-column {
+  flex: 2;
+  min-width: 0;
+}
+
+/* Card Base Styles - Tron Style */
+.skills-card,
+.certification-card,
+.awards-card {
+  background: rgba(0, 10, 20, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 0;
+  padding: 0;
+  margin-bottom: 30px;
+  border: 1px solid var(--accent-cyan);
+  box-shadow: 
+    0 0 10px rgba(0, 229, 255, 0.15),
+    inset 0 1px 0 rgba(0, 229, 255, 0.1);
+  transition: all 0.3s ease;
+  overflow: hidden;
+  position: relative;
+  z-index: 2;
+}
+
+.skills-card:hover,
+.certification-card:hover,
+.awards-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 
+    0 0 20px rgba(0, 229, 255, 0.25),
+    inset 0 1px 0 rgba(0, 229, 255, 0.15);
+  border-color: var(--accent-cyan);
+}
+
+/* Experience Card Container */
+.experience-card {
+  background: transparent;
+  border-radius: 0;
+  padding: 0;
+  margin-bottom: 30px;
+  box-shadow: none;
+  overflow: visible;
+  position: relative;
+  z-index: 2;
+}
+
+.experience-card .card-header {
+  background: rgba(0, 229, 255, 0.1);
+  backdrop-filter: blur(10px);
+  color: var(--accent-cyan);
+  padding: 25px 30px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border-radius: 0;
+  margin-bottom: 0;
+  border: 1px solid var(--accent-cyan);
+  border-bottom: none;
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
+}
+
+.experience-card .card-content {
+  padding: 0;
+  background: transparent;
+}
+
+/* Card Header - Tron */
+.card-header {
+  background: rgba(0, 229, 255, 0.1);
+  backdrop-filter: blur(10px);
+  color: var(--accent-cyan);
+  padding: 25px 30px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  box-sizing: border-box;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+  animation: headerShine 3s linear infinite;
+}
+
+@keyframes headerShine {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+.card-header h3 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.section-icon {
+  font-size: 1.5rem;
+  opacity: 0.9;
+}
+
+/* Card Content */
+.card-content {
+  padding: 30px;
+  color: rgba(0, 229, 255, 0.95);
+}
+
+
+/* Skills Styling - Tron Tags */
+.skills-category {
+  margin-bottom: 25px;
+}
+
+.skills-category:last-child {
+  margin-bottom: 0;
+}
+
+.skills-category h4 {
+  color: var(--accent-cyan);
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 15px 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(0, 229, 255, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.skill-tag {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  color: var(--accent-cyan);
+  padding: 8px 16px;
+  border-radius: 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  cursor: default;
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  box-shadow: 0 0 5px rgba(0, 229, 255, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.skill-tag::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  box-sizing: border-box;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.skill-tag:hover::before {
+  left: 100%;
+}
+
+.skill-tag:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.3);
+  border-color: var(--accent-cyan);
+}
+
+/* Experience Styling - Tron Cards */
+.experience-item {
+  background: rgba(0, 10, 20, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 0;
+  padding: 25px;
+  margin-bottom: 25px;
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  box-shadow: 
+    0 0 10px rgba(0, 229, 255, 0.15),
+    inset 0 1px 0 rgba(0, 229, 255, 0.05);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.experience-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.experience-item:hover::before {
+  opacity: 1;
+}
+
+.experience-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 
+    0 0 20px rgba(0, 229, 255, 0.25),
+    inset 0 1px 0 rgba(0, 229, 255, 0.1);
+  border-color: var(--accent-cyan);
+}
+
+.experience-item:last-child {
+  margin-bottom: 0;
+}
+
+.experience-header {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.company-logo {
+  width: 60px;
+  height: 60px;
+  border-radius: 0;
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: var(--accent-cyan);
+}
+
+.experience-item:hover .company-logo {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.3);
+  border-color: var(--accent-cyan);
+}
+
+.experience-info {
+  flex: 1;
+}
+
+.experience-info h4 {
+  color: var(--accent-cyan);
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0 0 10px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.experience-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.company {
+  color: rgba(0, 229, 255, 0.95);
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.duration {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  color: rgba(0, 229, 255, 0.95);
+  padding: 6px 12px;
+  border-radius: 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border: 1px solid rgba(0, 229, 255, 0.3);
+}
+
+.achievements {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.achievements li {
+  position: relative;
+  padding-left: 25px;
+  margin-bottom: 12px;
+  color: rgba(0, 229, 255, 0.9);
+  line-height: 1.6;
+}
+
+.achievements li::before {
+  content: "▶";
+  position: absolute;
+  left: 0;
+  color: var(--accent-cyan);
+  font-size: 0.8rem;
+}
+
+.achievements li strong {
+  color: var(--accent-cyan);
+  font-weight: 600;
+}
+
+/* Certification Styling - Tron */
+.certification-item {
+  margin-bottom: 20px;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  border-radius: 0;
+  border-left: 2px solid var(--accent-cyan);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  border-left-width: 2px;
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.1);
+}
+
+.certification-item:hover {
+  background: rgba(0, 229, 255, 0.05);
+  transform: translateX(5px);
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.2);
+  border-left-color: var(--accent-cyan);
+}
+
+.certification-item:last-child {
+  margin-bottom: 0;
+}
+
+.cert-provider {
+  color: var(--accent-cyan);
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.cert-link {
+  color: rgba(0, 229, 255, 0.95);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1.05rem;
+  line-height: 1.4;
+  transition: all 0.3s ease;
+}
+
+.cert-link:hover {
+  color: var(--accent-cyan);
+}
+
+
+/* Awards Styling - Tron Trophies */
+.award-item {
+  margin-bottom: 25px;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(15px);
+  border-radius: 0;
+  position: relative;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  border-left: 3px solid var(--accent-cyan);
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.15);
+  overflow: hidden;
+}
+
+.award-item::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  box-sizing: border-box;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.1), transparent);
+  transition: left 0.5s;
+}
+
+.award-item:hover::after {
+  left: 100%;
+}
+
+.award-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 20px rgba(0, 229, 255, 0.25);
+  border-color: var(--accent-cyan);
+}
+
+.award-item:last-child {
+  margin-bottom: 0;
+}
+
+.award-item::before {
+  content: "🏆 ";
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-size: 1.3rem;
+}
+
+.award-title {
+  color: var(--accent-cyan);
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+  margin-left: 35px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.award-company {
+  color: rgba(0, 229, 255, 0.95);
+  font-weight: 500;
+  margin-bottom: 5px;
+  margin-left: 35px;
+}
+
+.award-date {
+  color: rgba(0, 229, 255, 0.6);
+  font-size: 0.9rem;
+  font-style: italic;
+  margin-left: 35px;
+}
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .resume-container {
+    padding: 15px;
+  }
+
+  .main-content {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .left-column,
+  .right-column {
+    flex: 1 1 100%;
+    width: 100%;
+  box-sizing: border-box;
+  }
+
+  .profile-section {
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+  }
+
+  /* h1 responsive styles */
+  .profile-info h1 {
+    font-size: 2.5rem;
+  }
+
+  .contact-info {
+    grid-template-columns: 1fr;
+  }
+
+  .experience-meta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .header-card,
+  .summary-card,
+  .skills-card,
+  .certification-card,
+  .awards-card,
+  .experience-card {
+    padding: 25px;
+  }
+
+  .card-header {
+    padding: 20px 25px;
+  }
+
+  .card-content {
+    padding: 25px;
+  }
+}
+
+@media (max-width: 480px) {
+  .resume-container {
+    padding: 10px;
+  }
+
+  /* h1 responsive styles */
+  .profile-info h1 {
+    font-size: 2rem;
+  }
+
+  .profile-avatar {
+    width: 100px;
+    height: 100px;
+  }
+
+  .avatar-text {
+    font-size: 2rem;
+  }
+
+  .header-card,
+  .summary-card,
+  .skills-card,
+  .certification-card,
+  .awards-card,
+  .experience-card {
+    padding: 20px;
+    border-radius: 15px;
+  }
+
+  .card-header {
+    padding: 15px 20px;
+  }
+
+  .card-content {
+    padding: 20px;
+  }
+
+  .skill-tag {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+}
+
+/* Animation for page load */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.header-card,
+.summary-card,
+.skills-card,
+.certification-card,
+.awards-card,
+.experience-card {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.header-card {
+  animation-delay: 0.1s;
+}
+
+.summary-card {
+  animation-delay: 0.2s;
+}
+
+.skills-card {
+  animation-delay: 0.3s;
+}
+
+.certification-card {
+  animation-delay: 0.4s;
+}
+
+.awards-card {
+  animation-delay: 0.5s;
+}
+
+.experience-card {
+  animation-delay: 0.6s;
+}

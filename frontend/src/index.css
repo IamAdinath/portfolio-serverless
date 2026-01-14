@@ -1,19 +1,17 @@
 /**
- * Optimized main CSS entry point
- * Imports only essential styles and uses CSS variables for consistency
+ * Main CSS - Dark Professional Theme
  */
 
-/* CSS Variables - Load first for all components */
+/* CSS Variables */
 @import './styles/variables.css';
 
-/* Critical CSS - Above the fold styles */
-@import './styles/critical.css';
+/* Global Typography */
+@import './styles/typography.css';
 
-/* Utility classes - Reduces component CSS duplication */
-@import './styles/utilities.css';
-
-/* Component styles - Optimized using variables and utilities */
-@import './styles/components.css';
+#root {
+  background: #000000;
+  min-height: 100vh;
+}
 
 /* Base styles */
 body {
@@ -21,45 +19,42 @@ body {
   font-family: var(--font-family-base);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: var(--color-text);
+  color: var(--text);
   line-height: var(--line-height-normal);
-  background: var(--gradient-background);
+  background: #000000;
   min-height: 100vh;
+  overflow-x: hidden;
+}
+
+html, body {
+  height: 100%;
+  background: #000000;
+}
+
+/* Background gradient effect */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000000;
+  z-index: -1;
+  pointer-events: none;
 }
 
 code {
   font-family: var(--font-family-mono);
 }
 
-/* Remove default styles */
 * {
   box-sizing: border-box;
 }
 
-/* Focus styles for accessibility */
+/* Focus styles */
 *:focus {
-  outline: 2px solid rgba(0, 0, 0, 0.2);
-  outline-offset: 2px;
-}
-
-/* Skip navigation link for keyboard accessibility */
-.skip-nav-link {
-  position: absolute;
-  top: -40px;
-  left: 6px;
-  background: var(--color-primary);
-  color: white;
-  padding: 8px 16px;
-  text-decoration: none;
-  border-radius: 4px;
-  font-weight: 600;
-  z-index: 1000;
-  transition: top 0.3s ease;
-}
-
-.skip-nav-link:focus {
-  top: 6px;
-  outline: 2px solid white;
+  outline: 2px solid var(--accent-cyan);
   outline-offset: 2px;
 }
 
@@ -68,60 +63,48 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Selection */
+::selection {
+  background: var(--accent-cyan);
+  color: var(--bg);
+}
+
+::-moz-selection {
+  background: var(--accent-cyan);
+  color: var(--bg);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-2);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-blue);
+}
+
 /* Loading states */
 .loading {
   opacity: 0.7;
   pointer-events: none;
 }
 
-/* Page loader */
 .page-loader {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 50vh;
   font-size: var(--font-size-lg);
-  color: var(--color-text-muted);
-}
-
-/* Animation utilities */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes heartbeat {
-  0%, 50%, 100% { transform: scale(1); }
-  25%, 75% { transform: scale(1.1); }
-}
-
-.animate-fadeInUp {
-  animation: fadeInUp 0.6s ease-out;
-}
-
-.animate-fadeInDown {
-  animation: fadeInDown 0.6s ease-out;
-}
-
-.animate-heartbeat {
-  animation: heartbeat 2s infinite;
+  color: var(--text-dim);
 }
 
 /* Print styles */
@@ -134,9 +117,5 @@ html {
     background: white !important;
     color: black !important;
   }
-  
-  .card {
-    box-shadow: none !important;
-    border: 1px solid #ccc !important;
-  }
 }
+

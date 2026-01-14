@@ -1,17 +1,17 @@
-/* BlogCard.css */
+/* BlogCard.css - Balanced Tron Theme */
 
 .blogcard-link {
   text-decoration: none;
   color: inherit;
   display: block;
   margin-bottom: 2rem;
-  border-radius: 20px;
+  border-radius: 0;
   transition: all 0.3s ease;
 }
 
 .blogcard-link:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(45, 45, 45, 0.3);
+  box-shadow: 0 0 0 2px rgba(0, 229, 255, 0.5);
 }
 
 .blogcard-main {
@@ -20,17 +20,36 @@
   align-items: flex-start;
   gap: 2rem;
   
-  background: white;
-  border: none;
-  border-radius: 20px;
+  background: rgba(0, 10, 20, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  border-radius: 0;
   padding: 30px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.15);
   transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.blogcard-main::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+  transition: left 0.5s;
+}
+
+.blogcard-link:hover .blogcard-main::before {
+  left: 100%;
 }
 
 .blogcard-link:hover .blogcard-main {
   transform: translateY(-8px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 0 25px rgba(0, 229, 255, 0.3);
+  border-color: var(--accent-cyan);
 }
 
 .blogcard-content-wrapper {
@@ -50,11 +69,12 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #000000 0%, #434343 50%, #1a1a1a 100%);
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid var(--accent-cyan);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: var(--accent-cyan);
   font-weight: 600;
   font-size: 0.9rem;
 }
@@ -62,26 +82,24 @@
 .blogcard-author-name {
   font-size: 0.9rem;
   font-weight: 600;
-  color: #2d3748;
+  color: var(--accent-cyan);
 }
 
 .blogcard-title {
-  font-family: 'Inter', 'Segoe UI', 'Roboto', sans-serif;
+  font-family: var(--font-family-base);
   font-size: 1.5rem;
   font-weight: 700;
   line-height: 1.3;
   margin: 0 0 15px 0;
-  color: #2d3748;
+  color: var(--accent-cyan);
   transition: color 0.3s ease;
-}
-
-.blogcard-link:hover .blogcard-title {
-  color: #000000;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 .blogcard-snippet {
-  font-family: 'Inter', 'Segoe UI', 'Roboto', sans-serif;
-  color: #4a5568;
+  font-family: var(--font-family-base);
+  color: rgba(0, 229, 255, 0.9);
   font-size: 1rem;
   line-height: 1.6;
   margin: 0 0 20px 0;
@@ -93,18 +111,7 @@
   flex-wrap: wrap;
   gap: 15px;
   font-size: 0.875rem;
-  color: #718096;
-}
-
-.blogcard-meta-item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.blogcard-meta-separator {
-  font-weight: bold;
-  color: #cbd5e0;
+  color: rgba(0, 229, 255, 0.6);
 }
 
 .blogcard-tags {
@@ -116,29 +123,33 @@
 
 .blogcard-tag {
   padding: 4px 10px;
-  background: #f7fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  border-radius: 0;
   font-size: 0.75rem;
-  color: #4a5568;
+  color: var(--accent-cyan);
   font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .blogcard-thumbnail-container {
   flex-shrink: 0;
   width: 160px;
   height: 120px;
-  border-radius: 15px;
+  border-radius: 0;
   overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
 }
 
 .blogcard-thumbnail {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+  background: rgba(0, 0, 0, 0.8);
   transition: transform 0.3s ease;
+  filter: brightness(0.9) contrast(1.1);
 }
 
 .blogcard-link:hover .blogcard-thumbnail {
@@ -149,15 +160,16 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: #2d2d2d;
+  color: var(--accent-cyan);
   font-weight: 600;
   font-size: 0.9rem;
   margin-top: 15px;
   transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .blogcard-link:hover .blogcard-read-more {
-  color: #000000;
   transform: translateX(5px);
 }
 

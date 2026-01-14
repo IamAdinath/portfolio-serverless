@@ -2,12 +2,12 @@
 
 /* Container */
 .writer-container {
-  max-width: 1000px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 20px;
   font-family: 'Inter', 'Segoe UI', 'Roboto', sans-serif;
   color: #2d3748;
-  background: linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 50%, #2d2d2d 100%);
+  background: var(--gradient-background);
   min-height: 100vh;
 }
 
@@ -33,10 +33,8 @@
   margin: 0 0 8px 0;
   font-size: 1.8rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #000000 0%, #4a4a4a 50%, #1a1a1a 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #FFFFFF;
+  font-family: 'Times New Roman', Times, serif;
 }
 
 .save-status {
@@ -203,7 +201,7 @@
 }
 
 .menu-bar button.is-active {
-  background: linear-gradient(135deg, #000000 0%, #434343 50%, #1a1a1a 100%);
+  background: var(--gradient-primary);
   color: white;
   border-color: #2d2d2d;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -229,7 +227,8 @@
   font-size: 2rem;
   font-weight: 700;
   margin: 1.5em 0 0.5em 0;
-  color: #1a202c;
+  color: #FFFFFF;
+  font-family: 'Times New Roman', Times, serif;
   line-height: 1.3;
 }
 
@@ -360,7 +359,7 @@
 
 /* Publish Button */
 .publish-button {
-  background: linear-gradient(135deg, #000000 0%, #434343 50%, #1a1a1a 100%);
+  background: var(--gradient-primary);
   color: white;
   padding: 15px 30px;
   border: none;
@@ -378,7 +377,7 @@
 .publish-button:hover:not(:disabled) {
   transform: translateY(-3px);
   box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
-  background: linear-gradient(135deg, #1a1a1a 0%, #000000 50%, #2d2d2d 100%);
+  background: var(--gradient-secondary);
 }
 
 .publish-button:active:not(:disabled) {
@@ -409,14 +408,14 @@
   align-items: center;
   justify-content: center;
   min-height: 50vh;
-  color: #e2e8f0;
+  color: var(--text-dim);
 }
 
 .loading-spinner {
   width: 40px;
   height: 40px;
-  border: 4px solid rgba(226, 232, 240, 0.3);
-  border-top: 4px solid #e2e8f0;
+  border: 4px solid rgba(107, 114, 128, 0.3);
+  border-top: 4px solid var(--primary-green);
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin-bottom: 1rem;

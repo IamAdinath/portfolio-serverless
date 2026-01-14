@@ -19,10 +19,10 @@ import { usePageTitle } from './components/common/usePageTitle';
 import Logo from './components/common/Logo';
 import SEOHead from './components/common/SEOHead';
 import { SOCIAL_LINKS } from './constants';
-import logoAsset from './assets/Logo_old.png';
-import './Portfolio.css';
+import logoAsset from './assets/logo.png';
+import './HomePage.css';
 
-const Portfolio: React.FC = () => {
+const HomePage: React.FC = () => {
   usePageTitle('Portfolio');
 
   const latestBlogs = [
@@ -335,4 +335,4 @@ const Portfolio: React.FC = () => {
   );
 };
 
-export default Portfolio;
+export default HomePage;

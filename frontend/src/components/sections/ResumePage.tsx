@@ -1,14 +1,14 @@
 import React from 'react';
-import './Resume.css';
+import './ResumePage.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLinkedin, faMedium } from '@fortawesome/free-brands-svg-icons';
 import { faMobileAndroid, faEnvelope, faAward, faCertificate, faCode, faBriefcase } from '@fortawesome/free-solid-svg-icons';
-import StickmanDownload from '../common/stickManDownload';
+import ResumeDownloadButton from '../common/ResumeDownloadButton';
 import { usePageTitle } from '../common/usePageTitle';
 import SEOHead from '../common/SEOHead';
 import { CONTACT, SOCIAL_LINKS } from '../../constants';
 
-const Resume: React.FC = () => {
+const ResumePage: React.FC = () => {
     usePageTitle('Resume');
     return (
         <>
@@ -301,12 +301,14 @@ const Resume: React.FC = () => {
 
 
                     </div> {/* End Right Column */}
-                    <StickmanDownload />
 
                 </div> {/* End Main Content Area */}
+
+                {/* Floating Download Button */}
+                <ResumeDownloadButton />
             </div>
         </>
     );
 };
 
-export default Resume;
+export default ResumePage;

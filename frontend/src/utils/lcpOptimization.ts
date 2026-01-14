@@ -3,7 +3,7 @@
  * Helps improve Core Web Vitals by optimizing the loading of LCP elements
  */
 
-import logoAsset from '../assets/Logo_old.png';
+import logoAsset from '../assets/logo.png';
 
 /**
  * Preload the LCP image as early as possible

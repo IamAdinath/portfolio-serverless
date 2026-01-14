@@ -1,12 +1,12 @@
-// src/components/sections/AuthPage.tsx - Streamlined with Auth Context
+// src/components/sections/LoginPage.tsx - Streamlined with Auth Context
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import './AuthPage.css'; 
+import './LoginPage.css'; 
 import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../common/ToastProvider';
 import { usePageTitle } from '../common/usePageTitle';
 
-const AuthPage: React.FC = () => {
+const LoginPage: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
@@ -125,4 +125,4 @@ const AuthPage: React.FC = () => {
   );
 };
 
-export default AuthPage;
+export default LoginPage;

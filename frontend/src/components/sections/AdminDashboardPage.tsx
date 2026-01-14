@@ -16,14 +16,14 @@ import {
 import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../common/ToastProvider';
 import { usePageTitle } from '../common/usePageTitle';
-import { useConfirmation } from '../../hooks/useConfirmation';
-import { GetBlogPosts, DeleteBlogPost, uploadFileToS3 } from '../common/userAPI';
+import { useConfirmation } from '../../hooks/useConfirmationModal';
+import { GetBlogPosts, DeleteBlogPost, uploadFileToS3 } from '../common/apiService';
 import { BlogPostData } from '../../types';
 import ErrorBoundary from '../common/ErrorBoundary';
 import ConfirmationModal from '../common/ConfirmationModal';
-import './AdminDashboard.css';
+import './AdminDashboardPage.css';
 
-const AdminDashboard: React.FC = () => {
+const AdminDashboardPage: React.FC = () => {
   usePageTitle('Admin Dashboard');
 
   const [blogs, setBlogs] = useState<BlogPostData[]>([]);
@@ -525,4 +525,4 @@ const AdminDashboard: React.FC = () => {
   );
 };
 
-export default AdminDashboard;
+export default AdminDashboardPage;

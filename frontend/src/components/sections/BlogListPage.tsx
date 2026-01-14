@@ -1,11 +1,11 @@
-// src/components/sections/BlogList.tsx
+// src/components/sections/BlogListPage.tsx
 
 import React, { useEffect, useState } from 'react';
 import BlogCard from '../common/BlogCard';
-import './BlogList.css';
+import './BlogListPage.css';
 import { usePageTitle } from '../common/usePageTitle';
 import SEOHead from '../common/SEOHead';
-import { GetAllPublishedBlogs } from '../common/userAPI';
+import { GetAllPublishedBlogs } from '../common/apiService';
 import { Blog, DateFormatOptions } from '../../types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBlog, faClock } from '@fortawesome/free-solid-svg-icons';
@@ -36,7 +36,7 @@ const formatPublishDate = (dateString: string): string => {
   return new Date(dateString).toLocaleDateString('en-US', options);
 };
 
-const BlogList: React.FC = () => {
+const BlogListPage: React.FC = () => {
   usePageTitle('Blogs');
 
   const [blogs, setBlogs] = useState<Blog[]>([]);
@@ -171,4 +171,4 @@ const BlogList: React.FC = () => {
   );
 };
 
-export default BlogList;
+export default BlogListPage;

@@ -1,5 +1,5 @@
 import React from 'react';
-import './AboutMe.css';
+import './AboutPage.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLinkedin, faGithub, faMedium, faStackOverflow } from '@fortawesome/free-brands-svg-icons';
 import { faUser, faHeart, faCode, faRocket, faLightbulb, faCoffee } from '@fortawesome/free-solid-svg-icons';
@@ -8,7 +8,7 @@ import ProfileImage from '../common/ProfileImage';
 import SEOHead from '../common/SEOHead';
 import { SOCIAL_LINKS } from '../../constants';
 
-const AboutMe: React.FC = () => {
+const AboutPage: React.FC = () => {
   usePageTitle('About Me');
   
   return (
@@ -200,4 +200,4 @@ const AboutMe: React.FC = () => {
   );
 };
 
-export default AboutMe;
+export default AboutPage;
