@@ -1,6 +1,11 @@
 /* AboutMe.css - TRON Futuristic Theme */
 
-/* Container with Grid Background */
+/* Full-width black background wrapper */
+body {
+  background: #000000;
+}
+
+/* Container with Solid Black Background */
 .about-container {
   max-width: 1400px;
   margin: 0 auto;
@@ -14,20 +19,17 @@
   box-sizing: border-box;
 }
 
-.about-container::before {
+/* Ensure parent elements have black background */
+.about-container::after {
   content: '';
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: 
-    linear-gradient(0deg, rgba(0, 229, 255, 0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 229, 255, 0.02) 1px, transparent 1px),
-    #000000;
-  background-size: 50px 50px, 50px 50px, 100% 100%;
+  right: 0;
+  bottom: 0;
+  background: #000000;
+  z-index: -1;
   pointer-events: none;
-  z-index: 0;
 }
 
 .about-container > * {
@@ -35,30 +37,9 @@
   z-index: 1;
 }
 
-.about-container::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, 
-    transparent 0%, 
-    #00E5FF 20%, 
-    #00E5FF 80%, 
-    transparent 100%);
-  box-shadow: 0 0 20px #00E5FF, 0 0 40px #00E5FF;
-  animation: scanline 3s linear infinite;
-}
-
-@keyframes scanline {
-  0% { transform: translateY(0); opacity: 1; }
-  100% { transform: translateY(100vh); opacity: 0; }
-}
-
 /* Hero Card with Tron Style */
 .hero-card {
-  background: rgba(0, 10, 20, 0.8);
+  background: rgba(0, 10, 20, 1);
   border-radius: 2px;
   padding: 48px;
   margin-bottom: 32px;
@@ -211,7 +192,7 @@
   font-weight: var(--font-weight-medium);
   transition: all var(--transition-base);
   border: 1px solid #00E5FF;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 1);
   color: #00E5FF;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -250,7 +231,7 @@
 
 /* About Cards with Tron Aesthetic */
 .about-card {
-  background: rgba(0, 10, 20, 0.6);
+  background: rgba(0, 10, 20, 1);
   border-radius: 0;
   padding: 0;
   border: 1px solid #00E5FF;
@@ -328,7 +309,7 @@
 
 .card-content {
   padding: 32px;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 1);
 }
 
 .card-content p {
@@ -352,7 +333,7 @@
 
 .skill-item {
   padding: 20px;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 1);
   border-radius: 0;
   border: 1px solid rgba(0, 229, 255, 0.3);
   transition: all var(--transition-base);
@@ -411,7 +392,7 @@
   align-items: flex-start;
   gap: 20px;
   padding: 20px;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 1);
   border-radius: 0;
   border: 1px solid rgba(0, 229, 255, 0.3);
   border-left: 2px solid #00E5FF;
@@ -462,7 +443,7 @@
 .fun-fact {
   text-align: center;
   padding: 24px 16px;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 1);
   border-radius: 0;
   border: 1px solid rgba(0, 229, 255, 0.3);
   transition: all var(--transition-base);

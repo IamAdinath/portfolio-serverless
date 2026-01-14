@@ -301,9 +301,11 @@ const Resume: React.FC = () => {
 
 
                     </div> {/* End Right Column */}
-                    <StickmanDownload />
 
                 </div> {/* End Main Content Area */}
+
+                {/* Floating Download Button */}
+                <StickmanDownload />
             </div>
         </>
     );

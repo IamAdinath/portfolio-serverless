@@ -1,4 +1,4 @@
-/* Portfolio.css - BALANCED TRON THEME */
+/* Portfolio.css - TRON FUTURISTIC THEME */
 
 /* Screen reader only text for accessibility */
 .sr-only {
@@ -13,14 +13,16 @@
   border: 0;
 }
 
-/* Tron Grid Background */
+/* Tron Grid Background with Solid Black */
 .portfolio-main-container {
-  font-family: 'Courier New', 'Consolas', monospace;
+  font-family: var(--font-family-base);
   color: #00E5FF;
   background: #000000;
   min-height: 100vh;
   position: relative;
   overflow-x: hidden;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .portfolio-main-container::before {
@@ -30,25 +32,18 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: 
+  background: 
     linear-gradient(0deg, rgba(0, 229, 255, 0.02) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0, 229, 255, 0.02) 1px, transparent 1px);
-  background-size: 50px 50px;
+  background-size: 20px 20px;
   pointer-events: none;
-  z-index: 1;
+  z-index: 0;
+  opacity: 0.5;
 }
 
-.portfolio-main-container::after {
-  content: 'TRON.SYSTEM.ONLINE';
-  position: fixed;
-  top: 10px;
-  right: 10px;
-  font-size: 0.7rem;
-  color: rgba(0, 229, 255, 0.3);
-  font-family: 'Courier New', monospace;
-  letter-spacing: 2px;
+.portfolio-main-container > * {
+  position: relative;
   z-index: 1;
-  text-transform: uppercase;
 }
 
 /* Hero Section - Tron Style */
@@ -77,19 +72,29 @@
 }
 
 .portfolio-hero-content::before {
-  content: '> SYSTEM.INITIALIZED';
+  content: '';
   position: absolute;
-  top: 10px;
-  left: 20px;
-  font-size: 0.8rem;
-  color: rgba(0, 229, 255, 0.5);
-  font-family: 'Courier New', monospace;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  top: -2px;
+  left: -100%;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #00E5FF, transparent);
+  animation: borderGlow 3s linear infinite;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+@keyframes borderGlow {
+  0% { left: -100%; }
+  100% { left: 100%; }
 }
 
 .portfolio-hero-content:hover {
   box-shadow: 0 0 30px rgba(0, 229, 255, 0.3);
+}
+
+.portfolio-hero-content:hover::before {
+  opacity: 1;
 }
 
 /* Hero h1 - White Times New Roman, custom size for portfolio hero */
@@ -101,28 +106,17 @@
   line-height: 1.1;
   font-family: 'Times New Roman', Times, serif;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.05em;
   position: relative;
-}
-
-.portfolio-hero-text h1::before {
-  content: '> ';
-  color: #FFFFFF;
 }
 
 .portfolio-hero-text h2 {
   font-size: 1.5rem;
-  color: rgba(0, 229, 255, 0.9);
+  color: #00E5FF;
   margin: 0 0 25px 0;
   font-weight: 500;
-  font-family: 'Courier New', monospace;
   text-transform: uppercase;
-  letter-spacing: 0.15em;
-}
-
-.portfolio-hero-text h2::before {
-  content: '// ';
-  color: rgba(0, 229, 255, 0.5);
+  letter-spacing: 0.1em;
 }
 
 .portfolio-hero-description {
@@ -130,7 +124,6 @@
   line-height: 1.7;
   color: rgba(0, 229, 255, 0.95);
   margin-bottom: 35px;
-  font-family: 'Courier New', monospace;
 }
 
 .portfolio-hero-stats {
@@ -146,6 +139,13 @@
   border: 1px solid #00E5FF;
   position: relative;
   overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.portfolio-stat:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.3);
+  background: rgba(0, 229, 255, 0.05);
 }
 
 .portfolio-stat-number {
@@ -154,7 +154,7 @@
   font-weight: bold;
   color: #00E5FF;
   margin-bottom: 5px;
-  font-family: 'Courier New', monospace;
+  font-family: var(--font-family-mono);
 }
 
 .portfolio-stat-label {
@@ -163,8 +163,7 @@
   font-size: 0.9rem;
   font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-family: 'Courier New', monospace;
+  letter-spacing: 0.05em;
 }
 
 .portfolio-hero-actions {
@@ -182,11 +181,25 @@
   font-weight: 600;
   transition: all 0.3s ease;
   border: 1px solid #00E5FF;
-  font-family: 'Courier New', monospace;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.05em;
   position: relative;
   overflow: hidden;
+}
+
+.portfolio-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.portfolio-btn:hover::before {
+  left: 100%;
 }
 
 .portfolio-btn:hover {
@@ -309,14 +322,8 @@
   font-size: 1.8rem;
   font-weight: 600;
   color: #00E5FF;
-  font-family: 'Courier New', monospace;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-
-.portfolio-section-header h3::before {
-  content: '$ ';
-  color: #00E5FF;
+  letter-spacing: 0.05em;
 }
 
 .portfolio-section-icon {
@@ -332,7 +339,6 @@
   text-decoration: none;
   font-weight: 500;
   transition: all 0.3s ease;
-  font-family: 'Courier New', monospace;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   font-size: 0.9rem;
@@ -378,7 +384,6 @@
 .portfolio-skill-name {
   font-weight: 600;
   color: #00E5FF;
-  font-family: 'Courier New', monospace;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -386,7 +391,7 @@
 .portfolio-skill-percentage {
   font-weight: bold;
   color: rgba(0, 229, 255, 0.9);
-  font-family: 'Courier New', monospace;
+  font-family: var(--font-family-mono);
 }
 
 .portfolio-skill-bar {
