@@ -113,6 +113,7 @@ const BlogEditorPage = () => {
   const [isPublishing, setIsPublishing] = useState(false);
   const [failureCount, setFailureCount] = useState<number>(0);
   const [isBlocked, setIsBlocked] = useState<boolean>(false);
+  const isPublishingRef = useRef(false); // Track publishing state reliably
 
   const editor = useEditor({
     extensions: [
@@ -352,11 +353,18 @@ const BlogEditorPage = () => {
   };
   
   useEffect(() => {
-    if (blogId && editor && status === 'idle' && !isBlocked && !isPublishing) {
+    // Don't auto-save if publishing or if blogId is null
+    if (blogId && editor && status === 'idle' && !isBlocked && !isPublishing && !isPublishingRef.current) {
       const currentTime = Date.now();
       // Only auto-save if it's been more than 10 seconds since last save
       if (currentTime - lastSaveTime > 10000) {
         const autoSave = async () => {
+          // Double-check we're not publishing before starting auto-save
+          if (isPublishingRef.current) {
+            console.log('Auto-save cancelled: Publishing in progress');
+            return;
+          }
+
           try {
             setStatus('saving');
             const contentHTML = editor.getHTML();
@@ -422,7 +430,9 @@ const BlogEditorPage = () => {
       return;
     }
 
+    // Set both state and ref to prevent any auto-saves
     setIsPublishing(true);
+    isPublishingRef.current = true;
     setStatus('saving');
 
     try {
@@ -443,6 +453,11 @@ const BlogEditorPage = () => {
       console.log('Publishing blog with payload:', blogPostPayload);
       const result = await UpdateBlogPost(blogId, blogPostPayload);
       console.log('Publish result:', result);
+      
+      // Clear blogId IMMEDIATELY to prevent any auto-saves
+      const publishedBlogId = blogId;
+      setBlogId(null);
+      
       addToast('success', 'Blog post published successfully!');
       
       // Track blog publish event
@@ -451,11 +466,12 @@ const BlogEditorPage = () => {
       // Clear the form after successful publish
       setTitle('');
       editor.commands.clearContent(true);
-      setBlogId(null);
       setStatus('idle');
       setLastSaveTime(0);
       setFailureCount(0);
       setIsBlocked(false);
+      
+      console.log(`Blog ${publishedBlogId} published and form cleared`);
     } catch (error: any) {
       console.error('Publish failed:', error);
       addToast('error', 'Failed to publish post. Please try again.');
@@ -465,6 +481,7 @@ const BlogEditorPage = () => {
       trackFormSubmit('blog_publish', false);
     } finally {
       setIsPublishing(false);
+      isPublishingRef.current = false;
     }
   };
 

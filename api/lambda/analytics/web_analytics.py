@@ -10,6 +10,20 @@ def lambda_handler(event, context):
     """
     AWS Lambda handler for web analytics data - uses real data from DynamoDB
     """
+    
+    # Handle OPTIONS request for CORS
+    if event.get('httpMethod') == 'OPTIONS':
+        return {
+            'statusCode': 200,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Headers': 'Content-Type,Authorization',
+                'Access-Control-Allow-Methods': 'GET,OPTIONS'
+            },
+            'body': ''
+        }
+    
     try:
         # Get DynamoDB table
         dynamodb = boto3.resource('dynamodb')

@@ -10,6 +10,20 @@ def lambda_handler(event, context):
     Lambda handler for tracking analytics events
     This endpoint receives page views, user interactions, etc.
     """
+    
+    # Handle OPTIONS request for CORS
+    if event.get('httpMethod') == 'OPTIONS':
+        return {
+            'statusCode': 200,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Headers': 'Content-Type,Authorization',
+                'Access-Control-Allow-Methods': 'POST,OPTIONS'
+            },
+            'body': ''
+        }
+    
     try:
         # Get DynamoDB table
         dynamodb = boto3.resource('dynamodb')
