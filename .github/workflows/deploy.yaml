@@ -52,6 +52,7 @@ jobs:
           DEFAULT_PYTHON_RUNTIME: python3.12
           API_HOSTNAME: ${{ vars.API_HOSTNAME_DEV }}
           API_ACM_CERTIFICATE_ARN: ${{ vars.API_ACM_CERTIFICATE_ARN }}
+          UI_HOSTNAME: ${{ vars.UI_HOSTNAME_DEV }}
 
   deploy-ui-dev:
     name: Deploy UI - Dev
@@ -189,6 +190,7 @@ jobs:
           DEFAULT_PYTHON_RUNTIME: python3.12
           API_HOSTNAME: ${{ vars.API_HOSTNAME_PROD }}
           API_ACM_CERTIFICATE_ARN: ${{ vars.API_ACM_CERTIFICATE_ARN }}
+          UI_HOSTNAME: ${{ vars.UI_HOSTNAME_PROD }}
 
   deploy-ui-prod:
     name: Deploy UI - Prod

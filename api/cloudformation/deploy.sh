@@ -37,6 +37,11 @@ function validate_parameters() {
         is_error=true
     fi
 
+    if [ -z "$UI_HOSTNAME" ]; then
+        parameter_error "UI_HOSTNAME (needed for CORS configuration)"
+        is_error=true
+    fi
+
     if $is_error; then
         exit 1
     fi
@@ -132,6 +137,7 @@ function deploy() {
                 PythonRuntime=${DEFAULT_PYTHON_RUNTIME} \
                 ApiHostname=${API_HOSTNAME} \
                 ApiCertificateArn=${API_ACM_CERTIFICATE_ARN} \
+                UiHostname=${UI_HOSTNAME} \
                 GoogleClientId="" \
                 GoogleClientSecret="" \
                 LinkedInClientId="" \

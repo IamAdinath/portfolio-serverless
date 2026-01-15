@@ -138,7 +138,8 @@ Resources:
       Cors:
         AllowMethods: "'OPTIONS,GET,POST,PUT,DELETE'"
         AllowHeaders: "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'"
-        AllowOrigin: "'*'"
+        AllowOrigin: !Sub "'https://${UiHostname},https://www.${UiHostname}'"
+        AllowCredentials: true
       Auth:
         Authorizers:
           CognitoAuth:
@@ -644,7 +645,10 @@ Parameters:
     Description: Custom hostname for API (e.g., api.example.com or dev-api.example.com)
     Type: String
   ApiCertificateArn:
-    Description: ACM certificate ARN for API custom domain (just the UUID part)
+    Description: ACM certificate ARN for API custom domain (full ARN in same region as API Gateway)
+    Type: String
+  UiHostname:
+    Description: UI hostname for CORS configuration (e.g., example.com or dev.example.com)
     Type: String
   GoogleClientId:
     Type: String
