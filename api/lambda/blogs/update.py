@@ -12,6 +12,14 @@ logger = logging.getLogger(__name__)
 
 
 def lambda_handler(event, context):
+    # Handle OPTIONS request for CORS
+    if event.get('httpMethod') == 'OPTIONS':
+        return build_response(
+            StatusCodes.OK,
+            Headers.CORS,
+            {}
+        )
+    
     try:
         BLOGS_TABLE = os.getenv("BLOGS_TABLE")
         if not BLOGS_TABLE:
