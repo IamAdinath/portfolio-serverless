@@ -27,27 +27,20 @@ function validate_parameters() {
         is_error=true
     fi
 
-    if [ -z "$UI_HOSTNAME" ]; then
-        parameter_error "UI_HOSTNAME"
+    if [ -z "$API_HOSTNAME" ]; then
+        parameter_error "API_HOSTNAME"
         is_error=true
     fi
 
-    if [ -z "$ACM_CERTIFICATE_ARN" ]; then
-        parameter_error "ACM_CERTIFICATE_ARN"
+    if [ -z "$API_ACM_CERTIFICATE_ARN" ]; then
+        parameter_error "API_ACM_CERTIFICATE_ARN (must be full ARN in same region as API Gateway)"
         is_error=true
     fi
 
     if $is_error; then
         exit 1
     fi
-    
-    # Auto-generate API hostname from UI hostname
-    if [ "$ENV" = "dev" ] || [ "$ENV" = "development" ]; then
-        # For dev: if UI is dev.example.com, API becomes dev-api.example.com
-        API_HOSTNAME="dev-api.${UI_HOSTNAME#*.}"
-    else
-        # For prod: if UI is example.com, API becomes api.example.com
-        API_HOSTNAME="api.${UI_HOSTNAME}"
+}
     fi
     
     echo "Generated API_HOSTNAME: $API_HOSTNAME"
@@ -81,8 +74,7 @@ function deploy() {
     echo "REGION: $REGION"
     echo "STACK_NAME: $STACK_NAME"
     echo "CODE_BUCKET: $CODE_BUCKET"
-    echo "UI_HOSTNAME: $UI_HOSTNAME"
-    echo "API_HOSTNAME: $API_HOSTNAME (auto-generated)"
+    echo "API_HOSTNAME: $API_HOSTNAME"
     echo "=========================="
     
     NOW=$(date "+%Y%m%d_%H%M%S")
@@ -143,7 +135,7 @@ function deploy() {
                 CodePath="${CODE_PATH}/${CODE_ZIP}" \
                 PythonRuntime=${DEFAULT_PYTHON_RUNTIME} \
                 ApiHostname=${API_HOSTNAME} \
-                ApiCertificateArn=${ACM_CERTIFICATE_ARN} \
+                ApiCertificateArn=${API_ACM_CERTIFICATE_ARN} \
                 GoogleClientId="" \
                 GoogleClientSecret="" \
                 LinkedInClientId="" \
