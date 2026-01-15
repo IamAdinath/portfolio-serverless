@@ -647,6 +647,8 @@ Parameters:
     Type: String
     Description: S3 path to resume file
     Default: public/Adinath_Gore_Resume.pdf
+  UiHostname:
+    Type: String
 Outputs:
   ApiBaseUrl:
     Description: "Base URL for the API Gateway"
