@@ -61,14 +61,48 @@ def lambda_handler(event, context):
 
     items = response.get("Items")
 
+    # Convert image S3 keys/URLs to presigned URLs
     for item in items:
         item["reading_time"] = int(item["reading_time"])
         images_list = item.get("images", [])
-        for image in images_list:
-            item["images"] = get_s3_file_url(media_bucket, image)
-            break
+        if images_list and isinstance(images_list, list):
+            # Convert S3 keys or URLs to presigned URLs
+            presigned_urls = []
+            for image_ref in images_list:
+                if not image_ref:  # Skip empty strings
+                    continue
+                    
+                # Check if it's already a full URL
+                if image_ref.startswith('http://') or image_ref.startswith('https://'):
+                    # Extract S3 key from URL
+                    # Format: https://bucket.s3.amazonaws.com/key or https://bucket.s3.region.amazonaws.com/key
+                    try:
+                        # Split by .amazonaws.com/ to get the key part
+                        if '.amazonaws.com/' in image_ref:
+                            s3_key = image_ref.split('.amazonaws.com/', 1)[1]
+                        else:
+                            # If not S3 URL, use as-is
+                            presigned_urls.append(image_ref)
+                            continue
+                    except:
+                        # If parsing fails, use original URL
+                        presigned_urls.append(image_ref)
+                        continue
+                else:
+                    # It's already an S3 key
+                    s3_key = image_ref
+                
+                # Generate presigned URL
+                presigned_url = get_s3_file_url(media_bucket, s3_key)
+                if presigned_url:
+                    presigned_urls.append(presigned_url)
+                    
+            # Store as JSON string for frontend compatibility
+            item["images"] = json.dumps(presigned_urls) if presigned_urls else None
+        else:
+            item["images"] = None
+            
     last_evaluated_key = response.get("LastEvaluatedKey")
-    item = json.dumps(items)
     return build_response(
         StatusCodes.OK,
         Headers.CORS,

@@ -60,10 +60,36 @@ def lambda_handler(event, context):
         )
     images_list = item.get("images", [])
     item["reading_time"] = int(item["reading_time"])
-    images_singed_urls = []
-    for image in images_list:
-        images_singed_urls.append(get_s3_file_url(media_bucket, image))
-    item["images"] = images_singed_urls
+    images_signed_urls = []
+    
+    for image_ref in images_list:
+        if not image_ref:  # Skip empty strings
+            continue
+            
+        # Check if it's already a full URL
+        if image_ref.startswith('http://') or image_ref.startswith('https://'):
+            # Extract S3 key from URL
+            try:
+                if '.amazonaws.com/' in image_ref:
+                    s3_key = image_ref.split('.amazonaws.com/', 1)[1]
+                else:
+                    # If not S3 URL, use as-is
+                    images_signed_urls.append(image_ref)
+                    continue
+            except:
+                # If parsing fails, use original URL
+                images_signed_urls.append(image_ref)
+                continue
+        else:
+            # It's already an S3 key
+            s3_key = image_ref
+        
+        # Generate presigned URL
+        presigned_url = get_s3_file_url(media_bucket, s3_key)
+        if presigned_url:
+            images_signed_urls.append(presigned_url)
+    
+    item["images"] = images_signed_urls
 
     return build_response(
         StatusCodes.OK,
