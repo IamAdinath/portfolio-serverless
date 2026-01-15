@@ -3,7 +3,7 @@ import json
 import boto3
 from boto3.dynamodb.conditions import Key
 from common.contsants import StatusCodes, Headers
-from common.utils import build_response
+from common.utils import build_response, process_image_references
 import logging
 from common.s3 import get_s3_file_url
 
@@ -58,12 +58,15 @@ def lambda_handler(event, context):
             Headers.CORS,
             {"error": "Blog not found"},
         )
+    # Process images using centralized utility
     images_list = item.get("images", [])
     item["reading_time"] = int(item["reading_time"])
-    images_singed_urls = []
-    for image in images_list:
-        images_singed_urls.append(get_s3_file_url(media_bucket, image))
-    item["images"] = images_singed_urls
+    
+    if images_list and isinstance(images_list, list):
+        # Use centralized utility function
+        item["images"] = process_image_references(images_list, media_bucket, get_s3_file_url)
+    else:
+        item["images"] = []
 
     return build_response(
         StatusCodes.OK,

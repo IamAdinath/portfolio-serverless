@@ -2,8 +2,8 @@ import os
 import json
 import boto3
 from boto3.dynamodb.conditions import Key
+from common.utils import build_response, process_image_references
 from common.contsants import StatusCodes, Headers
-from common.utils import build_response
 import logging
 from common.s3 import get_s3_file_url
 
@@ -61,14 +61,20 @@ def lambda_handler(event, context):
 
     items = response.get("Items")
 
+    # Convert image S3 keys/URLs to presigned URLs using centralized utility
     for item in items:
         item["reading_time"] = int(item["reading_time"])
         images_list = item.get("images", [])
-        for image in images_list:
-            item["images"] = get_s3_file_url(media_bucket, image)
-            break
+        
+        if images_list and isinstance(images_list, list):
+            # Use centralized utility function
+            presigned_urls = process_image_references(images_list, media_bucket, get_s3_file_url)
+            # Store as JSON string for frontend compatibility
+            item["images"] = json.dumps(presigned_urls) if presigned_urls else None
+        else:
+            item["images"] = None
+            
     last_evaluated_key = response.get("LastEvaluatedKey")
-    item = json.dumps(items)
     return build_response(
         StatusCodes.OK,
         Headers.CORS,

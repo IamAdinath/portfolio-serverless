@@ -31,8 +31,9 @@ def lambda_handler(event, context):
     if payload:
         try:
             data = json.loads(payload)
-            file_content = data.get("file_content")
-            file_name = data.get("file_name")
+            # Support both snake_case and camelCase for compatibility
+            file_content = data.get("file_content") or data.get("fileContent")
+            file_name = data.get("file_name") or data.get("fileName")
         except json.JSONDecodeError:
             logger.error("Invalid JSON payload")
             return build_response(

@@ -40,6 +40,22 @@ def lambda_handler(event, context):
     # URL decode the filename
     file_name = unquote(file_name)
 
+    # Determine content type based on file extension
+    content_type = 'image/jpeg'  # default
+    file_lower = file_name.lower()
+    if file_lower.endswith('.png'):
+        content_type = 'image/png'
+    elif file_lower.endswith('.gif'):
+        content_type = 'image/gif'
+    elif file_lower.endswith('.webp'):
+        content_type = 'image/webp'
+    elif file_lower.endswith(('.jpg', '.jpeg')):
+        content_type = 'image/jpeg'
+    elif file_lower.endswith('.svg'):
+        content_type = 'image/svg+xml'
+    
+    logger.info(f"Generating presigned URL for {file_name} with content type {content_type}")
+
     try:
         # Generate presigned URL for PUT operation (upload)
         presigned_url = s3_client.generate_presigned_url(
@@ -47,7 +63,7 @@ def lambda_handler(event, context):
             Params={
                 'Bucket': media_bucket,
                 'Key': file_name,
-                'ContentType': 'image/jpeg'  # Default content type for images
+                'ContentType': content_type
             },
             ExpiresIn=3600  # URL expires in 1 hour
         )

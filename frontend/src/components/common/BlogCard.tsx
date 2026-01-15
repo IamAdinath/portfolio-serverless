@@ -94,6 +94,13 @@ const BlogCard: React.FC<BlogCardProps> = ({
               className="blogcard-thumbnail"
               loading="lazy"
               decoding="async"
+              onError={(e) => {
+                // Hide thumbnail container if image fails to load
+                const container = e.currentTarget.parentElement;
+                if (container) {
+                  container.style.display = 'none';
+                }
+              }}
             />
           </div>
         )}

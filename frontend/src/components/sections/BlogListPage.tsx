@@ -142,7 +142,22 @@ const BlogListPage: React.FC = () => {
           blogs.map((blog) => {
             const readTime = calculateReadTime(blog.content);
             const publishDate = blog.published_at ? formatPublishDate(blog.published_at) : "Date not available";
-            const thumbnail = blog.images ? blog.images : undefined;
+            
+            // Extract first image from images field
+            let thumbnail: string | undefined = undefined;
+            if (blog.images) {
+              try {
+                // Try to parse as JSON array
+                const imagesArray = JSON.parse(blog.images);
+                if (Array.isArray(imagesArray) && imagesArray.length > 0) {
+                  thumbnail = imagesArray[0];
+                }
+              } catch {
+                // If not JSON, treat as single URL string
+                thumbnail = blog.images;
+              }
+            }
+            
             const tags = blog.tags ? blog.tags : [];
 
             return (
