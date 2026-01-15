@@ -177,6 +177,7 @@ Resources:
       DomainName: !Ref ApiHostname
       RestApiId: !Ref PortfolioAPI
       Stage: !Ref Env
+      BasePath: !Ref Env
 
   GetBlogsLambda:
     Type: AWS::Serverless::Function
