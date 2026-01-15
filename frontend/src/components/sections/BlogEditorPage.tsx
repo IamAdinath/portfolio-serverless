@@ -323,6 +323,34 @@ const BlogEditorPage = () => {
 
   // Auto-save functionality with debouncing (disabled during publishing)
   const editorContent = editor?.getHTML();
+  
+  // Helper function to extract S3 key from full URL
+  const extractS3Key = (url: string): string => {
+    if (!url) return url;
+    
+    // If it's a blob URL, return as-is (will be filtered out)
+    if (url.startsWith('blob:')) return url;
+    
+    // If it's already just a key (no http), return as-is
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+      return url;
+    }
+    
+    // Extract S3 key from full URL
+    // Format: https://bucket.s3.amazonaws.com/key or https://bucket.s3.region.amazonaws.com/key
+    try {
+      if (url.includes('.amazonaws.com/')) {
+        const key = url.split('.amazonaws.com/')[1].split('?')[0]; // Remove query params
+        return key;
+      }
+    } catch (e) {
+      console.warn('Failed to extract S3 key from URL:', url, e);
+    }
+    
+    // If extraction fails, return original URL (backend will handle it)
+    return url;
+  };
+  
   useEffect(() => {
     if (blogId && editor && status === 'idle' && !isBlocked && !isPublishing) {
       const currentTime = Date.now();
@@ -344,7 +372,7 @@ const BlogEditorPage = () => {
               new DOMParser()
                 .parseFromString(contentHTML, 'text/html')
                 .querySelectorAll('img')
-            ).map(img => img.src).filter(src => !src.startsWith('blob:'));
+            ).map(img => extractS3Key(img.src)).filter(src => !src.startsWith('blob:'));
 
             const blogPostPayload = {
               title: title.trim(),
@@ -403,7 +431,7 @@ const BlogEditorPage = () => {
         new DOMParser()
           .parseFromString(contentHTML, 'text/html')
           .querySelectorAll('img')
-      ).map(img => img.src).filter(src => !src.startsWith('blob:'));
+      ).map(img => extractS3Key(img.src)).filter(src => !src.startsWith('blob:'));
 
       const blogPostPayload = {
         title: title.trim(),
