@@ -41,10 +41,6 @@ function validate_parameters() {
         exit 1
     fi
 }
-    fi
-    
-    echo "Generated API_HOSTNAME: $API_HOSTNAME"
-}
 
 function exist_s3_bucket() {
     local bucket_name=$1

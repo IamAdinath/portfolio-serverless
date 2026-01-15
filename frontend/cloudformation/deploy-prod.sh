@@ -103,7 +103,6 @@ function deploy() {
     echo "CloudFront cache invalidated"
     echo "=========================="
 }
-}
 
 validate_parameters
 deploy
