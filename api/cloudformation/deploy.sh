@@ -27,6 +27,16 @@ function validate_parameters() {
         is_error=true
     fi
 
+    if [ -z "$API_HOSTNAME" ]; then
+        parameter_error "API_HOSTNAME"
+        is_error=true
+    fi
+
+    if [ -z "$API_ACM_CERTIFICATE_ARN" ]; then
+        parameter_error "API_ACM_CERTIFICATE_ARN"
+        is_error=true
+    fi
+
     if [ -z "$UI_HOSTNAME" ]; then
         parameter_error "UI_HOSTNAME (needed for Cognito callbacks)"
         is_error=true
@@ -65,6 +75,7 @@ function deploy() {
     echo "REGION: $REGION"
     echo "STACK_NAME: $STACK_NAME"
     echo "CODE_BUCKET: $CODE_BUCKET"
+    echo "API_HOSTNAME: $API_HOSTNAME"
     echo "UI_HOSTNAME: $UI_HOSTNAME"
     echo "=========================="
     
@@ -125,6 +136,8 @@ function deploy() {
                 CodeBucket=${CODE_BUCKET} \
                 CodePath="${CODE_PATH}/${CODE_ZIP}" \
                 PythonRuntime=${DEFAULT_PYTHON_RUNTIME} \
+                ApiHostname=${API_HOSTNAME} \
+                ApiCertificateArn=${API_ACM_CERTIFICATE_ARN} \
                 UiHostname=${UI_HOSTNAME} \
                 GoogleClientId="" \
                 GoogleClientSecret="" \
@@ -132,10 +145,20 @@ function deploy() {
                 LinkedInClientSecret=""; then
             echo "✅ Deployment successful"
             
-            # Get and display API URL
+            # Get and display API URLs
             API_BASE_URL=$(aws --region ${REGION} cloudformation describe-stacks \
                 --stack-name ${STACK_NAME} \
                 --query "Stacks[0].Outputs[?OutputKey=='ApiBaseUrl'].OutputValue" \
+                --output text)
+            
+            CUSTOM_API_URL=$(aws --region ${REGION} cloudformation describe-stacks \
+                --stack-name ${STACK_NAME} \
+                --query "Stacks[0].Outputs[?OutputKey=='CustomApiUrl'].OutputValue" \
+                --output text)
+            
+            REGIONAL_DOMAIN=$(aws --region ${REGION} cloudformation describe-stacks \
+                --stack-name ${STACK_NAME} \
+                --query "Stacks[0].Outputs[?OutputKey=='ApiRegionalDomainName'].OutputValue" \
                 --output text)
             
             MEDIA_BUCKET=$(aws --region ${REGION} cloudformation describe-stacks \
@@ -145,6 +168,8 @@ function deploy() {
             
             echo "=== Deployment Outputs ==="
             echo "API Base URL: ${API_BASE_URL}"
+            echo "Custom API URL: ${CUSTOM_API_URL}"
+            echo "Regional Domain (for DNS): ${REGIONAL_DOMAIN}"
             echo "Media Bucket: ${MEDIA_BUCKET}"
             echo "=========================="
             break

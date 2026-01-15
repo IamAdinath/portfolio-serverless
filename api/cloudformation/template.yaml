@@ -136,16 +136,34 @@ Resources:
       Name: !Sub ${ProjectName}-API-${Env}
       StageName: !Ref Env
       Cors:
-        AllowMethods: "'OPTIONS,GET,POST,PUT,DELETE'"
-        AllowHeaders: "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'"
-        AllowOrigin: !Sub "'https://${UiHostname},https://www.${UiHostname}'"
-        AllowCredentials: true
+        AllowMethods: "'DELETE,GET,HEAD,OPTIONS,PATCH,POST,PUT'"
+        AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+        AllowOrigin: "'*'"
+        MaxAge: "'600'"
       Auth:
         Authorizers:
           CognitoAuth:
             UserPoolArn: !GetAtt BlogUserPool.Arn
             Identity:
               Header: Authorization
+
+  ApiCustomDomain:
+    Type: AWS::ApiGateway::DomainName
+    Properties:
+      DomainName: !Ref ApiHostname
+      RegionalCertificateArn: !Ref ApiCertificateArn
+      EndpointConfiguration:
+        Types:
+          - REGIONAL
+      SecurityPolicy: TLS_1_2
+
+  ApiBasePathMapping:
+    Type: AWS::ApiGateway::BasePathMapping
+    DependsOn: ApiCustomDomain
+    Properties:
+      DomainName: !Ref ApiHostname
+      RestApiId: !Ref PortfolioAPI
+      Stage: !Ref Env
 
   GetBlogsLambda:
     Type: AWS::Serverless::Function
