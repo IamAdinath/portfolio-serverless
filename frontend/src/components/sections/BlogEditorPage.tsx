@@ -244,6 +244,20 @@ const BlogEditorPage = () => {
       addToast('error', 'Please enter a title to start adding images.');
       return;
     }
+    
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      addToast('error', 'Please select a valid image file (JPEG, PNG, GIF, WebP)');
+      return;
+    }
+    
+    // Validate file size (5MB limit)
+    const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
+    if (file.size > MAX_IMAGE_SIZE) {
+      addToast('error', 'Image size must be less than 5MB. Please compress your image and try again.');
+      return;
+    }
+    
     const placeholderId = `placeholder-${Date.now()}`;
     const blobUrl = URL.createObjectURL(file);
 
@@ -254,7 +268,19 @@ const BlogEditorPage = () => {
     editor.chain().focus().setImage({ src: blobUrl, 'data-id': placeholderId }).run();
 
     try {
-      const imageKey = `posts/${blogId}/image_${imageCounter.current++}.jpg`;
+      // Get file extension from the file type or name
+      let extension = 'jpg';
+      if (file.type === 'image/png') extension = 'png';
+      else if (file.type === 'image/gif') extension = 'gif';
+      else if (file.type === 'image/webp') extension = 'webp';
+      else if (file.name) {
+        const nameParts = file.name.split('.');
+        if (nameParts.length > 1) {
+          extension = nameParts[nameParts.length - 1].toLowerCase();
+        }
+      }
+      
+      const imageKey = `posts/${blogId}/image_${imageCounter.current++}.${extension}`;
 
       const presignedData = await getPresignedUrl(imageKey);
       if (!presignedData || !presignedData.presignedUrl || !presignedData.publicUrl) {
@@ -282,9 +308,11 @@ const BlogEditorPage = () => {
         tr.setNodeMarkup(placeholderPos, undefined, { src: finalImageUrl, 'data-id': null });
         dispatch(tr);
       }
+      
+      addToast('success', 'Image uploaded successfully');
     } catch (error) {
       console.error('Image upload failed:', error);
-      addToast('error', 'Image upload failed.');
+      addToast('error', `Image upload failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
       // Optional: find and remove the failed blob image from the editor
     } finally {
       URL.revokeObjectURL(blobUrl);
