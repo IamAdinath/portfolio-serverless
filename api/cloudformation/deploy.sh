@@ -111,6 +111,9 @@ function deploy() {
                 CodeBucket=${CODE_BUCKET} \
                 CodePath="${CODE_PATH}/${CODE_ZIP}" \
                 PythonRuntime=${DEFAULT_PYTHON_RUNTIME} \
+                ApiHostname=${API_HOSTNAME} \
+                ApiCertificateArn=${API_ACM_CERTIFICATE_ARN} \
+                UiHostname=${UI_HOSTNAME} \
                 GoogleClientId="" \
                 GoogleClientSecret="" \
                 LinkedInClientId="" \
