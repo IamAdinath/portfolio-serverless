@@ -223,8 +223,6 @@ Resources:
             RestApiId: !Ref PortfolioAPI
             Path: /create-blog
             Method: OPTIONS
-            Auth:
-              Authorizer: NONE
       Environment:
         Variables:
           BLOGS_TABLE: !Ref BlogsTable
@@ -253,8 +251,6 @@ Resources:
             RestApiId: !Ref PortfolioAPI
             Path: /update-blog
             Method: OPTIONS
-            Auth:
-              Authorizer: NONE
       Environment:
         Variables:
           BLOGS_TABLE: !Ref BlogsTable
@@ -283,8 +279,6 @@ Resources:
             RestApiId: !Ref PortfolioAPI
             Path: /delete-blog
             Method: OPTIONS
-            Auth:
-              Authorizer: NONE
       Environment:
         Variables:
           BLOGS_TABLE: !Ref BlogsTable
@@ -311,8 +305,6 @@ Resources:
             RestApiId: !Ref PortfolioAPI
             Path: /list-blogs
             Method: OPTIONS
-            Auth:
-              Authorizer: NONE
       Environment:
         Variables:
           BLOGS_TABLE: !Ref BlogsTable
@@ -340,8 +332,6 @@ Resources:
             RestApiId: !Ref PortfolioAPI
             Path: /blog-stats
             Method: OPTIONS
-            Auth:
-              Authorizer: NONE
       Environment:
         Variables:
           BLOGS_TABLE: !Ref BlogsTable
@@ -369,8 +359,6 @@ Resources:
             RestApiId: !Ref PortfolioAPI
             Path: /web-analytics
             Method: OPTIONS
-            Auth:
-              Authorizer: NONE
       Environment:
         Variables:
           ANALYTICS_TABLE: !Ref AnalyticsTable
@@ -390,16 +378,12 @@ Resources:
             RestApiId: !Ref PortfolioAPI
             Path: /track-analytics
             Method: POST
-            Auth:
-              Authorizer: NONE
         TrackAnalyticsOptions:
           Type: Api
           Properties:
             RestApiId: !Ref PortfolioAPI
             Path: /track-analytics
             Method: OPTIONS
-            Auth:
-              Authorizer: NONE
       Environment:
         Variables:
           ANALYTICS_TABLE: !Ref AnalyticsTable
