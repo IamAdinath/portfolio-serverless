@@ -136,16 +136,34 @@ Resources:
       Name: !Sub ${ProjectName}-API-${Env}
       StageName: !Ref Env
       Cors:
-        AllowMethods: "'DELETE,GET,HEAD,OPTIONS,PATCH,POST,PUT'"
-        AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-        AllowOrigin: "'*'"
-        MaxAge: "'600'"
+        AllowMethods: "'OPTIONS,GET,POST,PUT,DELETE'"
+        AllowHeaders: "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'"
+        AllowOrigin: !Sub "'https://${UiHostname},https://www.${UiHostname}'"
+        AllowCredentials: true
       Auth:
         Authorizers:
           CognitoAuth:
             UserPoolArn: !GetAtt BlogUserPool.Arn
             Identity:
               Header: Authorization
+
+  ApiCustomDomain:
+    Type: AWS::ApiGateway::DomainName
+    Properties:
+      DomainName: !Ref ApiHostname
+      RegionalCertificateArn: !Sub arn:aws:acm:${AWS::Region}:${AWS::AccountId}:certificate/${ApiCertificateArn}
+      EndpointConfiguration:
+        Types:
+          - REGIONAL
+      SecurityPolicy: TLS_1_2
+
+  ApiBasePathMapping:
+    Type: AWS::ApiGateway::BasePathMapping
+    DependsOn: ApiCustomDomain
+    Properties:
+      DomainName: !Ref ApiHostname
+      RestApiId: !Ref PortfolioAPI
+      Stage: !Ref Env
 
   GetBlogsLambda:
     Type: AWS::Serverless::Function
@@ -627,6 +645,15 @@ Parameters:
     Description: The Python version to use for lambda functions
     Type: String
     Default: python3.12
+  ApiHostname:
+    Description: Custom hostname for API (e.g., api.example.com or dev-api.example.com)
+    Type: String
+  ApiCertificateArn:
+    Description: ACM certificate ARN for API custom domain (full ARN in same region as API Gateway)
+    Type: String
+  UiHostname:
+    Description: UI hostname for CORS configuration (e.g., example.com or dev.example.com)
+    Type: String
   GoogleClientId:
     Type: String
     Description: Google OAuth Client ID
@@ -650,21 +677,28 @@ Parameters:
   UiHostname:
     Type: String
 Outputs:
-  ApiBaseUrl:
-    Description: "Base URL for the API Gateway"
-    Value: !Sub "https://${PortfolioAPI}.execute-api.${AWS::Region}.amazonaws.com/${Env}"
-  CognitoUserPoolId:
-    Description: "Cognito User Pool ID"
-    Value: !Ref BlogUserPool
-  CognitoUserPoolClientId:
-    Description: "Cognito User Pool Client ID"
-    Value: !Ref BlogUserPoolClient
-  CognitoIdentityPoolId:
-    Description: "Cognito Identity Pool ID"
-    Value: !Ref BlogIdentityPool
+  CustomApiUrl:
+    Description: "Custom domain URL for the API"
+    Value: !Sub "https://${ApiHostname}/${Env}"
+    Export:
+      Name: !Sub "${AWS::StackName}-CustomApiUrl"
+  ApiRegionalDomainName:
+    Description: "Regional domain name for DNS configuration"
+    Value: !GetAtt ApiCustomDomain.RegionalDomainName
+    Export:
+      Name: !Sub "${AWS::StackName}-ApiRegionalDomainName"
+  ApiRegionalHostedZoneId:
+    Description: "Regional hosted zone ID for Route53 configuration"
+    Value: !GetAtt ApiCustomDomain.RegionalHostedZoneId
+    Export:
+      Name: !Sub "${AWS::StackName}-ApiRegionalHostedZoneId"
+  ApiDomainName:
+    Description: "API Gateway custom domain name"
+    Value: !Ref ApiCustomDomain
+    Export:
+      Name: !Sub "${AWS::StackName}-ApiDomainName"
   MediaBucketName:
     Description: "S3 Bucket for media files"
     Value: !Ref MediaBucket
-  UserPoolDomain:
-    Description: "Cognito User Pool Domain"
-    Value: !Ref BlogUserPoolDomain
+    Export:
+      Name: !Sub "${AWS::StackName}-MediaBucketName"

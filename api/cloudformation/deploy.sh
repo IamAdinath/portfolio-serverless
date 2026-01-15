@@ -27,6 +27,21 @@ function validate_parameters() {
         is_error=true
     fi
 
+    if [ -z "$API_HOSTNAME" ]; then
+        parameter_error "API_HOSTNAME"
+        is_error=true
+    fi
+
+    if [ -z "$API_ACM_CERTIFICATE_ARN" ]; then
+        parameter_error "API_ACM_CERTIFICATE_ARN (must be full ARN in same region as API Gateway)"
+        is_error=true
+    fi
+
+    if [ -z "$UI_HOSTNAME" ]; then
+        parameter_error "UI_HOSTNAME (needed for CORS configuration)"
+        is_error=true
+    fi
+
     if $is_error; then
         exit 1
     fi
@@ -54,6 +69,15 @@ function create_s3_bucket() {
 }
 
 function deploy() {
+    echo "=== Environment Variables ==="
+    echo "PROJECT_NAME: $PROJECT_NAME"
+    echo "ENV: $ENV"
+    echo "REGION: $REGION"
+    echo "STACK_NAME: $STACK_NAME"
+    echo "CODE_BUCKET: $CODE_BUCKET"
+    echo "API_HOSTNAME: $API_HOSTNAME"
+    echo "=========================="
+    
     NOW=$(date "+%Y%m%d_%H%M%S")
     CODE_PATH="${ENV}/${NOW}"
 
@@ -119,6 +143,34 @@ function deploy() {
                 LinkedInClientId="" \
                 LinkedInClientSecret=""; then
             echo "✅ Deployment successful"
+            
+            # Get and display custom API URL
+            CUSTOM_API_URL=$(aws --region ${REGION} cloudformation describe-stacks \
+                --stack-name ${STACK_NAME} \
+                --query "Stacks[0].Outputs[?OutputKey=='CustomApiUrl'].OutputValue" \
+                --output text)
+            
+            REGIONAL_DOMAIN=$(aws --region ${REGION} cloudformation describe-stacks \
+                --stack-name ${STACK_NAME} \
+                --query "Stacks[0].Outputs[?OutputKey=='ApiRegionalDomainName'].OutputValue" \
+                --output text)
+            
+            REGIONAL_ZONE_ID=$(aws --region ${REGION} cloudformation describe-stacks \
+                --stack-name ${STACK_NAME} \
+                --query "Stacks[0].Outputs[?OutputKey=='ApiRegionalHostedZoneId'].OutputValue" \
+                --output text)
+            
+            MEDIA_BUCKET=$(aws --region ${REGION} cloudformation describe-stacks \
+                --stack-name ${STACK_NAME} \
+                --query "Stacks[0].Outputs[?OutputKey=='MediaBucketName'].OutputValue" \
+                --output text)
+            
+            echo "=== Deployment Outputs ==="
+            echo "Custom API URL: ${CUSTOM_API_URL}"
+            echo "Regional Domain (for DNS): ${REGIONAL_DOMAIN}"
+            echo "Regional Hosted Zone ID: ${REGIONAL_ZONE_ID}"
+            echo "Media Bucket: ${MEDIA_BUCKET}"
+            echo "=========================="
             break
         else
             RETRY_COUNT=$((RETRY_COUNT + 1))
