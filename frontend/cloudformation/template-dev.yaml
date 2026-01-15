@@ -66,7 +66,6 @@ Resources:
               OriginAccessIdentity: !Sub 'origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}'
         Aliases:
         - !Ref HostnameDev
-        - !Sub "www.${HostnameDev}"
         Enabled: true
         Comment: !Sub "Cloudfront Distribution for ${ProjectName} UI - Development"
         DefaultRootObject: index.html
