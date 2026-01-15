@@ -627,6 +627,12 @@ Parameters:
     Description: The Python version to use for lambda functions
     Type: String
     Default: python3.12
+  ApiHostname:
+    Description: Custom hostname for API (e.g., api.example.com or dev-api.example.com)
+    Type: String
+  ApiCertificateArn:
+    Description: ACM certificate ARN for API custom domain (full ARN in same region as API Gateway)
+    Type: String
   UiHostname:
     Description: UI hostname for CORS and Cognito configuration (e.g., example.com or dev.example.com)
     Type: String
@@ -656,6 +662,21 @@ Outputs:
     Value: !Sub "https://${PortfolioAPI}.execute-api.${AWS::Region}.amazonaws.com/${Env}"
     Export:
       Name: !Sub "${AWS::StackName}-ApiBaseUrl"
+  CustomApiUrl:
+    Description: "Custom domain URL for the API"
+    Value: !Sub "https://${ApiHostname}/${Env}"
+    Export:
+      Name: !Sub "${AWS::StackName}-CustomApiUrl"
+  ApiRegionalDomainName:
+    Description: "Regional domain name for DNS configuration"
+    Value: !GetAtt ApiCustomDomain.RegionalDomainName
+    Export:
+      Name: !Sub "${AWS::StackName}-ApiRegionalDomainName"
+  ApiRegionalHostedZoneId:
+    Description: "Regional hosted zone ID for Route53 configuration"
+    Value: !GetAtt ApiCustomDomain.RegionalHostedZoneId
+    Export:
+      Name: !Sub "${AWS::StackName}-ApiRegionalHostedZoneId"
   MediaBucketName:
     Description: "S3 Bucket for media files"
     Value: !Ref MediaBucket
