@@ -90,18 +90,25 @@ const AnalyticsPage: React.FC = () => {
   const { addToast } = useToast();
 
   const fetchAnalyticsData = useCallback(async (range: string) => {
+    console.log('Fetching analytics data for range:', range);
     try {
       setLoading(true);
       setError(null);
 
-      // Try to fetch real analytics data, fallback to mock data if API not available
+      // Try to fetch real analytics data, fallback to empty data if API not available
       try {
+        console.log('Calling GetWebAnalytics API...');
         const response = await GetWebAnalytics(range);
+        console.log('Analytics API response:', response);
         setAnalyticsData(response);
-        addToast('success', 'Real analytics data loaded');
-      } catch (apiError) {
-        console.warn('Analytics API not available, showing empty state:', apiError);
-        addToast('info', 'Analytics API not available - showing empty state until data is collected');
+        addToast('success', 'Analytics data loaded');
+      } catch (apiError: any) {
+        console.warn('Analytics API error:', apiError);
+        console.warn('Error status:', apiError.statusCode);
+        console.warn('Error details:', apiError.details);
+        
+        // Show empty state instead of error for API unavailability
+        addToast('info', 'Analytics data not available - showing empty state');
         
         // Generate empty data structure for the date range
         const emptyData = generateEmptyData(range);
@@ -114,11 +121,11 @@ const AnalyticsPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [addToast]);
+  }, []); // Remove addToast from dependencies to prevent infinite loop
 
   useEffect(() => {
     fetchAnalyticsData(dateRange);
-  }, [dateRange, fetchAnalyticsData]);
+  }, [dateRange]); // Remove fetchAnalyticsData from dependencies
 
   const getTrendIcon = (trend: 'up' | 'down' | 'neutral') => {
     switch (trend) {
@@ -263,7 +270,7 @@ const AnalyticsPage: React.FC = () => {
             <div className="top-pages-list">
               {analyticsData.topPages.length > 0 ? (
                 analyticsData.topPages.map((page, index) => (
-                  <div key={page.path} className="page-item">
+                  <div key={`${page.path}-${index}`} className="page-item">
                     <div className="page-rank">{index + 1}</div>
                     <div className="page-info">
                       <div className="page-title">{page.title}</div>

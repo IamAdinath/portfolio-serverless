@@ -138,7 +138,7 @@ const BlogEditorPage = () => {
     const loadExistingBlog = async () => {
       console.log('Load check:', { editBlogId, hasEditor: !!editor, isLoadingExisting, hasLoadedBlog: hasLoadedBlog.current });
       
-      if (editBlogId && editor && !hasLoadedBlog.current) {
+      if (editBlogId && editor && !hasLoadedBlog.current && !isLoadingExisting) {
         console.log('Starting to load blog:', editBlogId);
         hasLoadedBlog.current = true;
         try {
@@ -152,7 +152,7 @@ const BlogEditorPage = () => {
               hasLoadedBlog.current = false;
             }
           }, 10000); // 10 second timeout
-          // Temporarily bypass safeApiCall for debugging
+          
           console.log('Calling GetBlogPostById with ID:', editBlogId);
           const blogData = await GetBlogPostById(editBlogId);
           console.log('Received blog data:', blogData);
@@ -160,6 +160,9 @@ const BlogEditorPage = () => {
           if (!isMounted) return; // Prevent state updates if component unmounted
           
           console.log('Blog data loaded:', { title: blogData.title, contentLength: blogData.content?.length });
+          
+          // Clear timeout since we got the data
+          clearTimeout(timeoutId);
           
           // Set the title
           setTitle(blogData.title || '');
@@ -184,7 +187,6 @@ const BlogEditorPage = () => {
             addToast('error', `Failed to load blog: ${error instanceof Error ? error.message : 'Unknown error'}`);
           }
         } finally {
-          clearTimeout(timeoutId);
           if (isMounted) {
             setIsLoadingExisting(false);
           }
@@ -199,9 +201,11 @@ const BlogEditorPage = () => {
 
     return () => {
       isMounted = false;
-      clearTimeout(timeoutId);
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
     };
-  }, [editBlogId, editor, addToast, isLoadingExisting]); // Added missing dependencies
+  }, [editBlogId, editor, addToast]); // Removed isLoadingExisting from dependencies
 
   // Effect to create the initial draft when a title is entered (only once)
   useEffect(() => {

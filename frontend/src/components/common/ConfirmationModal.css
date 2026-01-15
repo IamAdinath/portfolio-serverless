@@ -1,35 +1,76 @@
-/* ConfirmationModal.css */
+/* ConfirmationModal.css - Tron Theme */
 .modal-backdrop {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.85) !important;
+  backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 999999; /* Ensure it's above everything */
+  z-index: 999999 !important;
   padding: 1rem;
+  pointer-events: auto !important;
 }
 
 .confirmation-modal {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  max-width: 400px;
+  background: rgba(0, 10, 20, 0.95) !important;
+  border: 2px solid rgba(0, 229, 255, 0.5) !important;
+  border-radius: 0 !important;
+  box-shadow: 
+    0 0 30px rgba(0, 229, 255, 0.3),
+    inset 0 1px 0 rgba(0, 229, 255, 0.1) !important;
+  max-width: 450px;
   width: 100%;
   max-height: 90vh;
   overflow: hidden;
-  animation: modalSlideIn 0.3s ease-out;
+  animation: modalSlideIn 0.3s ease-out, modalGlitch 0.5s 0.3s;
   position: relative;
-  z-index: 1000000; /* Ensure modal content is above backdrop */
+  z-index: 1000000 !important;
+  pointer-events: auto !important;
+}
+
+/* Running neon line effect on modal border */
+.confirmation-modal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #00E5FF, transparent);
+  animation: modalBorderSweep 3s linear infinite;
+  z-index: 1;
+}
+
+.confirmation-modal::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: -100%;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #00E5FF, transparent);
+  animation: modalBorderSweepReverse 3s linear infinite;
+  z-index: 1;
+}
+
+@keyframes modalBorderSweep {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+@keyframes modalBorderSweepReverse {
+  0% { right: -100%; }
+  100% { right: 100%; }
 }
 
 @keyframes modalSlideIn {
   from {
     opacity: 0;
-    transform: translateY(-20px) scale(0.95);
+    transform: translateY(-30px) scale(0.9);
   }
   to {
     opacity: 1;
@@ -37,131 +78,318 @@
   }
 }
 
+/* Glitch effect on modal appearance */
+@keyframes modalGlitch {
+  0%, 100% {
+    transform: translate(0) scale(1);
+    filter: none;
+  }
+  10% {
+    transform: translate(-5px, 2px) scale(1.01);
+    filter: hue-rotate(90deg);
+  }
+  20% {
+    transform: translate(3px, -3px) scale(0.99);
+    filter: hue-rotate(-90deg);
+  }
+  30% {
+    transform: translate(-2px, 1px) scale(1.01);
+    filter: hue-rotate(45deg);
+  }
+  40% {
+    transform: translate(4px, -2px) scale(0.99);
+    filter: hue-rotate(-45deg);
+  }
+  50% {
+    transform: translate(-3px, 3px) scale(1.01);
+    filter: hue-rotate(180deg);
+  }
+  60% {
+    transform: translate(2px, -1px) scale(0.99);
+    filter: hue-rotate(-180deg);
+  }
+  70%, 100% {
+    transform: translate(0) scale(1);
+    filter: none;
+  }
+}
+
 .modal-header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  padding: 1.5rem 1.5rem 0 1.5rem;
+  padding: 1.5rem 1.5rem 1rem 1.5rem;
+  border-bottom: 1px solid rgba(0, 229, 255, 0.2);
+  gap: 1rem;
 }
 
 .modal-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  min-width: 56px;
+  border-radius: 0 !important;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
+  font-size: 1.75rem;
+  border: 2px solid;
+  box-shadow: 0 0 15px;
+  flex-shrink: 0;
 }
 
 .modal-icon.danger {
-  background: #fed7d7;
-  color: #e53e3e;
+  background: rgba(255, 0, 128, 0.1) !important;
+  color: #FF0080 !important;
+  border-color: #FF0080 !important;
+  box-shadow: 0 0 15px rgba(255, 0, 128, 0.3) !important;
+  animation: dangerIconGlitch 6s infinite;
+}
+
+/* Glitch effect for danger icon */
+@keyframes dangerIconGlitch {
+  0%, 85%, 87%, 89%, 91%, 100% {
+    transform: translate(0) rotate(0deg);
+    filter: none;
+  }
+  86% {
+    transform: translate(-3px, 2px) rotate(-2deg);
+    filter: hue-rotate(30deg);
+  }
+  88% {
+    transform: translate(3px, -2px) rotate(2deg);
+    filter: hue-rotate(-30deg);
+  }
+  90% {
+    transform: translate(-2px, 1px) rotate(-1deg);
+    filter: hue-rotate(15deg);
+  }
 }
 
 .modal-icon.warning {
-  background: #fef5e7;
-  color: #d69e2e;
+  background: rgba(255, 193, 7, 0.1) !important;
+  color: #FFC107 !important;
+  border-color: #FFC107 !important;
+  box-shadow: 0 0 15px rgba(255, 193, 7, 0.3) !important;
 }
 
 .modal-icon.info {
-  background: #ebf8ff;
-  color: #3182ce;
+  background: rgba(0, 229, 255, 0.1) !important;
+  color: #00E5FF !important;
+  border-color: #00E5FF !important;
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.3) !important;
 }
 
 .modal-close {
-  background: none;
-  border: none;
-  color: #a0aec0;
+  background: rgba(0, 0, 0, 0.6) !important;
+  border: 1px solid rgba(0, 229, 255, 0.3) !important;
+  color: rgba(0, 229, 255, 0.8) !important;
   cursor: pointer;
   padding: 0.5rem;
-  border-radius: 6px;
-  transition: all 0.2s ease;
+  border-radius: 0 !important;
+  transition: all 0.3s ease;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
 .modal-close:hover {
-  background: #f7fafc;
-  color: #4a5568;
+  background: rgba(0, 229, 255, 0.1) !important;
+  border-color: #00E5FF !important;
+  color: #00E5FF !important;
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.3) !important;
 }
 
 .modal-content {
-  padding: 1rem 1.5rem;
+  padding: 1.5rem;
 }
 
 .modal-title {
-  margin: 0 0 0.5rem 0;
-  color: #2d3748;
-  font-size: 1.25rem;
+  margin: 0 0 0.75rem 0;
+  color: #00E5FF !important;
+  font-size: 1.5rem;
   font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
+  position: relative;
+  animation: glitchTitle 8s infinite;
+}
+
+/* Glitch effect for title */
+@keyframes glitchTitle {
+  0%, 90%, 92%, 94%, 96%, 100% {
+    transform: translate(0);
+    text-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
+  }
+  91% {
+    transform: translate(-2px, 1px);
+    text-shadow: 
+      2px 0 #FF0080,
+      -2px 0 #00E5FF,
+      0 0 10px rgba(0, 229, 255, 0.5);
+  }
+  93% {
+    transform: translate(2px, -1px);
+    text-shadow: 
+      -2px 0 #FF0080,
+      2px 0 #00E5FF,
+      0 0 10px rgba(0, 229, 255, 0.5);
+  }
+  95% {
+    transform: translate(-1px, 2px);
+    text-shadow: 
+      1px 0 #FF0080,
+      -1px 0 #00E5FF,
+      0 0 10px rgba(0, 229, 255, 0.5);
+  }
 }
 
 .modal-message {
   margin: 0;
-  color: #4a5568;
-  line-height: 1.5;
+  color: rgba(0, 229, 255, 0.9) !important;
+  line-height: 1.6;
+  font-size: 1rem;
 }
 
 .modal-actions {
   display: flex;
-  gap: 0.75rem;
+  gap: 1rem;
   padding: 1.5rem;
   justify-content: flex-end;
+  border-top: 1px solid rgba(0, 229, 255, 0.2);
+  position: relative;
+}
+
+/* Running neon line effect on action buttons border */
+.modal-actions::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #00E5FF, transparent);
+  animation: actionBorderSweep 2s linear infinite;
+}
+
+@keyframes actionBorderSweep {
+  0% { left: -100%; }
+  100% { left: 100%; }
 }
 
 .btn-cancel {
-  background: #f7fafc;
-  border: 1px solid #e2e8f0;
-  color: #4a5568;
+  background: rgba(0, 0, 0, 0.8) !important;
+  border: 1px solid rgba(0, 229, 255, 0.3) !important;
+  color: rgba(0, 229, 255, 0.9) !important;
   padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  font-weight: 500;
+  border-radius: 0 !important;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-cancel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn-cancel:hover::before {
+  left: 100%;
 }
 
 .btn-cancel:hover {
-  background: #edf2f7;
-  border-color: #cbd5e0;
+  background: rgba(0, 229, 255, 0.1) !important;
+  border-color: #00E5FF !important;
+  color: #00E5FF !important;
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.3) !important;
+  transform: translateY(-2px);
 }
 
 .btn-confirm {
   padding: 0.75rem 1.5rem;
-  border-radius: 8px;
+  border-radius: 0 !important;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
-  border: none;
-  color: white;
+  transition: all 0.3s ease;
+  border: 2px solid;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-confirm::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn-confirm:hover::before {
+  left: 100%;
 }
 
 .btn-confirm.danger {
-  background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+  background: rgba(255, 0, 128, 0.2) !important;
+  border-color: #FF0080 !important;
+  color: #FF0080 !important;
+  box-shadow: 0 0 10px rgba(255, 0, 128, 0.3) !important;
 }
 
 .btn-confirm.danger:hover {
-  background: linear-gradient(135deg, #c53030 0%, #9c2626 100%);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(229, 62, 62, 0.3);
+  background: rgba(255, 0, 128, 0.3) !important;
+  border-color: #FF0080 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 0 20px rgba(255, 0, 128, 0.5) !important;
+  transform: translateY(-2px);
 }
 
 .btn-confirm.warning {
-  background: linear-gradient(135deg, #d69e2e 0%, #b7791f 100%);
+  background: rgba(255, 193, 7, 0.2) !important;
+  border-color: #FFC107 !important;
+  color: #FFC107 !important;
+  box-shadow: 0 0 10px rgba(255, 193, 7, 0.3) !important;
 }
 
 .btn-confirm.warning:hover {
-  background: linear-gradient(135deg, #b7791f 0%, #975a16 100%);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(214, 158, 46, 0.3);
+  background: rgba(255, 193, 7, 0.3) !important;
+  border-color: #FFC107 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 0 20px rgba(255, 193, 7, 0.5) !important;
+  transform: translateY(-2px);
 }
 
 .btn-confirm.info {
-  background: linear-gradient(135deg, #3182ce 0%, #2c5aa0 100%);
+  background: rgba(0, 229, 255, 0.2) !important;
+  border-color: #00E5FF !important;
+  color: #00E5FF !important;
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.3) !important;
 }
 
 .btn-confirm.info:hover {
-  background: linear-gradient(135deg, #2c5aa0 0%, #2a4a7c 100%);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(49, 130, 206, 0.3);
+  background: rgba(0, 229, 255, 0.3) !important;
+  border-color: #00E5FF !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 0 20px rgba(0, 229, 255, 0.5) !important;
+  transform: translateY(-2px);
 }
 
 /* Responsive Design */
@@ -175,8 +403,33 @@
     width: 100%;
   }
   
+  .modal-header {
+    padding: 1rem 1rem 0.75rem 1rem;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .modal-icon {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    font-size: 1.5rem;
+  }
+  
+  .modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+  }
+  
+  .modal-title {
+    font-size: 1.25rem;
+  }
+  
   .modal-actions {
     flex-direction: column-reverse;
+    gap: 0.75rem;
   }
   
   .btn-cancel,

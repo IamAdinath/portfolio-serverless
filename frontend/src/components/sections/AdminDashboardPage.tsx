@@ -407,8 +407,14 @@ const AdminDashboardPage: React.FC = () => {
                           </button>
                           <button
                             className="action-btn delete-btn"
-                            onClick={() => handleDelete(blog.id, blog.title)}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              console.log('Delete button raw click event');
+                              handleDelete(blog.id, blog.title);
+                            }}
                             title="Delete"
+                            style={{ cursor: 'pointer', pointerEvents: 'auto' }}
                           >
                             <FontAwesomeIcon icon={faTrash} />
                           </button>

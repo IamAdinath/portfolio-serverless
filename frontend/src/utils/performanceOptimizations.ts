@@ -43,31 +43,12 @@ export const addApiPreconnect = (): void => {
 
 /**
  * Preload critical API endpoints for better performance
+ * Disabled to avoid preload warnings - endpoints are loaded on-demand
  */
 export const preloadCriticalEndpoints = (): void => {
-  const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
-  
-  if (!apiBaseUrl) {
-    return;
-  }
-
-  const criticalEndpoints = [
-    '/get-media?type=profile',
-    '/get-blogs'
-  ];
-
-  criticalEndpoints.forEach(endpoint => {
-    try {
-      const link = document.createElement('link');
-      link.rel = 'preload';
-      link.as = 'fetch';
-      link.href = `${apiBaseUrl}${endpoint}`;
-      link.crossOrigin = 'anonymous';
-      document.head.appendChild(link);
-    } catch (error) {
-      console.warn(`Failed to preload endpoint ${endpoint}:`, error);
-    }
-  });
+  // Disabled - causing preload warnings
+  // API endpoints are now loaded on-demand when needed
+  return;
 };
 
 /**
