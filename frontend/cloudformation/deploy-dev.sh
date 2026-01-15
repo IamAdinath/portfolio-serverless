@@ -48,15 +48,6 @@ function deploy() {
     echo "REGION: $REGION"
     echo "UI_BUCKET_NAME: $UI_BUCKET_NAME"
     echo "UI_HOSTNAME_DEV: $UI_HOSTNAME_DEV"
-    echo "ACM_CERTIFICATE_ARN_DEV: $ACM_CERTIFICATE_ARN_DEV"
-    echo "REACT_APP_API_BASE_URL: $REACT_APP_API_BASE_URL"
-    echo "REACT_APP_COGNITO_USER_POOL_ID: $REACT_APP_COGNITO_USER_POOL_ID"
-    echo "REACT_APP_COGNITO_CLIENT_ID: $REACT_APP_COGNITO_CLIENT_ID"
-    echo "REACT_APP_COGNITO_REGION: $REACT_APP_COGNITO_REGION"
-    echo "REACT_APP_COGNITO_DOMAIN: $REACT_APP_COGNITO_DOMAIN"
-    echo "REACT_APP_COGNITO_REDIRECT_SIGNIN: $REACT_APP_COGNITO_REDIRECT_SIGNIN"
-    echo "REACT_APP_COGNITO_REDIRECT_SIGNOUT: $REACT_APP_COGNITO_REDIRECT_SIGNOUT"
-    echo "REACT_APP_API_KEY: $REACT_APP_API_KEY"
     echo "=========================="
     
     # Build React app
@@ -83,14 +74,36 @@ function deploy() {
     CLOUDFRONT_URL=$(aws --region ${REGION} cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='CloudFrontURL'].OutputValue" --output text)
     CUSTOM_DOMAIN_URL=$(aws --region ${REGION} cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='CustomDomainURL'].OutputValue" --output text)
     
-    # Sync files and invalidate cache
-    aws --region ${REGION} s3 sync ${DIR}/../build s3://$UI_BUCKET_NAME --acl public-read --delete
-    aws --region ${REGION} cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths '/' '/*'
+    echo "=== Starting Zero-Downtime Deployment ==="
     
-    echo "=== Deployment Completed ==="
+    # Phase 1: Upload new/changed files (no delete)
+    echo "📤 Uploading new files to S3..."
+    aws --region ${REGION} s3 sync ${DIR}/../build s3://$UI_BUCKET_NAME --acl public-read
+    
+    # Phase 2: Invalidate CloudFront cache
+    echo "🔄 Invalidating CloudFront cache..."
+    INVALIDATION_ID=$(aws --region ${REGION} cloudfront create-invalidation \
+        --distribution-id $DISTRIBUTION_ID \
+        --paths '/*' \
+        --query 'Invalidation.Id' \
+        --output text)
+    
+    echo "⏳ Waiting for invalidation to complete (ID: $INVALIDATION_ID)..."
+    aws --region ${REGION} cloudfront wait invalidation-completed \
+        --distribution-id $DISTRIBUTION_ID \
+        --id $INVALIDATION_ID
+    
+    # Phase 3: Clean up old files
+    echo "🧹 Cleaning up old files..."
+    aws --region ${REGION} s3 sync ${DIR}/../build s3://$UI_BUCKET_NAME --acl public-read --delete
+    
+    echo "=== Deployment Outputs ==="
     echo "CloudFront URL: $CLOUDFRONT_URL"
     echo "Custom Domain URL: $CUSTOM_DOMAIN_URL"
     echo "Distribution ID: $DISTRIBUTION_ID"
+    echo "Files synced to S3 bucket: $UI_BUCKET_NAME"
+    echo "CloudFront cache invalidated"
+    echo "=========================="
 }
 
 validate_parameters
