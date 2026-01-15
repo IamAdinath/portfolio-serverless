@@ -151,7 +151,7 @@ Resources:
     Type: AWS::ApiGateway::DomainName
     Properties:
       DomainName: !Ref ApiHostname
-      RegionalCertificateArn: !Ref ApiCertificateArn
+      RegionalCertificateArn: !Sub arn:aws:acm:${AWS::Region}:${AWS::AccountId}:certificate/${ApiCertificateArn}
       EndpointConfiguration:
         Types:
           - REGIONAL
@@ -649,7 +649,7 @@ Parameters:
     Description: Custom hostname for API (e.g., api.example.com or dev-api.example.com)
     Type: String
   ApiCertificateArn:
-    Description: ACM certificate ARN for API custom domain (full ARN in same region as API Gateway)
+    Description: ACM certificate ARN for API custom domain (just the UUID part)
     Type: String
   UiHostname:
     Description: UI hostname for CORS and Cognito configuration (e.g., example.com or dev.example.com)
