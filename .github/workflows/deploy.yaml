@@ -50,8 +50,8 @@ jobs:
           STACK_NAME: ${{ vars.API_STACK_NAME_DEV }}
           CODE_BUCKET: ${{ vars.API_BUCKET_NAME_DEV }}
           DEFAULT_PYTHON_RUNTIME: python3.12
-          API_HOSTNAME: ${{ vars.API_HOSTNAME_DEV }}
-          API_CERTIFICATE_ARN: ${{ vars.API_CERTIFICATE_ARN_DEV }}
+          UI_HOSTNAME: ${{ vars.UI_HOSTNAME_DEV }}
+          ACM_CERTIFICATE_ARN: ${{ vars.ACM_CERTIFICATE_ARN_DEV }}
 
   deploy-ui-dev:
     name: Deploy UI - Dev
@@ -187,8 +187,8 @@ jobs:
           STACK_NAME: ${{ vars.API_STACK_NAME_PROD }}
           CODE_BUCKET: ${{ vars.API_BUCKET_NAME_PROD }}
           DEFAULT_PYTHON_RUNTIME: python3.12
-          API_HOSTNAME: ${{ vars.API_HOSTNAME_PROD }}
-          API_CERTIFICATE_ARN: ${{ vars.API_CERTIFICATE_ARN_PROD }}
+          UI_HOSTNAME: ${{ vars.UI_HOSTNAME_PROD }}
+          ACM_CERTIFICATE_ARN: ${{ vars.ACM_CERTIFICATE_ARN_PROD }}
 
   deploy-ui-prod:
     name: Deploy UI - Prod
