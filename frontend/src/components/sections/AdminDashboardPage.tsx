@@ -72,6 +72,7 @@ const AdminDashboardPage: React.FC = () => {
   }, [isAuthenticated, navigate, fetchBlogs]);
 
   const handleDelete = (blogId: string, title: string) => {
+    console.log('Delete button clicked:', { blogId, title });
     showConfirmation({
       title: 'Delete Blog Post',
       message: `Are you sure you want to delete "${title}"? This action cannot be undone.`,
@@ -79,6 +80,7 @@ const AdminDashboardPage: React.FC = () => {
       cancelText: 'Cancel',
       type: 'danger',
       onConfirm: async () => {
+        console.log('Confirm button clicked, deleting blog:', blogId);
         try {
           await DeleteBlogPost(blogId);
           setBlogs(prev => prev.filter(blog => blog.id !== blogId));
