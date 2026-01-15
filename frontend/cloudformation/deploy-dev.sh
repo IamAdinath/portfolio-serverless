@@ -23,6 +23,16 @@ function validate_parameters() {
         is_error=true
     fi
 
+    if [ -z "$UI_HOSTNAME_DEV" ]; then
+        echo "UI_HOSTNAME_DEV not defined"
+        is_error=true
+    fi
+
+    if [ -z "$ACM_CERTIFICATE_ARN_DEV" ]; then
+        echo "ACM_CERTIFICATE_ARN_DEV not defined"
+        is_error=true
+    fi
+
     if [ "$is_error" = true ]; then
         exit 1
     fi
@@ -37,6 +47,8 @@ function deploy() {
     echo "ENV: $ENV"
     echo "REGION: $REGION"
     echo "UI_BUCKET_NAME: $UI_BUCKET_NAME"
+    echo "UI_HOSTNAME_DEV: $UI_HOSTNAME_DEV"
+    echo "ACM_CERTIFICATE_ARN_DEV: $ACM_CERTIFICATE_ARN_DEV"
     echo "REACT_APP_API_BASE_URL: $REACT_APP_API_BASE_URL"
     echo "REACT_APP_COGNITO_USER_POOL_ID: $REACT_APP_COGNITO_USER_POOL_ID"
     echo "REACT_APP_COGNITO_CLIENT_ID: $REACT_APP_COGNITO_CLIENT_ID"
@@ -62,11 +74,14 @@ function deploy() {
     --no-fail-on-empty-changeset \
     --parameter-overrides \
     ProjectName=${PROJECT_NAME} \
-    BucketName=${UI_BUCKET_NAME}
+    BucketName=${UI_BUCKET_NAME} \
+    HostnameDev=${UI_HOSTNAME_DEV} \
+    SSLCertArnDev=${ACM_CERTIFICATE_ARN_DEV}
 
     # Get outputs
     DISTRIBUTION_ID=$(aws --region ${REGION} cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='CloudFrontDistributionID'].OutputValue" --output text)
     CLOUDFRONT_URL=$(aws --region ${REGION} cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='CloudFrontURL'].OutputValue" --output text)
+    CUSTOM_DOMAIN_URL=$(aws --region ${REGION} cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='CustomDomainURL'].OutputValue" --output text)
     
     # Sync files and invalidate cache
     aws --region ${REGION} s3 sync ${DIR}/../build s3://$UI_BUCKET_NAME --acl public-read --delete
@@ -74,6 +89,7 @@ function deploy() {
     
     echo "=== Deployment Completed ==="
     echo "CloudFront URL: $CLOUDFRONT_URL"
+    echo "Custom Domain URL: $CUSTOM_DOMAIN_URL"
     echo "Distribution ID: $DISTRIBUTION_ID"
 }
 

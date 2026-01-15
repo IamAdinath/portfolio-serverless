@@ -18,8 +18,8 @@ function validate_parameters() {
         is_error=true
     fi
 
-    if [ -z "$HOSTNAME" ]; then
-        echo "HOSTNAME not defined"
+    if [ -z "$UI_HOSTNAME_PROD" ]; then
+        echo "UI_HOSTNAME_PROD not defined"
         is_error=true
     fi
 
@@ -28,8 +28,8 @@ function validate_parameters() {
         is_error=true
     fi
 
-    if [ -z "$ACM_CERTIFICATE_ARN" ]; then
-        echo "ACM_CERTIFICATE_ARN not defined"
+    if [ -z "$ACM_CERTIFICATE_ARN_PROD" ]; then
+        echo "ACM_CERTIFICATE_ARN_PROD not defined"
         is_error=true
     fi
 
@@ -46,9 +46,9 @@ function deploy() {
     echo "PROJECT_NAME: $PROJECT_NAME"
     echo "ENV: $ENV"
     echo "REGION: $REGION"
-    echo "HOSTNAME: $HOSTNAME"
+    echo "UI_HOSTNAME_PROD: $UI_HOSTNAME_PROD"
     echo "UI_BUCKET_NAME: $UI_BUCKET_NAME"
-    echo "ACM_CERTIFICATE_ARN: $ACM_CERTIFICATE_ARN"
+    echo "ACM_CERTIFICATE_ARN_PROD: $ACM_CERTIFICATE_ARN_PROD"
     echo "REACT_APP_API_BASE_URL: $REACT_APP_API_BASE_URL"
     echo "REACT_APP_COGNITO_USER_POOL_ID: $REACT_APP_COGNITO_USER_POOL_ID"
     echo "REACT_APP_COGNITO_CLIENT_ID: $REACT_APP_COGNITO_CLIENT_ID"
@@ -74,19 +74,20 @@ function deploy() {
     --no-fail-on-empty-changeset \
     --parameter-overrides \
     ProjectName=${PROJECT_NAME} \
-    Hostname=${HOSTNAME} \
+    HostnameProd=${UI_HOSTNAME_PROD} \
     BucketName=${UI_BUCKET_NAME} \
-    SSLCertArn=${ACM_CERTIFICATE_ARN} 
+    SSLCertArnProd=${ACM_CERTIFICATE_ARN_PROD}
 
     # Get outputs
     DISTRIBUTION_ID=$(aws --region ${REGION} cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='CloudFrontDistributionID'].OutputValue" --output text)
+    CUSTOM_DOMAIN_URL=$(aws --region ${REGION} cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='CustomDomainURL'].OutputValue" --output text)
     
     # Sync files and invalidate cache
     aws --region ${REGION} s3 sync ${DIR}/../build s3://$UI_BUCKET_NAME --acl public-read --delete
     aws --region ${REGION} cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths '/' '/*'
     
     echo "=== Deployment Completed ==="
-    echo "Custom Domain URL: https://$HOSTNAME"
+    echo "Custom Domain URL: $CUSTOM_DOMAIN_URL"
     echo "Distribution ID: $DISTRIBUTION_ID"
 }
 

@@ -6,11 +6,11 @@ Parameters:
     Default: portfolio
     Description: "The name of the project. Will be used as prefix for resource names"
     Type: "String"
-  SSLCertArn:
-    Description: "ACM Cert arn for custom domain"
+  SSLCertArnProd:
+    Description: "ACM Cert arn for custom domain (Production)"
     Type: "String"
-  Hostname:
-    Description: "Hostname in DNS for ui"
+  HostnameProd:
+    Description: "Hostname in DNS for ui (Production)"
     Type: "String"
   BucketName:
     Description: "UI Bucket Asset"
@@ -64,8 +64,8 @@ Resources:
             S3OriginConfig:
               OriginAccessIdentity: !Sub 'origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}'
         Aliases:
-        - !Ref Hostname
-        - !Sub "www.${Hostname}"
+        - !Ref HostnameProd
+        - !Sub "www.${HostnameProd}"
         Enabled: true
         Comment: !Sub "Cloudfront Distribution for ${ProjectName} UI - Production"
         DefaultRootObject: index.html
@@ -98,7 +98,7 @@ Resources:
           CachePolicyId: !Ref PortfolioCachePolicy
         PriceClass: PriceClass_200
         ViewerCertificate:
-          AcmCertificateArn: !Sub arn:aws:acm:${AWS::Region}:${AWS::AccountId}:certificate/${SSLCertArn}
+          AcmCertificateArn: !Sub arn:aws:acm:${AWS::Region}:${AWS::AccountId}:certificate/${SSLCertArnProd}
           SslSupportMethod: "sni-only"
 
   PortfolioCachePolicy:
@@ -142,8 +142,8 @@ Resources:
               - DELETE
           AccessControlAllowOrigins:
             Items:
-            - !Ref Hostname
-            - !Sub "www.${Hostname}"
+            - !Ref HostnameProd
+            - !Sub "www.${HostnameProd}"
           AccessControlExposeHeaders:
             Items:
             - ALL
@@ -201,3 +201,7 @@ Outputs:
     Value: !Ref PortfolioFrontDistribution
     Export:
       Name: !Sub "${AWS::StackName}-DistributionID"
+  CustomDomainURL:
+    Value: !Sub "https://${HostnameProd}"
+    Export:
+      Name: !Sub "${AWS::StackName}-CustomDomainURL"

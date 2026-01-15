@@ -23,15 +23,25 @@ function validate_parameters() {
         is_error=true
     fi
 
-    # Check if this is a production deployment (requires hostname and SSL)
-    if [ "$ENV" = "prod" ] || [ "$ENV" = "production" ]; then
-        if [ -z "$HOSTNAME" ]; then
-            echo "HOSTNAME not defined (required for production)"
+    # Check environment-specific requirements
+    if [ "$ENV" = "dev" ] || [ "$ENV" = "development" ]; then
+        if [ -z "$UI_HOSTNAME_DEV" ]; then
+            echo "UI_HOSTNAME_DEV not defined (required for development)"
             is_error=true
         fi
 
-        if [ -z "$ACM_CERTIFICATE_ARN" ]; then
-            echo "ACM_CERTIFICATE_ARN not defined (required for production)"
+        if [ -z "$ACM_CERTIFICATE_ARN_DEV" ]; then
+            echo "ACM_CERTIFICATE_ARN_DEV not defined (required for development)"
+            is_error=true
+        fi
+    elif [ "$ENV" = "prod" ] || [ "$ENV" = "production" ]; then
+        if [ -z "$UI_HOSTNAME_PROD" ]; then
+            echo "UI_HOSTNAME_PROD not defined (required for production)"
+            is_error=true
+        fi
+
+        if [ -z "$ACM_CERTIFICATE_ARN_PROD" ]; then
+            echo "ACM_CERTIFICATE_ARN_PROD not defined (required for production)"
             is_error=true
         fi
     fi
@@ -50,11 +60,17 @@ function deploy() {
     echo "ENV: $ENV"
     echo "REGION: $REGION"
     echo "UI_BUCKET_NAME: $UI_BUCKET_NAME"
-    if [ -n "$HOSTNAME" ]; then
-        echo "HOSTNAME: $HOSTNAME"
+    if [ -n "$UI_HOSTNAME_DEV" ]; then
+        echo "UI_HOSTNAME_DEV: $UI_HOSTNAME_DEV"
     fi
-    if [ -n "$ACM_CERTIFICATE_ARN" ]; then
-        echo "ACM_CERTIFICATE_ARN: $ACM_CERTIFICATE_ARN"
+    if [ -n "$UI_HOSTNAME_PROD" ]; then
+        echo "UI_HOSTNAME_PROD: $UI_HOSTNAME_PROD"
+    fi
+    if [ -n "$ACM_CERTIFICATE_ARN_DEV" ]; then
+        echo "ACM_CERTIFICATE_ARN_DEV: $ACM_CERTIFICATE_ARN_DEV"
+    fi
+    if [ -n "$ACM_CERTIFICATE_ARN_PROD" ]; then
+        echo "ACM_CERTIFICATE_ARN_PROD: $ACM_CERTIFICATE_ARN_PROD"
     fi
     echo "REACT_APP_API_BASE_URL: $REACT_APP_API_BASE_URL"
     echo "REACT_APP_COGNITO_USER_POOL_ID: $REACT_APP_COGNITO_USER_POOL_ID"
@@ -78,7 +94,7 @@ function deploy() {
     
     if [ "$ENV" = "dev" ] || [ "$ENV" = "development" ]; then
         TEMPLATE_FILE="template-dev.yaml"
-        echo "Using development template (no custom domain)"
+        echo "Using development template (with custom domain)"
         
         aws --region ${REGION} cloudformation deploy \
         --template-file $DIR/${TEMPLATE_FILE} \
@@ -87,11 +103,15 @@ function deploy() {
         --no-fail-on-empty-changeset \
         --parameter-overrides \
         ProjectName=${PROJECT_NAME} \
-        BucketName=${UI_BUCKET_NAME}
+        BucketName=${UI_BUCKET_NAME} \
+        HostnameDev=${UI_HOSTNAME_DEV} \
+        SSLCertArnDev=${ACM_CERTIFICATE_ARN_DEV}
         
-        # Get CloudFront URL for dev
+        # Get CloudFront URL and custom domain for dev
         CLOUDFRONT_URL=$(aws --region ${REGION} cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='CloudFrontURL'].OutputValue" --output text)
+        CUSTOM_DOMAIN_URL=$(aws --region ${REGION} cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='CustomDomainURL'].OutputValue" --output text)
         echo "CloudFront URL: $CLOUDFRONT_URL"
+        echo "Custom Domain URL: $CUSTOM_DOMAIN_URL"
     else
         echo "Using production template (with custom domain)"
         
@@ -102,11 +122,12 @@ function deploy() {
         --no-fail-on-empty-changeset \
         --parameter-overrides \
         ProjectName=${PROJECT_NAME} \
-        Hostname=${HOSTNAME} \
+        HostnameProd=${UI_HOSTNAME_PROD} \
         BucketName=${UI_BUCKET_NAME} \
-        SSLCertArn=${ACM_CERTIFICATE_ARN}
+        SSLCertArnProd=${ACM_CERTIFICATE_ARN_PROD}
         
-        echo "Custom Domain URL: https://$HOSTNAME"
+        CUSTOM_DOMAIN_URL=$(aws --region ${REGION} cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='CustomDomainURL'].OutputValue" --output text)
+        echo "Custom Domain URL: $CUSTOM_DOMAIN_URL"
     fi
 
     # Get distribution ID and sync files
