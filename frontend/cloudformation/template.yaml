@@ -142,7 +142,9 @@ Resources:
               - DELETE
           AccessControlAllowOrigins:
             Items:
-            - !Ref Hostname
+            - !Ref HostnameProd
+            - !Sub "www.${HostnameProd}"
+            - "*"
             - !Sub "www.${Hostname}"
           AccessControlExposeHeaders:
             Items:

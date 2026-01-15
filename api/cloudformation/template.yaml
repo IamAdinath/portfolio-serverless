@@ -136,9 +136,10 @@ Resources:
       Name: !Sub ${ProjectName}-API-${Env}
       StageName: !Ref Env
       Cors:
-        AllowMethods: "'OPTIONS,GET,POST,PUT,DELETE'"
-        AllowHeaders: "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'"
+        AllowMethods: "'DELETE,GET,HEAD,OPTIONS,PATCH,POST,PUT'"
+        AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
         AllowOrigin: "'*'"
+        MaxAge: "'600'"
       Auth:
         Authorizers:
           CognitoAuth:
@@ -340,8 +341,12 @@ Resources:
         - openid
         - profile
       CallbackURLs:
+        - !Sub "https://${UiHostname}/callback"
+        - !Sub "https://www.${UiHostname}/callback"
         - http://localhost:3000/callback
       LogoutURLs:
+        - !Sub "https://${UiHostname}/logout"
+        - !Sub "https://www.${UiHostname}/logout"
         - http://localhost:3000/logout
       SupportedIdentityProviders:
         - COGNITO
