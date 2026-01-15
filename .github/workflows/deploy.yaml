@@ -115,20 +115,30 @@ jobs:
           chmod +x ./deploy-dev.sh
           ./deploy-dev.sh
           
-          # Get CloudFront URL
+          # Get CloudFront URL and Custom Domain URL
+          STACK_NAME="${PROJECT_NAME}-${ENV}-UI"
           UI_URL=$(aws cloudformation describe-stacks \
-            --stack-name ${PROJECT_NAME}-${ENV}-UI \
+            --stack-name ${STACK_NAME} \
             --region ${REGION} \
             --query "Stacks[0].Outputs[?OutputKey=='CloudFrontURL'].OutputValue" \
             --output text)
           
+          CUSTOM_DOMAIN_URL=$(aws cloudformation describe-stacks \
+            --stack-name ${STACK_NAME} \
+            --region ${REGION} \
+            --query "Stacks[0].Outputs[?OutputKey=='CustomDomainURL'].OutputValue" \
+            --output text)
+          
           echo "ui-url=${UI_URL}" >> $GITHUB_OUTPUT
-          echo "✅ UI deployed to: ${UI_URL}"
+          echo "✅ UI deployed to CloudFront: ${UI_URL}"
+          echo "✅ Custom Domain: ${CUSTOM_DOMAIN_URL}"
         env:
           PROJECT_NAME: ${{ vars.PROJECT_NAME }}
           ENV: dev
           REGION: ${{ vars.UI_AWS_REGION }}
           UI_BUCKET_NAME: ${{ vars.UI_BUCKET_NAME_DEV }}
+          UI_HOSTNAME_DEV: ${{ vars.UI_HOSTNAME_DEV }}
+          ACM_CERTIFICATE_ARN_DEV: ${{ vars.ACM_CERTIFICATE_ARN_DEV }}
           REACT_APP_API_BASE_URL: ${{ vars.REACT_APP_API_BASE_URL_DEV }}
           REACT_APP_COGNITO_USER_POOL_ID: ${{ vars.REACT_APP_COGNITO_USER_POOL_ID_DEV }}
           REACT_APP_COGNITO_CLIENT_ID: ${{ vars.REACT_APP_COGNITO_CLIENT_ID_DEV }}
@@ -244,10 +254,10 @@ jobs:
           
           # Get outputs
           STACK_NAME="${PROJECT_NAME}-${ENV}-UI"
-          UI_URL=$(aws cloudformation describe-stacks \
+          CUSTOM_DOMAIN_URL=$(aws cloudformation describe-stacks \
             --stack-name ${STACK_NAME} \
             --region ${REGION} \
-            --query "Stacks[0].Outputs[?OutputKey=='CloudFrontURL'].OutputValue" \
+            --query "Stacks[0].Outputs[?OutputKey=='CustomDomainURL'].OutputValue" \
             --output text)
           
           DISTRIBUTION_ID=$(aws cloudformation describe-stacks \
@@ -256,16 +266,16 @@ jobs:
             --query "Stacks[0].Outputs[?OutputKey=='CloudFrontDistributionID'].OutputValue" \
             --output text)
           
-          echo "ui-url=${UI_URL}" >> $GITHUB_OUTPUT
+          echo "ui-url=${CUSTOM_DOMAIN_URL}" >> $GITHUB_OUTPUT
           echo "distribution-id=${DISTRIBUTION_ID}" >> $GITHUB_OUTPUT
-          echo "✅ UI deployed to: ${UI_URL}"
+          echo "✅ UI deployed to: ${CUSTOM_DOMAIN_URL}"
         env:
           PROJECT_NAME: ${{ vars.PROJECT_NAME }}
           ENV: prod
           REGION: ${{ vars.UI_AWS_REGION }}
-          HOSTNAME: ${{ vars.UI_HOSTNAME_PROD }}
+          UI_HOSTNAME_PROD: ${{ vars.UI_HOSTNAME_PROD }}
           UI_BUCKET_NAME: ${{ vars.UI_BUCKET_NAME_PROD }}
-          ACM_CERTIFICATE_ARN: ${{ vars.ACM_CERTIFICATE_ARN }}
+          ACM_CERTIFICATE_ARN_PROD: ${{ vars.ACM_CERTIFICATE_ARN_PROD }}
           REACT_APP_API_BASE_URL: ${{ vars.REACT_APP_API_BASE_URL_PROD }}
           REACT_APP_COGNITO_USER_POOL_ID: ${{ vars.REACT_APP_COGNITO_USER_POOL_ID_PROD }}
           REACT_APP_COGNITO_CLIENT_ID: ${{ vars.REACT_APP_COGNITO_CLIENT_ID_PROD }}
