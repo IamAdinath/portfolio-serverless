@@ -409,10 +409,15 @@ export async function GetBlogPostById(id: string) {
 
 export async function DeleteBlogPost(id: string) {
   const endpoint = `${API_BASE_URL}/delete-blog?id=${id}`;
+  console.log('DeleteBlogPost called with:', { id, endpoint });
+  
   const token = localStorage.getItem('authToken');
   if (!token) {
+    console.error('No auth token found');
     throw new Error('Authentication required. Please log in.');
   }
+  
+  console.log('Auth token found, making DELETE request');
   
   try {
     const response = await fetch(endpoint, {
@@ -420,9 +425,13 @@ export async function DeleteBlogPost(id: string) {
       headers: getAuthHeaders(),
     });
 
+    console.log('DELETE response received:', { status: response.status, ok: response.ok });
+
     const jsonResponse = await response.json().catch(() => ({
       message: `Request failed with status ${response.status} and no JSON error body.`,
     }));
+
+    console.log('DELETE response body:', jsonResponse);
 
     if (!response.ok) {
       const error: ApiError = new Error(jsonResponse.message || `API Error: ${response.status} ${response.statusText}`);
@@ -432,6 +441,7 @@ export async function DeleteBlogPost(id: string) {
       throw error;
     }
 
+    console.log('Blog deleted successfully');
     return jsonResponse;
 
   } catch (error) {

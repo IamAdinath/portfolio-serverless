@@ -217,6 +217,12 @@ Resources:
             Method: POST
             Auth:
               Authorizer: CognitoAuth
+        CreateBlogOptions:
+          Type: Api
+          Properties:
+            RestApiId: !Ref PortfolioAPI
+            Path: /create-blog
+            Method: OPTIONS
       Environment:
         Variables:
           BLOGS_TABLE: !Ref BlogsTable
@@ -239,6 +245,12 @@ Resources:
             Method: POST
             Auth:
               Authorizer: CognitoAuth
+        UpdateBlogOptions:
+          Type: Api
+          Properties:
+            RestApiId: !Ref PortfolioAPI
+            Path: /update-blog
+            Method: OPTIONS
       Environment:
         Variables:
           BLOGS_TABLE: !Ref BlogsTable
@@ -261,6 +273,12 @@ Resources:
             Method: DELETE
             Auth:
               Authorizer: CognitoAuth
+        DeleteBlogOptions:
+          Type: Api
+          Properties:
+            RestApiId: !Ref PortfolioAPI
+            Path: /delete-blog
+            Method: OPTIONS
       Environment:
         Variables:
           BLOGS_TABLE: !Ref BlogsTable
@@ -281,6 +299,12 @@ Resources:
             RestApiId: !Ref PortfolioAPI
             Path: /list-blogs
             Method: GET
+        ListBlogsOptions:
+          Type: Api
+          Properties:
+            RestApiId: !Ref PortfolioAPI
+            Path: /list-blogs
+            Method: OPTIONS
       Environment:
         Variables:
           BLOGS_TABLE: !Ref BlogsTable
@@ -302,6 +326,12 @@ Resources:
             Method: GET
             Auth:
               Authorizer: CognitoAuth
+        BlogStatsOptions:
+          Type: Api
+          Properties:
+            RestApiId: !Ref PortfolioAPI
+            Path: /blog-stats
+            Method: OPTIONS
       Environment:
         Variables:
           BLOGS_TABLE: !Ref BlogsTable
@@ -323,6 +353,12 @@ Resources:
             Method: GET
             Auth:
               Authorizer: CognitoAuth
+        WebAnalyticsOptions:
+          Type: Api
+          Properties:
+            RestApiId: !Ref PortfolioAPI
+            Path: /web-analytics
+            Method: OPTIONS
       Environment:
         Variables:
           ANALYTICS_TABLE: !Ref AnalyticsTable
@@ -342,6 +378,12 @@ Resources:
             RestApiId: !Ref PortfolioAPI
             Path: /track-analytics
             Method: POST
+        TrackAnalyticsOptions:
+          Type: Api
+          Properties:
+            RestApiId: !Ref PortfolioAPI
+            Path: /track-analytics
+            Method: OPTIONS
       Environment:
         Variables:
           ANALYTICS_TABLE: !Ref AnalyticsTable

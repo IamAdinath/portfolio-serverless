@@ -1,4 +1,5 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExclamationTriangle, faTimes } from '@fortawesome/free-solid-svg-icons';
 import './ConfirmationModal.css';
@@ -24,22 +25,35 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   onCancel,
   type = 'warning'
 }) => {
+  console.log('ConfirmationModal render:', { isOpen, title, type });
+  
   if (!isOpen) return null;
 
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
+      console.log('Backdrop clicked, canceling');
       onCancel();
     }
   };
 
-  return (
+  const handleConfirmClick = () => {
+    console.log('Confirm button clicked in modal');
+    onConfirm();
+  };
+
+  const handleCancelClick = () => {
+    console.log('Cancel button clicked in modal');
+    onCancel();
+  };
+
+  return createPortal(
     <div className="modal-backdrop" onClick={handleBackdropClick}>
       <div className="confirmation-modal">
         <div className="modal-header">
           <div className={`modal-icon ${type}`}>
             <FontAwesomeIcon icon={faExclamationTriangle} />
           </div>
-          <button className="modal-close" onClick={onCancel}>
+          <button className="modal-close" onClick={handleCancelClick}>
             <FontAwesomeIcon icon={faTimes} />
           </button>
         </div>
@@ -50,15 +64,16 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
         </div>
         
         <div className="modal-actions">
-          <button className="btn-cancel" onClick={onCancel}>
+          <button className="btn-cancel" onClick={handleCancelClick}>
             {cancelText}
           </button>
-          <button className={`btn-confirm ${type}`} onClick={onConfirm}>
+          <button className={`btn-confirm ${type}`} onClick={handleConfirmClick}>
             {confirmText}
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 
