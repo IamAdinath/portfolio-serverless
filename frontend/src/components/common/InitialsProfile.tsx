@@ -47,11 +47,9 @@ const InitialsProfile: React.FC<InitialsProfileProps> = ({
         cursor: 'pointer'
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.transform = 'scale(1.05)';
         e.currentTarget.style.boxShadow = '0 0 40px rgba(0, 229, 255, 0.6), inset 0 0 40px rgba(0, 229, 255, 0.2)';
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.transform = 'scale(1)';
         e.currentTarget.style.boxShadow = '0 0 25px rgba(0, 229, 255, 0.4), inset 0 0 25px rgba(0, 229, 255, 0.1)';
       }}
     >
