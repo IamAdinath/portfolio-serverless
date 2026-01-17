@@ -62,6 +62,29 @@ def lambda_handler(event, context):
         # Get file path from environment variable or use default
         file_path = os.getenv(config['env_var'], config['default_path'])
         
+        # For profile images, find the actual file regardless of extension
+        if file_type == 'profile':
+            base_path = file_path.rsplit('.', 1)[0] if '.' in file_path else file_path
+            possible_extensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp']
+            
+            # Try to find the file with any of the possible extensions
+            found_path = None
+            for ext in possible_extensions:
+                test_path = f"{base_path}{ext}"
+                if s3_file_exists(MEDIA_BUCKET, test_path):
+                    found_path = test_path
+                    break
+            
+            if not found_path:
+                logger.error(f"Profile image not found with any extension at {base_path}")
+                return build_response(
+                    StatusCodes.NOT_FOUND,
+                    Headers.CORS,
+                    {"message": "Profile image not found."},
+                )
+            
+            file_path = found_path
+        
         logger.info(f"Looking for {file_type} file at: {file_path}")
         
         # Check if file exists
