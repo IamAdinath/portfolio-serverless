@@ -22,12 +22,24 @@ def get_s3_file(bucket: str, key: str) -> Optional[str]:
         return None
 
 
-def put_s3_file(bucket: str, key: str, content: str) -> bool:
+def put_s3_file(bucket: str, key: str, content: str, content_type: str = None) -> bool:
     """Upload a string content to S3."""
     try:
+        # Check if content is base64 encoded
         if isinstance(content, str):
-            content = content.encode('utf-8')
-        s3_client.put_object(Bucket=bucket, Key=key, Body=content)
+            try:
+                # Try to decode as base64
+                import base64
+                content = base64.b64decode(content)
+            except Exception:
+                # If not base64, encode as UTF-8
+                content = content.encode('utf-8')
+        
+        extra_args = {}
+        if content_type:
+            extra_args['ContentType'] = content_type
+            
+        s3_client.put_object(Bucket=bucket, Key=key, Body=content, **extra_args)
         return True
     except ClientError as e:
         logging.error(f"Error putting file to {bucket}/{key}: {e}")
@@ -113,3 +125,13 @@ def s3_file_exists(bucket: str, key: str) -> bool:
             return False
         logging.error(f"Error checking existence of {bucket}/{key}: {e}")
         return False
+
+
+def get_s3_file_metadata(bucket: str, key: str) -> Optional[dict]:
+    """Get metadata for a file in S3."""
+    try:
+        response = s3_client.head_object(Bucket=bucket, Key=key)
+        return response
+    except ClientError as e:
+        logging.error(f"Error getting metadata for {bucket}/{key}: {e}")
+        return None

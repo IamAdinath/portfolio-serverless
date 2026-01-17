@@ -1,15 +1,32 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './AboutPage.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLinkedin, faGithub, faMedium, faStackOverflow } from '@fortawesome/free-brands-svg-icons';
-import { faUser, faHeart, faCode, faRocket, faLightbulb, faCoffee } from '@fortawesome/free-solid-svg-icons';
+import { faHeart, faCode, faRocket, faLightbulb, faCoffee } from '@fortawesome/free-solid-svg-icons';
 import { usePageTitle } from '../common/usePageTitle';
 import InitialsProfile from '../common/InitialsProfile';
 import SEOHead from '../common/SEOHead';
 import { SOCIAL_LINKS } from '../../constants';
+import { getProfileImage } from '../common/apiService';
 
 const AboutPage: React.FC = () => {
   usePageTitle('About Me');
+  
+  useEffect(() => {
+    const fetchProfileImage = async () => {
+      try {
+        const { imageUrl } = await getProfileImage();
+        
+        const container = document.querySelector('.profile-image-container') as HTMLElement;
+        if (container && imageUrl) {
+          container.style.setProperty('--profile-image-url', `url(${imageUrl})`);
+        }
+      } catch (error) {
+        console.error('Failed to load profile image:', error);
+      }
+    };
+    fetchProfileImage();
+  }, []);
   
   return (
     <>
@@ -50,9 +67,6 @@ const AboutPage: React.FC = () => {
                 size="medium"
                 initials="AG"
               />
-              <div className="profile-badge">
-                <FontAwesomeIcon icon={faUser} />
-              </div>
             </div>
             <div className="profile-info">
               <h1>Hey there! I'm Adinath</h1>

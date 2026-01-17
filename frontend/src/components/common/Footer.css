@@ -1,7 +1,7 @@
 /* Footer.css - Balanced Tron Theme */
 
 .modern-footer {
-  background: rgba(0, 10, 20, 0.95);
+  background: url('../../assets/footer-bg.png') center/cover, rgba(0, 10, 20, 0.95);
   border-top: 1px solid #00E5FF;
   color: rgba(0, 229, 255, 0.95);
   margin-top: auto;

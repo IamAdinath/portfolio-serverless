@@ -73,7 +73,44 @@ export async function requestUserConfirmation(payload: ConfirmUserPayload): Prom
   }
 }
 
-// Unified media API function
+/**
+ * Logout user - invalidates all tokens on the server side
+ * @returns Promise<{ success: boolean, message: string }>
+ */
+export async function LogoutUser(): Promise<{ success: boolean, message: string }> {
+  const endpoint = `${API_BASE_URL}/logout`;
+
+  try {
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+    });
+
+    const jsonResponse = await response.json().catch(() => ({
+      message: `Request failed with status ${response.status} and no JSON error body.`,
+    }));
+
+    if (!response.ok) {
+      const error: ApiError = new Error(jsonResponse.message || `API Error: ${response.status} ${response.statusText}`);
+      error.statusCode = response.status;
+      error.details = jsonResponse;
+      console.error('LogoutUser API error:', error.details);
+      throw error;
+    }
+
+    return jsonResponse;
+
+  } catch (error) {
+    console.error('Network or other error in LogoutUser:', error);
+    if ((error as ApiError).statusCode) {
+      throw error;
+    }
+    const apiError: ApiError = new Error((error as Error).message || 'An unexpected error occurred during logout.');
+    throw apiError;
+  }
+}
+
+// Unified media API function (without retry wrapper for large files)
 async function getMediaFile(fileType: 'profile' | 'resume') {
   const endpoint = `${API_BASE_URL}/get-media?type=${fileType}`;
 
@@ -119,7 +156,47 @@ export async function DownloadResume() {
 
 export async function GetProfileImage() {
   const response = await getMediaFile('profile');
-  return response.imageUrl;
+  return { imageUrl: response.imageUrl, lastModified: response.lastModified };
+}
+
+export const getProfileImage = GetProfileImage;
+
+export async function UploadProfileImage(fileContent: string, fileType: string): Promise<{ message: string; imageUrl: string; lastModified?: string }> {
+  const endpoint = `${API_BASE_URL}/upload-profile-image`;
+  const token = localStorage.getItem('authToken');
+  
+  if (!token) {
+    throw new Error('Authentication required. Please log in.');
+  }
+
+  try {
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ file_content: fileContent, file_type: fileType }),
+    });
+
+    const jsonResponse = await response.json().catch(() => ({
+      message: `Request failed with status ${response.status} and no JSON error body.`,
+    }));
+
+    if (!response.ok) {
+      const error: ApiError = new Error(jsonResponse.message || `API Error: ${response.status} ${response.statusText}`);
+      error.statusCode = response.status;
+      error.details = jsonResponse;
+      console.error('UploadProfileImage API error:', error.details);
+      throw error;
+    }
+
+    return jsonResponse;
+  } catch (error) {
+    console.error('Network or other error in UploadProfileImage:', error);
+    if ((error as ApiError).statusCode) {
+      throw error;
+    }
+    const apiError: ApiError = new Error((error as Error).message || 'An unexpected error occurred during profile image upload.');
+    throw apiError;
+  }
 }
 
 export async function GetFile(fileURL: string) {

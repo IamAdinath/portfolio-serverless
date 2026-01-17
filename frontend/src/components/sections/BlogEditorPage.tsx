@@ -144,45 +144,39 @@ const BlogEditorPage = () => {
         try {
           setIsLoadingExisting(true);
           
-          // Set a timeout to prevent infinite loading
           timeoutId = setTimeout(() => {
             if (isMounted) {
               setIsLoadingExisting(false);
               addToast('error', 'Loading timeout. Please try again.');
               hasLoadedBlog.current = false;
             }
-          }, 10000); // 10 second timeout
+          }, 10000);
           
           console.log('Calling GetBlogPostById with ID:', editBlogId);
           const blogData = await GetBlogPostById(editBlogId);
           console.log('Received blog data:', blogData);
           
-          if (!isMounted) return; // Prevent state updates if component unmounted
+          if (!isMounted) return;
           
           console.log('Blog data loaded:', { title: blogData.title, contentLength: blogData.content?.length });
           
-          // Clear timeout since we got the data
           clearTimeout(timeoutId);
           
-          // Set the title
           setTitle(blogData.title || '');
           
-          // Set the editor content with proper HTML
           if (blogData.content) {
             editor.commands.setContent(blogData.content);
           }
           
-          // Set the blog ID to prevent re-loading
           setBlogId(editBlogId);
           
-          // Set status to saved since we're loading existing content
           setStatus('saved');
           setLastSaveTime(Date.now());
           
           addToast('success', 'Blog loaded for editing');
         } catch (error) {
           console.error('Failed to load blog for editing:', error);
-          hasLoadedBlog.current = false; // Reset on error to allow retry
+          hasLoadedBlog.current = false;
           if (isMounted) {
             addToast('error', `Failed to load blog: ${error instanceof Error ? error.message : 'Unknown error'}`);
           }
@@ -194,7 +188,6 @@ const BlogEditorPage = () => {
       }
     };
 
-    // Only load if we have an editBlogId and editor is ready
     if (editBlogId && editor) {
       loadExistingBlog();
     }
@@ -205,7 +198,7 @@ const BlogEditorPage = () => {
         clearTimeout(timeoutId);
       }
     };
-  }, [editBlogId, editor, addToast]); // Removed isLoadingExisting from dependencies
+  }, [editBlogId, editor, addToast, isLoadingExisting]);
 
   // Effect to create the initial draft when a title is entered (only once)
   useEffect(() => {

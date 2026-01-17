@@ -2,7 +2,7 @@ import React from 'react';
 import './ResumePage.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLinkedin, faMedium } from '@fortawesome/free-brands-svg-icons';
-import { faMobileAndroid, faEnvelope, faAward, faCertificate, faCode, faBriefcase } from '@fortawesome/free-solid-svg-icons';
+import { faMobileAndroid, faEnvelope, faAward, faGraduationCap, faCode, faBriefcase } from '@fortawesome/free-solid-svg-icons';
 import ResumeDownloadButton from '../common/ResumeDownloadButton';
 import { usePageTitle } from '../common/usePageTitle';
 import SEOHead from '../common/SEOHead';
@@ -137,7 +137,7 @@ const ResumePage: React.FC = () => {
 
                         <section className="certification-card">
                             <div className="card-header">
-                                <FontAwesomeIcon icon={faCertificate} className="section-icon" />
+                                <FontAwesomeIcon icon={faGraduationCap} className="section-icon" />
                                 <h3>Certifications</h3>
                             </div>
                             <div className="card-content">

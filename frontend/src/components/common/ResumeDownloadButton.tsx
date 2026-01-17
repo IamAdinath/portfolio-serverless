@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
-import './ResumeDownloadButton.css';
+import './FloatingButton.css';
 import { DownloadResume } from './apiService';
 import { downloadFile } from '../../utils/downloadUtils';
 import { useToast } from './ToastProvider';
@@ -47,22 +47,24 @@ const ResumeDownloadButton: React.FC = () => {
   };
 
   const buttonContent = (
-    <button
-      onClick={handleDownload}
-      className="floating-download-btn"
-      disabled={isAnimating}
-      aria-label="Download Resume"
-    >
-      {isAnimating ? (
-        <>
-          <FontAwesomeIcon icon={faDownload} spin /> Downloading...
-        </>
-      ) : (
-        <>
-          <FontAwesomeIcon icon={faDownload} /> Download Resume
-        </>
-      )}
-    </button>
+    <div className="floating-button-container">
+      <button
+        onClick={handleDownload}
+        className="floating-download-btn"
+        disabled={isAnimating}
+        aria-label="Download Resume"
+      >
+        {isAnimating ? (
+          <>
+            <FontAwesomeIcon icon={faDownload} spin /> Downloading...
+          </>
+        ) : (
+          <>
+            <FontAwesomeIcon icon={faDownload} /> Download Resume
+          </>
+        )}
+      </button>
+    </div>
   );
 
   // Render directly to body using portal to avoid stacking context issues

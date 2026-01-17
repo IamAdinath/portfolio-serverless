@@ -17,7 +17,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../common/ToastProvider';
 import { usePageTitle } from '../common/usePageTitle';
 import { useConfirmation } from '../../hooks/useConfirmationModal';
-import { GetBlogPosts, DeleteBlogPost, uploadFileToS3 } from '../common/apiService';
+import { GetBlogPosts, DeleteBlogPost, uploadFileToS3, UploadProfileImage } from '../common/apiService';
 import { BlogPostData } from '../../types';
 import ErrorBoundary from '../common/ErrorBoundary';
 import ConfirmationModal from '../common/ConfirmationModal';
@@ -165,8 +165,8 @@ const AdminDashboardPage: React.FC = () => {
       return;
     }
 
-    if (file.size > 2 * 1024 * 1024) { // 2MB limit
-      addToast('error', 'Image file size must be less than 2MB');
+    if (file.size > 2 * 1024 * 1024) { // 2MB limit (note: base64 encoding adds ~33% overhead)
+      addToast('error', 'Image file size must be less than 2MB. Please compress the image before uploading.');
       return;
     }
 
@@ -180,8 +180,7 @@ const AdminDashboardPage: React.FC = () => {
           const base64Content = reader.result as string;
           const base64Data = base64Content.split(',')[1]; // Remove data:image/...;base64, prefix
 
-          const fileExtension = file.name.split('.').pop() || 'jpg';
-          await uploadFileToS3(`profile.${fileExtension}`, base64Data);
+          await UploadProfileImage(base64Data, file.type);
           addToast('success', 'Profile image uploaded successfully');
         } catch (error) {
           console.error('Failed to upload profile image:', error);

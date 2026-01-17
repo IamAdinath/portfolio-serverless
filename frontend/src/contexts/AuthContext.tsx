@@ -126,6 +126,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const logout = async (): Promise<void> => {
     try {
       setIsLoading(true);
+      
+      // Call backend to invalidate tokens server-side
+      try {
+        const { LogoutUser } = await import('../components/common/apiService');
+        await LogoutUser();
+      } catch (apiError) {
+        console.warn('Backend logout failed, continuing with client logout:', apiError);
+      }
+      
+      // Sign out from Cognito
       await signOut();
       setUser(null);
       localStorage.removeItem('authToken');

@@ -3,6 +3,9 @@ Transform: AWS::Serverless-2016-10-31
 Description: >
   Configurations and resources for Portfolio Backend
 
+Conditions:
+  IsProduction: !Equals [!Ref Env, "prod"]
+
 Globals:
   Function:
     Runtime: python3.12
@@ -509,12 +512,6 @@ Resources:
           KeyType: HASH
       BillingMode: PAY_PER_REQUEST
 
-  BlogUserPoolDomain:
-    Type: AWS::Cognito::UserPoolDomain
-    Properties:
-      Domain: !Sub ${ProjectName}-blog-${Env}-auth
-      UserPoolId: !Ref BlogUserPool
-
   ConfirmUserLambda:
     Type: AWS::Serverless::Function
     Properties:
@@ -534,6 +531,31 @@ Resources:
       Environment:
         Variables:
           USERS_TABLE: !Ref UsersTable
+          USER_POOL_ID: !Ref BlogUserPool
+
+  LogoutUserLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${ProjectName}-logout-user-${Env}
+      Handler: users.logout.lambda_handler
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AmazonCognitoPowerUser
+      Events:
+        LogoutUser:
+          Type: Api
+          Properties:
+            RestApiId: !Ref PortfolioAPI
+            Path: /logout
+            Method: POST
+        LogoutUserOptions:
+          Type: Api
+          Properties:
+            RestApiId: !Ref PortfolioAPI
+            Path: /logout
+            Method: OPTIONS
+      Environment:
+        Variables:
           USER_POOL_ID: !Ref BlogUserPool
 
   MediaBucket:
@@ -641,6 +663,43 @@ Resources:
           MEDIA_BUCKET: !Ref MediaBucket
           PROFILE_IMAGE_PATH: !Ref ProfileImagePath
           RESUME_PATH: !Ref ResumePath
+
+  UploadProfileImageLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${ProjectName}-upload-profile-image-${Env}
+      Handler: media.upload_profile.lambda_handler
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AmazonS3FullAccess
+      Events:
+        UploadProfile:
+          Type: Api
+          Properties:
+            RestApiId: !Ref PortfolioAPI
+            Path: /upload-profile-image
+            Method: POST
+            Auth:
+              Authorizer: CognitoAuth
+      Environment:
+        Variables:
+          MEDIA_BUCKET: !Ref MediaBucket
+          PROFILE_IMAGE_PATH: !Ref ProfileImagePath
+
+  UploadProfileImageOptionsLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${ProjectName}-upload-profile-image-options-${Env}
+      Handler: common.options_handler.lambda_handler
+      Policies:
+        - AWSLambdaBasicExecutionRole
+      Events:
+        UploadProfileOptions:
+          Type: Api
+          Properties:
+            RestApiId: !Ref PortfolioAPI
+            Path: /upload-profile-image
+            Method: OPTIONS
 
   UploadToS3Lambda:
     Type: AWS::Serverless::Function
@@ -756,3 +815,13 @@ Outputs:
     Value: !Ref MediaBucket
     Export:
       Name: !Sub "${AWS::StackName}-MediaBucketName"
+  CognitoUserPoolId:
+    Description: "Cognito User Pool ID"
+    Value: !Ref BlogUserPool
+    Export:
+      Name: !Sub "${AWS::StackName}-CognitoUserPoolId"
+  CognitoUserPoolClientId:
+    Description: "Cognito User Pool Client ID"
+    Value: !Ref BlogUserPoolClient
+    Export:
+      Name: !Sub "${AWS::StackName}-CognitoUserPoolClientId"

@@ -3,7 +3,7 @@ import json
 import boto3
 from common.utils import build_response
 from common.contsants import StatusCodes, Headers
-from common.s3 import get_s3_file_url, s3_file_exists
+from common.s3 import get_s3_file_url, s3_file_exists, get_s3_file_metadata
 import logging
 
 logger = logging.getLogger(__name__)
@@ -62,6 +62,29 @@ def lambda_handler(event, context):
         # Get file path from environment variable or use default
         file_path = os.getenv(config['env_var'], config['default_path'])
         
+        # For profile images, find the actual file regardless of extension
+        if file_type == 'profile':
+            base_path = file_path.rsplit('.', 1)[0] if '.' in file_path else file_path
+            possible_extensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp']
+            
+            # Try to find the file with any of the possible extensions
+            found_path = None
+            for ext in possible_extensions:
+                test_path = f"{base_path}{ext}"
+                if s3_file_exists(MEDIA_BUCKET, test_path):
+                    found_path = test_path
+                    break
+            
+            if not found_path:
+                logger.error(f"Profile image not found with any extension at {base_path}")
+                return build_response(
+                    StatusCodes.NOT_FOUND,
+                    Headers.CORS,
+                    {"message": "Profile image not found."},
+                )
+            
+            file_path = found_path
+        
         logger.info(f"Looking for {file_type} file at: {file_path}")
         
         # Check if file exists
@@ -84,13 +107,18 @@ def lambda_handler(event, context):
                 {"message": f"Failed to generate {file_type} URL."},
             )
         
+        # Get file metadata
+        metadata = get_s3_file_metadata(MEDIA_BUCKET, file_path)
+        last_modified = metadata.get('LastModified').isoformat() if metadata and metadata.get('LastModified') else None
+        
         logger.info(f"Generated presigned URL for {file_type}")
         
         # Build response
         response_data = {
             "message": f"{file_type.capitalize()} URL generated successfully.",
             config['response_key']: presigned_url,
-            "expiresIn": config['expires_in']
+            "expiresIn": config['expires_in'],
+            "lastModified": last_modified
         }
         
         # Add filename for downloadable files
