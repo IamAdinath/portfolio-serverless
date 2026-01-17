@@ -156,12 +156,12 @@ export async function DownloadResume() {
 
 export async function GetProfileImage() {
   const response = await getMediaFile('profile');
-  return response.imageUrl;
+  return { imageUrl: response.imageUrl, lastModified: response.lastModified };
 }
 
 export const getProfileImage = GetProfileImage;
 
-export async function UploadProfileImage(fileContent: string): Promise<{ message: string; imageUrl: string }> {
+export async function UploadProfileImage(fileContent: string, fileType: string): Promise<{ message: string; imageUrl: string; lastModified?: string }> {
   const endpoint = `${API_BASE_URL}/upload-profile-image`;
   const token = localStorage.getItem('authToken');
   
@@ -173,7 +173,7 @@ export async function UploadProfileImage(fileContent: string): Promise<{ message
     const response = await fetch(endpoint, {
       method: 'POST',
       headers: getAuthHeaders(),
-      body: JSON.stringify({ file_content: fileContent }),
+      body: JSON.stringify({ file_content: fileContent, file_type: fileType }),
     });
 
     const jsonResponse = await response.json().catch(() => ({

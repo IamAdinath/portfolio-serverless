@@ -16,13 +16,13 @@ const AboutPage: React.FC = () => {
   useEffect(() => {
     const fetchProfileImage = async () => {
       try {
-        const url = await getProfileImage();
-        setProfileImageUrl(url);
+        const { imageUrl } = await getProfileImage();
+        setProfileImageUrl(imageUrl);
         
         // Update CSS variable for the background image
         const container = document.querySelector('.profile-image-container') as HTMLElement;
-        if (container && url) {
-          container.style.setProperty('--profile-image-url', `url(${url})`);
+        if (container && imageUrl) {
+          container.style.setProperty('--profile-image-url', `url(${imageUrl})`);
         }
       } catch (error) {
         console.error('Failed to load profile image:', error);

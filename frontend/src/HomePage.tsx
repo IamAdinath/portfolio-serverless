@@ -21,7 +21,7 @@ import { usePageTitle } from './components/common/usePageTitle';
 import InitialsProfile from './components/common/InitialsProfile';
 import SEOHead from './components/common/SEOHead';
 import { SOCIAL_LINKS } from './constants';
-import { GetAllPublishedBlogs } from './components/common/apiService';
+import { GetAllPublishedBlogs, getProfileImage } from './components/common/apiService';
 import { Blog } from './types';
 import './HomePage.css';
 
@@ -48,12 +48,19 @@ const HomePage: React.FC = () => {
     fetchLatestBlogs();
   }, []);
 
-  // Auto-rotate skills carousel
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentSkillBatch((prev) => (prev + 1) % skillBatches.length);
-    }, 3000);
-    return () => clearInterval(interval);
+    const fetchProfileImage = async () => {
+      try {
+        const { imageUrl } = await getProfileImage();
+        const container = document.querySelector('.portfolio-profile-card') as HTMLElement;
+        if (container && imageUrl) {
+          container.style.setProperty('--profile-image-url', `url(${imageUrl})`);
+        }
+      } catch (error) {
+        console.error('Failed to load profile image:', error);
+      }
+    };
+    fetchProfileImage();
   }, []);
 
   const certificates = [
@@ -62,7 +69,7 @@ const HomePage: React.FC = () => {
       name: 'Artificial Intelligence and Business Strategy',
       issuer: 'LinkedIn Learning',
       date: '2023',
-      logo: 'https://content.linkedin.com/content/dam/me/business/en-us/amp/brand-site/v2/bg/LI-Bug.svg.original.svg',
+      logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg',
       link: 'https://www.linkedin.com/learning/certificates/e8c4b5ded0908d47fb2d6458a1ed6c219de127e34f6beb3842305de91b92b909?u=1810',
       level: 'Professional'
     },
@@ -177,10 +184,21 @@ const HomePage: React.FC = () => {
     }
   ];
 
-  const skillBatches = [];
-  for (let i = 0; i < skills.length; i += 4) {
-    skillBatches.push(skills.slice(i, i + 4));
-  }
+  const skillBatches = React.useMemo(() => {
+    const batches = [];
+    for (let i = 0; i < skills.length; i += 4) {
+      batches.push(skills.slice(i, i + 4));
+    }
+    return batches;
+  }, []);
+
+  // Auto-rotate skills carousel
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSkillBatch((prev) => (prev + 1) % skillBatches.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [skillBatches.length]);
 
   return (
     <>

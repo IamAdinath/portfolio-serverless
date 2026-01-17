@@ -3,7 +3,7 @@ import json
 import boto3
 from common.utils import build_response
 from common.contsants import StatusCodes, Headers
-from common.s3 import get_s3_file_url, s3_file_exists
+from common.s3 import get_s3_file_url, s3_file_exists, get_s3_file_metadata
 import logging
 
 logger = logging.getLogger(__name__)
@@ -84,13 +84,18 @@ def lambda_handler(event, context):
                 {"message": f"Failed to generate {file_type} URL."},
             )
         
+        # Get file metadata
+        metadata = get_s3_file_metadata(MEDIA_BUCKET, file_path)
+        last_modified = metadata.get('LastModified').isoformat() if metadata and metadata.get('LastModified') else None
+        
         logger.info(f"Generated presigned URL for {file_type}")
         
         # Build response
         response_data = {
             "message": f"{file_type.capitalize()} URL generated successfully.",
             config['response_key']: presigned_url,
-            "expiresIn": config['expires_in']
+            "expiresIn": config['expires_in'],
+            "lastModified": last_modified
         }
         
         # Add filename for downloadable files

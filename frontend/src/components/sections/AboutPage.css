@@ -138,22 +138,6 @@
   }
 }
 
-.profile-image {
-  width: 180px;
-  height: 180px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid var(--accent-cyan);
-  box-shadow: 0 0 15px rgba(0, 229, 255, 0.3);
-  transition: all var(--transition-base);
-  filter: brightness(1.05) contrast(1.1);
-}
-
-.profile-image:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 25px rgba(0, 229, 255, 0.5);
-}
-
 .profile-badge {
   position: absolute;
   bottom: 10px;
