@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   FontAwesomeIcon,
-  faRocket, 
   faCode, 
   faUser, 
   faBlog, 
@@ -12,7 +11,11 @@ import {
   faStar,
   faLinkedin, 
   faGithub, 
-  faMedium 
+  faMedium,
+  faGraduationCap,
+  faChevronLeft,
+  faChevronRight,
+  faExternalLinkAlt
 } from './utils/iconLibrary';
 import { usePageTitle } from './components/common/usePageTitle';
 import InitialsProfile from './components/common/InitialsProfile';
@@ -26,6 +29,8 @@ const HomePage: React.FC = () => {
   usePageTitle('Portfolio');
   const [latestBlogs, setLatestBlogs] = useState<Blog[]>([]);
   const [blogsLoading, setBlogsLoading] = useState(true);
+  const [currentCertBatch, setCurrentCertBatch] = useState(0);
+  const [currentSkillBatch, setCurrentSkillBatch] = useState(0);
 
   useEffect(() => {
     const fetchLatestBlogs = async () => {
@@ -42,6 +47,75 @@ const HomePage: React.FC = () => {
 
     fetchLatestBlogs();
   }, []);
+
+  // Auto-rotate skills carousel
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSkillBatch((prev) => (prev + 1) % skillBatches.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const certificates = [
+    {
+      id: 1,
+      name: 'Artificial Intelligence and Business Strategy',
+      issuer: 'LinkedIn Learning',
+      date: '2023',
+      logo: 'https://content.linkedin.com/content/dam/me/business/en-us/amp/brand-site/v2/bg/LI-Bug.svg.original.svg',
+      link: 'https://www.linkedin.com/learning/certificates/e8c4b5ded0908d47fb2d6458a1ed6c219de127e34f6beb3842305de91b92b909?u=1810',
+      level: 'Professional'
+    },
+    {
+      id: 2,
+      name: 'Python for Data Science and Machine Learning Bootcamp',
+      issuer: 'Udemy',
+      date: '2023',
+      logo: 'https://www.udemy.com/staticx/udemy/images/v7/logo-udemy.svg',
+      link: 'https://www.udemy.com/certificate/UC-bc48da75-4011-42bc-9d09-f7fc1151e022/?utm_source=sendgrid.com&utm_medium=email&utm_campaign=email',
+      level: 'Certificate'
+    },
+    {
+      id: 3,
+      name: 'Python, JS, & React | Build a Blockchain & Cryptocurrency',
+      issuer: 'Udemy',
+      date: '2022',
+      logo: 'https://www.udemy.com/staticx/udemy/images/v7/logo-udemy.svg',
+      link: 'https://www.udemy.com/certificate/UC-b4e524ff-92af-45f5-82c6-01163bea9f2a/',
+      level: 'Certificate'
+    },
+    {
+      id: 4,
+      name: 'Python Certification',
+      issuer: 'HackerRank',
+      date: '2022',
+      logo: 'https://hrcdn.net/fcore/assets/brand/logo-new-white-green-a5cb16e0ae.svg',
+      link: 'https://www.hackerrank.com/certificates/36ca56e7716a',
+      level: 'Certified'
+    },
+    {
+      id: 5,
+      name: 'SQL Certification',
+      issuer: 'HackerRank',
+      date: '2022',
+      logo: 'https://hrcdn.net/fcore/assets/brand/logo-new-white-green-a5cb16e0ae.svg',
+      link: 'https://www.hackerrank.com/certificates/aadd3de22555',
+      level: 'Certified'
+    }
+  ];
+
+  const certBatches = [];
+  for (let i = 0; i < certificates.length; i += 4) {
+    certBatches.push(certificates.slice(i, i + 4));
+  }
+
+  const nextCertBatch = () => {
+    setCurrentCertBatch((prev) => (prev + 1) % certBatches.length);
+  };
+
+  const prevCertBatch = () => {
+    setCurrentCertBatch((prev) => (prev - 1 + certBatches.length) % certBatches.length);
+  };
 
   const testimonials = [
     {
@@ -61,11 +135,52 @@ const HomePage: React.FC = () => {
   ];
 
   const skills = [
-    { name: 'Python Development', level: 95 },
-    { name: 'Cloud Engineering', level: 92 },
-    { name: 'AWS Services', level: 90 },
-    { name: 'DevOps & CI/CD', level: 88 },
+    { 
+      name: 'Python', 
+      logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',
+      level: 95 
+    },
+    { 
+      name: 'AWS', 
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg',
+      level: 92 
+    },
+    { 
+      name: 'Django', 
+      logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg',
+      level: 90 
+    },
+    { 
+      name: 'Docker', 
+      logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg',
+      level: 88 
+    },
+    { 
+      name: 'PostgreSQL', 
+      logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg',
+      level: 85 
+    },
+    { 
+      name: 'React', 
+      logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg',
+      level: 82 
+    },
+    { 
+      name: 'MongoDB', 
+      logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg',
+      level: 80 
+    },
+    { 
+      name: 'Git', 
+      logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg',
+      level: 90 
+    }
   ];
+
+  const skillBatches = [];
+  for (let i = 0; i < skills.length; i += 4) {
+    skillBatches.push(skills.slice(i, i + 4));
+  }
 
   return (
     <>
@@ -131,9 +246,6 @@ const HomePage: React.FC = () => {
                   size="large"
                   initials="AG"
                 />
-                <div className="portfolio-profile-badge">
-                  <FontAwesomeIcon icon={faRocket} />
-                </div>
               </div>
             </div>
           </div>
@@ -147,21 +259,75 @@ const HomePage: React.FC = () => {
               Core Expertise
             </h3>
           </div>
-          <div className="portfolio-skills-grid">
-            {skills.map((skill, index) => (
-              <div key={index} className="portfolio-skill-card">
-                <div className="portfolio-skill-info">
-                  <span className="portfolio-skill-name">{skill.name}</span>
-                  <span className="portfolio-skill-percentage">{skill.level}%</span>
+          <div className="portfolio-skills-carousel">
+            <div className="portfolio-skills-grid">
+              {skillBatches[currentSkillBatch]?.map((skill, index) => (
+                <div key={index} className="portfolio-skill-card">
+                  <div className="portfolio-skill-logo">
+                    <img src={skill.logo} alt={`${skill.name} logo`} />
+                  </div>
+                  <div className="portfolio-skill-info">
+                    <span className="portfolio-skill-name">{skill.name}</span>
+                  </div>
                 </div>
-                <div className="portfolio-skill-bar">
-                  <div
-                    className="portfolio-skill-progress"
-                    style={{ width: `${skill.level}%` }}
-                  ></div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Certificates Section */}
+        <section className="portfolio-certificates-section">
+          <div className="portfolio-section-header">
+            <h3>
+              <FontAwesomeIcon icon={faGraduationCap} className="portfolio-section-icon" />
+              Certifications
+            </h3>
+            <div className="portfolio-carousel-controls">
+              <button 
+                onClick={prevCertBatch} 
+                className="portfolio-carousel-btn"
+                disabled={certBatches.length <= 1}
+              >
+                <FontAwesomeIcon icon={faChevronLeft} />
+              </button>
+              <span className="portfolio-carousel-indicator">
+                {currentCertBatch + 1} / {certBatches.length}
+              </span>
+              <button 
+                onClick={nextCertBatch} 
+                className="portfolio-carousel-btn"
+                disabled={certBatches.length <= 1}
+              >
+                <FontAwesomeIcon icon={faChevronRight} />
+              </button>
+            </div>
+          </div>
+          <div className="portfolio-certificates-carousel">
+            <div className="portfolio-certificates-grid">
+              {certBatches[currentCertBatch]?.map((cert) => (
+                <div key={cert.id} className="portfolio-certificate-card">
+                  <div className="portfolio-cert-logo">
+                    <img src={cert.logo} alt={`${cert.name} logo`} />
+                  </div>
+                  <div className="portfolio-cert-info">
+                    <h4 className="portfolio-cert-name">{cert.name}</h4>
+                    <p className="portfolio-cert-issuer">{cert.issuer}</p>
+                    <div className="portfolio-cert-meta">
+                      <span className="portfolio-cert-level">{cert.level}</span>
+                      <span className="portfolio-cert-date">{cert.date}</span>
+                    </div>
+                    <a 
+                      href={cert.link} 
+                      className="portfolio-cert-link"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      View Certificate <FontAwesomeIcon icon={faExternalLinkAlt} />
+                    </a>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </section>
 

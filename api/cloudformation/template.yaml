@@ -676,6 +676,34 @@ Resources:
           PROFILE_IMAGE_PATH: !Ref ProfileImagePath
           RESUME_PATH: !Ref ResumePath
 
+  UploadProfileImageLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${ProjectName}-upload-profile-image-${Env}
+      Handler: media.upload_profile.lambda_handler
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AmazonS3FullAccess
+      Events:
+        UploadProfile:
+          Type: Api
+          Properties:
+            RestApiId: !Ref PortfolioAPI
+            Path: /upload-profile-image
+            Method: POST
+            Auth:
+              Authorizer: CognitoAuth
+        UploadProfileOptions:
+          Type: Api
+          Properties:
+            RestApiId: !Ref PortfolioAPI
+            Path: /upload-profile-image
+            Method: OPTIONS
+      Environment:
+        Variables:
+          MEDIA_BUCKET: !Ref MediaBucket
+          PROFILE_IMAGE_PATH: !Ref ProfileImagePath
+
   UploadToS3Lambda:
     Type: AWS::Serverless::Function
     Properties:

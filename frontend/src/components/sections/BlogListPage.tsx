@@ -112,7 +112,6 @@ const BlogListPage: React.FC = () => {
       {/* Header Section */}
       <div className="bloglist-header">
         <h1>
-          <FontAwesomeIcon icon={faBlog} style={{ marginRight: '15px', color: '#2d2d2d' }} />
           Blog Posts
         </h1>
         <p>Discover insights, tutorials, and thoughts on web development, cloud architecture, and technology trends.</p>

@@ -44,7 +44,12 @@ export {
   faEdit,
   faTrash,
   faPlus,
-  faCog
+  faCog,
+  faChevronLeft,
+  faChevronRight,
+  faExternalLinkAlt,
+  faMedal,
+  faGraduationCap
 } from '@fortawesome/free-solid-svg-icons';
 
 // Brand icons
