@@ -95,7 +95,6 @@ const AnalyticsPage: React.FC = () => {
       setLoading(true);
       setError(null);
 
-      // Try to fetch real analytics data, fallback to empty data if API not available
       try {
         console.log('Calling GetWebAnalytics API...');
         const response = await GetWebAnalytics(range);
@@ -107,10 +106,8 @@ const AnalyticsPage: React.FC = () => {
         console.warn('Error status:', apiError.statusCode);
         console.warn('Error details:', apiError.details);
         
-        // Show empty state instead of error for API unavailability
         addToast('info', 'Analytics data not available - showing empty state');
         
-        // Generate empty data structure for the date range
         const emptyData = generateEmptyData(range);
         setAnalyticsData(emptyData);
       }
@@ -121,11 +118,11 @@ const AnalyticsPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, []); // Remove addToast from dependencies to prevent infinite loop
+  }, [addToast]); // Remove addToast from dependencies to prevent infinite loop
 
   useEffect(() => {
     fetchAnalyticsData(dateRange);
-  }, [dateRange]); // Remove fetchAnalyticsData from dependencies
+  }, [dateRange, fetchAnalyticsData]);
 
   const getTrendIcon = (trend: 'up' | 'down' | 'neutral') => {
     switch (trend) {

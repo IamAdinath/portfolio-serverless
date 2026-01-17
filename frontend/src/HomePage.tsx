@@ -141,50 +141,50 @@ const HomePage: React.FC = () => {
     },
   ];
 
-  const skills = [
-    { 
-      name: 'Python', 
-      logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',
-      level: 95 
-    },
-    { 
-      name: 'AWS', 
-      logo: 'https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg',
-      level: 92 
-    },
-    { 
-      name: 'Django', 
-      logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg',
-      level: 90 
-    },
-    { 
-      name: 'Docker', 
-      logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg',
-      level: 88 
-    },
-    { 
-      name: 'PostgreSQL', 
-      logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg',
-      level: 85 
-    },
-    { 
-      name: 'React', 
-      logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg',
-      level: 82 
-    },
-    { 
-      name: 'MongoDB', 
-      logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg',
-      level: 80 
-    },
-    { 
-      name: 'Git', 
-      logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg',
-      level: 90 
-    }
-  ];
-
   const skillBatches = React.useMemo(() => {
+    const skills = [
+      { 
+        name: 'Python', 
+        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',
+        level: 95 
+      },
+      { 
+        name: 'AWS', 
+        logo: 'https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg',
+        level: 92 
+      },
+      { 
+        name: 'Django', 
+        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg',
+        level: 90 
+      },
+      { 
+        name: 'Docker', 
+        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg',
+        level: 88 
+      },
+      { 
+        name: 'PostgreSQL', 
+        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg',
+        level: 85 
+      },
+      { 
+        name: 'React', 
+        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg',
+        level: 82 
+      },
+      { 
+        name: 'MongoDB', 
+        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg',
+        level: 80 
+      },
+      { 
+        name: 'Git', 
+        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg',
+        level: 90 
+      }
+    ];
+    
     const batches = [];
     for (let i = 0; i < skills.length; i += 4) {
       batches.push(skills.slice(i, i + 4));

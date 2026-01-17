@@ -3,8 +3,6 @@
  * Helps improve Core Web Vitals by optimizing the loading of LCP elements
  */
 
-import logoAsset from '../assets/logo.png';
-
 /**
  * Preload the LCP image as early as possible
  * Disabled to avoid preload warnings - using CSS-based logo instead

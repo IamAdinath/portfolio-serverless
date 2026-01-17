@@ -39,7 +39,7 @@ const InitialsProfile: React.FC<InitialsProfileProps> = ({
         textTransform: 'uppercase',
         letterSpacing: '0.15em',
         border: '3px solid #00E5FF',
-        borderRadius: '0', // Square for Tron theme
+        borderRadius: '0',
         boxShadow: '0 0 25px rgba(0, 229, 255, 0.4), inset 0 0 25px rgba(0, 229, 255, 0.1)',
         position: 'relative',
         overflow: 'hidden',

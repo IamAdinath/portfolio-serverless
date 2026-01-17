@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import './AboutPage.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLinkedin, faGithub, faMedium, faStackOverflow } from '@fortawesome/free-brands-svg-icons';
@@ -11,15 +11,12 @@ import { getProfileImage } from '../common/apiService';
 
 const AboutPage: React.FC = () => {
   usePageTitle('About Me');
-  const [profileImageUrl, setProfileImageUrl] = useState<string>('');
   
   useEffect(() => {
     const fetchProfileImage = async () => {
       try {
         const { imageUrl } = await getProfileImage();
-        setProfileImageUrl(imageUrl);
         
-        // Update CSS variable for the background image
         const container = document.querySelector('.profile-image-container') as HTMLElement;
         if (container && imageUrl) {
           container.style.setProperty('--profile-image-url', `url(${imageUrl})`);
