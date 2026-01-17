@@ -122,7 +122,7 @@ const AnalyticsPage: React.FC = () => {
 
   useEffect(() => {
     fetchAnalyticsData(dateRange);
-  }, [dateRange, fetchAnalyticsData]);
+  }, [dateRange]); // Remove fetchAnalyticsData from dependencies
 
   const getTrendIcon = (trend: 'up' | 'down' | 'neutral') => {
     switch (trend) {
