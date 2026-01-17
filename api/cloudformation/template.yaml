@@ -3,6 +3,9 @@ Transform: AWS::Serverless-2016-10-31
 Description: >
   Configurations and resources for Portfolio Backend
 
+Conditions:
+  IsProduction: !Equals [!Ref Env, "prod"]
+
 Globals:
   Function:
     Runtime: python3.12
@@ -519,9 +522,6 @@ Resources:
       CustomDomainConfig:
         CertificateArn: !Sub arn:aws:acm:us-east-1:${AWS::AccountId}:certificate/${ApiCertificateArn}
       UserPoolId: !Ref BlogUserPool
-
-Conditions:
-  IsProduction: !Equals [!Ref Env, "prod"]
 
   ConfirmUserLambda:
     Type: AWS::Serverless::Function
