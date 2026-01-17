@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   FontAwesomeIcon,
@@ -18,34 +18,30 @@ import { usePageTitle } from './components/common/usePageTitle';
 import InitialsProfile from './components/common/InitialsProfile';
 import SEOHead from './components/common/SEOHead';
 import { SOCIAL_LINKS } from './constants';
+import { GetAllPublishedBlogs } from './components/common/apiService';
+import { Blog } from './types';
 import './HomePage.css';
 
 const HomePage: React.FC = () => {
   usePageTitle('Portfolio');
+  const [latestBlogs, setLatestBlogs] = useState<Blog[]>([]);
+  const [blogsLoading, setBlogsLoading] = useState(true);
 
-  const latestBlogs = [
-    {
-      id: 1,
-      title: 'Building Scalable Web Applications',
-      snippet: 'Exploring modern architecture patterns and best practices for creating maintainable, scalable web applications.',
-      readTime: '5 min read',
-      date: 'Dec 2024'
-    },
-    {
-      id: 2,
-      title: 'Serverless Architecture with AWS',
-      snippet: 'Deep dive into serverless computing, Lambda functions, and building cost-effective cloud solutions.',
-      readTime: '8 min read',
-      date: 'Nov 2024'
-    },
-    {
-      id: 3,
-      title: 'React Performance Optimization',
-      snippet: 'Tips and techniques for optimizing React applications for better user experience and performance.',
-      readTime: '6 min read',
-      date: 'Oct 2024'
-    },
-  ];
+  useEffect(() => {
+    const fetchLatestBlogs = async () => {
+      try {
+        const blogs = await GetAllPublishedBlogs();
+        setLatestBlogs(blogs.slice(0, 3)); // Get only the latest 3 blogs
+      } catch (error) {
+        console.error('Failed to fetch blogs:', error);
+        // Keep empty array on error
+      } finally {
+        setBlogsLoading(false);
+      }
+    };
+
+    fetchLatestBlogs();
+  }, []);
 
   const testimonials = [
     {
@@ -181,19 +177,52 @@ const HomePage: React.FC = () => {
             </Link>
           </div>
           <div className="portfolio-blog-grid">
-            {latestBlogs.map((blog) => (
-              <article key={blog.id} className="portfolio-blog-card">
-                <div className="portfolio-blog-meta">
-                  <span className="portfolio-blog-date">{blog.date}</span>
-                  <span className="portfolio-blog-read-time">{blog.readTime}</span>
-                </div>
-                <h4 className="portfolio-blog-title">{blog.title}</h4>
-                <p className="portfolio-blog-snippet">{blog.snippet}</p>
-                <Link to={`/blog/${blog.id}`} className="portfolio-blog-link">
-                  Read More <FontAwesomeIcon icon={faArrowRight} />
-                </Link>
-              </article>
-            ))}
+            {blogsLoading ? (
+              <div className="portfolio-blog-loading">
+                Loading latest posts...
+              </div>
+            ) : latestBlogs.length > 0 ? (
+              latestBlogs.map((blog) => {
+                const formatDate = (dateString: string) => {
+                  const date = new Date(dateString);
+                  return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+                };
+                
+                const calculateReadTime = (content: string) => {
+                  const text = content.replace(/<[^>]+>/g, '');
+                  const wordCount = text.trim().split(/\s+/).length;
+                  const readTime = Math.ceil(wordCount / 225);
+                  return `${readTime} min read`;
+                };
+                
+                const createSnippet = (content: string) => {
+                  const text = content.replace(/<[^>]+>/g, '');
+                  return text.length > 150 ? text.substring(0, 150) + '...' : text;
+                };
+                
+                return (
+                  <article key={blog.id} className="portfolio-blog-card">
+                    <div className="portfolio-blog-meta">
+                      <span className="portfolio-blog-date">
+                        {blog.published_at ? formatDate(blog.published_at) : 'Recent'}
+                      </span>
+                      <span className="portfolio-blog-read-time">
+                        {calculateReadTime(blog.content)}
+                      </span>
+                    </div>
+                    <h4 className="portfolio-blog-title">{blog.title}</h4>
+                    <p className="portfolio-blog-snippet">{createSnippet(blog.content)}</p>
+                    <Link to={`/blog/${blog.id}`} className="portfolio-blog-link">
+                      Read More <FontAwesomeIcon icon={faArrowRight} />
+                    </Link>
+                  </article>
+                );
+              })
+            ) : (
+              <div className="portfolio-blog-empty">
+                <p>No blog posts available yet. Check back soon!</p>
+              </div>
+            )}
           </div>
         </section>
 

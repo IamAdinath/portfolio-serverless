@@ -560,6 +560,29 @@
   transform: translateX(5px);
 }
 
+/* Blog Loading and Empty States */
+.portfolio-blog-loading,
+.portfolio-blog-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: clamp(2rem, 5vw, 3rem);
+  color: rgba(0, 229, 255, 0.7);
+  font-family: 'Courier New', monospace;
+  font-size: clamp(1rem, 2.5vw, 1.1rem);
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  border-radius: 0;
+}
+
+.portfolio-blog-loading {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
 /* Testimonials - Responsive Synced */
 .portfolio-testimonials-grid {
   display: grid;
