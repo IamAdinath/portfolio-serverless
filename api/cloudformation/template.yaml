@@ -522,7 +522,7 @@ Resources:
         - !Sub "auth-dev.${ApiHostname}"
       UserPoolId: !Ref BlogUserPool
       CustomDomainConfig:
-        CertificateArn: !Sub "arn:aws:acm:us-east-1:${AWS::AccountId}:certificate/${AuthCertificateArn}"
+        CertificateArn: !Sub "arn:aws:acm:us-east-1:${AWS::AccountId}:certificate/${ApiCertificateArn}"
 
   ConfirmUserLambda:
     Type: AWS::Serverless::Function
@@ -764,9 +764,6 @@ Parameters:
     Type: String
     Description: S3 path to resume file
     Default: public/Adinath_Gore_Resume.pdf
-  AuthCertificateArn:
-    Description: ACM certificate ARN for Auth custom domain in us-east-1 (just the UUID part) - must be in us-east-1 region
-    Type: String
 Outputs:
   ApiBaseUrl:
     Description: "Base URL for the API Gateway"
