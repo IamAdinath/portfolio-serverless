@@ -512,7 +512,9 @@ Resources:
   BlogUserPoolDomain:
     Type: AWS::Cognito::UserPoolDomain
     Properties:
-      Domain: !Sub ${ProjectName}-blog-${Env}-auth
+      Domain: !Ref AuthHostname
+      CustomDomainConfig:
+        CertificateArn: !Sub arn:aws:acm:us-east-1:${AWS::AccountId}:certificate/${AuthCertificateArn}
       UserPoolId: !Ref BlogUserPool
 
   ConfirmUserLambda:
@@ -534,6 +536,31 @@ Resources:
       Environment:
         Variables:
           USERS_TABLE: !Ref UsersTable
+          USER_POOL_ID: !Ref BlogUserPool
+
+  LogoutUserLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${ProjectName}-logout-user-${Env}
+      Handler: users.logout.lambda_handler
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AmazonCognitoPowerUser
+      Events:
+        LogoutUser:
+          Type: Api
+          Properties:
+            RestApiId: !Ref PortfolioAPI
+            Path: /logout
+            Method: POST
+        LogoutUserOptions:
+          Type: Api
+          Properties:
+            RestApiId: !Ref PortfolioAPI
+            Path: /logout
+            Method: OPTIONS
+      Environment:
+        Variables:
           USER_POOL_ID: !Ref BlogUserPool
 
   MediaBucket:
@@ -730,6 +757,12 @@ Parameters:
     Type: String
     Description: S3 path to resume file
     Default: public/Adinath_Gore_Resume.pdf
+  AuthHostname:
+    Description: Custom hostname for Cognito Auth (e.g., auth.api.adinathgore.com or auth-dev.api.adinathgore.com)
+    Type: String
+  AuthCertificateArn:
+    Description: ACM certificate ARN for Auth custom domain in us-east-1 (just the UUID part)
+    Type: String
 Outputs:
   ApiBaseUrl:
     Description: "Base URL for the API Gateway"
@@ -756,3 +789,23 @@ Outputs:
     Value: !Ref MediaBucket
     Export:
       Name: !Sub "${AWS::StackName}-MediaBucketName"
+  CognitoUserPoolId:
+    Description: "Cognito User Pool ID"
+    Value: !Ref BlogUserPool
+    Export:
+      Name: !Sub "${AWS::StackName}-CognitoUserPoolId"
+  CognitoUserPoolClientId:
+    Description: "Cognito User Pool Client ID"
+    Value: !Ref BlogUserPoolClient
+    Export:
+      Name: !Sub "${AWS::StackName}-CognitoUserPoolClientId"
+  CognitoAuthDomain:
+    Description: "Cognito Auth custom domain"
+    Value: !Ref AuthHostname
+    Export:
+      Name: !Sub "${AWS::StackName}-CognitoAuthDomain"
+  CognitoCloudFrontDistribution:
+    Description: "CloudFront distribution for Cognito custom domain (for DNS configuration)"
+    Value: !GetAtt BlogUserPoolDomain.CloudFrontDistribution
+    Export:
+      Name: !Sub "${AWS::StackName}-CognitoCloudFrontDistribution"

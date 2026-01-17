@@ -73,6 +73,43 @@ export async function requestUserConfirmation(payload: ConfirmUserPayload): Prom
   }
 }
 
+/**
+ * Logout user - invalidates all tokens on the server side
+ * @returns Promise<{ success: boolean, message: string }>
+ */
+export async function LogoutUser(): Promise<{ success: boolean, message: string }> {
+  const endpoint = `${API_BASE_URL}/logout`;
+
+  try {
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+    });
+
+    const jsonResponse = await response.json().catch(() => ({
+      message: `Request failed with status ${response.status} and no JSON error body.`,
+    }));
+
+    if (!response.ok) {
+      const error: ApiError = new Error(jsonResponse.message || `API Error: ${response.status} ${response.statusText}`);
+      error.statusCode = response.status;
+      error.details = jsonResponse;
+      console.error('LogoutUser API error:', error.details);
+      throw error;
+    }
+
+    return jsonResponse;
+
+  } catch (error) {
+    console.error('Network or other error in LogoutUser:', error);
+    if ((error as ApiError).statusCode) {
+      throw error;
+    }
+    const apiError: ApiError = new Error((error as Error).message || 'An unexpected error occurred during logout.');
+    throw apiError;
+  }
+}
+
 // Unified media API function
 async function getMediaFile(fileType: 'profile' | 'resume') {
   const endpoint = `${API_BASE_URL}/get-media?type=${fileType}`;
