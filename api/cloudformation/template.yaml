@@ -512,10 +512,16 @@ Resources:
   BlogUserPoolDomain:
     Type: AWS::Cognito::UserPoolDomain
     Properties:
-      Domain: !Ref AuthHostname
+      Domain: !If 
+        - IsProduction
+        - !Sub "auth.${ApiHostname}"
+        - !Sub "auth-dev.${ApiHostname}"
       CustomDomainConfig:
-        CertificateArn: !Sub arn:aws:acm:us-east-1:${AWS::AccountId}:certificate/${AuthCertificateArn}
+        CertificateArn: !Sub arn:aws:acm:us-east-1:${AWS::AccountId}:certificate/${ApiCertificateArn}
       UserPoolId: !Ref BlogUserPool
+
+Conditions:
+  IsProduction: !Equals [!Ref Env, "prod"]
 
   ConfirmUserLambda:
     Type: AWS::Serverless::Function
@@ -757,12 +763,6 @@ Parameters:
     Type: String
     Description: S3 path to resume file
     Default: public/Adinath_Gore_Resume.pdf
-  AuthHostname:
-    Description: Custom hostname for Cognito Auth (e.g., auth.api.adinathgore.com or auth-dev.api.adinathgore.com)
-    Type: String
-  AuthCertificateArn:
-    Description: ACM certificate ARN for Auth custom domain in us-east-1 (just the UUID part)
-    Type: String
 Outputs:
   ApiBaseUrl:
     Description: "Base URL for the API Gateway"
@@ -801,7 +801,10 @@ Outputs:
       Name: !Sub "${AWS::StackName}-CognitoUserPoolClientId"
   CognitoAuthDomain:
     Description: "Cognito Auth custom domain"
-    Value: !Ref AuthHostname
+    Value: !If 
+      - IsProduction
+      - !Sub "auth.${ApiHostname}"
+      - !Sub "auth-dev.${ApiHostname}"
     Export:
       Name: !Sub "${AWS::StackName}-CognitoAuthDomain"
   CognitoCloudFrontDistribution:
