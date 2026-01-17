@@ -25,8 +25,15 @@ def get_s3_file(bucket: str, key: str) -> Optional[str]:
 def put_s3_file(bucket: str, key: str, content: str, content_type: str = None) -> bool:
     """Upload a string content to S3."""
     try:
+        # Check if content is base64 encoded
         if isinstance(content, str):
-            content = content.encode('utf-8')
+            try:
+                # Try to decode as base64
+                import base64
+                content = base64.b64decode(content)
+            except Exception:
+                # If not base64, encode as UTF-8
+                content = content.encode('utf-8')
         
         extra_args = {}
         if content_type:

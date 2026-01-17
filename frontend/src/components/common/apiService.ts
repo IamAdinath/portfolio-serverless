@@ -110,7 +110,7 @@ export async function LogoutUser(): Promise<{ success: boolean, message: string 
   }
 }
 
-// Unified media API function
+// Unified media API function (without retry wrapper for large files)
 async function getMediaFile(fileType: 'profile' | 'resume') {
   const endpoint = `${API_BASE_URL}/get-media?type=${fileType}`;
 

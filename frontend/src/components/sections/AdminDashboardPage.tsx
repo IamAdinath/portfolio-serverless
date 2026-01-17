@@ -165,8 +165,8 @@ const AdminDashboardPage: React.FC = () => {
       return;
     }
 
-    if (file.size > 2 * 1024 * 1024) { // 2MB limit
-      addToast('error', 'Image file size must be less than 2MB');
+    if (file.size > 2 * 1024 * 1024) { // 2MB limit (note: base64 encoding adds ~33% overhead)
+      addToast('error', 'Image file size must be less than 2MB. Please compress the image before uploading.');
       return;
     }
 
