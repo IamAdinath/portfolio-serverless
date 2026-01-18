@@ -151,12 +151,9 @@ const SEOHead: React.FC<SEOHeadProps> = ({
       <meta name="msapplication-TileColor" content="#667eea" />
       <meta name="application-name" content="Adinath Gore Portfolio" />
 
-      {/* Security Headers */}
+      {/* Security Headers - Note: These should be set by server/CloudFront, not meta tags */}
       <meta httpEquiv="X-Content-Type-Options" content="nosniff" />
-      <meta httpEquiv="X-Frame-Options" content="DENY" />
-      <meta httpEquiv="X-XSS-Protection" content="1; mode=block" />
       <meta httpEquiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
-      <meta httpEquiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains; preload" />
       
       {/* HTTPS Enforcement */}
       <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests" />
