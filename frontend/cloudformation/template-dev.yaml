@@ -216,7 +216,7 @@ Resources:
 
         ViewerCertificate: !If
           - HasCustomDomain
-          - AcmCertificateArn: !Ref SSLCertArnDev
+          - AcmCertificateArn: !Sub  arn:aws:acm:${AWS::Region}:${AWS::AccountId}:certificate/${SSLCertArnDev}
             SslSupportMethod: sni-only
             MinimumProtocolVersion: TLSv1.2_2021
           - CloudFrontDefaultCertificate: true
