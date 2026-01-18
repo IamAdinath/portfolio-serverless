@@ -175,29 +175,12 @@ Resources:
 
   ApiBasePathMapping:
     Type: AWS::ApiGateway::BasePathMapping
-    DependsOn:
-      - ApiCustomDomain
-      - PortfolioAPIStage
+    DependsOn: ApiCustomDomain
     Properties:
       DomainName: !Ref ApiHostname
       RestApiId: !Ref PortfolioAPI
-      Stage: !Ref PortfolioAPIStage
+      Stage: !Ref Env
       BasePath: !Ref Env
-
-  PortfolioAPIStage:
-    Type: AWS::ApiGateway::Stage
-    Properties:
-      StageName: !Ref Env
-      RestApiId: !Ref PortfolioAPI
-      DeploymentId: !Ref PortfolioAPIDeployment
-
-  PortfolioAPIDeployment:
-    Type: AWS::ApiGateway::Deployment
-    DependsOn:
-      - GetBlogsLambda
-      - CreateBlogsLambda
-    Properties:
-      RestApiId: !Ref PortfolioAPI
 
   GetBlogsLambda:
     Type: AWS::Serverless::Function
