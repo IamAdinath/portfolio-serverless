@@ -53,78 +53,29 @@ export const preloadCriticalEndpoints = (): void => {
 
 /**
  * Add resource hints for better navigation performance
+ * Disabled - React Router handles code splitting and lazy loading
  */
 export const addResourceHints = (): void => {
-  const routes = ['/about', '/blogs', '/resume'];
-  
-  routes.forEach(route => {
-    const link = document.createElement('link');
-    link.rel = 'prefetch';
-    link.href = route;
-    document.head.appendChild(link);
-  });
+  // Disabled - not needed with React Router lazy loading
+  return;
 };
 
 /**
  * Optimize CSS loading and delivery
+ * Disabled - CSS is bundled and optimized by build process
  */
 export const optimizeCSSDelivery = (): void => {
-  // CSS is now loaded directly via component imports
-  // No need for dynamic CSS loading
-  
-  // Remove unused CSS after page load
-  setTimeout(() => {
-    removeUnusedCSS();
-  }, 2000);
-};
-
-/**
- * Remove unused CSS classes and rules
- */
-const removeUnusedCSS = (): void => {
-  if (process.env.NODE_ENV !== 'production') {
-    return;
-  }
-  
-  // This would integrate with a CSS purging solution
-  const unusedSelectors = [
-    '.fa-spin:not(.loading)',
-    '.fa-pulse:not(.heartbeat)',
-    '.debug-*',
-    '.test-*'
-  ];
-  
-  console.log('Would remove unused CSS selectors:', unusedSelectors.length);
+  // Disabled - CSS optimization handled by build process
+  return;
 };
 
 /**
  * Optimize font loading
  */
 export const optimizeFontLoading = (): void => {
-  // Preload critical fonts
-  const criticalFonts = [
-    'https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.woff2'
-  ];
-  
-  criticalFonts.forEach(href => {
-    const link = document.createElement('link');
-    link.rel = 'preload';
-    link.as = 'font';
-    link.type = 'font/woff2';
-    link.href = href;
-    link.crossOrigin = 'anonymous';
-    document.head.appendChild(link);
-  });
-  
-  // Use font-display: swap for better performance
-  const style = document.createElement('style');
-  style.textContent = `
-    @font-face {
-      font-family: 'Inter';
-      font-display: swap;
-    }
-  `;
-  document.head.appendChild(style);
+  // Font preloading disabled - fonts are loaded via Google Fonts CSS
+  // which handles optimization automatically
+  return;
 };
 
 /**
@@ -133,22 +84,4 @@ export const optimizeFontLoading = (): void => {
 export const initializePerformanceOptimizations = (): void => {
   // Add API preconnect immediately
   addApiPreconnect();
-  
-  // Optimize CSS delivery
-  optimizeCSSDelivery();
-  
-  // Optimize font loading
-  optimizeFontLoading();
-  
-  // Preload critical endpoints after a short delay to avoid blocking initial render
-  setTimeout(() => {
-    preloadCriticalEndpoints();
-  }, 100);
-  
-  // Add resource hints after page load
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', addResourceHints);
-  } else {
-    addResourceHints();
-  }
 };
