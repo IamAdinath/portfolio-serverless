@@ -173,14 +173,16 @@ Resources:
           - REGIONAL
       SecurityPolicy: TLS_1_2
 
-  ApiBasePathMapping:
-    Type: AWS::ApiGateway::BasePathMapping
-    DependsOn: ApiCustomDomain
-    Properties:
-      DomainName: !Ref ApiHostname
-      RestApiId: !Ref PortfolioAPI
-      Stage: !Ref Env
-      BasePath: !Ref Env
+  # ApiBasePathMapping:
+  #   Type: AWS::ApiGateway::BasePathMapping
+  #   DependsOn:
+  #     - ApiCustomDomain
+  #     - PortfolioAPI
+  #   Properties:
+  #     DomainName: !Ref ApiHostname
+  #     RestApiId: !Ref PortfolioAPI
+  #     Stage: !Sub "${PortfolioAPI}.Stage"
+  #     BasePath: !Ref Env
 
   GetBlogsLambda:
     Type: AWS::Serverless::Function
