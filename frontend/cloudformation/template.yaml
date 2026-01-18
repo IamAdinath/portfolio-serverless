@@ -29,6 +29,7 @@ Resources:
         RestrictPublicBuckets: false
       WebsiteConfiguration:
         IndexDocument: "index.html"
+        ErrorDocument: "index.html"
       OwnershipControls:
         Rules:
           - ObjectOwnership: BucketOwnerPreferred
@@ -45,7 +46,6 @@ Resources:
             Principal: '*'
             Action: 
             - s3:GetObject
-            - s3:PutObject
             Resource: !Sub arn:aws:s3:::${UIBucket}/*
 
   CloudFrontOriginAccessIdentity:
@@ -145,7 +145,6 @@ Resources:
             - !Ref HostnameProd
             - !Sub "www.${HostnameProd}"
             - "*"
-            - !Sub "www.${Hostname}"
           AccessControlExposeHeaders:
             Items:
             - ALL
@@ -161,12 +160,11 @@ Resources:
           StrictTransportSecurity:
             AccessControlMaxAgeSec: 31536000
             IncludeSubdomains: true
-            Preload: true
             Override: true
           ContentTypeOptions:
             Override: true
           FrameOptions:
-            FrameOption: DENY
+            FrameOption: SAMEORIGIN
             Override: true
           ReferrerPolicy:
             Override: true
@@ -182,15 +180,6 @@ Resources:
           Items:
             - Header: Permissions-Policy
               Value: "geolocation=(), microphone=(), camera=()"
-              Override: true
-            - Header: Cross-Origin-Embedder-Policy
-              Value: "require-corp"
-              Override: true
-            - Header: Cross-Origin-Opener-Policy
-              Value: "same-origin"
-              Override: true
-            - Header: Cross-Origin-Resource-Policy
-              Value: "same-origin"
               Override: true
 
 
