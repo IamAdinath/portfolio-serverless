@@ -81,8 +81,8 @@ Resources:
         MaxTTL: 0
         MinTTL: 0
         ParametersInCacheKeyAndForwardedToOrigin:
-          EnableAcceptEncodingGzip: true
-          EnableAcceptEncodingBrotli: true
+          EnableAcceptEncodingGzip: false
+          EnableAcceptEncodingBrotli: false
           CookiesConfig:
             CookieBehavior: none
           HeadersConfig:
@@ -99,7 +99,7 @@ Resources:
         Comment: "Long-cache for versioned assets (JS/CSS/media). Safe due to hashed filenames."
         DefaultTTL: 31536000
         MaxTTL: 31536000
-        MinTTL: 0
+        MinTTL: 1
         ParametersInCacheKeyAndForwardedToOrigin:
           EnableAcceptEncodingGzip: true
           EnableAcceptEncodingBrotli: true
