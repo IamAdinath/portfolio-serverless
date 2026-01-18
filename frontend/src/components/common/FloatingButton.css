@@ -12,11 +12,11 @@
 }
 
 .floating-button-container {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  z-index: 2147483647;
-  pointer-events: auto;
+  position: fixed !important;
+  bottom: 30px !important;
+  right: 30px !important;
+  z-index: 2147483647 !important;
+  pointer-events: auto !important;
 }
 
 .floating-download-btn {

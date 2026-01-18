@@ -85,7 +85,7 @@
   width: 128px;
   height: 128px;
   cursor: pointer;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .profile-image-container::after {
