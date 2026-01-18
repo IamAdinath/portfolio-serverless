@@ -175,11 +175,13 @@ Resources:
 
   ApiBasePathMapping:
     Type: AWS::ApiGateway::BasePathMapping
-    DependsOn: ApiCustomDomain
+    DependsOn:
+      - ApiCustomDomain
+      - PortfolioAPI
     Properties:
       DomainName: !Ref ApiHostname
       RestApiId: !Ref PortfolioAPI
-      Stage: !Ref Env
+      Stage: !Sub "${PortfolioAPI}.Stage"
       BasePath: !Ref Env
 
   GetBlogsLambda:
