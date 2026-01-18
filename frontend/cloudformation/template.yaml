@@ -1,165 +1,151 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: "AWS CloudFormation template for Portfolio UI - Production"
-Transform: "AWS::Serverless-2016-10-31"
+
 Parameters:
   ProjectName:
     Default: portfolio
-    Description: "The name of the project. Will be used as prefix for resource names"
-    Type: "String"
-  SSLCertArnProd:
-    Description: "ACM Cert arn for custom domain (Production)"
-    Type: "String"
-  HostnameProd:
-    Description: "Hostname in DNS for ui (Production)"
-    Type: "String"
-  BucketName:
-    Description: "UI Bucket Asset"
-    Type: "String"
-  
-Resources:
+    Description: "The name of the project. Used as prefix for resource names"
+    Type: String
 
+  BucketName:
+    Description: "S3 bucket name for UI assets"
+    Type: String
+
+  HostnameProd:
+    Description: "Custom hostname (optional). Example: example.com"
+    Type: String
+    Default: ""
+
+  SSLCertArnProd:
+    Description: "ACM certificate ARN (must be in us-east-1 for CloudFront). Optional if no custom domain."
+    Type: String
+    Default: ""
+
+Conditions:
+  HasCustomDomain: !And
+    - !Not [!Equals [!Ref HostnameProd, ""]]
+    - !Not [!Equals [!Ref SSLCertArnProd, ""]]
+
+Resources:
+  # ===========================
+  # S3 Bucket (PRIVATE)
+  # ===========================
   UIBucket:
-    Type: "AWS::S3::Bucket"
+    Type: AWS::S3::Bucket
     Properties:
       BucketName: !Ref BucketName
-      PublicAccessBlockConfiguration:
-        BlockPublicAcls: false
-        BlockPublicPolicy: false
-        IgnorePublicAcls: false
-        RestrictPublicBuckets: false
-      WebsiteConfiguration:
-        IndexDocument: "index.html"
-        ErrorDocument: "index.html"
       OwnershipControls:
         Rules:
           - ObjectOwnership: BucketOwnerPreferred
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
 
+  # ===========================
+  # CloudFront OAI (legacy but stable)
+  # ===========================
+  CloudFrontOriginAccessIdentity:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: !Sub "${ProjectName}-Prod-OAI"
+
+  # Bucket policy to allow CloudFront to read S3
   UIBucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
       Bucket: !Ref UIBucket
       PolicyDocument:
-        Version: '2012-10-17'
+        Version: "2012-10-17"
         Statement:
-          - Sid: PublicReadGetObject
+          - Sid: AllowCloudFrontRead
             Effect: Allow
-            Principal: '*'
-            Action: 
-            - s3:GetObject
-            Resource: !Sub arn:aws:s3:::${UIBucket}/*
+            Principal:
+              CanonicalUser: !GetAtt CloudFrontOriginAccessIdentity.S3CanonicalUserId
+            Action:
+              - s3:GetObject
+            Resource: !Sub "arn:aws:s3:::${UIBucket}/*"
 
-  CloudFrontOriginAccessIdentity:
-    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
-    Properties:
-      CloudFrontOriginAccessIdentityConfig:
-        Comment: !Sub "${ProjectName}-Stack"
-
-  PortfolioFrontDistribution:
-    Type: AWS::CloudFront::Distribution
-    Properties:
-      DistributionConfig:
-        Origins:
-          - DomainName: !Sub "${BucketName}.s3.amazonaws.com"
-            Id: !Ref UIBucket
-            S3OriginConfig:
-              OriginAccessIdentity: !Sub 'origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}'
-        # Aliases:
-        # - !Ref HostnameProd
-        # - !Sub "www.${HostnameProd}"
-        Enabled: true
-        Comment: !Sub "Cloudfront Distribution for ${ProjectName} UI - Production"
-        DefaultRootObject: index.html
-        CustomErrorResponses:
-            - ErrorCode: 404
-              ResponsePagePath: /index.html
-              ResponseCode: 200
-              ErrorCachingMinTTL: 0
-            - ErrorCode: 403
-              ResponsePagePath: /index.html
-              ResponseCode: 200
-              ErrorCachingMinTTL: 0
-        DefaultCacheBehavior:
-          AllowedMethods:
-            - DELETE
-            - GET
-            - HEAD
-            - OPTIONS
-            - PATCH
-            - POST
-            - PUT
-          TargetOriginId: !Ref UIBucket
-          ForwardedValues:
-            QueryString: false
-            Cookies:
-              Forward: none
-          ViewerProtocolPolicy: redirect-to-https
-          Compress: true
-          ResponseHeadersPolicyId: !Ref PortfolioHeaderPolicy
-          CachePolicyId: !Ref PortfolioCachePolicy
-        PriceClass: PriceClass_200
-        ViewerCertificate:
-          AcmCertificateArn: !Sub arn:aws:acm:${AWS::Region}:${AWS::AccountId}:certificate/${SSLCertArnProd}
-          SslSupportMethod: "sni-only"
-
-  PortfolioCachePolicy:
+  # ===========================
+  # Cache Policy: NO CACHE for index.html
+  # ===========================
+  NoCachePolicy:
     Type: AWS::CloudFront::CachePolicy
     Properties:
       CachePolicyConfig:
-        Name: !Sub ${AWS::StackName}-cache-policy
-        Comment: !Sub "Cache policy for ${ProjectName} Production with compression optimization"
-        DefaultTTL: 86400  # 1 day
-        MaxTTL: 31536000   # 1 year
+        Name: !Sub "${AWS::StackName}-no-cache"
+        Comment: "No-cache policy for index.html"
+        DefaultTTL: 0
+        MaxTTL: 0
         MinTTL: 0
+        ParametersInCacheKeyAndForwardedToOrigin:
+          EnableAcceptEncodingGzip: false
+          EnableAcceptEncodingBrotli: false
+          CookiesConfig:
+            CookieBehavior: none
+          HeadersConfig:
+            HeaderBehavior: none
+          QueryStringsConfig:
+            QueryStringBehavior: none
+
+  # Cache Policy: Long cache for static assets
+  LongCachePolicy:
+    Type: AWS::CloudFront::CachePolicy
+    Properties:
+      CachePolicyConfig:
+        Name: !Sub "${AWS::StackName}-long-cache"
+        Comment: "Long-cache for versioned assets (JS/CSS/media). Safe due to hashed filenames."
+        DefaultTTL: 31536000
+        MaxTTL: 31536000
+        MinTTL: 1
         ParametersInCacheKeyAndForwardedToOrigin:
           EnableAcceptEncodingGzip: true
           EnableAcceptEncodingBrotli: true
-          QueryStringsConfig:
-            QueryStringBehavior: none
-          HeadersConfig:
-            HeaderBehavior: whitelist
-            Headers:
-              - CloudFront-Viewer-Country
           CookiesConfig:
             CookieBehavior: none
+          HeadersConfig:
+            HeaderBehavior: none
+          QueryStringsConfig:
+            QueryStringBehavior: none
 
+  # ===========================
+  # Response Headers Policy (basic + security)
+  # ===========================
   PortfolioHeaderPolicy:
     Type: AWS::CloudFront::ResponseHeadersPolicy
     Properties:
       ResponseHeadersPolicyConfig:
-        Name: !Sub ${AWS::StackName}-header-policy
-        Comment: !Sub "Header policy for ${ProjectName} Production."
+        Name: !Sub "${AWS::StackName}-headers"
+        Comment: "Security headers for Portfolio UI"
         CorsConfig:
-          OriginOverride: false
+          OriginOverride: true
           AccessControlAllowCredentials: false
           AccessControlAllowHeaders:
             Items:
-              - ALL
+              - "*"
           AccessControlAllowMethods:
             Items:
-              - POST
               - GET
+              - HEAD
               - OPTIONS
-              - DELETE
           AccessControlAllowOrigins:
             Items:
-            # - !Ref HostnameProd
-            # - !Sub "www.${HostnameProd}"
-            - "*"
+              - "*"
           AccessControlExposeHeaders:
             Items:
-            - ALL
-          AccessControlMaxAgeSec: 3600
+              - "*"
+          AccessControlMaxAgeSec: 600
         RemoveHeadersConfig:
           Items:
             - Header: server
             - Header: x-powered-by
-        ServerTimingHeadersConfig:
-          Enabled: true
-          SamplingRate: 50
         SecurityHeadersConfig:
           StrictTransportSecurity:
             AccessControlMaxAgeSec: 31536000
             IncludeSubdomains: true
+            Preload: true
             Override: true
           ContentTypeOptions:
             Override: true
@@ -167,32 +153,93 @@ Resources:
             FrameOption: SAMEORIGIN
             Override: true
           ReferrerPolicy:
-            Override: true
             ReferrerPolicy: strict-origin-when-cross-origin
-          XSSProtection:
             Override: true
+          XSSProtection:
             Protection: true
             ModeBlock: true
-          ContentSecurityPolicy:
-            ContentSecurityPolicy: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https:; frame-ancestors 'none'; base-uri 'self'; form-action 'self';"
             Override: true
-        CustomHeadersConfig:
-          Items:
-            - Header: Permissions-Policy
-              Value: "geolocation=(), microphone=(), camera=()"
-              Override: true
 
+  # ===========================
+  # CloudFront Distribution
+  # ===========================
+  PortfolioFrontDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Enabled: true
+        Comment: !Sub "CloudFront Distribution for ${ProjectName} UI - Production"
+        DefaultRootObject: index.html
+
+        Origins:
+          - Id: UIOrigin
+            DomainName: !GetAtt UIBucket.RegionalDomainName
+            S3OriginConfig:
+              OriginAccessIdentity: !Sub "origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}"
+
+        # SPA fallback (React Router)
+        CustomErrorResponses:
+          - ErrorCode: 403
+            ResponsePagePath: /index.html
+            ResponseCode: 200
+            ErrorCachingMinTTL: 0
+          - ErrorCode: 404
+            ResponsePagePath: /index.html
+            ResponseCode: 200
+            ErrorCachingMinTTL: 0
+
+        # Ordered behavior: index.html must be NO-CACHE
+        CacheBehaviors:
+          - PathPattern: "index.html"
+            TargetOriginId: UIOrigin
+            ViewerProtocolPolicy: redirect-to-https
+            AllowedMethods: [GET, HEAD, OPTIONS]
+            Compress: true
+            CachePolicyId: !Ref NoCachePolicy
+            ResponseHeadersPolicyId: !Ref PortfolioHeaderPolicy
+
+        # Default behavior: static assets can be cached long
+        DefaultCacheBehavior:
+          TargetOriginId: UIOrigin
+          ViewerProtocolPolicy: redirect-to-https
+          AllowedMethods: [GET, HEAD, OPTIONS]
+          Compress: true
+          CachePolicyId: !Ref LongCachePolicy
+          ResponseHeadersPolicyId: !Ref PortfolioHeaderPolicy
+
+        PriceClass: PriceClass_200
+
+        Aliases: !If
+          - HasCustomDomain
+          - - !Ref HostnameProd
+            - !Sub "www.${HostnameProd}"
+          - !Ref "AWS::NoValue"
+
+        ViewerCertificate: !If
+          - HasCustomDomain
+          - AcmCertificateArn: !Sub  arn:aws:acm:${AWS::Region}:${AWS::AccountId}:certificate/${SSLCertArnProd}
+            SslSupportMethod: sni-only
+            MinimumProtocolVersion: TLSv1.2_2021
+          - CloudFrontDefaultCertificate: true
 
 Outputs:
-  UIBucket:
+  UIBucketName:
     Value: !Ref UIBucket
     Export:
       Name: !Sub "${AWS::StackName}-UIBucketName"
+
   CloudFrontDistributionID:
     Value: !Ref PortfolioFrontDistribution
     Export:
       Name: !Sub "${AWS::StackName}-DistributionID"
+
+  CloudFrontURL:
+    Value: !Sub "https://${PortfolioFrontDistribution.DomainName}"
+    Export:
+      Name: !Sub "${AWS::StackName}-CloudFrontURL"
+
   CustomDomainURL:
+    Condition: HasCustomDomain
     Value: !Sub "https://${HostnameProd}"
     Export:
       Name: !Sub "${AWS::StackName}-CustomDomainURL"
