@@ -64,8 +64,8 @@ Resources:
             Id: !Ref UIBucket
             S3OriginConfig:
               OriginAccessIdentity: !Sub 'origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}'
-        Aliases:
-        - !Ref HostnameDev
+        # Aliases:
+        # - !Ref HostnameDev
         Enabled: true
         Comment: !Sub "Cloudfront Distribution for ${ProjectName} UI - Development"
         DefaultRootObject: index.html
@@ -142,8 +142,8 @@ Resources:
               - DELETE
           AccessControlAllowOrigins:
             Items:
-            - !Ref HostnameDev
-            - !Sub "www.${HostnameDev}"
+            # - !Ref HostnameDev
+            # - !Sub "www.${HostnameDev}"
             - "*"
           AccessControlExposeHeaders:
             Items:
