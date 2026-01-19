@@ -53,8 +53,12 @@ def lambda_handler(event, context):
             )
 
         # Ensure we always use public/ folder and .pdf extension
-        final_path = "public/resume.pdf"
-        
+        resume_path = os.getenv("RESUME_KEY")
+        if resume_path.startswith("public/") and resume_path.lower().endswith(".pdf"):
+            final_path = resume_path
+        else:
+            logger.warning("RESUME_KEY is not in the correct format. Overriding to 'public/Adinath_Gore_Resume.pdf'")
+            final_path = "public/Adinath_Gore_Resume.pdf"
         logger.info(f"Uploading resume to: {final_path}")
 
         # Delete existing file if it exists
