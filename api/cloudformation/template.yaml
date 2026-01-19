@@ -672,7 +672,7 @@ Resources:
         - AWSLambdaBasicExecutionRole
         - AmazonS3FullAccess
       Events:
-        UploadProfile:
+        UploadProfilePost:
           Type: Api
           Properties:
             RestApiId: !Ref PortfolioAPI
@@ -680,25 +680,44 @@ Resources:
             Method: POST
             Auth:
               Authorizer: CognitoAuth
-      Environment:
-        Variables:
-          MEDIA_BUCKET: !Ref MediaBucket
-          PROFILE_IMAGE_PATH: !Ref ProfileImagePath
-
-  UploadProfileImageOptionsLambda:
-    Type: AWS::Serverless::Function
-    Properties:
-      FunctionName: !Sub ${ProjectName}-upload-profile-image-options-${Env}
-      Handler: common.options_handler.lambda_handler
-      Policies:
-        - AWSLambdaBasicExecutionRole
-      Events:
         UploadProfileOptions:
           Type: Api
           Properties:
             RestApiId: !Ref PortfolioAPI
             Path: /upload-profile-image
             Method: OPTIONS
+      Environment:
+        Variables:
+          MEDIA_BUCKET: !Ref MediaBucket
+          PROFILE_IMAGE_PATH: !Ref ProfileImagePath
+
+  UploadResumeLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${ProjectName}-upload-resume-${Env}
+      Handler: resume.upload.lambda_handler
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AmazonS3FullAccess
+      Events:
+        UploadResumePost:
+          Type: Api
+          Properties:
+            RestApiId: !Ref PortfolioAPI
+            Path: /upload-resume
+            Method: POST
+            Auth:
+              Authorizer: CognitoAuth
+        UploadResumeOptions:
+          Type: Api
+          Properties:
+            RestApiId: !Ref PortfolioAPI
+            Path: /upload-resume
+            Method: OPTIONS
+      Environment:
+        Variables:
+          MEDIA_BUCKET: !Ref MediaBucket
+          RESUME_KEY: !Ref ResumePath
 
   UploadToS3Lambda:
     Type: AWS::Serverless::Function
