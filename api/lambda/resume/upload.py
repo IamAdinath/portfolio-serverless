@@ -17,8 +17,14 @@ def lambda_handler(event, context):
         return build_response(StatusCodes.OK, Headers.CORS, {})
 
     media_bucket = os.getenv("MEDIA_BUCKET")
-    resume_path = os.getenv("RESUME_KEY", "public/resume.pdf")
-    
+    resume_path = os.getenv("RESUME_KEY")
+    if not resume_path:
+        logger.error("RESUME_KEY env variable is not set")
+        return build_response(
+            StatusCodes.INTERNAL_SERVER_ERROR,
+            Headers.CORS,
+            {"error": "RESUME_KEY env variable not set"},
+        )
     if not media_bucket:
         logger.error("MEDIA_BUCKET env variable is not set")
         return build_response(
