@@ -17,14 +17,8 @@ def lambda_handler(event, context):
         return build_response(StatusCodes.OK, Headers.CORS, {})
 
     media_bucket = os.getenv("MEDIA_BUCKET")
-    resume_path = os.getenv("RESUME_KEY")
-    if not resume_path:
-        logger.error("RESUME_KEY env variable is not set")
-        return build_response(
-            StatusCodes.INTERNAL_SERVER_ERROR,
-            Headers.CORS,
-            {"error": "RESUME_KEY env variable not set"},
-        )
+    resume_path = os.getenv("RESUME_KEY", "public/Adinath_Gore_Resume.pdf")
+    
     if not media_bucket:
         logger.error("MEDIA_BUCKET env variable is not set")
         return build_response(
@@ -52,30 +46,23 @@ def lambda_handler(event, context):
                 {"error": "File content is required"},
             )
 
-        # Ensure we always use public/ folder and .pdf extension
-        resume_path = os.getenv("RESUME_KEY")
-        if resume_path.startswith("public/") and resume_path.lower().endswith(".pdf"):
-            final_path = resume_path
-        else:
-            logger.warning("RESUME_KEY is not in the correct format. Overriding to 'public/Adinath_Gore_Resume.pdf'")
-            final_path = "public/Adinath_Gore_Resume.pdf"
-        logger.info(f"Uploading resume to: {final_path}")
+        logger.info(f"Uploading resume to: {resume_path}")
 
         # Delete existing file if it exists
         try:
-            delete_s3_file(media_bucket, final_path)
-            logger.info(f"Deleted existing resume at {final_path}")
+            delete_s3_file(media_bucket, resume_path)
+            logger.info(f"Deleted existing resume at {resume_path}")
         except Exception as e:
             logger.info(f"No existing file to delete or error deleting: {str(e)}")
 
         # Upload new file with content type
-        put_s3_file(media_bucket, final_path, file_content, content_type='application/pdf')
+        put_s3_file(media_bucket, resume_path, file_content, content_type='application/pdf')
         
         # Get metadata including last modified date
-        metadata = get_s3_file_metadata(media_bucket, final_path)
+        metadata = get_s3_file_metadata(media_bucket, resume_path)
         last_modified = metadata.get('LastModified').isoformat() if metadata.get('LastModified') else None
         
-        file_url = get_s3_file_url(media_bucket, final_path, expires_in=3600)
+        file_url = get_s3_file_url(media_bucket, resume_path, expires_in=3600)
         
         return build_response(
             StatusCodes.OK,
