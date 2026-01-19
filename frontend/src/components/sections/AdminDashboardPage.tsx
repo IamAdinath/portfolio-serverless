@@ -17,7 +17,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../common/ToastProvider';
 import { usePageTitle } from '../common/usePageTitle';
 import { useConfirmation } from '../../hooks/useConfirmationModal';
-import { GetBlogPosts, DeleteBlogPost, uploadFileToS3, UploadProfileImage } from '../common/apiService';
+import { GetBlogPosts, DeleteBlogPost, uploadFileToS3, UploadProfileImage, UploadResume } from '../common/apiService';
 import { BlogPostData } from '../../types';
 import ErrorBoundary from '../common/ErrorBoundary';
 import ConfirmationModal from '../common/ConfirmationModal';
@@ -139,7 +139,7 @@ const AdminDashboardPage: React.FC = () => {
           const base64Content = reader.result as string;
           const base64Data = base64Content.split(',')[1]; // Remove data:application/pdf;base64, prefix
 
-          await uploadFileToS3('resume.pdf', base64Data);
+          await UploadResume(base64Data);
           addToast('success', 'Resume uploaded successfully');
         } catch (error) {
           console.error('Failed to upload resume:', error);

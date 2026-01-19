@@ -13,8 +13,8 @@ def lambda_handler(event, context):
         return s3 file signed url
     """
     try:
-        bucket = os.environ['RESUME_BUCKET']
-        resume_file = os.environ['RESUME_KEY']
+        bucket = os.environ.get('RESUME_BUCKET') or os.environ.get('MEDIA_BUCKET')
+        resume_file = os.environ.get('RESUME_KEY', 'public/Adinath_Gore_Resume.pdf')
         url = s3.get_s3_file_url(bucket, resume_file)
         if not url:
             return utils.build_response(StatusCodes.NOT_FOUND, Headers.CORS)
