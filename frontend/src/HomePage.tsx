@@ -8,6 +8,7 @@ import {
   // faQuoteLeft, // Temporarily hidden - testimonials
   faArrowRight, 
   faDownload, 
+  faEye,
   // faStar, // Temporarily hidden - testimonials
   faLinkedin, 
   faGithub, 
@@ -23,6 +24,7 @@ import SEOHead from './components/common/SEOHead';
 import { SOCIAL_LINKS } from './constants';
 import { GetAllPublishedBlogs, getProfileImage } from './components/common/apiService';
 import { Blog } from './types';
+import FeaturedMediumArticles from './components/sections/FeaturedMediumArticles';
 import './HomePage.css';
 
 const HomePage: React.FC = () => {
@@ -253,7 +255,7 @@ const HomePage: React.FC = () => {
                   About Me
                 </Link>
                 <Link to="/resume" className="portfolio-btn portfolio-btn-secondary">
-                  <FontAwesomeIcon icon={faDownload} />
+                  <FontAwesomeIcon icon={faEye} />
                   View Resume
                 </Link>
               </div>
@@ -410,6 +412,9 @@ const HomePage: React.FC = () => {
             )}
           </div>
         </section>
+
+        {/* Featured Medium Articles */}
+        <FeaturedMediumArticles />
 
         {/* Testimonials - Temporarily Hidden */}
         {/* <section className="portfolio-testimonials-section">

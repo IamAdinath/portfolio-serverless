@@ -1,0 +1,51 @@
+[
+  {
+    "id": 1,
+    "title": "Unlocking Backend Excellence: The Crucial Role of Unit Testing",
+    "publisher": "Python in Plain English",
+    "url": "https://medium.com/python-in-plain-english/unlocking-backend-excellence-the-crucial-role-of-unit-testing-d86f94206627",
+    "image": "https://miro.medium.com/v2/resize:fit:1200/1*jCr7KYZ5_TQK4TkUjapv2w.jpeg"
+  },
+  {
+    "id": 2,
+    "title": "Crafting Resilient and Timeless Pythonic Code with SOLID Principles",
+    "publisher": "Python in Plain English",
+    "url": "https://medium.com/python-in-plain-english/crafting-resilient-and-timeless-pythonic-code-with-solid-principles-6010eb3d5e78",
+    "image": "https://miro.medium.com/v2/resize:fit:720/format:webp/1*PdHbMwTMwKnfElddzFxIlA.png"
+  },
+  {
+    "id": 3,
+    "title": "Mastering Machine Learning Tools: Explore to Deploy",
+    "publisher": "Python in Plain English",
+    "url": "https://medium.com/python-in-plain-english/mastering-machine-learning-tools-explore-to-deploy-169b7ba3207f",
+    "image": "https://miro.medium.com/v2/resize:fit:720/format:webp/1*DAIbVHBdLHgKnTvtvsWLWw.jpeg"
+  },
+  {
+    "id": 4,
+    "title": "DynamoDB: What, Why, and How",
+    "publisher": "AWS in Plain English",
+    "url": "https://medium.com/aws-in-plain-english/dynamodb-what-why-and-how-e177e430999c",
+    "image": "https://miro.medium.com/v2/resize:fit:720/format:webp/1*bjd-Db1gbvIyxcJ8-D1AmA.png"
+  },
+  {
+    "id": 5,
+    "title": "AWS Cognito Security: Mastering User Identity with Confidence",
+    "publisher": "AWS in Plain English",
+    "url": "https://medium.com/aws-in-plain-english/aws-cognito-security-mastering-user-identity-with-confidence-e2deced80ab7",
+    "image": "https://miro.medium.com/v2/resize:fit:720/format:webp/1*8uc4IATdJZ7wRWpdOR-vyA.jpeg"
+  },
+  {
+    "id": 6,
+    "title": "Strengthening Cloud Security: A Deep Dive into AWS IAM",
+    "publisher": "AWS in Plain English",
+    "url": "https://medium.com/aws-in-plain-english/strengthening-cloud-security-a-deep-dive-into-aws-iam-f1db74c66f84",
+    "image": "https://miro.medium.com/v2/resize:fit:720/format:webp/1*YpTJ1oKDlOiEoNWro2LLHA.png"
+  },
+  {
+    "id": 7,
+    "title": "Why You Should Choose Python",
+    "publisher": "Analytics Vidhya",
+    "url": "https://medium.com/analytics-vidhya/why-you-should-choose-python-9079a97ae359",
+    "image": "https://miro.medium.com/v2/resize:fit:720/format:webp/1*8nSkPDw1ry0gEGH_NGdPRw.jpeg"
+  }
+]
