@@ -241,6 +241,64 @@
   transform: scale(1.1);
 }
 
+/* Download Resume Button */
+.download-resume-btn {
+  padding: 10px 16px;
+  background: rgba(0, 0, 0, 0.6);
+  color: rgba(0, 229, 255, 0.9);
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  border-radius: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.download-resume-btn:hover {
+  background: rgba(0, 229, 255, 0.1);
+  color: #00E5FF;
+  border-color: #00E5FF;
+  transform: translateY(-2px);
+}
+
+.download-resume-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mobile-download-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 20px;
+  background: rgba(0, 229, 255, 0.05);
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  border-radius: 0;
+  color: #00E5FF;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 10px;
+}
+
+.mobile-download-btn:hover {
+  background: rgba(0, 229, 255, 0.1);
+  border-color: #00E5FF;
+  transform: translateX(5px);
+}
+
+.mobile-download-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 /* Mobile Menu Button */
 .mobile-menu-btn {
   display: flex;

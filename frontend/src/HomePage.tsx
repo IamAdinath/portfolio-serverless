@@ -5,10 +5,10 @@ import {
   faCode, 
   faUser, 
   faBlog, 
-  faQuoteLeft, 
+  // faQuoteLeft, // Temporarily hidden - testimonials
   faArrowRight, 
   faDownload, 
-  faStar,
+  // faStar, // Temporarily hidden - testimonials
   faLinkedin, 
   faGithub, 
   faMedium,
@@ -124,22 +124,23 @@ const HomePage: React.FC = () => {
     setCurrentCertBatch((prev) => (prev - 1 + certBatches.length) % certBatches.length);
   };
 
-  const testimonials = [
-    {
-      id: 1,
-      quote: 'Adinath delivered exceptional results on our project. His technical expertise and attention to detail were outstanding.',
-      author: 'Sarah Johnson',
-      position: 'Project Manager @ TechCorp',
-      rating: 5
-    },
-    {
-      id: 2,
-      quote: 'Working with Adinath was a pleasure. He brought innovative solutions and maintained excellent communication throughout.',
-      author: 'Michael Chen',
-      position: 'CTO @ StartupX',
-      rating: 5
-    },
-  ];
+  // Testimonials data - temporarily hidden
+  // const testimonials = [
+  //   {
+  //     id: 1,
+  //     quote: 'Adinath delivered exceptional results on our project. His technical expertise and attention to detail were outstanding.',
+  //     author: 'Sarah Johnson',
+  //     position: 'Project Manager @ TechCorp',
+  //     rating: 5
+  //   },
+  //   {
+  //     id: 2,
+  //     quote: 'Working with Adinath was a pleasure. He brought innovative solutions and maintained excellent communication throughout.',
+  //     author: 'Michael Chen',
+  //     position: 'CTO @ StartupX',
+  //     rating: 5
+  //   },
+  // ];
 
   const skillBatches = React.useMemo(() => {
     const skills = [
@@ -410,8 +411,8 @@ const HomePage: React.FC = () => {
           </div>
         </section>
 
-        {/* Testimonials */}
-        <section className="portfolio-testimonials-section">
+        {/* Testimonials - Temporarily Hidden */}
+        {/* <section className="portfolio-testimonials-section">
           <div className="portfolio-section-header">
             <h3>
               <FontAwesomeIcon icon={faQuoteLeft} className="portfolio-section-icon" />
@@ -436,7 +437,7 @@ const HomePage: React.FC = () => {
               </div>
             ))}
           </div>
-        </section>
+        </section> */}
 
         {/* Connect Section */}
         {/* Site Navigation */}

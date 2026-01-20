@@ -14,7 +14,7 @@
 .floating-button-container {
   position: fixed !important;
   bottom: 30px !important;
-  right: 30px !important;
+  left: 30px !important;
   z-index: 2147483647 !important;
   pointer-events: auto !important;
 }
@@ -128,8 +128,8 @@
 
 @media (max-width: 768px) {
   .floating-button-container {
-    bottom: 20px;
-    right: 20px;
+    bottom: 20px !important;
+    left: 20px !important;
   }
   
   .floating-download-btn {
@@ -140,8 +140,8 @@
 
 @media (max-width: 480px) {
   .floating-button-container {
-    bottom: 15px;
-    right: 15px;
+    bottom: 15px !important;
+    left: 15px !important;
   }
   
   .floating-download-btn {

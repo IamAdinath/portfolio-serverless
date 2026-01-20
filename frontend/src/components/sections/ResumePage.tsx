@@ -3,7 +3,6 @@ import './ResumePage.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLinkedin, faMedium } from '@fortawesome/free-brands-svg-icons';
 import { faMobileAndroid, faEnvelope, faAward, faGraduationCap, faCode, faBriefcase } from '@fortawesome/free-solid-svg-icons';
-import ResumeDownloadButton from '../common/ResumeDownloadButton';
 import { usePageTitle } from '../common/usePageTitle';
 import SEOHead from '../common/SEOHead';
 import { CONTACT, SOCIAL_LINKS } from '../../constants';
@@ -305,7 +304,7 @@ const ResumePage: React.FC = () => {
                 </div> {/* End Main Content Area */}
 
                 {/* Floating Download Button */}
-                <ResumeDownloadButton />
+                {/* Removed - now in header */}
             </div>
         </>
     );

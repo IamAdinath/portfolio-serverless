@@ -1,10 +1,14 @@
-// src/components/common/Header.tsx - Modern Portfolio Header
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faTimes, faUser, faSignOutAlt, faPen } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faTimes, faUser, faSignOutAlt, faPen, faDownload } from '@fortawesome/free-solid-svg-icons';
 import SmallLogo from './SmallLogo';
+import { DownloadResume } from './apiService';
+import { downloadFile } from '../../utils/downloadUtils';
+import { useToast } from './ToastProvider';
+import { trackDownload } from '../../utils/analytics';
+import { FILES } from '../../constants';
 import './Header.css';
 
 const publicNavLinks = [
@@ -23,15 +27,16 @@ const authNavLinks = [
 
 const Header: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { isAuthenticated, user, logout } = useAuth();
+  const { addToast } = useToast();
 
   // Combine nav links based on auth status
   const navLinks = [
     ...publicNavLinks,
     ...(isAuthenticated ? authNavLinks : []),
-    ...(isAuthenticated ? [] : [{ label: 'Login', path: '/auth' }]),
   ];
 
   const handleNavClick = (path: string) => {
@@ -42,6 +47,26 @@ const Header: React.FC = () => {
   const handleLogout = () => {
     logout();
     setIsMobileMenuOpen(false);
+  };
+
+  const handleDownload = async () => {
+    try {
+      setIsDownloading(true);
+      const response = await DownloadResume();
+      const presignedUrl = response.downloadUrl;
+      const filename = response.filename || FILES.RESUME_FILENAME;
+
+      if (presignedUrl) {
+        await downloadFile(presignedUrl, filename);
+        addToast('success', 'Resume downloaded successfully!');
+        trackDownload(filename, 'pdf');
+      }
+    } catch (err) {
+      console.error('Failed to download resume:', err);
+      addToast('error', 'Failed to download resume. Please try again.');
+    } finally {
+      setIsDownloading(false);
+    }
   };
 
   return (
@@ -82,6 +107,12 @@ const Header: React.FC = () => {
               </button>
             </div>
           )}
+          
+          {/* Download Resume Button */}
+          <button onClick={handleDownload} className="download-resume-btn" disabled={isDownloading} title="Download Resume">
+            <FontAwesomeIcon icon={faDownload} />
+            {isDownloading ? 'Downloading...' : 'Resume'}
+          </button>
         </nav>
 
         {/* Mobile Menu Button */}
@@ -125,6 +156,12 @@ const Header: React.FC = () => {
               </button>
             </div>
           )}
+          
+          {/* Download Resume Button (Mobile) */}
+          <button onClick={handleDownload} className="mobile-download-btn" disabled={isDownloading}>
+            <FontAwesomeIcon icon={faDownload} />
+            {isDownloading ? 'Downloading...' : 'Download Resume'}
+          </button>
         </div>
       </nav>
 
