@@ -35,6 +35,7 @@ const Footer: React.FC = () => {
     { label: 'About', path: '/about' },
     { label: 'Resume', path: '/resume' },
     { label: 'Blogs', path: '/blogs' },
+    { label: 'Login', path: '/auth' },
   ];
 
   const scrollToTop = () => {

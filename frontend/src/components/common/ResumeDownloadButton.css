@@ -3,7 +3,7 @@
 .floating-download-btn {
   position: fixed;
   bottom: 30px;
-  right: 30px;
+  left: 30px;
   padding: 15px 25px;
   background: rgba(0, 0, 0, 0.9);
   color: #00E5FF;
@@ -146,7 +146,7 @@
 @media (max-width: 768px) {
   .floating-download-btn {
     bottom: 20px;
-    right: 20px;
+    left: 20px;
     padding: 12px 20px;
     font-size: 0.9rem;
   }
@@ -155,7 +155,7 @@
 @media (max-width: 480px) {
   .floating-download-btn {
     bottom: 15px;
-    right: 15px;
+    left: 15px;
     padding: 10px 16px;
     font-size: 0.85rem;
     gap: 8px;
