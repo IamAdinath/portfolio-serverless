@@ -2,94 +2,8 @@ import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 import { faMedium } from '@fortawesome/free-brands-svg-icons';
+import mediumArticlesData from '../../data/mediumArticles.json';
 import './FeaturedMediumArticles.css';
-
-const mediumArticles = [
-  {
-    id: 1,
-    title: 'Unlocking Backend Excellence: The Crucial Role of Unit Testing',
-    publisher: 'Python in Plain English',
-    link: 'https://medium.com/python-in-plain-english/unlocking-backend-excellence-the-crucial-role-of-unit-testing-d86f94206627',
-    image: 'https://via.placeholder.com/400x250/1a1a2e/00E5FF?text=Medium+Article'
-  },
-  {
-    id: 2,
-    title: 'Building Scalable APIs with Django REST Framework',
-    publisher: 'Python in Plain English',
-    link: 'https://medium.com/@adinathgore',
-    image: 'https://via.placeholder.com/400x250/1a1a2e/00E5FF?text=Medium+Article'
-  },
-  {
-    id: 3,
-    title: 'AWS Lambda Best Practices for Production',
-    publisher: 'AWS in Plain English',
-    link: 'https://medium.com/@adinathgore',
-    image: 'https://via.placeholder.com/400x250/1a1a2e/00E5FF?text=Medium+Article'
-  },
-  {
-    id: 4,
-    title: 'Microservices Architecture with Docker and Kubernetes',
-    publisher: 'DevOps.dev',
-    link: 'https://medium.com/@adinathgore',
-    image: 'https://via.placeholder.com/400x250/1a1a2e/00E5FF?text=Medium+Article'
-  },
-  {
-    id: 5,
-    title: 'PostgreSQL Performance Optimization Techniques',
-    publisher: 'Database Dive',
-    link: 'https://medium.com/@adinathgore',
-    image: 'https://via.placeholder.com/400x250/1a1a2e/00E5FF?text=Medium+Article'
-  },
-  {
-    id: 6,
-    title: 'Serverless Architecture: When and Why',
-    publisher: 'Cloud Computing',
-    link: 'https://medium.com/@adinathgore',
-    image: 'https://via.placeholder.com/400x250/1a1a2e/00E5FF?text=Medium+Article'
-  },
-  {
-    id: 7,
-    title: 'React Hooks: A Complete Guide',
-    publisher: 'JavaScript in Plain English',
-    link: 'https://medium.com/@adinathgore',
-    image: 'https://via.placeholder.com/400x250/1a1a2e/00E5FF?text=Medium+Article'
-  },
-  {
-    id: 8,
-    title: 'CI/CD Pipeline with GitHub Actions',
-    publisher: 'DevOps.dev',
-    link: 'https://medium.com/@adinathgore',
-    image: 'https://via.placeholder.com/400x250/1a1a2e/00E5FF?text=Medium+Article'
-  },
-  {
-    id: 9,
-    title: 'Python Async/Await: Mastering Concurrency',
-    publisher: 'Python in Plain English',
-    link: 'https://medium.com/@adinathgore',
-    image: 'https://via.placeholder.com/400x250/1a1a2e/00E5FF?text=Medium+Article'
-  },
-  {
-    id: 10,
-    title: 'GraphQL vs REST: Making the Right Choice',
-    publisher: 'API Design',
-    link: 'https://medium.com/@adinathgore',
-    image: 'https://via.placeholder.com/400x250/1a1a2e/00E5FF?text=Medium+Article'
-  },
-  {
-    id: 11,
-    title: 'Monitoring and Logging in Production',
-    publisher: 'DevOps.dev',
-    link: 'https://medium.com/@adinathgore',
-    image: 'https://via.placeholder.com/400x250/1a1a2e/00E5FF?text=Medium+Article'
-  },
-  {
-    id: 12,
-    title: 'Security Best Practices for Web Applications',
-    publisher: 'InfoSec Write-ups',
-    link: 'https://medium.com/@adinathgore',
-    image: 'https://via.placeholder.com/400x250/1a1a2e/00E5FF?text=Medium+Article'
-  }
-];
 
 interface FeaturedMediumArticlesProps {
   className?: string;
@@ -99,8 +13,8 @@ const FeaturedMediumArticles: React.FC<FeaturedMediumArticlesProps> = ({ classNa
   const [currentBatch, setCurrentBatch] = useState(0);
 
   const batches = [];
-  for (let i = 0; i < mediumArticles.length; i += 3) {
-    batches.push(mediumArticles.slice(i, i + 3));
+  for (let i = 0; i < mediumArticlesData.length; i += 3) {
+    batches.push(mediumArticlesData.slice(i, i + 3));
   }
 
   const nextBatch = () => {
@@ -156,7 +70,7 @@ const FeaturedMediumArticles: React.FC<FeaturedMediumArticlesProps> = ({ classNa
                   Published in <strong>{article.publisher}</strong>
                 </p>
                 <a 
-                  href={article.link}
+                  href={article.url}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="featured-medium-link"

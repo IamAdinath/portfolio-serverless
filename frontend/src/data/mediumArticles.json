@@ -1,0 +1,93 @@
+[
+  {
+    "id": 1,
+    "title": "Unlocking Backend Excellence: The Crucial Role of Unit Testing",
+    "publisher": "Python in Plain English",
+    "url": "https://medium.com/python-in-plain-english/unlocking-backend-excellence-the-crucial-role-of-unit-testing-d86f94206627",
+    "image": "https://miro.medium.com/v2/resize:fit:1200/1*jCr7KYZ5_TQK4TkUjapv2w.jpeg"
+  },
+  {
+    "id": 2,
+    "title": "Crafting Resilient and Timeless Pythonic Code with SOLID Principles",
+    "publisher": "Python in Plain English",
+    "url": "https://medium.com/python-in-plain-english/crafting-resilient-and-timeless-pythonic-code-with-solid-principles-6010eb3d5e78",
+    "image": "https://miro.medium.com/v2/resize:fit:720/format:webp/1*PdHbMwTMwKnfElddzFxIlA.png"
+  },
+  {
+    "id": 3,
+    "title": "Mastering Machine Learning Tools: Explore to Deploy",
+    "publisher": "Python in Plain English",
+    "url": "https://medium.com/python-in-plain-english/mastering-machine-learning-tools-explore-to-deploy-169b7ba3207f",
+    "image": "https://miro.medium.com/v2/resize:fit:720/format:webp/1*DAIbVHBdLHgKnTvtvsWLWw.jpeg"
+  },
+  {
+    "id": 4,
+    "title": "DynamoDB: What, Why, and How",
+    "publisher": "AWS in Plain English",
+    "url": "https://medium.com/aws-in-plain-english/dynamodb-what-why-and-how-e177e430999c",
+    "image": "https://miro.medium.com/v2/resize:fit:720/format:webp/1*bjd-Db1gbvIyxcJ8-D1AmA.png"
+  },
+  {
+    "id": 5,
+    "title": "AWS Cognito Security: Mastering User Identity with Confidence",
+    "publisher": "AWS in Plain English",
+    "url": "https://medium.com/aws-in-plain-english/aws-cognito-security-mastering-user-identity-with-confidence-e2deced80ab7",
+    "image": "https://miro.medium.com/v2/resize:fit:720/format:webp/1*8uc4IATdJZ7wRWpdOR-vyA.jpeg"
+  },
+  {
+    "id": 6,
+    "title": "Strengthening Cloud Security: A Deep Dive into AWS IAM",
+    "publisher": "AWS in Plain English",
+    "url": "https://medium.com/aws-in-plain-english/strengthening-cloud-security-a-deep-dive-into-aws-iam-f1db74c66f84",
+    "image": "https://miro.medium.com/v2/resize:fit:720/format:webp/1*YpTJ1oKDlOiEoNWro2LLHA.png"
+  },
+  {
+    "id": 7,
+    "title": "CircleCI: What, Why, and How",
+    "publisher": "Medium",
+    "url": "https://medium.com/@Iam_Adinath/circleci-what-why-and-how-05076c13941e",
+    "image": "https://miro.medium.com/v2/resize:fit:1200/1*6NxX6n8wK6lQdUcabBLM4g.png"
+  },
+  {
+    "id": 8,
+    "title": "Logging: What, Why, and How",
+    "publisher": "Medium",
+    "url": "https://medium.com/@Iam_Adinath/logging-what-why-and-how-6eb1e24c760f",
+    "image": "https://miro.medium.com/v2/resize:fit:720/format:webp/1*t7m2TB16sVUw0rRcrfHtDQ.png"
+  },
+  {
+    "id": 9,
+    "title": "Data Science: What, Why, and How - Unveiling the Power of Python Data Science Tools",
+    "publisher": "Medium",
+    "url": "https://medium.com/@Iam_Adinath/data-science-what-why-and-how-unveiling-the-power-of-python-data-science-tools-a8f9edd97830",
+    "image": "https://miro.medium.com/v2/resize:fit:720/format:webp/1*Fm6lrMKAerTt6lMXC_VptQ.jpeg"
+  },
+  {
+    "id": 10,
+    "title": "Mastering AWS CloudFormation: Best Practices and Real-World YAML Template Examples",
+    "publisher": "Medium",
+    "url": "https://medium.com/@Iam_Adinath/mastering-aws-cloudformation-best-practices-and-real-world-yaml-template-examples-643c3751f88c",
+    "image": "https://miro.medium.com/v2/resize:fit:640/format:webp/1*lgMb-q1UPxco34n6s_lLVw.png"
+  },
+  {
+    "id": 11,
+    "title": "AWS VPC Security: Don't Get Hacked",
+    "publisher": "Medium",
+    "url": "https://medium.com/@Iam_Adinath/aws-vpc-security-dont-get-hacked-b25af09a78e7",
+    "image": "https://miro.medium.com/v2/resize:fit:720/format:webp/1*WwiFcGZOXXVizTglFAem4g.jpeg"
+  },
+  {
+    "id": 12,
+    "title": "Charting the Cloud Course: Insights from an AWS Cloud Engineer",
+    "publisher": "Medium",
+    "url": "https://medium.com/@Iam_Adinath/charting-the-cloud-course-insights-from-an-aws-cloud-engineer-66f737f2987d",
+    "image": "https://miro.medium.com/v2/resize:fit:720/format:webp/1*Qjc2SDMb2L8b74maqy0HyA.png"
+  },
+  {
+    "id": 13,
+    "title": "Why You Should Choose Python",
+    "publisher": "Medium",
+    "url": "https://medium.com/@Iam_Adinath/why-you-should-choose-python-9079a97ae359",
+    "image": "https://miro.medium.com/v2/resize:fit:720/format:webp/1*8nSkPDw1ry0gEGH_NGdPRw.jpeg"
+  }
+]
