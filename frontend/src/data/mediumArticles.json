@@ -43,51 +43,9 @@
   },
   {
     "id": 7,
-    "title": "CircleCI: What, Why, and How",
-    "publisher": "Medium",
-    "url": "https://medium.com/@Iam_Adinath/circleci-what-why-and-how-05076c13941e",
-    "image": "https://miro.medium.com/v2/resize:fit:1200/1*6NxX6n8wK6lQdUcabBLM4g.png"
-  },
-  {
-    "id": 8,
-    "title": "Logging: What, Why, and How",
-    "publisher": "Medium",
-    "url": "https://medium.com/@Iam_Adinath/logging-what-why-and-how-6eb1e24c760f",
-    "image": "https://miro.medium.com/v2/resize:fit:720/format:webp/1*t7m2TB16sVUw0rRcrfHtDQ.png"
-  },
-  {
-    "id": 9,
-    "title": "Data Science: What, Why, and How - Unveiling the Power of Python Data Science Tools",
-    "publisher": "Medium",
-    "url": "https://medium.com/@Iam_Adinath/data-science-what-why-and-how-unveiling-the-power-of-python-data-science-tools-a8f9edd97830",
-    "image": "https://miro.medium.com/v2/resize:fit:720/format:webp/1*Fm6lrMKAerTt6lMXC_VptQ.jpeg"
-  },
-  {
-    "id": 10,
-    "title": "Mastering AWS CloudFormation: Best Practices and Real-World YAML Template Examples",
-    "publisher": "Medium",
-    "url": "https://medium.com/@Iam_Adinath/mastering-aws-cloudformation-best-practices-and-real-world-yaml-template-examples-643c3751f88c",
-    "image": "https://miro.medium.com/v2/resize:fit:640/format:webp/1*lgMb-q1UPxco34n6s_lLVw.png"
-  },
-  {
-    "id": 11,
-    "title": "AWS VPC Security: Don't Get Hacked",
-    "publisher": "Medium",
-    "url": "https://medium.com/@Iam_Adinath/aws-vpc-security-dont-get-hacked-b25af09a78e7",
-    "image": "https://miro.medium.com/v2/resize:fit:720/format:webp/1*WwiFcGZOXXVizTglFAem4g.jpeg"
-  },
-  {
-    "id": 12,
-    "title": "Charting the Cloud Course: Insights from an AWS Cloud Engineer",
-    "publisher": "Medium",
-    "url": "https://medium.com/@Iam_Adinath/charting-the-cloud-course-insights-from-an-aws-cloud-engineer-66f737f2987d",
-    "image": "https://miro.medium.com/v2/resize:fit:720/format:webp/1*Qjc2SDMb2L8b74maqy0HyA.png"
-  },
-  {
-    "id": 13,
     "title": "Why You Should Choose Python",
-    "publisher": "Medium",
-    "url": "https://medium.com/@Iam_Adinath/why-you-should-choose-python-9079a97ae359",
+    "publisher": "Analytics Vidhya",
+    "url": "https://medium.com/analytics-vidhya/why-you-should-choose-python-9079a97ae359",
     "image": "https://miro.medium.com/v2/resize:fit:720/format:webp/1*8nSkPDw1ry0gEGH_NGdPRw.jpeg"
   }
 ]
