@@ -8,7 +8,8 @@ import SEOHead from '../common/SEOHead';
 import { GetAllPublishedBlogs } from '../common/apiService';
 import { Blog, DateFormatOptions } from '../../types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBlog, faClock } from '@fortawesome/free-solid-svg-icons';
+import { faBlog, faClock, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import FeaturedMediumArticles from './FeaturedMediumArticles';
 
 // --- NEW HELPER FUNCTIONS ---
 
@@ -42,6 +43,8 @@ const BlogListPage: React.FC = () => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const blogsPerPage = 7;
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -88,6 +91,14 @@ const BlogListPage: React.FC = () => {
   const totalBlogs = blogs.length;
   const totalReadTime = blogs.reduce((total, blog) => total + calculateReadTime(blog.content), 0);
   const uniqueAuthors = new Set(blogs.map(blog => blog.author)).size;
+
+  // Pagination
+  const indexOfLastBlog = currentPage * blogsPerPage;
+  const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
+  const currentBlogs = blogs.slice(indexOfFirstBlog, indexOfLastBlog);
+  const totalPages = Math.ceil(blogs.length / blogsPerPage);
+
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   return (
     <>
@@ -137,8 +148,8 @@ const BlogListPage: React.FC = () => {
 
       {/* Blog Grid */}
       <div className="bloglist-grid">
-        {blogs.length > 0 ? (
-          blogs.map((blog) => {
+        {currentBlogs.length > 0 ? (
+          currentBlogs.map((blog) => {
             const readTime = calculateReadTime(blog.content);
             const publishDate = blog.published_at ? formatPublishDate(blog.published_at) : "Date not available";
             
@@ -180,6 +191,38 @@ const BlogListPage: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="bloglist-pagination">
+          <button
+            onClick={() => paginate(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="bloglist-pagination-btn"
+          >
+            <FontAwesomeIcon icon={faChevronLeft} />
+          </button>
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((number) => (
+            <button
+              key={number}
+              onClick={() => paginate(number)}
+              className={`bloglist-pagination-btn ${currentPage === number ? 'active' : ''}`}
+            >
+              {number}
+            </button>
+          ))}
+          <button
+            onClick={() => paginate(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className="bloglist-pagination-btn"
+          >
+            <FontAwesomeIcon icon={faChevronRight} />
+          </button>
+        </div>
+      )}
+
+      {/* Featured Medium Articles */}
+      <FeaturedMediumArticles className="bloglist-featured-spacing" />
     </div>
     </>
   );
