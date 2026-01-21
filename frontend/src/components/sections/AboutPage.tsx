@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import './AboutPage.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLinkedin, faGithub, faMedium, faStackOverflow } from '@fortawesome/free-brands-svg-icons';
-import { faHeart, faCode, faRocket, faLightbulb, faCoffee } from '@fortawesome/free-solid-svg-icons';
+import { faHeart, faCode, faRoute, faLightbulb, faCoffee, faLayerGroup, faCloud, faServer, faUsers, faFolderOpen, faTrophy, faInfinity } from '@fortawesome/free-solid-svg-icons';
 import { usePageTitle } from '../common/usePageTitle';
 import InitialsProfile from '../common/InitialsProfile';
 import SEOHead from '../common/SEOHead';
@@ -31,10 +31,11 @@ const AboutPage: React.FC = () => {
   return (
     <>
       <SEOHead
-        title="About Me - Adinath Gore | Full Stack Developer"
-        description="Learn about Adinath Gore, a passionate Full Stack Developer with 5+ years of experience in React, Node.js, AWS, and modern web technologies. Discover my journey, skills, and passion for creating innovative solutions."
+        title="About Me - Adinath Gore | Full Stack Imagineer"
+        description="Learn about Adinath Gore, a passionate Full Stack Imagineer with 5+ years of experience in React, Node.js, AWS, and modern web technologies. Discover my journey, skills, and passion for creating innovative solutions."
         keywords={[
           'About Adinath Gore',
+          'Full Stack Imagineer',
           'Full Stack Developer Story',
           'Software Engineer Background',
           'React Developer Experience',
@@ -70,7 +71,7 @@ const AboutPage: React.FC = () => {
             </div>
             <div className="profile-info">
               <h1>Hey there! I'm Adinath</h1>
-              <h2>Passionate Software Engineer</h2>
+              <h2>Full Stack Imagineer</h2>
               <p className="profile-tagline">
                 Crafting digital experiences with <FontAwesomeIcon icon={faHeart} className="heart-icon" /> and precision
               </p>
@@ -105,18 +106,50 @@ const AboutPage: React.FC = () => {
       {/* About Content */}
       <div className="about-content">
         {/* Journey Card */}
-        <section className="about-card">
+        <section className="about-card journey-timeline">
           <div className="card-header">
-            <FontAwesomeIcon icon={faRocket} className="section-icon" />
+            <FontAwesomeIcon icon={faRoute} className="section-icon" />
             <h3>My Journey</h3>
           </div>
           <div className="card-content">
-            <p>
-              With over <strong>5 years of experience</strong> in the tech realm, my journey has been marked by a commitment to excellence and a keen eye for detail. I've evolved from a curious beginner to a seasoned professional who thrives on solving complex problems and building scalable solutions.
-            </p>
-            <p>
-              My passion lies in creating digital experiences that not only meet technical requirements but also delight users. Every line of code I write is driven by the desire to make technology more accessible and impactful.
-            </p>
+            <div className="timeline">
+              <div className="timeline-item">
+                <div className="timeline-rail">
+                  <span className="timeline-dot"></span>
+                </div>
+                <div className="timeline-content">
+                  <h4>Curiosity → Code</h4>
+                  <p>Started with questions, ended up writing solutions. Every bug taught me something new.</p>
+                </div>
+              </div>
+              <div className="timeline-item">
+                <div className="timeline-rail">
+                  <span className="timeline-dot"></span>
+                </div>
+                <div className="timeline-content">
+                  <h4>Build → Break → Fix</h4>
+                  <p>Learned by doing. Breaking things was part of the process, fixing them made me better.</p>
+                </div>
+              </div>
+              <div className="timeline-item">
+                <div className="timeline-rail">
+                  <span className="timeline-dot"></span>
+                </div>
+                <div className="timeline-content">
+                  <h4>Systems & Scale</h4>
+                  <p>From single scripts to distributed systems. Building for thousands, not just one.</p>
+                </div>
+              </div>
+              <div className="timeline-item">
+                <div className="timeline-rail">
+                  <span className="timeline-dot"></span>
+                </div>
+                <div className="timeline-content">
+                  <h4>Future Ready</h4>
+                  <p>Always learning, always adapting. The next challenge is just another opportunity.</p>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -129,18 +162,22 @@ const AboutPage: React.FC = () => {
           <div className="card-content">
             <div className="skills-grid">
               <div className="skill-item">
+                <FontAwesomeIcon icon={faLayerGroup} className="skill-bg-icon" />
                 <h4>Full-Stack Development</h4>
                 <p>Building end-to-end applications with modern technologies like Python, Django, React, and AWS.</p>
               </div>
               <div className="skill-item">
+                <FontAwesomeIcon icon={faCloud} className="skill-bg-icon" />
                 <h4>Cloud Architecture</h4>
                 <p>Designing scalable, serverless solutions using AWS services like Lambda, API Gateway, and DynamoDB.</p>
               </div>
               <div className="skill-item">
+                <FontAwesomeIcon icon={faServer} className="skill-bg-icon" />
                 <h4>API Development</h4>
                 <p>Creating robust REST APIs and GraphQL endpoints with proper authentication and optimization.</p>
               </div>
               <div className="skill-item">
+                <FontAwesomeIcon icon={faUsers} className="skill-bg-icon" />
                 <h4>Team Leadership</h4>
                 <p>Leading development teams, conducting code reviews, and mentoring junior developers.</p>
               </div>
@@ -158,13 +195,15 @@ const AboutPage: React.FC = () => {
             <div className="philosophy-items">
               <div className="philosophy-item">
                 <FontAwesomeIcon icon={faCode} className="philosophy-icon" />
+                <FontAwesomeIcon icon={faCode} className="philosophy-bg-icon" />
                 <div>
                   <h4>Clean Code</h4>
                   <p>Writing maintainable, readable code that stands the test of time.</p>
                 </div>
               </div>
               <div className="philosophy-item">
-                <FontAwesomeIcon icon={faRocket} className="philosophy-icon" />
+                <FontAwesomeIcon icon={faCoffee} className="philosophy-icon" />
+                <FontAwesomeIcon icon={faCoffee} className="philosophy-bg-icon" />
                 <div>
                   <h4>Continuous Learning</h4>
                   <p>Staying updated with the latest technologies and best practices.</p>
@@ -172,6 +211,7 @@ const AboutPage: React.FC = () => {
               </div>
               <div className="philosophy-item">
                 <FontAwesomeIcon icon={faHeart} className="philosophy-icon" />
+                <FontAwesomeIcon icon={faHeart} className="philosophy-bg-icon" />
                 <div>
                   <h4>User-Centric Design</h4>
                   <p>Building solutions that prioritize user experience and accessibility.</p>
@@ -190,18 +230,22 @@ const AboutPage: React.FC = () => {
           <div className="card-content">
             <div className="fun-facts-grid">
               <div className="fun-fact">
+                <FontAwesomeIcon icon={faCoffee} className="fun-fact-bg-icon" />
                 <span className="fact-number">500+</span>
                 <span className="fact-label">Cups of Coffee</span>
               </div>
               <div className="fun-fact">
+                <FontAwesomeIcon icon={faFolderOpen} className="fun-fact-bg-icon" />
                 <span className="fact-number">50+</span>
                 <span className="fact-label">Projects Completed</span>
               </div>
               <div className="fun-fact">
+                <FontAwesomeIcon icon={faUsers} className="fun-fact-bg-icon" />
                 <span className="fact-number">7</span>
                 <span className="fact-label">Team Members Led</span>
               </div>
               <div className="fun-fact">
+                <FontAwesomeIcon icon={faInfinity} className="fun-fact-bg-icon" />
                 <span className="fact-number">∞</span>
                 <span className="fact-label">Lines of Code</span>
               </div>

@@ -1,6 +1,6 @@
 /* BALANCED TRON THEME - Resume Container */
 .resume-container {
-  max-width: 1400px;
+  max-width: var(--container-max-width);
   margin: 0 auto;
   padding: 20px;
   font-family: var(--font-family-base);

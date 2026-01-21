@@ -49,7 +49,7 @@
 /* Hero Section - Responsive Synced */
 .portfolio-hero-section {
   padding: clamp(2rem, 5vw, 4rem) clamp(1rem, 3vw, 2rem);
-  max-width: var(--breakpoint-xxl);
+  max-width: var(--container-max-width);
   margin: 0 auto;
   position: relative;
   z-index: 2;
@@ -379,9 +379,16 @@
 .portfolio-blog-section,
 .portfolio-testimonials-section,
 .portfolio-connect-section,
-.portfolio-certificates-section,
+.portfolio-certificates-section {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  padding: clamp(2rem, 5vw, 3rem) clamp(1rem, 3vw, 2rem);
+  position: relative;
+  z-index: 2;
+}
+
 .portfolio-featured-section {
-  max-width: var(--breakpoint-xxl);
+  max-width: var(--container-max-width);
   margin: 0 auto;
   padding: clamp(2rem, 5vw, 3rem) clamp(1rem, 3vw, 2rem);
   position: relative;
@@ -1106,17 +1113,18 @@
 
 /* Navigation Section - Responsive Synced */
 .portfolio-navigation-section {
-  padding: clamp(2rem, 5vw, 4rem) clamp(1rem, 3vw, 2rem);
+  max-width: 100%;
   background: rgba(0, 0, 0, 0.95);
   margin: clamp(1rem, 3vw, 2rem) 0;
   border-top: 1px solid rgba(0, 229, 255, 0.3);
   border-bottom: 1px solid rgba(0, 229, 255, 0.3);
+  padding: clamp(2rem, 5vw, 4rem) clamp(1rem, 3vw, 2rem);
   position: relative;
   z-index: 2;
 }
 
 .portfolio-navigation-content {
-  max-width: var(--breakpoint-xl);
+  max-width: var(--container-max-width);
   margin: 0 auto;
   text-align: center;
 }
@@ -1284,15 +1292,7 @@
   animation-delay: 0.6s;
 }
 
-/* Featured Medium Articles Section */
-.portfolio-featured-section {
-  max-width: var(--breakpoint-xxl);
-  margin: 0 auto;
-  padding: clamp(2rem, 5vw, 3rem) clamp(1rem, 3vw, 2rem);
-  position: relative;
-  z-index: 1;
-  isolation: isolate;
-}
+/* Featured Medium Articles Section - styles moved to grouped selector above */
 
 .portfolio-featured-carousel {
   overflow: visible;
