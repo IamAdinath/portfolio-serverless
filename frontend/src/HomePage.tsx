@@ -206,15 +206,15 @@ const HomePage: React.FC = () => {
   return (
     <>
       <SEOHead
-        title="Adinath Gore - Python Developer & Cloud Engineer"
-        description="Experienced Python Developer and Cloud Engineer specializing in AWS, Django, Flask, serverless architecture, and cloud solutions. View my portfolio, projects, and professional experience."
+        title="Adinath Gore - Full Stack Imagineer"
+        description="Experienced Full Stack Imagineer specializing in AWS, Django, Flask, React, serverless architecture, and cloud solutions. View my portfolio, projects, and professional experience."
         keywords={[
           'Adinath Gore',
-          'Python Developer',
-          'Cloud Engineer',
+          'Full Stack Imagineer',
+          'Full Stack Developer',
           'AWS Developer',
           'Django Developer',
-          'Flask Developer',
+          'React Developer',
           'Serverless Architecture',
           'Cloud Solutions',
           'Portfolio'
@@ -229,11 +229,12 @@ const HomePage: React.FC = () => {
           <div className="portfolio-hero-content">
             <div className="portfolio-hero-text">
               <h1>Hi, I'm Adinath Gore</h1>
-              <h2>Python Developer & Cloud Engineer</h2>
+              <h2>Full Stack Imagineer</h2>
               <p className="portfolio-hero-description">
-                Passionate about building scalable cloud solutions and Python applications.
-                With 5+ years of experience, I help businesses leverage cloud technologies
-                and develop robust backend systems that drive growth and innovation.
+                I imagine it first, then I build it.
+                I create modern digital experiences that feel effortless.
+                Fast, reliable, and designed with care.
+                Made for today, ready for tomorrow.
               </p>
               <div className="portfolio-hero-stats">
                 <div className="portfolio-stat">
