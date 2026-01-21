@@ -64,13 +64,12 @@ const ResumePage: React.FC = () => {
                 {/* Summary Section */}
                 <section className="summary-card">
                     <div className="card-header">
+                        <FontAwesomeIcon icon={faBriefcase} className="section-icon" />
                         <h3>Professional Summary</h3>
                     </div>
                     <div className="card-content">
                         <p>
-                            I am a dedicated Python Developer and Cloud Engineer with over 5 years of experience building scalable cloud solutions.
-                            My expertise focuses on Python development, AWS cloud services, serverless architecture, and database management
-                            including PostgreSQL, MySQL, MongoDB, and DynamoDB. I specialize in designing and implementing robust cloud infrastructure.
+                           Full Stack Engineer with 5+ years of experience building scalable backend systems and modern web applications. Strong in Python, AWS, PostgreSQL, and React/TypeScript, with proven ability to deliver reliable APIs, improve system performance, and ship production-ready features end-to-end. Experienced in designing secure authentication and role-based access systems, along with building clean admin workflows that support real business operations. Known for strong ownership, debugging production issues effectively, and writing maintainable code that scales with evolving requirements.
                         </p>
                     </div>
                 </section>

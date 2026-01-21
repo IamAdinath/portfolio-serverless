@@ -23,6 +23,9 @@
   --border: rgba(77, 124, 255, 0.15);     /* Subtle blue border */
   --border-bright: rgba(0, 229, 255, 0.3); /* Brighter cyan border */
   
+  /* Container Width */
+  --container-max-width: 1400px;  /* Global container width */
+  
   /* Gradients */
   --gradient-primary: linear-gradient(135deg, #00E5FF 0%, #4D7CFF 100%);
   --gradient-secondary: linear-gradient(135deg, #4D7CFF 0%, #00E5FF 100%);

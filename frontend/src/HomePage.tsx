@@ -415,7 +415,9 @@ const HomePage: React.FC = () => {
         </section>
 
         {/* Featured Medium Articles */}
-        <FeaturedMediumArticles />
+        <section className="portfolio-featured-section">
+          <FeaturedMediumArticles />
+        </section>
 
         {/* Testimonials - Temporarily Hidden */}
         {/* <section className="portfolio-testimonials-section">

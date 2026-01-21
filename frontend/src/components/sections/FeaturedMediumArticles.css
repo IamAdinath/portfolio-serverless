@@ -1,8 +1,7 @@
 /* Featured Medium Articles Component */
 .featured-medium-section {
-  max-width: var(--breakpoint-xxl);
-  margin: 0 auto;
-  padding: clamp(2rem, 5vw, 3rem) clamp(1rem, 3vw, 2rem);
+  margin: 0;
+  padding: 0;
   position: relative;
   z-index: 1;
   isolation: isolate;
@@ -23,6 +22,8 @@
   flex-wrap: wrap;
   gap: clamp(1rem, 3vw, 1.5rem);
   z-index: 1;
+  margin-left: 0;
+  margin-right: 0;
 }
 
 @media (max-width: 768px) {
