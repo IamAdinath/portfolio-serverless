@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import './AboutPage.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLinkedin, faGithub, faMedium, faStackOverflow } from '@fortawesome/free-brands-svg-icons';
-import { faHeart, faCode, faRoute, faLightbulb, faCoffee, faLayerGroup, faCloud, faServer, faUsers, faFolderOpen, faTrophy, faInfinity } from '@fortawesome/free-solid-svg-icons';
+import { faHeart, faCode, faRoute, faLightbulb, faCoffee, faLayerGroup, faCloud, faServer, faUsers, faFolderOpen, faInfinity } from '@fortawesome/free-solid-svg-icons';
 import { usePageTitle } from '../common/usePageTitle';
 import InitialsProfile from '../common/InitialsProfile';
 import SEOHead from '../common/SEOHead';

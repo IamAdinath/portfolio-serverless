@@ -11,8 +11,7 @@ import {
 import {
   faEnvelope,
   faHeart,
-  faCode,
-  faArrowUp
+  faCode
 } from '@fortawesome/free-solid-svg-icons';
 import SmallLogo from './SmallLogo';
 import './Footer.css';
@@ -38,9 +37,7 @@ const Footer: React.FC = () => {
     { label: 'Login', path: '/auth' },
   ];
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+
 
   return (
     <footer className="modern-footer">
@@ -116,15 +113,6 @@ const Footer: React.FC = () => {
               using React & AWS
             </p>
           </div>
-
-          <button
-            onClick={scrollToTop}
-            className="scroll-to-top"
-            title="Back to top"
-            aria-label="Scroll back to top of page"
-          >
-            <FontAwesomeIcon icon={faArrowUp} aria-hidden="true" />
-          </button>
         </div>
       </div>
     </footer>
