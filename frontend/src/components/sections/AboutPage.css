@@ -14,6 +14,18 @@
   box-sizing: border-box;
 }
 
+@media (max-width: 768px) {
+  .about-container {
+    padding: 30px 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-container {
+    padding: 20px 12px;
+  }
+}
+
 
 
 .about-container > * {
@@ -815,7 +827,7 @@
 /* Responsive Design */
 @media (max-width: 768px) {
   .about-container {
-    padding: 24px 16px;
+    padding: 30px 15px;
   }
 
   .profile-section {
@@ -845,6 +857,26 @@
 }
 
 @media (max-width: 480px) {
+  .about-container {
+    padding: 20px 12px;
+  }
+
+  .hero-card {
+    padding: 25px 15px;
+  }
+
+  .card-content {
+    padding: 25px 15px;
+  }
+
+  .card-header {
+    padding: 18px 15px;
+  }
+
+  .card-header h3 {
+    font-size: 1.25rem;
+  }
+
   /* h1 responsive styles inherited from global typography.css */
 
   .profile-image {
@@ -854,6 +886,16 @@
 
   .fun-facts-grid {
     grid-template-columns: 1fr;
+  }
+
+  .skill-item,
+  .philosophy-item,
+  .fun-fact {
+    padding: 18px 15px;
+  }
+
+  .timeline-content {
+    padding: 18px 15px;
   }
 }
 

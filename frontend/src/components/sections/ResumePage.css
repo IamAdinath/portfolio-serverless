@@ -675,7 +675,7 @@
 /* Responsive Design */
 @media (max-width: 768px) {
   .resume-container {
-    padding: 15px;
+    padding: 30px 15px;
   }
 
   .main-content {
@@ -730,12 +730,20 @@
 
 @media (max-width: 480px) {
   .resume-container {
-    padding: 10px;
+    padding: 20px 12px;
   }
 
   /* h1 responsive styles */
   .profile-info h1 {
     font-size: 2rem;
+  }
+
+  .profile-info h2 {
+    font-size: 1.25rem;
+  }
+
+  .profile-tagline {
+    font-size: 1rem;
   }
 
   .profile-avatar {
@@ -753,7 +761,7 @@
   .certification-card,
   .awards-card,
   .experience-card {
-    padding: 20px;
+    padding: 20px 15px;
     border-radius: 15px;
   }
 
@@ -761,13 +769,30 @@
     padding: 15px 20px;
   }
 
+  .card-header h3 {
+    font-size: 1.2rem;
+  }
+
   .card-content {
-    padding: 20px;
+    padding: 20px 15px;
   }
 
   .skill-tag {
     font-size: 0.8rem;
     padding: 6px 12px;
+  }
+
+  .contact-item {
+    padding: 12px 15px;
+  }
+
+  .experience-item {
+    padding: 20px 15px;
+  }
+
+  .certification-item,
+  .award-item {
+    padding: 18px 15px;
   }
 }
 

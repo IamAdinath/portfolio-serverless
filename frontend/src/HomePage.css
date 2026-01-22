@@ -1405,3 +1405,61 @@
   color: #00E5FF;
   transform: translateX(5px);
 }
+
+/* Additional Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .portfolio-hero-section,
+  .portfolio-skills-overview,
+  .portfolio-blog-section,
+  .portfolio-testimonials-section,
+  .portfolio-connect-section,
+  .portfolio-certificates-section,
+  .portfolio-featured-section {
+    padding: 2rem 1rem;
+  }
+
+  .portfolio-hero-content {
+    padding: 2rem 1.5rem;
+  }
+
+  .portfolio-skills-grid,
+  .portfolio-blog-grid,
+  .portfolio-featured-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .portfolio-hero-section,
+  .portfolio-skills-overview,
+  .portfolio-blog-section,
+  .portfolio-testimonials-section,
+  .portfolio-connect-section,
+  .portfolio-certificates-section,
+  .portfolio-featured-section {
+    padding: 1.5rem 0.75rem;
+  }
+
+  .portfolio-hero-content {
+    padding: 1.5rem 1rem;
+  }
+
+  .portfolio-section-header {
+    padding: 1.25rem 1rem;
+  }
+
+  .portfolio-skill-card,
+  .portfolio-blog-card,
+  .portfolio-certificate-card,
+  .portfolio-featured-card {
+    padding: 1.25rem;
+  }
+
+  .portfolio-nav-card {
+    padding: 1.25rem 1rem;
+  }
+
+  .portfolio-connect-content {
+    padding: 2rem 1.5rem;
+  }
+}

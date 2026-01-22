@@ -331,6 +331,26 @@
 
 
 /* Responsive Design */
+@media (max-width: 768px) {
+  .footer-main {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    text-align: center;
+  }
+
+  .footer-brand {
+    max-width: 100%;
+  }
+
+  .footer-logo {
+    justify-content: center;
+  }
+
+  .footer-social {
+    justify-content: center;
+  }
+}
+
 @media (max-width: 480px) {
   .footer-container {
     padding: 40px 15px 15px;
@@ -345,7 +365,11 @@
   }
 
   .footer-logo-name {
-    font-size: 1.3rem;
+    font-size: 1.1rem;
+  }
+
+  .footer-tagline {
+    font-size: 0.85rem;
   }
 
   .footer-social {
@@ -356,6 +380,20 @@
     width: 40px;
     height: 40px;
     font-size: 1rem;
+  }
+
+  .footer-links h4,
+  .footer-contact h4 {
+    font-size: 1rem;
+  }
+
+  .footer-nav-link,
+  .footer-contact-item {
+    font-size: 0.85rem;
+  }
+
+  .footer-copyright {
+    font-size: 0.8rem;
   }
 }
 
