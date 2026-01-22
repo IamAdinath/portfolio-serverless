@@ -21,7 +21,7 @@ const InitialsProfile: React.FC<InitialsProfileProps> = ({
   const sizeStyles = {
     small: { width: '64px', height: '64px', fontSize: '18px' },
     medium: { width: '128px', height: '128px', fontSize: '36px' },
-    large: { width: '250px', height: '250px', fontSize: '72px' } // Larger for profile
+    large: { width: '250px', height: '250px', fontSize: '96px' } // Larger for profile
   };
 
   return (
