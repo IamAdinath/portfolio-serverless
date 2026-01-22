@@ -25,10 +25,10 @@ User-agent: Baiduspider
 Allow: /
 
 # Sitemap location
-Sitemap: https://adinathgore.com/sitemap.xml
+Sitemap: https://adinathg.com/sitemap.xml
 
 # Crawl delay
 Crawl-delay: 1
 
 # Host directive
-Host: https://adinathgore.com
+Host: https://adinathg.com
