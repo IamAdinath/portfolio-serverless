@@ -10,7 +10,6 @@
   min-height: 100vh;
   position: relative;
   width: 100%;
-  max-width: 100%;
   box-sizing: border-box;
   overflow-x: hidden;
 }
@@ -846,6 +845,30 @@
   
   .profile-section {
     gap: 24px;
+  }
+  
+  .heart-icon {
+    font-size: 0.35em !important;
+  }
+}
+
+@keyframes heartbeat {
+  0%, 50%, 100% { 
+    transform: scale(1); 
+  }
+  25%, 75% { 
+    transform: scale(1.05); 
+  }
+}
+
+@media (max-width: 480px) {
+  @keyframes heartbeat {
+    0%, 50%, 100% { 
+      transform: scale(1); 
+    }
+    25%, 75% { 
+      transform: scale(1.03); 
+    }
   }
 }
 

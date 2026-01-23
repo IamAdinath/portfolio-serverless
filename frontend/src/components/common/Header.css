@@ -314,6 +314,7 @@
   z-index: 102;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
+  pointer-events: auto;
 }
 
 @media (min-width: 768px) {
@@ -327,6 +328,11 @@
   color: #00E5FF;
   border-color: #00E5FF;
   transform: scale(1.05);
+}
+
+.mobile-menu-btn:active {
+  transform: scale(0.95);
+  background: rgba(0, 229, 255, 0.2);
 }
 
 /* Mobile Navigation - Tron Style */

@@ -17,7 +17,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../common/ToastProvider';
 import { usePageTitle } from '../common/usePageTitle';
 import { useConfirmation } from '../../hooks/useConfirmationModal';
-import { GetBlogPosts, DeleteBlogPost, uploadFileToS3, UploadProfileImage, UploadResume } from '../common/apiService';
+import { GetBlogPosts, DeleteBlogPost, UploadProfileImage, UploadResume } from '../common/apiService';
 import { BlogPostData } from '../../types';
 import ErrorBoundary from '../common/ErrorBoundary';
 import ConfirmationModal from '../common/ConfirmationModal';

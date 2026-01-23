@@ -19,7 +19,6 @@ import {
   faExternalLinkAlt
 } from './utils/iconLibrary';
 import { usePageTitle } from './components/common/usePageTitle';
-import InitialsProfile from './components/common/InitialsProfile';
 import ProfileImageCard from './components/common/ProfileImageCard';
 import SEOHead from './components/common/SEOHead';
 import { SOCIAL_LINKS } from './constants';

@@ -122,7 +122,8 @@ const AnalyticsPage: React.FC = () => {
 
   useEffect(() => {
     fetchAnalyticsData(dateRange);
-  }, [dateRange]); // Remove fetchAnalyticsData from dependencies
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dateRange]);
 
   const getTrendIcon = (trend: 'up' | 'down' | 'neutral') => {
     switch (trend) {
