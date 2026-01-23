@@ -19,9 +19,9 @@ const InitialsProfile: React.FC<InitialsProfileProps> = ({
   };
 
   const sizeStyles = {
-    small: { width: '64px', height: '64px', fontSize: '18px' },
-    medium: { width: '128px', height: '128px', fontSize: '36px' },
-    large: { width: '250px', height: '250px', fontSize: '96px' } // Larger for profile
+    small: { width: '100%', height: '100%', fontSize: '32px' },
+    medium: { width: '100%', height: '100%', fontSize: '48px' },
+    large: { width: '100%', height: '100%', fontSize: '96px' }
   };
 
   return (
@@ -38,7 +38,7 @@ const InitialsProfile: React.FC<InitialsProfileProps> = ({
         fontFamily: "'Times New Roman', Times, serif",
         textTransform: 'uppercase',
         letterSpacing: '0.15em',
-        border: '3px solid #00E5FF',
+        border: '0px solid transparent',
         borderRadius: '0',
         boxShadow: '0 0 25px rgba(0, 229, 255, 0.4), inset 0 0 25px rgba(0, 229, 255, 0.1)',
         position: 'relative',

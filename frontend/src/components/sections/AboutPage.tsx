@@ -1,32 +1,15 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import './AboutPage.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLinkedin, faGithub, faMedium, faStackOverflow } from '@fortawesome/free-brands-svg-icons';
 import { faHeart, faCode, faRoute, faLightbulb, faCoffee, faLayerGroup, faCloud, faServer, faUsers, faFolderOpen, faInfinity } from '@fortawesome/free-solid-svg-icons';
 import { usePageTitle } from '../common/usePageTitle';
-import InitialsProfile from '../common/InitialsProfile';
+import ProfileImageCard from '../common/ProfileImageCard';
 import SEOHead from '../common/SEOHead';
 import { SOCIAL_LINKS } from '../../constants';
-import { getProfileImage } from '../common/apiService';
 
 const AboutPage: React.FC = () => {
   usePageTitle('About Me');
-  
-  useEffect(() => {
-    const fetchProfileImage = async () => {
-      try {
-        const { imageUrl } = await getProfileImage();
-        
-        const container = document.querySelector('.profile-image-container') as HTMLElement;
-        if (container && imageUrl) {
-          container.style.setProperty('--profile-image-url', `url(${imageUrl})`);
-        }
-      } catch (error) {
-        console.error('Failed to load profile image:', error);
-      }
-    };
-    fetchProfileImage();
-  }, []);
   
   return (
     <>
@@ -52,23 +35,7 @@ const AboutPage: React.FC = () => {
       <section className="hero-card">
         <div className="hero-content">
           <div className="profile-section">
-            <div className="profile-image-container">
-              {/* 
-                To use your LinkedIn profile picture:
-                1. Go to your LinkedIn profile
-                2. Right-click on your profile picture
-                3. Select "Copy image address" or "Copy image URL"
-                4. Replace the src URL below with your LinkedIn image URL
-                
-                Note: LinkedIn images may have authentication requirements.
-                For production, consider uploading your professional photo to your own server/CDN.
-              */}
-              <InitialsProfile 
-                className="profile-image"
-                size="medium"
-                initials="AG"
-              />
-            </div>
+            <ProfileImageCard size="small" className="profile-image-container" />
             <div className="profile-info">
               <h1>Hey there! I'm Adinath</h1>
               <h2>Full Stack Imagineer</h2>
