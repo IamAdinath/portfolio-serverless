@@ -5,9 +5,12 @@
   padding: 20px;
   font-family: var(--font-family-base);
   color: rgba(0, 229, 255, 0.95);
-  /* background inherited from body */
   min-height: 100vh;
   position: relative;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .resume-container::before {
@@ -676,6 +679,7 @@
 @media (max-width: 768px) {
   .resume-container {
     padding: 30px 15px;
+    overflow-x: hidden;
   }
 
   .main-content {
@@ -687,7 +691,7 @@
   .right-column {
     flex: 1 1 100%;
     width: 100%;
-  box-sizing: border-box;
+    box-sizing: border-box;
   }
 
   .profile-section {
@@ -696,13 +700,17 @@
     gap: 20px;
   }
 
-  /* h1 responsive styles */
   .profile-info h1 {
     font-size: 2.5rem;
   }
 
   .contact-info {
     grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .contact-item {
+    width: 100%;
   }
 
   .experience-meta {
@@ -726,14 +734,20 @@
   .card-content {
     padding: 25px;
   }
+  
+  .experience-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
 }
 
 @media (max-width: 480px) {
   .resume-container {
     padding: 20px 12px;
+    width: 100%;
   }
 
-  /* h1 responsive styles */
   .profile-info h1 {
     font-size: 2rem;
   }
@@ -762,7 +776,6 @@
   .awards-card,
   .experience-card {
     padding: 20px 15px;
-    border-radius: 15px;
   }
 
   .card-header {
@@ -784,6 +797,7 @@
 
   .contact-item {
     padding: 12px 15px;
+    width: 100%;
   }
 
   .experience-item {
@@ -794,49 +808,29 @@
   .award-item {
     padding: 18px 15px;
   }
+  
+  .experience-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 15px;
+  }
+  
+  .experience-info {
+    width: 100%;
+  }
+  
+  .skills-list {
+    gap: 8px;
+  }
 }
 
-/* Animation for page load */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
+/* Animation for page load - Disabled for performance */
 .header-card,
 .summary-card,
 .skills-card,
 .certification-card,
 .awards-card,
 .experience-card {
-  animation: fadeInUp 0.6s ease-out;
-}
-
-.header-card {
-  animation-delay: 0.1s;
-}
-
-.summary-card {
-  animation-delay: 0.2s;
-}
-
-.skills-card {
-  animation-delay: 0.3s;
-}
-
-.certification-card {
-  animation-delay: 0.4s;
-}
-
-.awards-card {
-  animation-delay: 0.5s;
-}
-
-.experience-card {
-  animation-delay: 0.6s;
+  /* Animations removed for better performance */
 }

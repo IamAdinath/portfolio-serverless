@@ -91,40 +91,42 @@ const App: React.FC = () => {
       <AuthProvider>
         <ToastProvider> 
           <Router>
-          <Header />
-          <main role="main" id="main-content">
-            <Suspense fallback={<PageLoader />}>
-              <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/about" element={<AboutPage />} />
-                <Route path="/blogs" element={<BlogListPage />} />
-                <Route path="/resume" element={<ResumePage />} />
-                <Route path="/auth" element={<LoginPage />} />
-                <Route path="/writer" element={
-                  <ProtectedRoute>
-                    <BlogEditorPage />
-                  </ProtectedRoute>
-                } />
-                <Route path="/admin" element={
-                  <ProtectedRoute>
-                    <AdminDashboardPage />
-                  </ProtectedRoute>
-                } />
-                <Route path="/admin/stats/:blogId" element={
-                  <ProtectedRoute>
-                    <BlogStatsPage />
-                  </ProtectedRoute>
-                } />
-                <Route path="/admin/analytics" element={
-                  <ProtectedRoute>
-                    <AnalyticsPage />
-                  </ProtectedRoute>
-                } />
-                <Route path="/blog/:blogId" element={<BlogDetailPage />} />
-              </Routes>
-            </Suspense>
-          </main>
-          <Footer />
+            <div className="app-container">
+              <Header />
+              <main className="main-content" role="main" id="main-content">
+                <Suspense fallback={<PageLoader />}>
+                  <Routes>
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="/about" element={<AboutPage />} />
+                    <Route path="/blogs" element={<BlogListPage />} />
+                    <Route path="/resume" element={<ResumePage />} />
+                    <Route path="/auth" element={<LoginPage />} />
+                    <Route path="/writer" element={
+                      <ProtectedRoute>
+                        <BlogEditorPage />
+                      </ProtectedRoute>
+                    } />
+                    <Route path="/admin" element={
+                      <ProtectedRoute>
+                        <AdminDashboardPage />
+                      </ProtectedRoute>
+                    } />
+                    <Route path="/admin/stats/:blogId" element={
+                      <ProtectedRoute>
+                        <BlogStatsPage />
+                      </ProtectedRoute>
+                    } />
+                    <Route path="/admin/analytics" element={
+                      <ProtectedRoute>
+                        <AnalyticsPage />
+                      </ProtectedRoute>
+                    } />
+                    <Route path="/blog/:blogId" element={<BlogDetailPage />} />
+                  </Routes>
+                </Suspense>
+              </main>
+              <Footer />
+            </div>
           </Router>
         </ToastProvider>
       </AuthProvider>

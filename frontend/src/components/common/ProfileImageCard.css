@@ -1,0 +1,139 @@
+.profile-image-card {
+  position: relative;
+  background: rgba(0, 0, 0, 0.9);
+  border-radius: 0;
+  border: 2px solid #00E5FF;
+  box-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
+  transition: all 0.3s ease;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* Size variants with responsive clamp */
+.profile-image-card-small {
+  width: clamp(120px, 25vw, 200px);
+  height: clamp(120px, 25vw, 200px);
+  padding: clamp(0.5rem, 2vw, 1rem);
+}
+
+.profile-image-card-medium {
+  width: clamp(150px, 35vw, 290px);
+  height: clamp(150px, 35vw, 290px);
+  padding: clamp(0.75rem, 3vw, 1.5rem);
+}
+
+.profile-image-card-large {
+  width: clamp(200px, 40vw, 350px);
+  height: clamp(200px, 40vw, 350px);
+  padding: clamp(1rem, 3vw, 1.75rem);
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .profile-image-card-small {
+    width: clamp(100px, 30vw, 150px);
+    height: clamp(100px, 30vw, 150px);
+  }
+  
+  .profile-image-card-medium {
+    width: clamp(140px, 40vw, 220px);
+    height: clamp(140px, 40vw, 220px);
+  }
+  
+  .profile-image-card-large {
+    width: clamp(180px, 50vw, 280px);
+    height: clamp(180px, 50vw, 280px);
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-image-card-small {
+    width: clamp(90px, 35vw, 130px);
+    height: clamp(90px, 35vw, 130px);
+    padding: 0.5rem;
+  }
+  
+  .profile-image-card-medium {
+    width: clamp(120px, 45vw, 180px);
+    height: clamp(120px, 45vw, 180px);
+    padding: 0.75rem;
+  }
+  
+  .profile-image-card-large {
+    width: clamp(150px, 55vw, 220px);
+    height: clamp(150px, 55vw, 220px);
+    padding: 1rem;
+  }
+}
+
+/* Hover effects */
+.profile-image-card:hover {
+  box-shadow: 0 0 30px rgba(0, 229, 255, 0.4);
+  transform: scale(1.05);
+  border-color: transparent;
+}
+
+/* Profile image reveal on hover */
+.profile-image-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: var(--profile-image-url);
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: 2;
+  border-radius: 0;
+}
+
+.profile-image-card:hover::after {
+  opacity: 1;
+}
+
+/* Scan effect on hover */
+.profile-image-card::before {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.6), transparent);
+  opacity: 0;
+  transition: all 0.8s ease;
+  z-index: 3;
+}
+
+.profile-image-card:hover::before {
+  opacity: 1;
+  top: 100%;
+  animation: scanEffect 1.5s ease-in-out;
+}
+
+@keyframes scanEffect {
+  0% {
+    top: -100%;
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}
+
+/* Initials styling */
+.profile-image-card-initials {
+  border-radius: 0;
+  filter: brightness(0.9) contrast(1.2);
+  border: 2px solid rgba(0, 229, 255, 0.3);
+}

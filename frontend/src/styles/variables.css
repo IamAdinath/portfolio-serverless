@@ -1,59 +1,19 @@
-/**
- * CSS Custom Properties (Variables)
- * Dark Professional Theme - Clean & Modern
- */
+/* CSS Variables - Tron Theme */
 
 :root {
-  /* Base Colors - Dark Theme */
-  --bg: #000000;              /* Pure black background for Tron theme */
-  --bg-2: #0C1635;            /* Card/elevated background */
-  --bg-elevated: #121B3A;     /* Hover/elevated state */
-  
-  /* Accent Colors */
-  --accent-cyan: #00E5FF;     /* Primary cyan accent */
-  --accent-blue: #4D7CFF;     /* Secondary blue accent */
-  
-  /* Text Colors */
-  --text: #EAF0FF;            /* Primary text - light blue-white */
-  --text-bright: #FFFFFF;     /* Brightest text */
-  --text-dim: rgba(234, 240, 255, 0.7);  /* Muted text */
-  --text-muted: rgba(234, 240, 255, 0.5); /* Very muted text */
-  
-  /* Border Colors */
-  --border: rgba(77, 124, 255, 0.15);     /* Subtle blue border */
-  --border-bright: rgba(0, 229, 255, 0.3); /* Brighter cyan border */
-  
-  /* Container Width */
-  --container-max-width: 1400px;  /* Global container width */
-  
-  /* Gradients */
-  --gradient-primary: linear-gradient(135deg, #00E5FF 0%, #4D7CFF 100%);
-  --gradient-secondary: linear-gradient(135deg, #4D7CFF 0%, #00E5FF 100%);
-  --gradient-background: radial-gradient(
-      circle at top right,
-      rgba(0, 229, 255, 0.05),
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at bottom left,
-      rgba(77, 124, 255, 0.05),
-      transparent 50%
-    ),
-    var(--bg);
-  
-  /* Shadows */
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
-  --shadow-base: 0 4px 16px rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.5);
-  --shadow-lg: 0 16px 32px rgba(0, 0, 0, 0.6);
-  --shadow-xl: 0 24px 48px rgba(0, 0, 0, 0.7);
-  --shadow-glow: 0 0 20px rgba(0, 229, 255, 0.3);
-  --shadow-glow-blue: 0 0 20px rgba(77, 124, 255, 0.3);
-  
+  /* Colors */
+  --bg: #000000;
+  --bg-2: #0a0a0a;
+  --text: rgba(0, 229, 255, 0.95);
+  --text-bright: #FFFFFF;
+  --text-dim: rgba(0, 229, 255, 0.7);
+  --accent-cyan: #00E5FF;
+  --accent-blue: #0099FF;
+  --accent-pink: #FF0080;
+
   /* Typography */
-  --font-family-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-family-mono: 'Monaco', 'Menlo', 'Courier New', monospace;
-  
+  --font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  --font-family-mono: 'Courier New', Courier, monospace;
   --font-size-xs: 0.75rem;
   --font-size-sm: 0.875rem;
   --font-size-base: 1rem;
@@ -62,69 +22,46 @@
   --font-size-2xl: 1.5rem;
   --font-size-3xl: 1.875rem;
   --font-size-4xl: 2.25rem;
-  --font-size-5xl: 3rem;
-  
   --font-weight-normal: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
-  
   --line-height-tight: 1.25;
   --line-height-normal: 1.5;
   --line-height-relaxed: 1.75;
-  
+
   /* Spacing */
-  --space-1: 0.25rem;
-  --space-2: 0.5rem;
-  --space-3: 0.75rem;
-  --space-4: 1rem;
-  --space-5: 1.25rem;
-  --space-6: 1.5rem;
-  --space-8: 2rem;
-  --space-10: 2.5rem;
-  --space-12: 3rem;
-  --space-16: 4rem;
-  --space-20: 5rem;
-  
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+
   /* Border Radius */
-  --radius-sm: 0.25rem;
-  --radius-base: 0.5rem;
-  --radius-lg: 0.75rem;
-  --radius-xl: 1rem;
-  --radius-2xl: 1.5rem;
+  --radius-sm: 0.125rem;
+  --radius-md: 0.25rem;
+  --radius-lg: 0.5rem;
   --radius-full: 9999px;
-  
+
   /* Transitions */
-  --transition-fast: 0.15s ease;
-  --transition-base: 0.25s ease;
-  --transition-slow: 0.4s ease;
-  
-  /* Z-index */
-  --z-dropdown: 1000;
-  --z-sticky: 1020;
-  --z-fixed: 1030;
-  --z-modal-backdrop: 1040;
-  --z-modal: 1050;
-  --z-popover: 1060;
-  --z-tooltip: 1070;
-  --z-toast: 1080;
-  
-  /* Legacy mappings for compatibility */
-  --color-primary: var(--accent-cyan);
-  --color-secondary: var(--accent-blue);
-  --color-text: var(--text);
-  --color-background: var(--bg);
-  --color-background-alt: var(--bg-2);
-  --color-border: var(--border);
-  --color-error: #FF4D4D;
-  --color-success: #00E5FF;
-  --color-warning: #FFB84D;
-  --color-info: #4D7CFF;
-  
-  --primary-green: var(--accent-cyan);
-  --primary-blue: var(--accent-blue);
-  --text-bright: var(--text-bright);
-  --text-dim: var(--text-dim);
-  --accent-teal: var(--accent-cyan);
-  --accent: var(--accent-cyan);
+  --transition-base: all 0.3s ease;
+  --transition-fast: all 0.15s ease;
+  --transition-slow: all 0.5s ease;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 229, 255, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 229, 255, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 229, 255, 0.2);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 229, 255, 0.3);
+
+  /* Breakpoints */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-xxl: 1536px;
+
+  /* Container */
+  --container-max-width: 1400px;
 }

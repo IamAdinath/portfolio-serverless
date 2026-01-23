@@ -3,18 +3,18 @@
 .modern-header {
   position: sticky;
   top: 0;
-  z-index: 1000;
+  z-index: 100;
   backdrop-filter: blur(10px);
   background: rgba(0, 10, 20, 0.95);
   border-bottom: 1px solid #00E5FF;
   border-radius: 0;
   box-shadow: 0 0 15px rgba(0, 229, 255, 0.2);
-  animation: header-fadeInDown 0.6s ease-out;
   overflow: visible;
-  /* Prevent layout shifts from animations */
   contain: layout style;
-  /* Fixed height to prevent mobile layout shifts */
   min-height: 70px;
+  flex-shrink: 0;
+  width: 100%;
+  will-change: auto;
 }
 
 .modern-header::before {
@@ -25,12 +25,8 @@
   width: 100%;
   height: 1px;
   background: linear-gradient(90deg, transparent, #00E5FF, transparent);
-  animation: headerScan 4s linear infinite;
-  /* Prevent this animation from affecting layout */
-  will-change: transform;
-  transform: translateZ(0);
-  /* Ensure it doesn't cause layout shifts */
   pointer-events: none;
+  will-change: auto;
 }
 
 @keyframes headerScan {
@@ -56,12 +52,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  /* Fixed height to prevent layout shifts */
   height: 70px;
-  /* Prevent flex items from causing layout changes */
   flex-shrink: 0;
   position: relative;
-  z-index: 1001;
+  z-index: 101;
 }
 
 /* Logo */
@@ -72,7 +66,7 @@
   gap: 12px;
   transition: transform 0.3s ease;
   position: relative;
-  z-index: 1001;
+  z-index: 101;
 }
 
 .logo:hover {
@@ -317,7 +311,7 @@
   transition: all 0.3s ease;
   font-size: 1.1rem;
   position: relative;
-  z-index: 1002;
+  z-index: 102;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 }
@@ -349,7 +343,7 @@
   opacity: 0;
   visibility: hidden;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 999;
+  z-index: 99;
   max-height: calc(100vh - 70px);
   overflow-y: auto;
 }
@@ -450,7 +444,7 @@
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 998;
+  z-index: 98;
   animation: overlay-fadeIn 0.3s ease-out;
 }
 

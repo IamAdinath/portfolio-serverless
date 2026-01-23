@@ -20,9 +20,10 @@ import {
 } from './utils/iconLibrary';
 import { usePageTitle } from './components/common/usePageTitle';
 import InitialsProfile from './components/common/InitialsProfile';
+import ProfileImageCard from './components/common/ProfileImageCard';
 import SEOHead from './components/common/SEOHead';
 import { SOCIAL_LINKS } from './constants';
-import { GetAllPublishedBlogs, getProfileImage } from './components/common/apiService';
+import { GetAllPublishedBlogs } from './components/common/apiService';
 import { Blog } from './types';
 import FeaturedMediumArticles from './components/sections/FeaturedMediumArticles';
 import './HomePage.css';
@@ -50,20 +51,7 @@ const HomePage: React.FC = () => {
     fetchLatestBlogs();
   }, []);
 
-  useEffect(() => {
-    const fetchProfileImage = async () => {
-      try {
-        const { imageUrl } = await getProfileImage();
-        const container = document.querySelector('.portfolio-profile-card') as HTMLElement;
-        if (container && imageUrl) {
-          container.style.setProperty('--profile-image-url', `url(${imageUrl})`);
-        }
-      } catch (error) {
-        console.error('Failed to load profile image:', error);
-      }
-    };
-    fetchProfileImage();
-  }, []);
+
 
   const certificates = [
     {
@@ -262,13 +250,7 @@ const HomePage: React.FC = () => {
               </div>
             </div>
             <div className="portfolio-hero-image">
-              <div className="portfolio-profile-card">
-                <InitialsProfile
-                  className="portfolio-profile-image"
-                  size="large"
-                  initials="AG"
-                />
-              </div>
+              <ProfileImageCard size="large" />
             </div>
           </div>
         </section>

@@ -7,9 +7,12 @@
   padding: 20px;
   font-family: var(--font-family-base);
   color: rgba(0, 229, 255, 0.95);
-  /* background inherited from body */
   min-height: 100vh;
   position: relative;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .bloglist-main-container::before {
@@ -253,13 +256,12 @@
 @media (max-width: 768px) {
   .bloglist-main-container {
     padding: 30px 15px;
+    overflow-x: hidden;
   }
 
   .bloglist-header {
     padding: 30px 20px;
   }
-
-  /* h1 responsive styles inherited from global typography.css */
 
   .bloglist-filters {
     flex-direction: column;
@@ -269,12 +271,17 @@
 
   .bloglist-search-input {
     min-width: auto;
+    width: 100%;
   }
 
   .bloglist-stats {
     flex-direction: column;
     gap: 20px;
     padding: 20px;
+  }
+  
+  .bloglist-stat {
+    width: 100%;
   }
 
   .bloglist-section-header {
@@ -285,16 +292,22 @@
   
   .bloglist-pagination {
     flex-wrap: wrap;
+    gap: 8px;
   }
 
   .bloglist-featured-grid {
     grid-template-columns: 1fr;
+  }
+  
+  .bloglist-grid {
+    gap: 20px;
   }
 }
 
 @media (max-width: 480px) {
   .bloglist-main-container {
     padding: 20px 12px;
+    width: 100%;
   }
 
   .bloglist-header {
@@ -304,8 +317,6 @@
   .bloglist-header h1 {
     font-size: 2.5rem;
   }
-
-  /* h1 responsive styles inherited from global typography.css */
 
   .bloglist-header p {
     font-size: 1rem;
@@ -317,10 +328,12 @@
 
   .bloglist-stats {
     padding: 15px;
+    gap: 15px;
   }
 
   .bloglist-stat {
     padding: 12px 15px;
+    width: 100%;
   }
 
   .bloglist-section-header {
@@ -341,41 +354,22 @@
     height: 40px;
     font-size: 0.85rem;
   }
-}
-
-/* Animation for page load */
-@keyframes bloglist-fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
+  
+  .bloglist-pagination {
+    gap: 6px;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  
+  .bloglist-grid {
+    gap: 15px;
   }
 }
 
+/* Animation for page load - Disabled for performance */
 .bloglist-header,
 .bloglist-filters,
 .bloglist-stats,
 .bloglist-grid {
-  animation: bloglist-fadeInUp 0.6s ease-out;
-}
-
-.bloglist-header {
-  animation-delay: 0.1s;
-}
-
-.bloglist-filters {
-  animation-delay: 0.2s;
-}
-
-.bloglist-stats {
-  animation-delay: 0.3s;
-}
-
-.bloglist-grid {
-  animation-delay: 0.4s;
+  /* Animations removed for better performance */
 }
 
 .bloglist-featured-spacing {
