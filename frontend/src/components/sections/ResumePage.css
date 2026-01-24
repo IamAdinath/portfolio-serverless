@@ -2,7 +2,7 @@
 .resume-container {
   max-width: var(--container-max-width);
   margin: 0 auto;
-  padding: 20px;
+  padding: 0 0 20px 0;
   font-family: var(--font-family-base);
   color: rgba(0, 229, 255, 0.95);
   min-height: 100vh;
@@ -677,7 +677,7 @@
 /* Responsive Design */
 @media (max-width: 768px) {
   .resume-container {
-    padding: 30px 15px;
+    padding: 0 0 30px 0;
     overflow-x: hidden;
   }
 
@@ -743,7 +743,7 @@
 
 @media (max-width: 480px) {
   .resume-container {
-    padding: 20px 12px;
+    padding: 0 0 20px 0;
     width: 100%;
   }
 

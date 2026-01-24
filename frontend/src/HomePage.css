@@ -592,7 +592,7 @@
 .portfolio-certificates-section {
   max-width: var(--container-max-width);
   margin: 0 auto;
-  padding: clamp(2rem, 5vw, 3rem) clamp(1rem, 3vw, 2rem);
+  padding: 0 0 clamp(2rem, 5vw, 3rem) 0;
   position: relative;
   z-index: 1;
   isolation: isolate;
@@ -1011,7 +1011,7 @@
   margin: clamp(1rem, 3vw, 2rem) 0;
   border-top: 1px solid rgba(0, 229, 255, 0.3);
   border-bottom: 1px solid rgba(0, 229, 255, 0.3);
-  padding: clamp(2rem, 5vw, 4rem) clamp(1rem, 3vw, 2rem);
+  padding: clamp(2rem, 5vw, 4rem) 0;
   position: relative;
   z-index: 2;
 }
