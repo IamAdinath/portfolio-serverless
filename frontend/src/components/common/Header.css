@@ -3,7 +3,7 @@
 .modern-header {
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 1000;
   backdrop-filter: blur(10px);
   background: rgba(0, 10, 20, 0.95);
   border-bottom: 1px solid #00E5FF;

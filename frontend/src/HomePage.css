@@ -49,7 +49,7 @@
 
 /* Hero Section - Responsive Synced */
 .portfolio-hero-section {
-  padding: clamp(2rem, 5vw, 4rem) clamp(1rem, 3vw, 2rem);
+  padding: 0 0 clamp(2rem, 5vw, 4rem) 0;
   max-width: var(--container-max-width);
   margin: 0 auto;
   position: relative;
@@ -275,7 +275,7 @@
 .portfolio-certificates-section {
   max-width: var(--container-max-width);
   margin: 0 auto;
-  padding: clamp(2rem, 5vw, 3rem) clamp(1rem, 3vw, 2rem);
+  padding: 0 0 clamp(2rem, 5vw, 3rem) 0;
   position: relative;
   z-index: 2;
 }
@@ -283,7 +283,7 @@
 .portfolio-featured-section {
   max-width: var(--container-max-width);
   margin: 0 auto;
-  padding: clamp(2rem, 5vw, 3rem) clamp(1rem, 3vw, 2rem);
+  padding: 0 0 clamp(2rem, 5vw, 3rem) 0;
   position: relative;
   z-index: 2;
 }
@@ -590,7 +590,7 @@
 
 /* Certificates Section - Responsive Synced */
 .portfolio-certificates-section {
-  max-width: var(--breakpoint-xxl);
+  max-width: var(--container-max-width);
   margin: 0 auto;
   padding: clamp(2rem, 5vw, 3rem) clamp(1rem, 3vw, 2rem);
   position: relative;
@@ -1312,7 +1312,7 @@
   .portfolio-connect-section,
   .portfolio-certificates-section,
   .portfolio-featured-section {
-    padding: 2rem 1rem;
+    padding: 0 0 2rem 0;
   }
 
   .portfolio-hero-content {
@@ -1348,7 +1348,7 @@
   .portfolio-connect-section,
   .portfolio-certificates-section,
   .portfolio-featured-section {
-    padding: 1.5rem 0.75rem;
+    padding: 0 0 1.5rem 0;
   }
 
   .portfolio-hero-content {
