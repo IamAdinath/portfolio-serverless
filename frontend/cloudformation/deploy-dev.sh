@@ -30,6 +30,7 @@ function deploy() {
 
   # Build React app
   pushd "$DIR/.." >/dev/null
+    rm -rf build/
     npm ci
     npm run build
   popd >/dev/null

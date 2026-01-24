@@ -1,8 +1,8 @@
-/* BALANCED TRON THEME - Resume Container */
+/* Resume - TRON */
 .resume-container {
   max-width: var(--container-max-width);
   margin: 0 auto;
-  padding: 20px;
+  padding: 0 0 20px 0;
   font-family: var(--font-family-base);
   color: rgba(0, 229, 255, 0.95);
   min-height: 100vh;
@@ -33,7 +33,7 @@
   z-index: 1;
 }
 
-/* Header Card - Tron Style */
+/* Header Card */
 .header-card {
   background: rgba(0, 10, 20, 0.8);
   backdrop-filter: blur(10px);
@@ -68,9 +68,9 @@
 }
 
 .header-card:hover {
-  transform: translateY(-5px);
   box-shadow: 
-    0 0 20px rgba(0, 229, 255, 0.25),
+    0 0 50px rgba(0, 229, 255, 0.7),
+    0 0 80px rgba(0, 229, 255, 0.4),
     inset 0 1px 0 rgba(0, 229, 255, 0.15);
   border-color: var(--accent-cyan);
 }
@@ -677,7 +677,7 @@
 /* Responsive Design */
 @media (max-width: 768px) {
   .resume-container {
-    padding: 30px 15px;
+    padding: 0 0 30px 0;
     overflow-x: hidden;
   }
 
@@ -743,7 +743,7 @@
 
 @media (max-width: 480px) {
   .resume-container {
-    padding: 20px 12px;
+    padding: 0 0 20px 0;
     width: 100%;
   }
 

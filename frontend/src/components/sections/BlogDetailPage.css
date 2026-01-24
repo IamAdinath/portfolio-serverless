@@ -1,10 +1,10 @@
-/* Blog.css - Balanced Tron Theme */
+/* Blog Detail - Tron */
 
 /* Container */
 .blog-reader-container {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 0 0 20px 0;
   font-family: var(--font-family-base);
   color: rgba(0, 229, 255, 0.95);
   /* background inherited from body */
@@ -617,7 +617,7 @@
 /* Responsive Design */
 @media (max-width: 768px) {
   .blog-reader-container {
-    padding: 15px;
+    padding: 0 0 15px 0;
   }
 
   .blog-header {
@@ -657,7 +657,7 @@
 
 @media (max-width: 480px) {
   .blog-reader-container {
-    padding: 10px;
+    padding: 0 0 10px 0;
   }
 
   .blog-header {

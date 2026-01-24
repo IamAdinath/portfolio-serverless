@@ -6,8 +6,7 @@ import { analyticsTracker } from './utils/analytics';
 import { initializePerformanceOptimizations } from './utils/performanceOptimizations';
 import { initializeApiDebugging } from './utils/apiDebugger';
 import { preloadLCPImage } from './utils/lcpOptimization';
-import Header from './components/common/Header';
-import Footer from './components/common/Footer';
+import MainLayout from './components/layout/MainLayout';
 import LCPOptimization from './components/common/LCPOptimization';
 import CriticalCSSLoader from './components/common/CriticalCSSLoader';
 import PerformanceMonitor from './components/common/PerformanceMonitor';
@@ -100,42 +99,38 @@ const App: React.FC = () => {
       <AuthProvider>
         <ToastProvider> 
           <Router>
-            <div className="app-container">
-              <Header />
-              <main className="main-content" role="main" id="main-content">
-                <Suspense fallback={<PageLoader />}>
-                  <Routes>
-                    <Route path="/" element={<HomePage />} />
-                    <Route path="/about" element={<AboutPage />} />
-                    <Route path="/blogs" element={<BlogListPage />} />
-                    <Route path="/resume" element={<ResumePage />} />
-                    <Route path="/auth" element={<LoginPage />} />
-                    <Route path="/writer" element={
-                      <ProtectedRoute>
-                        <BlogEditorPage />
-                      </ProtectedRoute>
-                    } />
-                    <Route path="/admin" element={
-                      <ProtectedRoute>
-                        <AdminDashboardPage />
-                      </ProtectedRoute>
-                    } />
-                    <Route path="/admin/stats/:blogId" element={
-                      <ProtectedRoute>
-                        <BlogStatsPage />
-                      </ProtectedRoute>
-                    } />
-                    <Route path="/admin/analytics" element={
-                      <ProtectedRoute>
-                        <AnalyticsPage />
-                      </ProtectedRoute>
-                    } />
-                    <Route path="/blog/:blogId" element={<BlogDetailPage />} />
-                  </Routes>
-                </Suspense>
-              </main>
-              <Footer />
-            </div>
+            <MainLayout>
+              <Suspense fallback={<PageLoader />}>
+                <Routes>
+                  <Route path="/" element={<HomePage />} />
+                  <Route path="/about" element={<AboutPage />} />
+                  <Route path="/blogs" element={<BlogListPage />} />
+                  <Route path="/resume" element={<ResumePage />} />
+                  <Route path="/auth" element={<LoginPage />} />
+                  <Route path="/writer" element={
+                    <ProtectedRoute>
+                      <BlogEditorPage />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/admin" element={
+                    <ProtectedRoute>
+                      <AdminDashboardPage />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/admin/stats/:blogId" element={
+                    <ProtectedRoute>
+                      <BlogStatsPage />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/admin/analytics" element={
+                    <ProtectedRoute>
+                      <AnalyticsPage />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/blog/:blogId" element={<BlogDetailPage />} />
+                </Routes>
+              </Suspense>
+            </MainLayout>
           </Router>
         </ToastProvider>
       </AuthProvider>
