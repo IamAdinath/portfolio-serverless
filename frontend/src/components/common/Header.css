@@ -1,4 +1,4 @@
-/* Header.css - Balanced Tron Theme */
+/* Header - Tron */
 
 .modern-header {
   position: sticky;
@@ -79,7 +79,7 @@
   gap: 12px;
 }
 
-/* Brand logo - Tron Style */
+/* Brand logo */
 .brand-logo {
   width: 42px;
   height: 42px;
@@ -123,7 +123,7 @@
   }
 }
 
-/* Desktop Navigation - Tron Style */
+/* Desktop Navigation */
 .desktop-nav {
   display: none;
   align-items: center;
@@ -335,7 +335,7 @@
   background: rgba(0, 229, 255, 0.2);
 }
 
-/* Mobile Navigation - Tron Style */
+/* Mobile Navigation */
 .mobile-nav {
   position: absolute;
   top: 100%;
@@ -538,7 +538,7 @@
   box-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
 }
 
-/* Focus States for Accessibility */
+/* Accessibility focus */
 .nav-link:focus,
 .mobile-menu-btn:focus,
 .logout-btn:focus {

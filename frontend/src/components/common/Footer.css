@@ -1,4 +1,4 @@
-/* Footer.css - Balanced Tron Theme */
+/* Footer - Tron */
 
 .modern-footer {
   background: url('../../assets/footer-bg.png') center/cover, rgba(0, 10, 20, 0.95);
@@ -115,7 +115,7 @@
   display: none;
 }
 
-/* Brand logo - Tron Style */
+/* Brand logo */
 .footer-brand-logo {
   width: 40px;
   height: 40px;
@@ -154,7 +154,7 @@
   font-size: 0.95rem;
 }
 
-/* Social Icons - Tron Style */
+/* Social Icons */
 .footer-social {
   display: flex;
   gap: 15px;
@@ -294,7 +294,7 @@
   color: #00E5FF;
 }
 
-/* Footer Bottom - Tron Style */
+/* Footer Bottom */
 .footer-bottom {
   display: flex;
   justify-content: center;
@@ -422,7 +422,7 @@
   }
 }
 
-/* Animation Delays - Disabled for performance */
+/* Animations removed */
 .footer-brand,
 .footer-links,
 .footer-contact {
@@ -462,7 +462,7 @@
   }
 }
 
-/* Focus States for Accessibility */
+/* Accessibility focus */
 .footer-nav-link:focus,
 .social-icon:focus {
   outline: 2px solid rgba(0, 229, 255, 0.5);
